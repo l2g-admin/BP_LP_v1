@@ -67,10 +67,11 @@ body {
   color: rgba(246, 244, 240, 0.62);
 }
 
-/* Brand orange is muddy on ink; lift the accent to the warmer tone
-   the handoff uses so it stays bright in the dark room. */
+/* No orange type in the dark room (Ewan, Jul 8) — brand orange is
+   muddy on ink and the lifted tone read as off-brand. The accent
+   word keeps only its serif italic voice, in the room's cream. */
 .fold--dark .hl-accent {
-  color: #e77a58;
+  color: var(--header-bg);
 }
 
 /* --------------------------------------------------------------------------

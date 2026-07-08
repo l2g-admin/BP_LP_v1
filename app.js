@@ -393,34 +393,39 @@ if (vesselFold) {
 }
 
 // --------------------------------------------------------------------------
-// Slide 4 choreography: "the battery". The fold rides the same
-// .is-visible / .is-resetting conductor as slide 2; this block owns the
-// drain: one rAF clock climbs the age 20 -> 70 (linear — years tick
-// steadily; the front-loaded drop comes from the supply data itself)
-// and everything else reads off it, so the fill width, the split
-// number's two clip rects, the fill color, and both readouts can only
-// ever agree. The clock also fires the story beats instead of CSS
-// delays: is-pill when the age crosses the dock point (the pill's
-// slide-in and the lede key off it in styles.css), then the charging
-// bolt flickers up after the pill lands and sputters out after the
-// drain settles; is-drained releases the handoff. The supply data
-// never reacts to the pill — that IS the argument, so keep it honest.
-// Resets off screen and replays on return. Reduced motion gets the
-// settled end state: age 70, 25%, orange, pill docked (base CSS),
-// bolt dead, copy visible.
+// Slide 4 choreography: "the battery" (v2, vertical). The fold rides
+// the same .is-visible / .is-resetting conductor as slide 2; this block
+// owns the whole scene on one rAF clock. The age climbs 20 -> 70
+// (linear — years tick steadily; the front-loaded drop comes from the
+// supply data itself) and the level, the split number's two clip
+// rects, the fill color, and both readouts all read off it, so they
+// can only ever agree. The pill is the recurring actor: at three ages
+// it drops into the terminal and buys a blue buffer on top of the
+// level — each one a fixed share of whatever's left, so each one
+// smaller — and the buffer drains away while the supply keeps sinking
+// underneath. The readout NEVER counts the buffer, and the supply
+// data never reacts to the pill: the number is the supply, honestly.
+// Beats fire from the clock: is-pill on the first drop (the lede keys
+// off it in styles.css), is-drained when the level settles (the
+// handoff); the last buffer dies after the drain has already ended —
+// the closing beat. Resets off screen and replays on return. Reduced
+// motion gets the settled end state: age 70, 25%, warmed fill, no
+// pill in sight, copy visible via the base CSS.
 // --------------------------------------------------------------------------
 const supplyFold = document.getElementById('the-supply');
 if (supplyFold) {
   const fill = supplyFold.querySelector('.bat__fill');
+  const buffer = supplyFold.querySelector('.bat__buffer');
   const clipFill = supplyFold.querySelector('.bat__clip-fill');
   const clipEmpty = supplyFold.querySelector('.bat__clip-empty');
   const nums = supplyFold.querySelectorAll('.bat__num');
-  const bolt = supplyFold.querySelector('.bat__bolt');
+  const pill = supplyFold.querySelector('.bat-pill');
   const ageEl = supplyFold.querySelector('.bat-age');
 
   // Chamber geometry, matching the SVG's inner rects.
-  const X0 = 61;
-  const W = 282;
+  const IN_TOP = 79;
+  const IN_BOT = 441;
+  const IN_H = 362;
 
   // The supply, in % left by age — same defensible figures as the
   // curve version (anchored to the 20s peak; ~50% gone by 40, ~75%
@@ -435,18 +440,23 @@ if (supplyFold) {
     return ANCHORS[ANCHORS.length - 1][1];
   };
 
-  // The charge warms from cream to the dark room's lifted orange as
-  // the level falls through 50 — low-battery in the brand's palette.
+  // The charge warms from cream toward the room's low-battery orange
+  // as the level falls through 50. Set as the rect's fill ATTRIBUTE —
+  // there is deliberately no CSS fill rule on .bat__fill to override
+  // it (a stylesheet rule froze the charge cream in v1).
   const CREAM = [246, 244, 240];
   const LOW = [231, 122, 88];
 
+  // Returns the level's y so the frame loop can stack the buffer on it.
   const setSupply = (age) => {
     const pct = supplyAt(age);
-    const fw = (W * pct) / 100;
-    fill.setAttribute('width', fw.toFixed(1));
-    clipFill.setAttribute('width', fw.toFixed(1));
-    clipEmpty.setAttribute('x', (X0 + fw).toFixed(1));
-    clipEmpty.setAttribute('width', (W - fw).toFixed(1));
+    const levelY = IN_BOT - (IN_H * pct) / 100;
+    const h = (IN_BOT - levelY).toFixed(1);
+    fill.setAttribute('y', levelY.toFixed(1));
+    fill.setAttribute('height', h);
+    clipFill.setAttribute('y', levelY.toFixed(1));
+    clipFill.setAttribute('height', h);
+    clipEmpty.setAttribute('height', Math.max(levelY - IN_TOP, 0).toFixed(1));
 
     let warm = Math.min(Math.max((50 - pct) / 20, 0), 1);
     warm = warm * warm * (3 - 2 * warm);
@@ -456,32 +466,31 @@ if (supplyFold) {
     const rounded = Math.round(pct);
     nums.forEach((n) => { n.textContent = rounded; });
     ageEl.textContent = Math.round(age);
+    return levelY;
   };
 
   const AGE0 = 20;
   const AGE1 = 70;
-  const DRAIN_MS = 5000;   // the drain itself
-  const DRAIN_DELAY = 800; // after .is-visible, once the battery is up
-  const DOCK_AGE = 34;     // the pill sets out mid-fall, plenty left to lose
-  const BOLT_LAG = 1450;   // dock transition (1.1s) + contact
-  const BOLT_TAIL = 700;   // keeps sputtering after the drain settles
+  const DRAIN_MS = 6000;   // the drain itself
+  const DRAIN_DELAY = 800; // after .is-visible, once the cell is up
 
-  // The bolt's life: flickers up (shimmer, never steady), then fails
-  // intermittently and dies. Deterministic — no Math.random — so a
-  // replay is the same scene.
-  const boltAlpha = (e, span) => {
-    if (e <= 0 || e >= span) return 0;
-    const shimmer = 0.7 + 0.3 * (0.5 + 0.5 * Math.sin(e * 0.05));
-    const inRamp = Math.min(e / 220, 1);
-    const dieRamp = Math.min((span - e) / 600, 1);
-    const sputter = dieRamp < 1 ? (Math.sin(e * 0.12) > -0.2 ? 1 : 0.15) : 1;
-    return 0.9 * inRamp * dieRamp * sputter * shimmer;
-  };
+  // The pill events: drop through the terminal, buffer rises, holds a
+  // breath, and is spent — while the level keeps falling underneath.
+  // Ages chosen so the rhythm quickens as the buffers shrink.
+  const PILL_AGES = [45, 55, 65];
+  const DROP_MS = 400;
+  const RISE_MS = 200;
+  const HOLD_MS = 150;
+  const SPEND_MS = 700;
+  const EVENT_MS = DROP_MS + RISE_MS + HOLD_MS + SPEND_MS;
+  const BOOST = 0.3; // a buffer is 30% of what's left — never a refill
+
+  const eventStart = (age) => ((age - AGE0) / (AGE1 - AGE0)) * DRAIN_MS;
+  const LAST_EVENT_END = eventStart(PILL_AGES[PILL_AGES.length - 1]) + EVENT_MS;
 
   let raf = null;
   let delayTimer = null;
-  let docked = false;
-  let dockT = 0;
+  let firstDrop = false;
 
   const stop = () => {
     cancelAnimationFrame(raf);
@@ -489,9 +498,9 @@ if (supplyFold) {
   };
 
   const resetScene = () => {
-    docked = false;
-    dockT = 0;
-    bolt.style.opacity = 0;
+    firstDrop = false;
+    buffer.setAttribute('height', 0);
+    pill.style.opacity = 0;
     setSupply(AGE0);
   };
 
@@ -501,32 +510,60 @@ if (supplyFold) {
       if (start === null) start = now;
       const elapsed = now - start;
       const t = Math.min(elapsed / DRAIN_MS, 1);
-      setSupply(AGE0 + (AGE1 - AGE0) * t);
+      const levelY = setSupply(AGE0 + (AGE1 - AGE0) * t);
 
-      if (!docked && AGE0 + (AGE1 - AGE0) * t >= DOCK_AGE) {
-        docked = true;
-        dockT = elapsed;
-        supplyFold.classList.add('is-pill');
+      // The pill events. One sprite serves all three drops (they never
+      // overlap); overlapping buffer tails resolve to the tallest.
+      let buf = 0;
+      let pillY = null;
+      let pillA = 0;
+      for (const pillAge of PILL_AGES) {
+        const e = elapsed - eventStart(pillAge);
+        if (e <= 0) continue;
+        if (!firstDrop) {
+          firstDrop = true;
+          supplyFold.classList.add('is-pill');
+        }
+        if (e < DROP_MS) {
+          // Falls, accelerating, into the terminal; fades as it enters.
+          const p = e / DROP_MS;
+          pillY = 6 + 52 * p * p;
+          pillA = Math.min(e / 120, 1) * Math.min((DROP_MS - e) / 90, 1);
+        } else if (e < EVENT_MS) {
+          // The buffer it bought: a share of what was left at swallow
+          // time, so each one is smaller than the last.
+          const pctThen = supplyAt(
+            AGE0 + (AGE1 - AGE0) * Math.min((eventStart(pillAge) + DROP_MS) / DRAIN_MS, 1)
+          );
+          const B = (IN_H * BOOST * pctThen) / 100;
+          const r = e - DROP_MS;
+          let b;
+          if (r < RISE_MS) b = B * (1 - (1 - r / RISE_MS) ** 2);
+          else if (r < RISE_MS + HOLD_MS) b = B;
+          else b = B * (1 - (r - RISE_MS - HOLD_MS) / SPEND_MS);
+          buf = Math.max(buf, b);
+        }
       }
 
-      let boltDone = false;
-      if (docked) {
-        const e = elapsed - dockT - BOLT_LAG;
-        const span = DRAIN_MS - dockT - BOLT_LAG + BOLT_TAIL;
-        bolt.style.opacity = boltAlpha(e, span).toFixed(3);
-        boltDone = e >= span;
+      buffer.setAttribute('y', (levelY - buf).toFixed(1));
+      buffer.setAttribute('height', Math.max(buf, 0).toFixed(1));
+      if (pillY === null) {
+        pill.style.opacity = 0;
+      } else {
+        pill.setAttribute('transform', `translate(110 ${pillY.toFixed(1)})`);
+        pill.style.opacity = pillA.toFixed(3);
       }
 
       if (t >= 1) supplyFold.classList.add('is-drained');
-      if (t < 1 || !boltDone) raf = requestAnimationFrame(step);
+      if (t < 1 || elapsed < LAST_EVENT_END) raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
   };
 
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    // Settled end state; the pill sits docked and the copy shows via
-    // the base CSS (the choreography lives inside the no-preference
-    // query), so only the drained cell needs setting here.
+    // Settled end state; the copy shows via the base CSS (the
+    // choreography lives inside the no-preference query) and the
+    // pill sprite stays parked hidden, so only the cell needs setting.
     setSupply(AGE1);
   } else {
     resetScene();
