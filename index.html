@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Better Way to Healthy Blood Flow | Berkeley Life</title>
+  <meta name="description" content="You might not need the little blue pill. Berkeley Life helps your body restore its own Nitric Oxide. Prescription free, backed by clinical research.">
+  <meta name="theme-color" content="#f6f3f0">
+
+  <!-- Berkeley Life's own Adobe Fonts kit: tt-commons-pro + cormorant-garamond -->
+  <link rel="stylesheet" href="https://use.typekit.net/wbx3yzs.css">
+  <!-- Fallback for the serif accent if the kit is domain-restricted in local dev -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <!-- ============================================================
+       SLIDE 1 — THE ANSWER
+       The ad ends "...there's a better way." The page opens by
+       delivering it: the little blue pill dissolves into Berkeley
+       Life capsules (assets/better-way.mp4). The video plays once
+       and holds on the capsules; app.js replays it only when the
+       slide re-enters the viewport. No CTA here; slide 2 makes
+       the claim credible before anything is asked of the visitor.
+       ============================================================ -->
+  <div class="fold" id="the-better-way">
+
+    <header class="site-header">
+      <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
+    </header>
+
+    <main class="hero">
+      <!-- One continuous scene. The video plays from the moment the
+           slide is on screen; its opening ~1.5s of near-stillness is
+           the quiet under the typing. app.js stages the text off the
+           video clock: hook types while the pill idles, dissolves as
+           the pill deforms, the claim rises as the capsules take
+           shape, and the scroll cue lands when the video ends. -->
+      <div class="hero__intro">
+        <div class="headline-stack">
+          <p class="hero__headline morph-hook" aria-hidden="true">
+            You might not need this<br><em class="hl-pill">little blue pill</em>.
+          </p>
+          <h1 class="hero__headline headline-claim">
+            There is a <em class="hl-accent">better way</em>.
+          </h1>
+        </div>
+        <p class="hero__lede">Say goodbye to prescriptions and side effects.</p>
+      </div>
+
+      <figure class="morph">
+        <video class="morph__video" muted playsinline preload="auto"
+               poster="assets/better-way-poster.jpg"
+               aria-label="A blue diamond-shaped tablet stamped VGR 100 dissolving into two Berkeley Life capsules">
+          <source src="assets/better-way.mp4" type="video/mp4">
+        </video>
+      </figure>
+
+      <div class="hero__action">
+        <div class="scrollcue" aria-hidden="true">
+          <span class="scrollcue__label">Scroll to learn more</span>
+          <svg viewBox="0 0 16 9" class="scrollcue__chevron"><path d="M1.5 1 L8 7.5 L14.5 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 2 — MEET THE MOLECULE
+       The reason to believe what slide 1 just showed: nitric
+       oxide, Nobel Prize, and the decline with age.
+
+       Choreography: "the bond". app.js flips .is-visible on this
+       fold once the slide has mostly settled; CSS transition
+       delays play the beats: headline lands alone, the two atoms
+       drift in from opposite sides and dock with a soft settle,
+       their letters surface, the tick draws down and the caption
+       names the molecule, the lede follows. Replays on return,
+       like slide 1.
+       ============================================================ -->
+  <div class="fold" id="the-molecule">
+
+    <section class="hero">
+      <h2 class="hero__headline">
+        Meet the <em class="hl-accent">molecule</em>.
+      </h2>
+
+      <!-- PLACEHOLDER: swap for a high-quality render of the NO molecule.
+           Space-filling model; nitrogen in ink navy, oxygen in brand
+           orange. Keep the two-atom grouping so the bond choreography
+           survives the swap. -->
+      <figure class="molecule">
+        <svg viewBox="0 0 320 200" role="img" aria-label="Space-filling model of a Nitric Oxide molecule: a nitrogen atom bonded to an oxygen atom">
+          <defs>
+            <radialGradient id="sphereN" cx="0.34" cy="0.28" r="0.95">
+              <stop offset="0" stop-color="#46538f"/>
+              <stop offset="0.55" stop-color="#1c2356"/>
+              <stop offset="1" stop-color="#06092a"/>
+            </radialGradient>
+            <radialGradient id="sphereO" cx="0.34" cy="0.28" r="0.95">
+              <stop offset="0" stop-color="#f09a74"/>
+              <stop offset="0.55" stop-color="#dc5a35"/>
+              <stop offset="1" stop-color="#a93a1e"/>
+            </radialGradient>
+            <radialGradient id="molSheen" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.65"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="molShadow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#080b2b" stop-opacity="0.2"/>
+              <stop offset="1" stop-color="#080b2b" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <ellipse class="mol-shadow" cx="165" cy="184" rx="102" ry="10" fill="url(#molShadow)"/>
+
+          <g class="atom atom--n">
+            <circle cx="122" cy="95" r="56" fill="url(#sphereN)"/>
+            <ellipse cx="103" cy="73" rx="24" ry="16" fill="url(#molSheen)" transform="rotate(-24 103 73)"/>
+            <text x="106" y="95" class="mol-symbol">N</text>
+          </g>
+          <g class="atom atom--o">
+            <circle cx="207" cy="95" r="62" fill="url(#sphereO)"/>
+            <ellipse cx="186" cy="70" rx="27" ry="18" fill="url(#molSheen)" transform="rotate(-24 186 70)"/>
+            <text x="212" y="95" class="mol-symbol">O</text>
+          </g>
+        </svg>
+        <figcaption class="molecule__note"><span>This is Nitric Oxide.</span></figcaption>
+      </figure>
+
+      <div class="hero__action">
+        <!-- One paragraph, one voice, ending on the prize. The medal
+             and source line beneath are the quiet, checkable
+             specificity that make the claim legit without a link
+             off the page. -->
+        <p class="hero__lede">
+          Nitric Oxide keeps your blood flowing.
+          Without it, blood can't get where it needs to go.
+          Its discovery won the
+          <span class="nobel-pop">
+            <button class="nobel-pop__trigger" type="button" aria-expanded="false">Nobel&nbsp;Prize in Medicine</button>
+            <span class="nobel-pop__card" role="note" aria-hidden="true">
+              <button class="nobel-pop__close" type="button" aria-label="Close">
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </button>
+              <img class="nobel-pop__photo" src="assets/nobel-1998.jpg"
+                   alt="Robert Furchgott accepting the Nobel Prize from the King of Sweden at the 1998 ceremony in Stockholm"
+                   width="640" height="885" loading="lazy">
+              <span class="nobel-pop__caption">
+                <em class="nobel-pop__dateline">Stockholm, 1998.</em>
+                The King of Sweden honors Dr.&nbsp;Furchgott for discovering
+                that Nitric Oxide opens blood vessels.
+              </span>
+            </span>
+          </span>.
+        </p>
+        <div class="nobel-lockup">
+          <img class="nobel-lockup__medal" src="assets/nobel-medal.png" alt="Nobel Prize medal" width="36" height="36">
+          <p class="nobel__source">1998 &middot; Furchgott, Ignarro, and Murad</p>
+        </div>
+
+        <!-- Trust badges intentionally held back until the product is
+             introduced. Markup saved in snippets/trust-badges.html. -->
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 3 — THE DEMONSTRATION
+       The stake-builder: what nitric oxide does for you, so the
+       dark room's falling number is a felt loss, not arithmetic.
+       The vessel floats in white space like slide 2's molecule —
+       an object, not a band — its cut ends feathered out with the
+       same CSS mask idiom as slide 1's video, so it still implies
+       "this continues beyond the frame" without slamming into the
+       screen edges and reading as a divider stripe.
+
+       The slide must read as a complete poster at rest: flick back
+       to it any time and the whole argument is standing — headline,
+       open vessel still flowing, both copy lines. The choreography
+       only assembles that poster; copy accumulates, and nothing
+       informative ever dissolves. "Watch it work." stays honest
+       forever because the flow never stops while the slide is on
+       screen.
+
+       Choreography: headline over the constricted vessel and its
+       strained trickle; two NO pairs drift in and dock, the
+       how-line rising as they land; the walls ease open, the flow
+       surges (app.js morphs walls and cells on one rAF clock), and
+       the payoff line follows. Then the breath: the vessel slowly
+       begins to contract again — this is what it does when the
+       signal fades — and a fresh NO pair drifts in just in time,
+       docks, and rides the wall back out as it stretches open.
+       Seamless cycle, entry side and point varying each pass, so
+       the scene re-enacts its own mechanism for as long as anyone
+       watches. Replays on return; reduced motion gets the settled
+       poster.
+       ============================================================ -->
+  <div class="fold" id="the-vessel">
+
+    <section class="vessel-scene">
+      <h2 class="hero__headline vessel-scene__headline">
+        Watch it <em class="hl-accent">work</em>.
+      </h2>
+
+      <figure class="vessel">
+        <!-- Walls in markup are the settled open state (the no-JS
+             fallback); app.js takes over and renders walls, interior
+             fill, and cells from one half-gap function, so the space
+             the cells swim in is always the space the walls show.
+             preserveAspectRatio="slice" fills the frame at any screen
+             shape by cropping the vessel's ends (the CSS mask then
+             feathers them), never letterboxing. -->
+        <svg viewBox="0 0 800 260" preserveAspectRatio="xMidYMid slice" role="img"
+             aria-label="A narrowed blood vessel with a thin trickle of blood cells. Two Nitric Oxide molecules land on its walls, the walls relax open, and blood flows freely. Whenever the vessel begins to narrow again, a fresh Nitric Oxide molecule arrives and stretches it back open.">
+          <defs>
+            <!-- Tube shading: deeper rose at the walls, bright at
+                 the core, so the vessel reads as a cylinder in the
+                 same physical world as slides 1 and 2, not a flat
+                 cartoon band. -->
+            <linearGradient id="vesTube" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0"    stop-color="#e8a78e"/>
+              <stop offset="0.16" stop-color="#f7d7c9"/>
+              <stop offset="0.5"  stop-color="#fdf3ee"/>
+              <stop offset="0.84" stop-color="#f7d7c9"/>
+              <stop offset="1"    stop-color="#e8a78e"/>
+            </linearGradient>
+            <!-- The movement: not moving color, moving light — a
+                 soft sheen drifting along the blood (app.js nudges
+                 the transform each frame). userSpaceOnUse + repeat
+                 so the drift can wrap. -->
+            <linearGradient id="vesFlow" gradientUnits="userSpaceOnUse"
+                            x1="0" y1="0" x2="260" y2="0" spreadMethod="repeat">
+              <stop offset="0"   stop-color="#ffffff" stop-opacity="0"/>
+              <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.3"/>
+              <stop offset="1"   stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+
+          <path class="vessel__fill" fill="url(#vesTube)"
+                d="M -20 72 L 820 72 L 820 188 L -20 188 Z"/>
+          <path class="vessel__sheen" fill="url(#vesFlow)"
+                d="M -20 72 L 820 72 L 820 188 L -20 188 Z"/>
+          <path class="vessel__wall vessel__wall--top" d="M -20 72 L 820 72"/>
+          <path class="vessel__wall vessel__wall--bottom" d="M -20 188 L 820 188"/>
+
+          <!-- Anatomical callout, the diagram's native idiom (and
+               deliberately not slide 2's centered serif caption):
+               a dot pinned on the lower wall, a diagonal hairline
+               leader, and an uppercase specimen label — journal
+               figure, not marketing copy. app.js keeps the dot and
+               leader tip riding the wall as it moves. -->
+          <g class="vessel__tag">
+            <circle class="vessel__tag-dot" cx="300" cy="188" r="2.5"/>
+            <line class="vessel__tag-line" x1="300" y1="190" x2="338" y2="222"/>
+            <text class="vessel__tag-text" x="344" y="226">BLOOD VESSEL</text>
+          </g>
+
+          <!-- app.js fills this with flowing cells. -->
+          <g class="vessel__cells"></g>
+
+          <!-- The molecule, in this scene's cleaner 2D voice: flat
+               circles, subtle letters. Keep the pair grouping if the
+               art is ever swapped. -->
+          <g class="no-pair no-pair--a">
+            <circle class="no-mol__n" cx="-9" cy="0" r="11"/>
+            <circle class="no-mol__o" cx="11" cy="0" r="12"/>
+            <text class="no-mol__symbol" x="-9" y="0">N</text>
+            <text class="no-mol__symbol" x="11" y="0">O</text>
+          </g>
+          <g class="no-pair no-pair--b">
+            <circle class="no-mol__n" cx="-9" cy="0" r="11"/>
+            <circle class="no-mol__o" cx="11" cy="0" r="12"/>
+            <text class="no-mol__symbol" x="-9" y="0">N</text>
+            <text class="no-mol__symbol" x="11" y="0">O</text>
+          </g>
+        </svg>
+      </figure>
+
+      <!-- One paragraph, one voice, like slide 2's lede — the whole
+           message lands after the release and stays, so the resting
+           slide keeps its argument. The wink lives in one quiet
+           serif word, not a bold line. -->
+      <div class="vessel__copy">
+        <p class="hero__lede">
+          Nitric Oxide tells your blood vessel walls to relax.
+          So blood gets <em class="lede-accent">everywhere</em> it should.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 4 — THE SUPPLY (the dark room)
+       The page's only dark slide. v2 (Jul 8, after Ewan's review of
+       the horizontal false-charger cell): ONE tall vertical battery,
+       center of the room, and the blue pill as a recurring actor.
+       Ewan asked for the visual to be more central with less text,
+       no orange type, and suggested the pill "adding a buffer" as
+       the level depletes — this is that. The side-by-side-ages
+       variant was considered and dropped: comparison panels shrink
+       on mobile and re-split one fact into several renderings,
+       which was the original complaint against v1.
+
+       The story: the cell drains from Age 20 / 100% to Age 70 /
+       ~25%, warming from cream to low-battery orange as it passes
+       half. At ages 45, 55, and 65 a blue pill drops into the
+       terminal and buys a thin blue buffer on top of the level —
+       each one visibly smaller, because a buffer is a fixed share
+       of whatever's left — and the buffer drains away while the
+       supply keeps sinking underneath. The readout NEVER counts
+       the buffer: the number is the supply, and the supply never
+       reacts to the pill. The last buffer dies after the drain has
+       already settled at 25% — the closing beat.
+
+       Figures unchanged, anchored to the 20s peak and defensible:
+       ~50% gone by age 40 (Berkeley Life's own claim; Taddei et
+       al. >50% endothelial-function loss in the oldest group) and
+       ~75% gone by the 70s (Egashira et al., 75% loss of coronary
+       endothelium-derived NO in 70-80yo vs healthy 20yo; both
+       reviewed in PMC3390088, "Nitric oxide and geriatrics").
+
+       The percentage lives INSIDE the cell (split-color: ink
+       clipped to the charge, cream to the empty chamber, so the
+       level boundary slices through the digits mid-drain); age and
+       label sit inside the SVG sharing the cell's axis, and the
+       three lines read as one sentence at every frame: "At age 47,
+       43% of your Nitric Oxide is left." app.js runs the whole
+       scene on one rAF clock; replays on return; reduced motion
+       gets the settled end state (age 70, 25%, no pill in sight,
+       copy visible). NO orange type anywhere in the room per Ewan —
+       the serif italic carries the headline emphasis and the
+       handoff is cream; the only warmth is the low-battery fill.
+       ============================================================ -->
+  <div class="fold fold--dark" id="the-supply">
+
+    <section class="hero">
+      <h2 class="hero__headline">
+        You produce <em class="hl-accent">less</em> every year.
+      </h2>
+
+      <!-- The battery. Static aria-label carries the whole story;
+           every moving part inside is decorative. -->
+      <div class="battery-hero" role="img"
+           aria-label="Your Nitric Oxide supply drains like a battery, from one hundred percent at age 20 to about a quarter by age 70. Blue pills drop in along the way, and each adds only a small temporary buffer that shrinks every time, while the supply keeps falling.">
+        <figure class="battery">
+          <svg viewBox="0 0 220 484" aria-hidden="true">
+            <defs>
+              <!-- Casing: darker at the sides, bright at the core,
+                   so the cell reads as an upright cylinder in the
+                   same physical world as slides 1-3. -->
+              <linearGradient id="batCase" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0"    stop-color="#1a1e40"/>
+                <stop offset="0.16" stop-color="#272c55"/>
+                <stop offset="0.5"  stop-color="#323966"/>
+                <stop offset="0.84" stop-color="#272c55"/>
+                <stop offset="1"    stop-color="#1a1e40"/>
+              </linearGradient>
+              <!-- Cylinder shading laid over the whole chamber, so
+                   charge, buffer, and empty glass shade alike. -->
+              <linearGradient id="batShade" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0"    stop-color="#ffffff" stop-opacity="0.3"/>
+                <stop offset="0.35" stop-color="#ffffff" stop-opacity="0"/>
+                <stop offset="0.7"  stop-color="#000000" stop-opacity="0"/>
+                <stop offset="1"    stop-color="#000000" stop-opacity="0.16"/>
+              </linearGradient>
+              <linearGradient id="pillBody" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0"    stop-color="#4a5ac2"/>
+                <stop offset="0.55" stop-color="#2f3c96"/>
+                <stop offset="1"    stop-color="#222c74"/>
+              </linearGradient>
+              <!-- The chamber's domed ends. -->
+              <clipPath id="batInner">
+                <rect x="49" y="79" width="122" height="362" rx="61"/>
+              </clipPath>
+              <!-- The split number: one copy of the percentage clipped
+                   to the charge (ink), one to the empty chamber
+                   (cream). app.js resizes both rects with the level;
+                   neither ever includes the buffer. -->
+              <clipPath id="batFillW">
+                <rect class="bat__clip-fill" x="49" y="79" width="122" height="362"/>
+              </clipPath>
+              <clipPath id="batEmptyW">
+                <rect class="bat__clip-empty" x="49" y="79" width="122" height="0"/>
+              </clipPath>
+            </defs>
+
+            <!-- "At age 20," / cell / "of your Nitric Oxide is left"
+                 share the cell's center axis (x=110). -->
+            <text class="bat__age" x="110" y="30">At age <tspan class="bat-age">20</tspan>,</text>
+
+            <rect class="bat__terminal" x="95" y="52" width="30" height="18" rx="8"/>
+            <rect class="bat__case" x="40" y="70" width="140" height="380" rx="70" fill="url(#batCase)"/>
+            <g clip-path="url(#batInner)">
+              <rect class="bat__chamber" x="49" y="79" width="122" height="362"/>
+              <rect class="bat__fill" x="49" y="79" width="122" height="362" fill="#f6f4f0"/>
+              <!-- The pill's buffer: rides on top of the level, blue,
+                   never counted by the readout. app.js sizes it. -->
+              <rect class="bat__buffer" x="49" y="79" width="122" height="0"/>
+              <rect x="49" y="79" width="122" height="362" fill="url(#batShade)"/>
+              <ellipse class="bat__spec" cx="62" cy="180" rx="7" ry="105"/>
+            </g>
+
+            <text class="bat__pct bat__pct--ink" clip-path="url(#batFillW)" x="110" y="260"><tspan class="bat__num">100</tspan><tspan class="bat__sign" dy="-10">%</tspan></text>
+            <text class="bat__pct bat__pct--cream" clip-path="url(#batEmptyW)" x="110" y="260"><tspan class="bat__num">100</tspan><tspan class="bat__sign" dy="-10">%</tspan></text>
+
+            <!-- The blue pill, dropped into the terminal at three ages
+                 by app.js (transform + opacity are driven per frame).
+                 Keep the group if the art is ever swapped. -->
+            <g class="bat-pill" opacity="0" transform="translate(110 6)">
+              <path class="bat-pill__body" d="M -11.5 -4 Q -17 0 -11.5 4 L -4.5 8.7 Q 0 11.7 4.5 8.7 L 11.5 4 Q 17 0 11.5 -4 L 4.5 -8.7 Q 0 -11.7 -4.5 -8.7 Z"/>
+              <ellipse class="bat-pill__spec" cx="-3.5" cy="-4.5" rx="7" ry="3"/>
+            </g>
+
+            <text class="bat__label" x="110" y="472">of your Nitric Oxide is left</text>
+          </svg>
+        </figure>
+      </div>
+
+      <div class="hero__action">
+        <!-- Two sentences on the whole slide, both landing after the
+             scene has already shown them. No orange type in the room. -->
+        <p class="hero__lede">
+          Each blue pill runs on what&rsquo;s left.
+        </p>
+
+        <p class="supply__handoff">So recharge the supply.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Dot rail: one dot per slide, fixed to the right edge — a quiet
+       "you are here, and the end is in sight" signal. app.js builds
+       the dots from the .fold count and keeps the rail hidden while
+       slide 1 has the screen to itself. Decorative only: no taps, so
+       hidden from assistive tech. -->
+  <div class="dotrail" aria-hidden="true"></div>
+
+</body>
+</html>

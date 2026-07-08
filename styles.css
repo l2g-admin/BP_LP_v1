@@ -1,0 +1,1097 @@
+/* ==========================================================================
+   Berkeley Life — Blue Pill landing page
+   Brand tokens pulled from berkeleylife.com (Shopify theme + Typekit kit):
+   type    tt-commons-pro (headings/body), cormorant-garamond (serif accent)
+   color   #ffffff page, #f6f4f0 header band, #080b2b ink, #d54f2f brand,
+           #e2e0d8 hairline
+   ========================================================================== */
+
+:root {
+  --bg: #ffffff;
+  --header-bg: #f6f4f0;
+  --ink: #080b2b;
+  --muted: rgba(8, 11, 43, 0.62);
+  --brand: #d54f2f;
+  --brand-deep: #b8432a;
+  --hairline: #e2e0d8;
+  --pill-blue: #2f3c96;
+
+  --sans: "tt-commons-pro", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --serif: "cormorant-garamond", "Cormorant Garamond", Georgia, serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Vertical slideshow: native scroll with each full-screen slide
+   snapping into place. No scroll-jacking. */
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* --------------------------------------------------------------------------
+   Fold: one full-viewport slide (slide 1 additionally carries the
+   site header at its top).
+   -------------------------------------------------------------------------- */
+
+.fold {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* The page's one dark slide: the problem lives in shadow between
+   two bright rooms. */
+.fold--dark {
+  background: var(--ink);
+  color: var(--header-bg);
+}
+
+.fold--dark .hero__lede {
+  color: rgba(246, 244, 240, 0.62);
+}
+
+/* Brand orange is muddy on ink; lift the accent to the warmer tone
+   the handoff uses so it stays bright in the dark room. */
+.fold--dark .hl-accent {
+  color: #e77a58;
+}
+
+/* --------------------------------------------------------------------------
+   Slide 2 choreography: "the bond". app.js flips .is-visible on the
+   fold itself once the slide has mostly settled (a per-element trigger
+   would start the beats mid-snap, half off screen). One clock, beats
+   as transition delays:
+     0s     headline words rise in one after another, echoing slide 1's
+            opening word-rise instead of landing as one block;
+     0.8s   the atoms drift in from opposite sides and dock, over-
+            shooting into the overlap and settling back: a bond forming;
+     1.65s  the N and O surface on the docked atoms;
+     2.0s   the tick draws down, the caption names the molecule;
+     2.7s   the lede and the Nobel line land together, one beat; the
+            medal + citation get the headline's blur-rise, the lede
+            itself stays a plain fade-rise (see note below).
+   Reduced motion: everything below sits inside the no-preference query,
+   so the slide is simply visible in its settled state. */
+@media (prefers-reduced-motion: no-preference) {
+  #the-molecule .hero__headline .w {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.3em);
+    filter: blur(4px);
+    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+  }
+
+  #the-molecule .hero__headline .w.is-on {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  #the-molecule .atom {
+    opacity: 0;
+    transition:
+      transform 0.95s cubic-bezier(0.34, 1.45, 0.5, 1) 0.8s,
+      opacity 0.45s ease 0.8s;
+  }
+  #the-molecule .atom--n { transform: translateX(-38px); }
+  #the-molecule .atom--o { transform: translateX(38px); }
+
+  #the-molecule .mol-symbol {
+    opacity: 0;
+    transition: opacity 0.5s ease 1.65s;
+  }
+
+  #the-molecule .molecule__note::before {
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s ease 2s;
+  }
+
+  #the-molecule .molecule__note span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.6s ease 2.25s, transform 0.6s ease 2.25s;
+  }
+
+  /* Lede and Nobel line land together, one beat. The lede stays a
+     plain fade-rise: it's a multi-line, text-wrap:pretty paragraph,
+     and animating filter:blur() on it fights the browser's line-
+     breaking pass, visibly re-wrapping a line right as the blur
+     clears. The single-line medal + citation have no line to
+     renegotiate, so they keep the fuller blur-rise, matching the
+     headline's word-in. */
+  #the-molecule .hero__lede,
+  #the-molecule .nobel-lockup {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease 2.7s, transform 0.7s ease 2.7s;
+  }
+
+  #the-molecule .nobel-lockup {
+    filter: blur(4px);
+    transition: opacity 0.7s ease 2.7s, transform 0.7s ease 2.7s, filter 0.7s ease 2.7s;
+  }
+
+  #the-molecule .mol-shadow {
+    opacity: 0;
+    transition: opacity 0.7s ease 1.5s;
+  }
+
+  #the-molecule.is-visible .atom,
+  #the-molecule.is-visible .mol-symbol,
+  #the-molecule.is-visible .mol-shadow,
+  #the-molecule.is-visible .molecule__note::before,
+  #the-molecule.is-visible .molecule__note span,
+  #the-molecule.is-visible .hero__action > * {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  /* Off screen, app.js resets the slide through this class so a quick
+     return never catches the beats mid-fade. */
+  #the-molecule.is-resetting *,
+  #the-molecule.is-resetting *::before {
+    transition: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Slide 3 choreography: "the demonstration". The poster assembles:
+   copy accumulates with the scene's events and nothing informative
+   ever dissolves, so the resting slide keeps its whole argument.
+   app.js adds two beat classes after .is-visible (walls, cells, and
+   the release ride its rAF clock); the copy rides the beats as
+   transition delays:
+     0s     headline lands over the constricted vessel, trickle
+            already moving;
+     1.2s   is-docking: two NO pairs drift in and land on the walls
+            with the same overshoot-settle as slide 2's bond;
+     2.7s   is-releasing: walls ease open, flow surges, the pairs
+            fade — their work done; the lede follows (+0.9s), one
+            paragraph in slide 2's voice.
+   Beat classes accumulate (none are removed until reset). */
+@media (prefers-reduced-motion: no-preference) {
+  #the-vessel .vessel-scene__headline {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  #the-vessel.is-visible .vessel-scene__headline {
+    opacity: 1;
+    transform: none;
+  }
+
+  #the-vessel .vessel__tag {
+    opacity: 0;
+    transition: opacity 0.6s ease 0.5s;
+  }
+
+  #the-vessel.is-visible .vessel__tag {
+    opacity: 1;
+  }
+
+  #the-vessel .hero__lede {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  #the-vessel.is-releasing .hero__lede {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.9s ease 0.9s, transform 0.9s ease 0.9s;
+  }
+
+  #the-vessel .no-pair {
+    transition:
+      transform 1.1s cubic-bezier(0.34, 1.45, 0.5, 1),
+      opacity 0.5s ease;
+  }
+  #the-vessel.is-docking .no-pair { opacity: 1; }
+  #the-vessel.is-docking .no-pair--a { transform: translate(310px, 86px); }
+  #the-vessel.is-docking .no-pair--b { transform: translate(480px, 171px); }
+  #the-vessel.is-releasing .no-pair {
+    opacity: 0;
+    transition:
+      transform 1.1s cubic-bezier(0.34, 1.45, 0.5, 1),
+      opacity 0.7s ease;
+  }
+
+  #the-vessel.is-resetting *,
+  #the-vessel.is-resetting *::before {
+    transition: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Slide 4 choreography: "the battery" (v2, vertical). Same conductor
+   as slide 2 (app.js flips .is-visible once the slide settles); the
+   pill drops and buffers are drawn per-frame by app.js, so the only
+   CSS beats here are the copy, keyed to classes the clock adds at
+   story moments — the words can only ever land after the scene has
+   shown them.
+     0s      headline lands;
+     0.35s   the cell surfaces, full, reading Age 20 / 100%;
+     0.8s    the drain starts: age climbs 20 -> 70, the level falls
+             100 -> ~25 and warms from cream to low-supply orange;
+     ~3.8s   is-pill: the first blue pill drops into the terminal
+             and buys its buffer; the lede follows (+0.9s);
+     ~6.8s   is-drained: the level settles at 25%, the handoff lands
+             (cream — no orange type in this room), and the last
+             buffer dies just after. */
+@media (prefers-reduced-motion: no-preference) {
+  #the-supply .hero__headline {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  #the-supply .battery-hero {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease 0.35s, transform 0.7s ease 0.35s;
+  }
+
+  #the-supply .hero__action > * {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  /* The lede waits for the first pill's buffer to be up and visibly
+     draining — the words land on a scene already showing them. */
+  #the-supply.is-pill .hero__lede {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.7s ease 0.9s, transform 0.7s ease 0.9s;
+  }
+
+  #the-supply.is-drained .supply__handoff {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
+  }
+
+  #the-supply.is-visible .hero__headline,
+  #the-supply.is-visible .battery-hero {
+    opacity: 1;
+    transform: none;
+  }
+
+  #the-supply.is-resetting *,
+  #the-supply.is-resetting *::before {
+    transition: none !important;
+  }
+}
+
+.site-header {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--hairline);
+  text-align: center;
+  padding: 18px 24px 14px;
+}
+
+.site-header__logo {
+  display: block;
+  margin: 0 auto;
+  width: min(230px, 64vw);
+  height: auto;
+}
+
+/* hero ---------------------------------------------------------------------- */
+
+/* Three blocks (headline, molecule, copy + action) share the leftover
+   viewport height evenly, so the screen composes itself to any phone. */
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  text-align: center;
+  gap: 20px;
+  padding: clamp(20px, 3svh, 40px) 24px clamp(24px, 3.5svh, 48px);
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.hero__action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(18px, 2.6svh, 26px);
+  width: 100%;
+}
+
+.kicker {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.hero__headline {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: clamp(2.1rem, 5.6vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  max-width: 17ch;
+}
+
+/* Brand signature: one serif italic word inside the bold sans headline. */
+.hl-accent {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.06em;
+  color: var(--brand);
+}
+
+/* Same signature in Viagra blue, for the opening hook. */
+.hl-pill {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.06em;
+  color: var(--pill-blue);
+}
+
+/* The quiet cousin, for one emphasized word inside a lede. Inherits
+   the lede's muted color; no dotted underline — that styling means
+   "tappable" on this page. */
+.lede-accent {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.06em;
+}
+
+/* Headline + lede travel together at the top of slide 1. */
+.hero__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* --- Slide 1 choreography (app.js stages these off the video clock) ---
+
+   The claim, lede, and scroll cue all start hidden and rise in as the
+   morph resolves; the hook types itself over the video, then dissolves
+   with the pill. */
+
+/* Hook and claim share one slot; the hook types in first, dissolves
+   as the pill deforms, and the claim takes its place. */
+.headline-stack {
+  display: grid;
+  justify-items: center;
+}
+
+.headline-stack > * {
+  grid-area: 1 / 1;
+  align-self: center;
+}
+
+.morph-hook {
+  max-width: none;
+  font-size: clamp(1.7rem, 6.9vw, 2.7rem);
+  transition: opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease;
+}
+
+.morph-hook.is-out {
+  opacity: 0;
+  transform: translateY(-12px);
+  filter: blur(5px);
+}
+
+/* Hook and lede words rise in one at a time (app.js staggers .is-on). */
+.morph-hook .w,
+.hero__lede .w {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.3em);
+  filter: blur(4px);
+  transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+}
+
+.morph-hook .w.is-on,
+.hero__lede .w.is-on {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .morph-hook .w,
+  .hero__lede .w { transition: none; }
+}
+
+.headline-claim {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(6px);
+  transition: opacity 0.9s ease, transform 0.9s ease, filter 0.9s ease;
+}
+
+.headline-claim.is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+#the-better-way .scrollcue {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+}
+
+#the-better-way .scrollcue.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .headline-claim,
+  #the-better-way .scrollcue,
+  .morph-hook {
+    transition: none;
+  }
+}
+
+/* molecule ------------------------------------------------------------------- */
+
+.molecule {
+  width: min(70vw, 290px);
+}
+
+.molecule svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.mol-symbol {
+  font-family: var(--sans);
+  font-size: 30px;
+  font-weight: 600;
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+/* Figure annotation: hairline tick pointing at the model, serif label. */
+.molecule__note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+
+.molecule__note::before {
+  content: "";
+  width: 1px;
+  height: 18px;
+  background: rgba(8, 11, 43, 0.28);
+}
+
+/* vessel (slide 3, the demonstration) -------------------------------------------
+
+   Full bleed: the vessel runs edge to edge with no side margins,
+   a floating object in white space like slide 2's molecule, its cut
+   ends feathered away by the same mask idiom as slide 1's video.
+   Walls, interior fill, and cells are drawn by app.js from one
+   shared half-gap function; here is only how they look: a medical
+   render, not a cartoon — cylinder-shaded rose interior (deeper at
+   the walls, bright at the core), a thin crisp wall line riding the
+   gradient's dark edge, a soft light sheen drifting along the blood,
+   brand orange cells. The molecule here speaks a cleaner 2D voice
+   than slide 2's hero render — flat white-ringed circles, subtle
+   letters — because at this size the 3D gradients turn to mud. */
+
+.vessel-scene {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  text-align: center;
+  gap: 16px;
+  width: 100%;
+  padding: clamp(20px, 3svh, 40px) 24px clamp(24px, 3.5svh, 48px);
+}
+
+/* One paragraph in slide 2's voice; the wink is one quiet serif
+   word inside it, not a bold line. */
+.vessel__copy {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.vessel {
+  width: min(88vw, 540px);
+  /* The specimen treatment: the vessel's cut ends dissolve into the
+     page, same idiom as the morph video's feathered frame. */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+}
+
+.vessel svg {
+  display: block;
+  width: 100%;
+  height: clamp(130px, 24svh, 230px);
+}
+
+/* A thin line riding the gradient's already-darkened edge, so wall
+   thickness comes from shading with a crisp finish — not a heavy
+   cartoon outline. */
+.vessel__wall {
+  fill: none;
+  stroke: var(--brand-deep);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vessel__cell {
+  fill: var(--brand);
+  opacity: 0.9;
+}
+
+/* Anatomical callout: dot on the wall, diagonal hairline leader,
+   uppercase specimen label — journal figure furniture, deliberately
+   not slide 2's serif caption. */
+.vessel__tag-dot {
+  fill: rgba(8, 11, 43, 0.4);
+}
+
+.vessel__tag-line {
+  stroke: rgba(8, 11, 43, 0.35);
+  stroke-width: 1;
+}
+
+.vessel__tag-text {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  fill: rgba(8, 11, 43, 0.5);
+}
+
+/* Flat 2D molecule for this scene: N in the slide-2 navy, O in
+   brand orange, letters quiet. The white ring lifts the pair off
+   the red wall when it docks. */
+.no-mol__n,
+.no-mol__o {
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+.no-mol__n { fill: #1c2356; }
+.no-mol__o { fill: var(--brand); }
+
+.no-mol__symbol {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 600;
+  fill: #fff;
+  opacity: 0.85;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+/* Parked at their start posts (off the vessel, past the frame's top
+   and bottom) until the docking beat; invisible in the reduced-
+   motion end state — their work is already done. */
+.no-pair {
+  opacity: 0;
+}
+.no-pair--a { transform: translate(310px, -14px); }
+.no-pair--b { transform: translate(480px, 272px); }
+
+/* supply (slide 4, the dark room) — the battery, v2 vertical --------------------
+
+   One tall object, center of the room: your Nitric Oxide supply as
+   an upright battery cell — capsule-shaped like slide 1's product,
+   shaded like slide 2's spheres, an object rather than a status
+   glyph. The percentage lives INSIDE the cell and renders twice,
+   ink clipped to the charge and cream clipped to the empty chamber,
+   so the level boundary slices through the digits mid-drain. The
+   blue pill is a recurring actor drawn per-frame by app.js: it
+   drops into the terminal at three ages and buys a shrinking blue
+   buffer on top of the level while the supply sinks underneath —
+   so nothing here needs a caption or a legend.
+
+   NO orange type in this room (Ewan, Jul 8): the serif italic
+   carries the headline emphasis, the handoff is cream. The only
+   warmth allowed is the low-battery fill itself, which app.js lerps
+   toward #e77a58 via the rect's fill ATTRIBUTE — deliberately no
+   CSS fill rule on .bat__fill, a stylesheet rule would override the
+   attribute and freeze the charge cream (v1 shipped that bug).
+
+   The base styles below are the settled state for reduced motion
+   and no-JS: copy visible, no pill in sight (the pills are transient
+   actors now), markup's full 100% standing in where the level needs
+   JS. The choreography block above hides the copy for the play. */
+
+.battery-hero {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* The cell is the slide: sized by height so it stays the dominant
+   central object on any phone, width follows the 220:484 viewBox. */
+.battery svg {
+  display: block;
+  height: clamp(300px, 46svh, 460px);
+  width: auto;
+}
+
+/* Age and label share the serif italic voice and the cell's center
+   axis, so the stack reads as one sentence at every frame:
+   "At age 47, 43% of your Nitric Oxide is left." */
+.bat__age,
+.bat__label {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 16px;
+  fill: rgba(246, 244, 240, 0.6);
+  text-anchor: middle;
+  font-variant-numeric: tabular-nums;
+}
+
+.bat__case {
+  stroke: rgba(246, 244, 240, 0.32);
+  stroke-width: 1.5;
+}
+
+.bat__terminal {
+  fill: #3a4172;
+  stroke: rgba(246, 244, 240, 0.32);
+  stroke-width: 1.5;
+}
+
+/* The empty chamber: barely-there glass, so "drained" reads as an
+   emptied container, not a missing element. */
+.bat__chamber {
+  fill: rgba(246, 244, 240, 0.07);
+}
+
+/* (No .bat__fill rule — see the header note; the fill color lives
+   on the rect's attribute so app.js can warm it as the level drops.) */
+
+/* The pill's buffer: the blue it buys, riding on top of the level.
+   Translucent so the chamber glass and shading read through it. */
+.bat__buffer {
+  fill: #4353b8;
+  opacity: 0.9;
+}
+
+.bat__spec {
+  fill: #fff;
+  opacity: 0.09;
+}
+
+.bat__pct {
+  font-family: var(--sans);
+  font-size: 44px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-variant-numeric: tabular-nums;
+}
+
+.bat__pct--ink { fill: var(--ink); }
+.bat__pct--cream { fill: var(--header-bg); }
+
+.bat__sign {
+  font-size: 24px;
+}
+
+/* The blue pill sprite (app.js drives transform + opacity; the
+   markup parks it hidden above the terminal). White hairline ring
+   lifts it off the dark casing, same trick as slide 3's molecules. */
+.bat-pill__body {
+  fill: url(#pillBody);
+  stroke: rgba(246, 244, 240, 0.4);
+  stroke-width: 1;
+}
+
+.bat-pill__spec {
+  fill: #fff;
+  opacity: 0.22;
+}
+
+/* The turn of the page, on its own line: the thesis pointing at the
+   bright slide below. Cream, bolder and brighter than the lede —
+   emphasis by weight and light, not color (no orange type here). */
+.supply__handoff {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--header-bg);
+  max-width: 30ch;
+  text-wrap: balance;
+}
+
+/* lede + cta ------------------------------------------------------------------ */
+
+/* text-wrap: pretty deliberately left off: the spec allows browsers to
+   compute it as a deferred second pass after first paint, and this
+   element fades/rises in right at that moment -- the mid-transition
+   reflow to better break points reads as a stutter on whichever line
+   shifts. Plain wrapping has no such delayed second pass. */
+.hero__lede {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 42ch;
+}
+
+/* "Nobel Prize in Medicine" is tappable: serif italic with a dotted
+   underline (the "more here, not a link" affordance). The card pops
+   above it with the verbatim citation and a plain-words line. */
+.nobel-pop {
+  position: relative;
+}
+
+.nobel-pop__trigger {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.06em;
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: underline dotted rgba(8, 11, 43, 0.4);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.nobel-pop__trigger:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* Photographic proof: the 1998 ceremony as a small footnote peek
+   above the phrase. No scrim, no scroll lock; scrolling or tapping
+   anywhere dismisses it, so it never interrupts the flow. */
+.nobel-pop__card {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  width: min(58vw, 230px);
+  padding: 6px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(8, 11, 43, 0.18);
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 20;
+}
+
+.nobel-pop.is-open .nobel-pop__card {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%);
+}
+
+.nobel-pop__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 9px;
+}
+
+/* Quiet frosted close tucked into the photo's corner; scroll and
+   tap-out also dismiss, this is just the visible exit. */
+.nobel-pop__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: rgba(8, 11, 43, 0.55);
+  cursor: pointer;
+}
+
+.nobel-pop__close svg {
+  width: 10px;
+  height: 10px;
+}
+
+/* Invisible halo keeps the tap target generous despite the quiet look. */
+.nobel-pop__close::after {
+  content: "";
+  position: absolute;
+  inset: -9px;
+}
+
+.nobel-pop__close:active {
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.nobel-pop__close:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* Serif italic dateline, then plain legible sans for the facts. */
+/* text-wrap: pretty left off, same reason as .hero__lede above: this
+   card fades/scales in on open, and the deferred reflow pass would
+   land mid-transition. */
+.nobel-pop__caption {
+  display: block;
+  padding: 11px 10px 7px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  color: rgba(8, 11, 43, 0.52);
+}
+
+.nobel-pop__dateline {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: rgba(8, 11, 43, 0.66);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nobel-pop__card,
+  .nobel-pop__scrim { transition: none; }
+}
+
+/* The medal does the emphasizing; the type stays quiet. */
+.nobel-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: -6px;
+}
+
+.nobel-lockup__medal {
+  width: 36px;
+  height: 36px;
+}
+
+.nobel__source {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: rgba(8, 11, 43, 0.45);
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: min(100%, 360px);
+  min-height: 56px;
+  background: var(--brand);
+  color: #fff;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background 160ms ease;
+}
+
+.cta:hover { background: var(--brand-deep); }
+
+.cta:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.cta__arrow { font-family: Arial, sans-serif; letter-spacing: 0; }
+
+/* trust row -------------------------------------------------------------------- */
+
+.trust {
+  margin-top: clamp(10px, 2svh, 22px);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 0;
+  max-width: 380px;
+}
+
+.trust__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 0 12px;
+}
+
+.trust__item + .trust__item { border-left: 1px solid var(--hairline); }
+
+.trust__icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+/* scroll cue -------------------------------------------------------------------- */
+
+.scrollcue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: rgba(8, 11, 43, 0.35);
+  margin-top: clamp(18px, 3.5svh, 40px);
+}
+
+.scrollcue__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(8, 11, 43, 0.45);
+}
+
+.scrollcue__chevron {
+  display: block;
+  width: 18px;
+  height: auto;
+  animation: cue-drift 2.4s ease-in-out infinite;
+}
+
+@keyframes cue-drift {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50%      { transform: translateY(5px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollcue__chevron { animation: none; }
+}
+
+/* dot rail --------------------------------------------------------------------
+
+   One dot per slide on the right edge: a passive map that says the
+   page is short and the end is in sight. Hidden while slide 1 has the
+   screen to itself (app.js toggles .is-on past slide 1). Ink only;
+   brand orange stays reserved for accent words and the CTA. */
+
+.dotrail {
+  position: fixed;
+  top: 50%;
+  right: max(12px, env(safe-area-inset-right));
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* Above slide content, below the lightbox (scrim 50 / card 60). */
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.dotrail.is-on { opacity: 1; }
+
+.dotrail__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(8, 11, 43, 0.16);
+  transition: background 0.35s ease, transform 0.35s ease;
+}
+
+.dotrail__dot.is-active {
+  background: var(--ink);
+  transform: scale(1.3);
+}
+
+/* On the dark slide the rail flips to cream (app.js toggles). */
+.dotrail--dark .dotrail__dot { background: rgba(246, 244, 240, 0.28); }
+.dotrail--dark .dotrail__dot.is-active { background: var(--header-bg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .dotrail,
+  .dotrail__dot { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Slide 1: the morph video. Plays once and holds on the capsules;
+   app.js handles replay-on-return and reduced motion.
+   -------------------------------------------------------------------------- */
+
+.morph {
+  width: min(80vw, 44svh, 380px);
+}
+
+.morph__video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  /* Feather the square frame into the page so its edges never read;
+     the outer ~9% of the clip is background only. */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
+    linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
+    linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
+  mask-composite: intersect;
+}
