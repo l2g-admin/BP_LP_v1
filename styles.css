@@ -54,6 +54,8 @@ body {
   flex-direction: column;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+  /* Positioning context for the keep-scrolling cue at each slide's foot. */
+  position: relative;
 }
 
 /* The page's one dark slide: the problem lives in shadow between
@@ -182,8 +184,8 @@ body {
    app.js adds two beat classes after .is-visible (walls, cells, and
    the release ride its rAF clock); the copy rides the beats as
    transition delays:
-     0s     headline lands over the constricted vessel, trickle
-            already moving;
+     0s     headline words rise in one after another, like slides 1
+            and 2, over the constricted vessel and its trickle;
      1.2s   is-docking: two NO pairs drift in and land on the walls
             with the same overshoot-settle as slide 2's bond;
      2.7s   is-releasing: walls ease open, flow surges, the pairs
@@ -191,15 +193,18 @@ body {
             paragraph in slide 2's voice.
    Beat classes accumulate (none are removed until reset). */
 @media (prefers-reduced-motion: no-preference) {
-  #the-vessel .vessel-scene__headline {
+  #the-vessel .vessel-scene__headline .w {
+    display: inline-block;
     opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transform: translateY(0.3em);
+    filter: blur(4px);
+    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
   }
 
-  #the-vessel.is-visible .vessel-scene__headline {
+  #the-vessel .vessel-scene__headline .w.is-on {
     opacity: 1;
     transform: none;
+    filter: none;
   }
 
   #the-vessel .vessel__tag {
@@ -244,29 +249,35 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   Slide 4 choreography: "the battery" (v2, vertical). Same conductor
-   as slide 2 (app.js flips .is-visible once the slide settles); the
-   pill drops and buffers are drawn per-frame by app.js, so the only
-   CSS beats here are the copy, keyed to classes the clock adds at
-   story moments — the words can only ever land after the scene has
-   shown them.
-     0s      headline lands;
-     0.35s   the cell surfaces, full, reading Age 20 / 100%;
-     0.8s    the drain starts: age climbs 20 -> 70, the level falls
-             100 -> ~25 and warms from cream to low-supply orange;
-     ~3.8s   is-pill: the first blue pill drops into the terminal
-             and buys its buffer; the lede follows (+0.9s);
-     ~6.8s   is-drained: the level settles at 25%, the handoff lands
-             (cream — no orange type in this room), and the last
-             buffer dies just after. */
+   Slide 4 choreography: "the supply" (v5, the lifespan chart). Same
+   conductor as slides 2-3 (app.js flips .is-visible once the slide
+   settles); the two data series and the leading marker are drawn
+   per-frame by app.js, so the only CSS beats here are the headline
+   word-rise (like slides 1-3), the chart's entrance, and the copy,
+   keyed to the is-pill class the clock adds when the pill's spikes
+   begin — the words land on a scene that has already shown them.
+     0s      headline words rise in one after another;
+     0.35s   the chart surfaces;
+     0.8s    the draw starts: age sweeps 20 -> 70, the cream supply
+             line falls 100 -> ~25;
+     ~mid    is-pill: from age 40 the blue spikes appear and fall back
+             to the line, shrinking; the lede follows. */
 @media (prefers-reduced-motion: no-preference) {
-  #the-supply .hero__headline {
+  #the-supply .hero__headline .w {
+    display: inline-block;
     opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transform: translateY(0.3em);
+    filter: blur(4px);
+    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
   }
 
-  #the-supply .battery-hero {
+  #the-supply .hero__headline .w.is-on {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  #the-supply .chart-hero {
     opacity: 0;
     transform: translateY(18px);
     transition: opacity 0.7s ease 0.35s, transform 0.7s ease 0.35s;
@@ -277,22 +288,15 @@ body {
     transform: translateY(18px);
   }
 
-  /* The lede waits for the first pill's buffer to be up and visibly
-     draining — the words land on a scene already showing them. */
+  /* The lede waits for the pill's spikes to enter — it lands on the
+     "it runs on what's left" picture already on screen. */
   #the-supply.is-pill .hero__lede {
     opacity: 1;
     transform: none;
-    transition: opacity 0.7s ease 0.9s, transform 0.7s ease 0.9s;
+    transition: opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
   }
 
-  #the-supply.is-drained .supply__handoff {
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
-  }
-
-  #the-supply.is-visible .hero__headline,
-  #the-supply.is-visible .battery-hero {
+  #the-supply.is-visible .chart-hero {
     opacity: 1;
     transform: none;
   }
@@ -301,6 +305,252 @@ body {
   #the-supply.is-resetting *::before {
     transition: none !important;
   }
+}
+
+/* --------------------------------------------------------------------------
+   Slide 5 choreography: "the source". Same conductor as slides 2-3.
+   The molecule transforms in place on CSS transitions; app.js adds the
+   step classes (nitrate -> nitrite -> nitric oxide) and, at the last
+   step, is-made (which blooms the halo and lands the lede). Base rules
+   OUTSIDE this query hold the finished NO pair (the no-JS / reduced-
+   motion poster); the no-preference query rewinds the atoms to nitrate
+   and gives them their transitions, then the step classes drive them
+   home.
+     0s      headline words rise in one after another;
+     0s      the figure surfaces as a nitrate molecule;
+     1.2s    step-nitrite: one oxygen peels away and fades;
+     2.5s    step-no + is-made: the second oxygen peels, the N and O
+             settle into the pair, the halo blooms, the lede lands. */
+@media (prefers-reduced-motion: no-preference) {
+  #the-source .hero__headline .w {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.3em);
+    filter: blur(4px);
+    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+  }
+
+  #the-source .hero__headline .w.is-on {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  #the-source .conv {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  #the-source.is-visible .conv {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Rewind to the nitrate molecule: three oxygens around one nitrogen,
+     the nitrogen centered. The transitions here are what the step
+     classes below animate along. */
+  #the-source .conv__n {
+    transform: translate(120px, 96px);
+    transition: transform 0.9s cubic-bezier(0.34, 1.2, 0.5, 1);
+  }
+  #the-source .conv__o {
+    transition: transform 0.9s cubic-bezier(0.34, 1.2, 0.5, 1), opacity 0.5s ease;
+  }
+  #the-source .conv__o1 { transform: translate(120px, 62px); opacity: 1; }
+  #the-source .conv__o2 { transform: translate(149px, 113px); }
+  #the-source .conv__o3 { transform: translate(90px, 113px); opacity: 1; }
+
+  #the-source .conv__glow { opacity: 0; transition: opacity 0.9s ease; }
+
+  #the-source .conv__label {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  #the-source.is-visible .conv__label { opacity: 1; }
+
+  #the-source .hero__lede {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  /* step-nitrite: the top oxygen lifts off and fades. */
+  #the-source.step-nitrite .conv__o1 {
+    transform: translate(120px, 6px);
+    opacity: 0;
+  }
+
+  /* step-no: the second oxygen drifts off, the survivors close into
+     the familiar N-left / O-right pair. */
+  #the-source.step-no .conv__n  { transform: translate(104px, 96px); }
+  #the-source.step-no .conv__o2 { transform: translate(148px, 96px); }
+  #the-source.step-no .conv__o3 {
+    transform: translate(64px, 170px);
+    opacity: 0;
+  }
+
+  /* The halo rides step-no (not is-made) so it blooms and rewinds with
+     every pass of the loop; is-made persists across passes and only
+     holds the lede. */
+  #the-source.step-no .conv__glow { opacity: 1; }
+
+  /* is-made: the supply comes back — the lede lands, and stays put
+     while the conversion loops behind it. */
+  #the-source.is-made .hero__lede {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s;
+  }
+
+  /* The loop's seam. step-exit: the finished pair drifts up and off,
+     sent into circulation. step-enter then holds the silently rewound
+     nitrate just below the stage (declared after is-visible, so it
+     wins) so the next pass rides the same entry transition as the
+     first. */
+  #the-source.step-exit .conv {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  #the-source.step-enter .conv {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  #the-source.is-resetting *,
+  #the-source.is-resetting *::before {
+    transition: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Slide 6 choreography: "the reveal". Same conductor as slide 2 — one
+   .is-visible class from app.js, beats as transition delays. The cut
+   from the dark room is itself the first beat (the room floods with
+   light); everything here just assembles the poster:
+     0s     headline words rise in one after another, like slides 1-4;
+     0.6s   the bottle rises in and settles — the museum-object entrance
+            slide 2's molecule made, now for the product;
+     1.4s   the stamp ring surfaces behind it and begins its slow turn;
+     2.1s   the lede lands;
+     2.5s+  the review pill and the two review cards slide out from
+            behind the bottle, staggered — the slide's quiet receipts,
+            arriving as objects from the same physical world.
+   (A caption under the bottle — "This is Nitric Oxide Support." in
+   slide 2's tick idiom — shipped in the first cut; Ewan cut the echo.
+   The label names the product itself.) */
+@media (prefers-reduced-motion: no-preference) {
+  #the-capsule .hero__headline .w {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.3em);
+    filter: blur(4px);
+    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+  }
+
+  #the-capsule .hero__headline .w.is-on {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  #the-capsule .reveal__bottle {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.85s ease 0.6s, transform 0.85s ease 0.6s;
+  }
+
+  #the-capsule .reveal__ring {
+    opacity: 0;
+    transition: opacity 1.1s ease 1.4s;
+  }
+
+  /* The award takes the old lede beat — with the "Each capsule..."
+     line cut (Jul 9), this is the slide's only copy below the
+     bottle: the award landing under the object it credentials. */
+  #the-capsule .laurel {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.7s ease 2.1s, transform 0.7s ease 2.1s;
+  }
+
+  /* The receipts band follows the award, one beat later — the same
+     rise, woven in just before the review pill slides out. */
+  #the-capsule .stats {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.7s ease 2.35s, transform 0.7s ease 2.35s;
+  }
+
+  /* The review widgets start tucked at the bottle's center — rotation
+     zeroed, a touch smaller, hidden behind the product — and travel
+     out to their resting poses. Opacity arrives on a shorter clock
+     than the transform so most of the slide-out happens in the open;
+     the translate %s are of each widget's own box, sized so the
+     journey starts under the bottle's silhouette at every clamp()
+     size. Staggered, pill first, then card by card. */
+  #the-capsule .reveal__pill,
+  #the-capsule .reveal__card {
+    opacity: 0;
+  }
+
+  /* The pill lives at the CAP, whose silhouette is narrower — its
+     tucked travel is shorter than the cards' so the rounded end never
+     pokes out the cap's far side mid-slide. */
+  #the-capsule .reveal__pill {
+    transform: translate(30%, 20%) scale(0.9) rotate(0deg);
+    transition: opacity 0.45s ease 2.5s,
+                transform 0.9s cubic-bezier(0.22, 0.9, 0.3, 1) 2.5s;
+  }
+
+  #the-capsule .reveal__card--right {
+    transform: translate(-48%, -8%) scale(0.92) rotate(0deg);
+    transition: opacity 0.45s ease 2.75s,
+                transform 0.9s cubic-bezier(0.22, 0.9, 0.3, 1) 2.75s;
+  }
+
+  #the-capsule .reveal__card--left {
+    transform: translate(48%, -8%) scale(0.92) rotate(0deg);
+    transition: opacity 0.45s ease 2.95s,
+                transform 0.9s cubic-bezier(0.22, 0.9, 0.3, 1) 2.95s;
+  }
+
+  #the-capsule.is-visible .reveal__bottle,
+  #the-capsule.is-visible .laurel,
+  #the-capsule.is-visible .stats {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Settle to --pose (each widget's tilt), never transform: none —
+     the tilt is part of the resting poster. */
+  #the-capsule.is-visible .reveal__pill,
+  #the-capsule.is-visible .reveal__card {
+    opacity: 1;
+    transform: var(--pose);
+  }
+
+  /* The ring only fades — its transform is the centering translate,
+     which must survive .is-visible (transform: none would unseat it).
+     The turn lives on the inner group, around the viewBox's exact
+     center, so surfacing and spinning never fight over one transform. */
+  #the-capsule.is-visible .reveal__ring {
+    opacity: 1;
+  }
+
+  #the-capsule .reveal__ring-spin {
+    transform-box: view-box;
+    transform-origin: center;
+    animation: ring-turn 75s linear infinite;
+  }
+
+  #the-capsule.is-resetting *,
+  #the-capsule.is-resetting *::before {
+    transition: none !important;
+  }
+}
+
+@keyframes ring-turn {
+  to { transform: rotate(360deg); }
 }
 
 .site-header {
@@ -315,6 +565,104 @@ body {
   margin: 0 auto;
   width: min(230px, 64vw);
   height: auto;
+}
+
+/* Clinicians' Choice lockup (slide 6, directly under the bottle):
+   the FrontrowMD award redrawn in brand type — serif title flanked
+   by laurel branches, with the awarder named underneath. The source
+   line is deliberately kept: an unattributed "Clinicians' Choice"
+   reads as self-declared; naming FrontrowMD and the no-compensation
+   condition is what makes it a credential. */
+.laurel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.laurel__title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.laurel__branch {
+  height: 24px;
+  width: auto;
+  fill: var(--ink);
+  color: var(--ink); /* the stem stroke rides currentColor */
+}
+
+.laurel__branch--r {
+  transform: scaleX(-1);
+}
+
+.laurel__source {
+  font-size: 0.68rem;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  max-width: 34ch;
+  text-wrap: balance;
+}
+
+/* The receipts band (slide 6): the brand's four credibility numbers
+   in one quiet strip — the stats-band idiom of berkeleylife.com
+   itself, in the trust row's legit-commerce register. Value in ink,
+   label in the uppercase specimen voice, hairline dividers. Four
+   across on every screen: the type scales with the viewport (same
+   min() pattern as the trust row) and the labels are written short
+   enough to live in a quarter of a phone at two lines.
+
+   Pinned to the fold's FOOT (Ewan, Jul 9): in flow after the laurel,
+   space-evenly parked the page's leftover height in a dead strip
+   between the band and the CTA bar; anchored here the band closes
+   ranks with the bar (12px of clearance) and the leftover gathers
+   above the numbers instead, between award and band. The fold's
+   padding-bottom reserves this footprint, so flow content can't run
+   into it. Positioned against the fold (the nearest positioned
+   ancestor), not the hero: left/right mirror the hero's 24px side
+   padding, margin:auto re-centers once the 480px cap bites. */
+.stats {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: calc(124px + env(safe-area-inset-bottom));
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.stats__item {
+  padding: 2px 6px;
+}
+
+.stats__item + .stats__item {
+  border-left: 1px solid var(--hairline);
+}
+
+.stats__value {
+  font-size: min(1.15rem, 4.6vw);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats__label {
+  margin-top: 3px;
+  font-size: min(0.55rem, 2.3vw);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  color: var(--muted);
 }
 
 /* hero ---------------------------------------------------------------------- */
@@ -639,132 +987,536 @@ body {
 .no-pair--a { transform: translate(310px, -14px); }
 .no-pair--b { transform: translate(480px, 272px); }
 
-/* supply (slide 4, the dark room) — the battery, v2 vertical --------------------
+/* supply (slide 4, the first dark room) — the lifespan chart (v5) ---------------
 
-   One tall object, center of the room: your Nitric Oxide supply as
-   an upright battery cell — capsule-shaped like slide 1's product,
-   shaded like slide 2's spheres, an object rather than a status
-   glyph. The percentage lives INSIDE the cell and renders twice,
-   ink clipped to the charge and cream clipped to the empty chamber,
-   so the level boundary slices through the digits mid-drain. The
-   blue pill is a recurring actor drawn per-frame by app.js: it
-   drops into the terminal at three ages and buys a shrinking blue
-   buffer on top of the level while the supply sinks underneath —
-   so nothing here needs a caption or a legend.
+   Two series on one figure: a cream line, your Nitric Oxide supply,
+   falling across the lifespan, and — from age 40 — the blue pill's
+   brief spikes of blood flow that rise off it and fall straight back,
+   shrinking as the line drops. Cream is the supply, blue is the pill's
+   costume (as on slide 1); no orange TYPE in this room (hl-accent is
+   cream). app.js draws both series and the leading marker per frame;
+   the rules here are only how they look. The data paths are empty
+   until app.js (or its reduced-motion branch) fills them. */
 
-   NO orange type in this room (Ewan, Jul 8): the serif italic
-   carries the headline emphasis, the handoff is cream. The only
-   warmth allowed is the low-battery fill itself, which app.js lerps
-   toward #e77a58 via the rect's fill ATTRIBUTE — deliberately no
-   CSS fill rule on .bat__fill, a stylesheet rule would override the
-   attribute and freeze the charge cream (v1 shipped that bug).
-
-   The base styles below are the settled state for reduced motion
-   and no-JS: copy visible, no pill in sight (the pills are transient
-   actors now), markup's full 100% standing in where the level needs
-   JS. The choreography block above hides the copy for the play. */
-
-.battery-hero {
+.chart-hero {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-/* The cell is the slide: sized by height so it stays the dominant
-   central object on any phone, width follows the 220:484 viewBox. */
-.battery svg {
+/* The chart is the slide: sized by width so it stays the dominant
+   central object on any phone, height follows the 380:300 viewBox. */
+.no-chart {
   display: block;
-  height: clamp(300px, 46svh, 460px);
-  width: auto;
+  width: min(92vw, 460px);
+  height: auto;
+  overflow: visible;
 }
 
-/* Age and label share the serif italic voice and the cell's center
-   axis, so the stack reads as one sentence at every frame:
-   "At age 47, 43% of your Nitric Oxide is left." */
-.bat__age,
-.bat__label {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 500;
-  font-size: 16px;
-  fill: rgba(246, 244, 240, 0.6);
-  text-anchor: middle;
-  font-variant-numeric: tabular-nums;
-}
-
-.bat__case {
-  stroke: rgba(246, 244, 240, 0.32);
-  stroke-width: 1.5;
-}
-
-.bat__terminal {
-  fill: #3a4172;
-  stroke: rgba(246, 244, 240, 0.32);
-  stroke-width: 1.5;
-}
-
-/* The empty chamber: barely-there glass, so "drained" reads as an
-   emptied container, not a missing element. */
-.bat__chamber {
-  fill: rgba(246, 244, 240, 0.07);
-}
-
-/* (No .bat__fill rule — see the header note; the fill color lives
-   on the rect's attribute so app.js can warm it as the level drops.) */
-
-/* The pill's buffer: the blue it buys, riding on top of the level.
-   Translucent so the chamber glass and shading read through it. */
-.bat__buffer {
-  fill: #4353b8;
-  opacity: 0.9;
-}
-
-.bat__spec {
-  fill: #fff;
-  opacity: 0.09;
-}
-
-.bat__pct {
-  font-family: var(--sans);
-  font-size: 44px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  text-anchor: middle;
-  dominant-baseline: central;
-  font-variant-numeric: tabular-nums;
-}
-
-.bat__pct--ink { fill: var(--ink); }
-.bat__pct--cream { fill: var(--header-bg); }
-
-.bat__sign {
-  font-size: 24px;
-}
-
-/* The blue pill sprite (app.js drives transform + opacity; the
-   markup parks it hidden above the terminal). White hairline ring
-   lifts it off the dark casing, same trick as slide 3's molecules. */
-.bat-pill__body {
-  fill: url(#pillBody);
-  stroke: rgba(246, 244, 240, 0.4);
+.chart__grid line {
+  stroke: rgba(246, 244, 240, 0.12);
   stroke-width: 1;
 }
 
-.bat-pill__spec {
-  fill: #fff;
-  opacity: 0.22;
+/* The age axis sits a touch brighter than the reference grid. */
+.chart__base {
+  stroke: rgba(246, 244, 240, 0.26);
+  stroke-width: 1;
 }
 
-/* The turn of the page, on its own line: the thesis pointing at the
-   bright slide below. Cream, bolder and brighter than the lede —
-   emphasis by weight and light, not color (no orange type here). */
-.supply__handoff {
-  font-size: 1.2rem;
+/* Faint dashed marker where the pill enters (age 40). */
+.chart__pill-mark {
+  stroke: rgba(246, 244, 240, 0.16);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.chart__ylab {
+  font-family: var(--sans);
+  font-size: 8px;
   font-weight: 600;
-  line-height: 1.4;
-  color: var(--header-bg);
-  max-width: 30ch;
-  text-wrap: balance;
+  letter-spacing: 0.02em;
+  fill: rgba(246, 244, 240, 0.42);
+  text-anchor: end;
+}
+
+.chart__xlab {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  fill: rgba(246, 244, 240, 0.5);
+  text-anchor: middle;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Axis titles: quieter than the tick labels themselves, so they read
+   as furniture rather than new emphasis. */
+.chart__axis-title {
+  font-family: var(--sans);
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  fill: rgba(246, 244, 240, 0.34);
+  text-anchor: middle;
+}
+
+/* The supply: a line over a faint cream wash, graded from brand orange
+   at 20 (peak) to cream by the older end (what's left, worn pale). */
+.chart__cream-line {
+  fill: none;
+  stroke: url(#chartLineGrad);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart__cream-area {
+  fill: rgba(246, 244, 240, 0.1);
+}
+
+/* The pill: blue spikes over a translucent blue lobe — the temporary,
+   local blood-flow bump the pill buys, riding on what's left. */
+.chart__blue-line {
+  fill: none;
+  stroke: #6675e6;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart__blue-area {
+  fill: rgba(102, 117, 230, 0.3);
+}
+
+/* Glow behind the spike: a wide, blurred, brighter-blue stroke tracing
+   the same path as .chart__blue-line, so each dose reads as a pulse of
+   blood flow rather than a plotted data point. */
+.chart__blue-glow {
+  fill: none;
+  stroke: #8b9bf5;
+  stroke-width: 7;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.65;
+  filter: url(#blueGlow);
+}
+
+/* The leading point of the falling supply line. */
+.chart__marker {
+  fill: var(--header-bg);
+}
+
+/* Legend: a swatch and an uppercase label per series. */
+.chart__leg-cream {
+  stroke: var(--header-bg);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.chart__leg-blue {
+  stroke: #6675e6;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.chart__leg-text {
+  font-family: var(--sans);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  fill: rgba(246, 244, 240, 0.62);
+  text-anchor: start;
+}
+
+/* source (slide 5, the second dark room) — the conversion ----------------------
+
+   The nitrate-nitrite-NO pathway as one molecule transforming in
+   place: a nitrogen ringed by three oxygens sheds two of them to
+   become the Nitric Oxide pair from slides 2-3. Reused motif, so the
+   navy N / orange O carry over (orange is the molecule's own colour,
+   the one exception to the room's no-orange-TYPE rule). The atoms are
+   positioned by CSS transform so the conversion can animate; the rules
+   here are the FINISHED state (the no-JS / reduced-motion poster), and
+   the choreography query above rewinds them to nitrate. */
+
+.conv {
+  width: min(70vw, 300px);
+  display: flex;
+  justify-content: center;
+}
+
+.conv__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* White ring lifts each sphere off the ink, same trick as slide 3's
+   molecules. */
+.conv__n circle,
+.conv__o circle {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 1.5;
+}
+
+/* Finished positions: N left, the surviving O right, the two peeled
+   oxygens parked off and invisible. */
+.conv__n  { transform: translate(104px, 96px); }
+.conv__o2 { transform: translate(148px, 96px); }
+.conv__o1 { transform: translate(120px, 6px); opacity: 0; }
+.conv__o3 { transform: translate(64px, 170px); opacity: 0; }
+
+.conv__sym {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 600;
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.conv__sym--n { font-size: 20px; }
+
+/* Names the current molecule, in slide 3-4's uppercase specimen idiom
+   (not slide 2's serif caption). app.js swaps the text at each beat. */
+.conv__label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  fill: rgba(246, 244, 240, 0.6);
+  text-anchor: middle;
+}
+
+/* reveal (slide 6) --------------------------------------------------------------
+
+   The product, staged like slide 2's molecule: one object in bright
+   space. The bottle is the real 60ct render on transparent alpha (its
+   soft contact shadow is baked into the PNG), sized by height so it
+   stays the dominant central object on any phone. Behind it, the
+   stamp ring — live SVG text on a circle, quiet ink, turning slowly —
+   the demo page's treatment rebuilt so it stays crisp and editable.
+   Base styles below are the settled poster (the no-JS and reduced-
+   motion state); the choreography above only assembles it. */
+
+/* The sticky CTA turns on the moment this fold arrives and stays, so
+   the fold reserves the bar's footprint (button + proof row + padding)
+   up front — without this the lede renders under the fixed bar on
+   phones ("Day after day" vanished behind it, Jul 8). */
+#the-capsule {
+  /* The sticky bar's footprint (112px — sized for the one-line badges
+     row; "Clinically backed" bought the width back after Made in USA
+     briefly forced two lines) plus the receipts band now pinned in
+     the fold's foot above it (~64px + 12px clearance, see .stats).
+     Everything in flow ends above both. */
+  padding-bottom: calc(188px + env(safe-area-inset-bottom));
+}
+
+.reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reveal__stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Floor lowered 270 -> 240 (Jul 8): with the sticky CTA's footprint
+   reserved at the fold's foot, short phones need the stage to give a
+   little back or the lede has no room. Only bites when 38svh < 270,
+   i.e. screens under ~710px tall. */
+.reveal__bottle {
+  position: relative;
+  z-index: 1;
+  display: block;
+  height: clamp(240px, 38svh, 420px);
+  width: auto;
+}
+
+/* The ring rides behind the bottle, sized off the bottle's height so
+   the two scale together. Deliberately SMALLER than the bottle (like
+   the demo reference): the circle's arcs surface well inside the
+   bottle's edges and duck behind it, a watermark under the object —
+   not a halo around it. Ink kept very light for the same reason.
+   The phrase repeats around the FULL circle (no dead arcs); the
+   letter-spacing here is only the starting guess, app.js fits it to
+   the circumference once the real font is in. */
+.reveal__ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 78%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+}
+
+.reveal__ring-text {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  fill: rgba(8, 11, 43, 0.17);
+}
+
+/* Review widgets: the slide's proof, staged as physical objects tucked
+   behind the bottle (they sit under its z-index 1, over the ring), each
+   resting at a slight tilt with a real drop shadow — the depth cue.
+
+   Anchoring (v3, Jul 9). Two invariants, learned the hard way across
+   v1 (stage-% anchors buried half of each card behind the bottle on
+   phones) and v2 (a fixed 28px tuck still ate the TEXT, because the
+   tucked side of the right card is where its lines start, and of the
+   pill where its line ends):
+
+   1. The tuck (20px) is carried as extra PADDING on each widget's
+      tucked side, so by construction no text can ever sit in the
+      hidden zone, at any screen size. Content had to meet geometry
+      halfway too: the cards carry the reviews' short TITLES, not
+      full quotes — a phone's gutter beside the bottle is ~90px of
+      line width, and only title-length copy survives that.
+   2. Card width equals the side gutter exactly (50vw reaches from
+      the bottle's center — the stage is centered — to the screen
+      edge; minus 50% = half the stage). With the 20px tuck, the
+      outer edge then rests 20px short of the screen: clear of the
+      dot rail's 12-18px band. Capped at 185px so desktop cards
+      stay cards.
+
+   The pill tucks behind the CAP (right edge at the cap's left flank,
+   18% of the box, + 20px), not the body: the cap is ~72% as wide as
+   the PNG box (alpha 14-86% up top, full width only from ~25% down),
+   so at cap height even a 360px phone fits the pill's whole text in
+   the open. --pose carries each widget's resting tilt so the
+   choreography can zero it while tucked and settle every widget with
+   one shared rule. Base styles below are the settled poster (the
+   no-JS / reduced-motion state). */
+
+.reveal__pill {
+  position: absolute;
+  top: 8%;
+  right: calc(82% - 20px);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  white-space: nowrap;
+  padding: 0.55em calc(0.9em + 20px) 0.55em 0.9em;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  box-shadow: 0 12px 26px rgba(8, 11, 43, 0.14);
+  font-size: min(0.82rem, 3vw);
+  font-weight: 600;
+  color: var(--ink);
+  --pose: rotate(-3deg);
+  transform: var(--pose);
+}
+
+/* 4.7 of 5 stars, in review-trust green (the page's only green — a
+   deliberate outsider to the brand palette, like every real ratings
+   widget). Grey base row underneath keeps the unfilled 30% of the
+   fifth star legible. */
+.reveal__pill-stars {
+  width: 3.9em;
+  height: 0.75em;
+  flex-shrink: 0;
+}
+
+.reveal__pill-stars-bg {
+  fill: #ddd9d0;
+}
+
+.reveal__pill-stars-fill {
+  fill: #3e7d51;
+}
+
+.reveal__card {
+  position: absolute;
+  width: min(185px, calc(50vw - 50%));
+  padding: 12px 12px 11px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  box-shadow: 0 14px 30px rgba(8, 11, 43, 0.13);
+  text-align: left;
+  transform: var(--pose);
+}
+
+/* Each card's tucked side (left for the right-hand card, right for
+   the left-hand one) absorbs the 20px tuck as padding — the text
+   block always starts at the bottle's visible edge. */
+.reveal__card--right {
+  top: 26%;
+  left: calc(100% - 20px);
+  padding-left: 32px;
+  --pose: rotate(2.5deg);
+}
+
+.reveal__card--left {
+  top: 40%;
+  right: calc(100% - 20px);
+  padding-right: 32px;
+  --pose: rotate(-2.5deg);
+}
+
+.reveal__card-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: min(0.95rem, 3.8vw);
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+/* The byline: the doctor's identity as one unit at the card's foot —
+   face, name, credential, stacked (side-by-side needs ~130px, a
+   phone card's inner width is ~85). It's a real <button>: tap opens
+   the full-quote peek. Name wears the dotted underline, the page's
+   "more here, not a link" affordance (Nobel pop). */
+.reveal__card-byline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: 9px;
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.reveal__card-byline:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* The face is the card's credential (photos are B&W already; the
+   mask is ours). Rounded square, not a circle (Ewan, Jul 9): reads
+   more like an ID badge, less like a social avatar. Radius is ~30%
+   of the 44px box; keep that ratio if the size changes. Intrinsic
+   160px, shown at 44 — crisp on 2-3x screens. */
+.reveal__card-avatar {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  object-fit: cover;
+}
+
+.reveal__card-name {
+  font-size: min(0.7rem, 2.9vw);
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: underline dotted rgba(8, 11, 43, 0.4);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.reveal__card-cred {
+  font-size: min(0.62rem, 2.6vw);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Full-quote peeks: tap a byline and the doctor's whole quote pops
+   centered over the stage, above the bottle. The Nobel peek's
+   grammar — scroll, tap-out, Escape, X all dismiss; never a modal.
+   Sans for the long quote (the serif italic voice stays on the
+   small cards); big soft shadow because it floats over everything
+   this slide owns. */
+.doc-pop {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  width: min(78vw, 310px);
+  padding: 18px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(8, 11, 43, 0.25);
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -50%) translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+}
+
+.doc-pop.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%);
+}
+
+.doc-pop__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: var(--header-bg);
+  border: 1px solid var(--hairline);
+  border-radius: 9px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.doc-pop__close svg {
+  width: 11px;
+  height: 11px;
+}
+
+.doc-pop__close:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* Same rounded-square mask as the card avatars (same ~30% ratio at
+   this size) so the peek reads as the card's own doctor, larger. */
+.doc-pop__photo {
+  display: block;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  object-fit: cover;
+}
+
+.doc-pop__quote {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.doc-pop__byline {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 10px;
+}
+
+.doc-pop__name {
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.doc-pop__cred {
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: var(--muted);
 }
 
 /* lede + cta ------------------------------------------------------------------ */
@@ -779,6 +1531,22 @@ body {
   line-height: 1.55;
   color: var(--muted);
   max-width: 42ch;
+}
+
+/* Copy blocks that rise in on a transform transition keep their
+   compositor layer at rest. Without this, the layer the browser
+   promotes for the animation is torn down the instant the transition
+   ends, and the text repaints snapped to the device pixel grid; the
+   block sits at a fractional y (space-evenly leftovers, 26.04px line
+   boxes), so that repaint lands up to half a pixel away from the last
+   animated frame and reads as a line of the paragraph snapping into
+   place right as the rise settles. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__lede,
+  .headline-claim,
+  .nobel-lockup {
+    will-change: transform;
+  }
 }
 
 /* "Nobel Prize in Medicine" is tappable: serif italic with a dotted
@@ -959,7 +1727,12 @@ body {
 
 .cta__arrow { font-family: Arial, sans-serif; letter-spacing: 0; }
 
-/* trust row -------------------------------------------------------------------- */
+/* trust row --------------------------------------------------------------------
+
+   Fixed two-line composition (Ewan): the first two badges share a
+   line, pipe-separated; the third sits centered on its own line
+   below. The pipe only lives between line-mates — a leading pipe on
+   the third would read as a dangling separator. */
 
 .trust {
   margin-top: clamp(10px, 2svh, 22px);
@@ -968,25 +1741,30 @@ body {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 8px 0;
-  max-width: 380px;
+  gap: 9px 0;
 }
 
+/* The type scales with the viewport (capped at the full size) and the
+   icon/gaps/padding ride it in em, so the first line's pair fits ONE
+   line on any phone instead of wrapping and breaking the composition. */
 .trust__item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.8rem;
+  justify-content: center;
+  gap: 0.5em;
+  font-size: min(0.8rem, 3vw);
   font-weight: 600;
   color: var(--ink);
-  padding: 0 12px;
+  padding: 0 0.9em;
 }
 
-.trust__item + .trust__item { border-left: 1px solid var(--hairline); }
+.trust__item:nth-child(2) { border-left: 1px solid var(--hairline); }
+
+.trust__item:nth-child(3) { flex-basis: 100%; }
 
 .trust__icon {
-  width: 15px;
-  height: 15px;
+  width: 1.2em;
+  height: 1.2em;
   flex-shrink: 0;
 }
 
@@ -1023,6 +1801,44 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .scrollcue__chevron { animation: none; }
+}
+
+/* keep-scrolling cue -----------------------------------------------------------
+
+   Slide 1 gets the full labelled cue above; every middle slide (after
+   slide 1, before the last) gets this text-less chevron instead, fading
+   in at the slide's foot once its choreography has settled — a quiet
+   "keep going" that matches the reel-swipe model. app.js injects one per
+   eligible fold and flips .is-cue after a per-slide delay. currentColor
+   so it reads ink on bright slides and cream on the dark ones. */
+
+.keepcue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(10px, 2.4svh, 24px);
+  transform: translateX(-50%);
+  color: rgba(8, 11, 43, 0.3);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fold--dark .keepcue { color: rgba(246, 244, 240, 0.42); }
+
+.fold.is-cue .keepcue { opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .keepcue { transition: opacity 0.7s ease; }
+}
+
+.keepcue__chevron {
+  display: block;
+  width: 20px;
+  height: auto;
+  animation: cue-drift 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keepcue__chevron { animation: none; }
 }
 
 /* dot rail --------------------------------------------------------------------
@@ -1069,6 +1885,161 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .dotrail,
   .dotrail__dot { transition: none; }
+}
+
+/* sticky cta --------------------------------------------------------------------
+
+   v2 (Jul 8): the v1 bare outlined pill read as thin and "floating"
+   next to real commerce sticky footers, and Ewan called it out
+   directly: "just a button plopped over a footer", not on brand, and
+   disconnected from the page. v3 fixes all three:
+     the bar    solid --header-bg fill + a top border matching the
+                site header's own border-bottom — the same band that
+                opens the page now closes it, a deliberate bookend,
+                so it reads as a shelf rather than a sheet of glass;
+     the button the brand's actual CTA — solid filled orange, the
+                same .cta voice used everywhere else — from the first
+                frame it appears, not an outline that upgrades later;
+     the body   a proof row under the button by default (not gated),
+                so it's never just a lone pill. app.js shows the whole
+                bar once slide 6 (#the-capsule) is on screen and hides
+                it again on the way back up. Hidden with opacity+
+                visibility, same idiom as .nobel-pop__card, so the
+                real link inside is out of the tab order while off
+                rather than an invisible focus trap. */
+
+.sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  padding: 14px max(16px, env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  background: var(--header-bg);
+  border-top: 1px solid var(--hairline);
+  /* Real lift off the page content — the biggest source of the
+     "disconnected" read was the old bar having only a hairline. */
+  box-shadow: 0 -10px 28px rgba(8, 11, 43, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+}
+
+.sticky-cta.is-on {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.sticky-cta__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* The brand's actual CTA voice — same register as .cta (wide filled
+   orange pill, uppercase, letter-spaced) — from the moment the bar
+   appears. No quiet/outline phase: Ewan wants the on-brand look
+   immediately; what escalates later is the proof row below, not this
+   button's style. */
+.sticky-cta__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 52px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  border: 1.5px solid var(--brand);
+  background: var(--brand);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 5px 18px rgba(213, 79, 47, 0.3);
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.sticky-cta__link:hover {
+  background: var(--brand-deep);
+  border-color: var(--brand-deep);
+}
+
+.sticky-cta__link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* Two proof rows sharing one slot, crossfaded — "small icon, bold
+   text, pipe separator", the same legit-commerce-badge idiom as
+   slide 6's trust row (never the louder discount-badge treatment).
+   --badges is the default: an echo of badges already shown moments
+   earlier on this same slide, so "more than a button" never means
+   showing the visitor something new and unearned. --stats (the
+   rating + provider count) only takes over once is-escalated fires,
+   which app.js gates on a slide with id="the-proof" existing and
+   being reached — no such slide exists (the Jul 9 proof room was
+   cut), so the row is dormant markup; see its comment in index.html. */
+.sticky-cta__proof {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px 0;
+  transition: opacity 0.3s ease;
+}
+
+
+.sticky-cta__proof--stats {
+  display: none;
+}
+
+.sticky-cta.is-escalated .sticky-cta__proof--badges {
+  display: none;
+}
+
+.sticky-cta.is-escalated .sticky-cta__proof--stats {
+  display: flex;
+}
+
+/* Type scales down a touch on narrow screens so all three badges
+   ("Prescription free | Clinically backed | Made in USA") hold one
+   line to ~360px; below that the row wraps gracefully. */
+.sticky-cta__proof-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: min(0.72rem, 2.9vw);
+  font-weight: 600;
+  color: var(--ink);
+  padding: 0 7px;
+  white-space: nowrap;
+}
+
+.sticky-cta__proof-item + .sticky-cta__proof-item {
+  border-left: 1px solid var(--hairline);
+}
+
+.sticky-cta__proof-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticky-cta,
+  .sticky-cta__link,
+  .sticky-cta__proof { transition: none; }
 }
 
 /* --------------------------------------------------------------------------

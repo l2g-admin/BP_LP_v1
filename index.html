@@ -164,8 +164,8 @@
           <p class="nobel__source">1998 &middot; Furchgott, Ignarro, and Murad</p>
         </div>
 
-        <!-- Trust badges intentionally held back until the product is
-             introduced. Markup saved in snippets/trust-badges.html. -->
+        <!-- Trust badges deliberately absent here: they land on slide 5
+             (#the-capsule) with the product they vouch for. -->
       </div>
     </section>
   </div>
@@ -296,47 +296,33 @@
   </div>
 
   <!-- ============================================================
-       SLIDE 4 — THE SUPPLY (the dark room)
-       The page's only dark slide. v2 (Jul 8, after Ewan's review of
-       the horizontal false-charger cell): ONE tall vertical battery,
-       center of the room, and the blue pill as a recurring actor.
-       Ewan asked for the visual to be more central with less text,
-       no orange type, and suggested the pill "adding a buffer" as
-       the level depletes — this is that. The side-by-side-ages
-       variant was considered and dropped: comparison panels shrink
-       on mobile and re-split one fact into several renderings,
-       which was the original complaint against v1.
+       SLIDE 4 — THE SUPPLY (the first dark room)
+       The problem, in shadow. v5 (Jul 8): the battery gives way to a
+       LIFESPAN CHART (Ewan's redirect) — one honest picture of two
+       things at once. A cream line, your Nitric Oxide supply, falls
+       across the lifespan (Age 20 / 100% -> Age 70 / ~25%; anchored to
+       the 20s peak; ~50% gone by 40 per Berkeley Life's own claim and
+       Taddei et al., ~75% by the 70s per Egashira et al.; both in
+       PMC3390088). From age 40 a second, BLUE series enters: the blue
+       pill (PDE5 inhibitors — sildenafil/tadalafil). It draws as brief
+       spikes of blood flow that rise off the cream line and fall
+       straight back to it — short-term and local, never lifting the
+       trajectory. And the spikes SHRINK as the line falls: the pill's
+       benefit is proportional to the Nitric Oxide you still have (it
+       prolongs that molecule's downstream effect, it makes none), so
+       "no NO, no go" — it runs on what's left. The two series never
+       add together (organic nitrate + PDE5i is a real hypotension
+       contraindication; the page stays pill-vs-foundation, never
+       "stack them").
 
-       The story: the cell drains from Age 20 / 100% to Age 70 /
-       ~25%, warming from cream to low-battery orange as it passes
-       half. At ages 45, 55, and 65 a blue pill drops into the
-       terminal and buys a thin blue buffer on top of the level —
-       each one visibly smaller, because a buffer is a fixed share
-       of whatever's left — and the buffer drains away while the
-       supply keeps sinking underneath. The readout NEVER counts
-       the buffer: the number is the supply, and the supply never
-       reacts to the pill. The last buffer dies after the drain has
-       already settled at 25% — the closing beat.
-
-       Figures unchanged, anchored to the 20s peak and defensible:
-       ~50% gone by age 40 (Berkeley Life's own claim; Taddei et
-       al. >50% endothelial-function loss in the oldest group) and
-       ~75% gone by the 70s (Egashira et al., 75% loss of coronary
-       endothelium-derived NO in 70-80yo vs healthy 20yo; both
-       reviewed in PMC3390088, "Nitric oxide and geriatrics").
-
-       The percentage lives INSIDE the cell (split-color: ink
-       clipped to the charge, cream to the empty chamber, so the
-       level boundary slices through the digits mid-drain); age and
-       label sit inside the SVG sharing the cell's axis, and the
-       three lines read as one sentence at every frame: "At age 47,
-       43% of your Nitric Oxide is left." app.js runs the whole
-       scene on one rAF clock; replays on return; reduced motion
-       gets the settled end state (age 70, 25%, no pill in sight,
-       copy visible). NO orange type anywhere in the room per Ewan —
-       the serif italic carries the headline emphasis and the
-       handoff is cream; the only warmth is the low-battery fill.
-       ============================================================ -->
+       Colour holds the deck's grammar: cream is your supply, blue is
+       the pill's costume (as on slide 1), and no orange TYPE lives in
+       this room (hl-accent is cream). app.js draws the whole chart on
+       one rAF clock as the age sweeps 20 -> 70, spikes appearing from
+       40; the headline rises word-by-word like slides 1-3; is-pill
+       fires when the pill enters (the lede keys off it). Replays on
+       return; reduced motion gets the settled chart (full decline, all
+       shrinking spikes, copy). -->
   <div class="fold fold--dark" id="the-supply">
 
     <section class="hero">
@@ -344,92 +330,490 @@
         You produce <em class="hl-accent">less</em> every year.
       </h2>
 
-      <!-- The battery. Static aria-label carries the whole story;
-           every moving part inside is decorative. -->
-      <div class="battery-hero" role="img"
-           aria-label="Your Nitric Oxide supply drains like a battery, from one hundred percent at age 20 to about a quarter by age 70. Blue pills drop in along the way, and each adds only a small temporary buffer that shrinks every time, while the supply keeps falling.">
-        <figure class="battery">
-          <svg viewBox="0 0 220 484" aria-hidden="true">
-            <defs>
-              <!-- Casing: darker at the sides, bright at the core,
-                   so the cell reads as an upright cylinder in the
-                   same physical world as slides 1-3. -->
-              <linearGradient id="batCase" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0"    stop-color="#1a1e40"/>
-                <stop offset="0.16" stop-color="#272c55"/>
-                <stop offset="0.5"  stop-color="#323966"/>
-                <stop offset="0.84" stop-color="#272c55"/>
-                <stop offset="1"    stop-color="#1a1e40"/>
-              </linearGradient>
-              <!-- Cylinder shading laid over the whole chamber, so
-                   charge, buffer, and empty glass shade alike. -->
-              <linearGradient id="batShade" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0"    stop-color="#ffffff" stop-opacity="0.3"/>
-                <stop offset="0.35" stop-color="#ffffff" stop-opacity="0"/>
-                <stop offset="0.7"  stop-color="#000000" stop-opacity="0"/>
-                <stop offset="1"    stop-color="#000000" stop-opacity="0.16"/>
-              </linearGradient>
-              <linearGradient id="pillBody" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0"    stop-color="#4a5ac2"/>
-                <stop offset="0.55" stop-color="#2f3c96"/>
-                <stop offset="1"    stop-color="#222c74"/>
-              </linearGradient>
-              <!-- The chamber's domed ends. -->
-              <clipPath id="batInner">
-                <rect x="49" y="79" width="122" height="362" rx="61"/>
-              </clipPath>
-              <!-- The split number: one copy of the percentage clipped
-                   to the charge (ink), one to the empty chamber
-                   (cream). app.js resizes both rects with the level;
-                   neither ever includes the buffer. -->
-              <clipPath id="batFillW">
-                <rect class="bat__clip-fill" x="49" y="79" width="122" height="362"/>
-              </clipPath>
-              <clipPath id="batEmptyW">
-                <rect class="bat__clip-empty" x="49" y="79" width="122" height="0"/>
-              </clipPath>
-            </defs>
+      <!-- The chart. Static aria-label carries the whole story; the
+           gridlines, axis labels and legend are fixed furniture, the
+           two data series and the leading marker are drawn by app.js. -->
+      <div class="chart-hero" role="img"
+           aria-label="Your Nitric Oxide supply drawn as a line falling with age, from full at 20 to about a quarter by 70. From age 40 the blue pill adds brief spikes of blood flow that fall straight back to the line each time and shrink as the years pass, never lifting it.">
+        <svg class="no-chart" viewBox="0 0 380 300" aria-hidden="true">
+          <!-- Gradient for the supply line: brand orange at 20 (peak
+               vitality), fading to the room's cream by the older end
+               (what's left). The leading marker's fill tracks it in JS. -->
+          <defs>
+            <linearGradient id="chartLineGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#d54f2f"/>
+              <stop offset="100%" stop-color="#f6f4f0"/>
+            </linearGradient>
+            <!-- Soft halo behind each pill spike, standing in for a
+                 pulse of blood flow rather than a plotted line. -->
+            <filter id="blueGlow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="3.2"/>
+            </filter>
+          </defs>
+          <!-- Reference grid: 100% / 50% / 0 (baseline). -->
+          <g class="chart__grid">
+            <line x1="46" y1="34"  x2="360" y2="34"/>
+            <line x1="46" y1="141" x2="360" y2="141"/>
+          </g>
+          <line class="chart__base" x1="46" y1="248" x2="360" y2="248"/>
+          <text class="chart__ylab" x="40" y="37">100%</text>
+          <text class="chart__ylab" x="40" y="144">50%</text>
+          <text class="chart__axis-title chart__axis-title--y"
+                x="16" y="141" transform="rotate(-90 16 141)">% OF PEAK</text>
 
-            <!-- "At age 20," / cell / "of your Nitric Oxide is left"
-                 share the cell's center axis (x=110). -->
-            <text class="bat__age" x="110" y="30">At age <tspan class="bat-age">20</tspan>,</text>
+          <!-- Where the pill enters (age 40); the spikes start here. -->
+          <line class="chart__pill-mark" x1="172" y1="34" x2="172" y2="248"/>
 
-            <rect class="bat__terminal" x="95" y="52" width="30" height="18" rx="8"/>
-            <rect class="bat__case" x="40" y="70" width="140" height="380" rx="70" fill="url(#batCase)"/>
-            <g clip-path="url(#batInner)">
-              <rect class="bat__chamber" x="49" y="79" width="122" height="362"/>
-              <rect class="bat__fill" x="49" y="79" width="122" height="362" fill="#f6f4f0"/>
-              <!-- The pill's buffer: rides on top of the level, blue,
-                   never counted by the readout. app.js sizes it. -->
-              <rect class="bat__buffer" x="49" y="79" width="122" height="0"/>
-              <rect x="49" y="79" width="122" height="362" fill="url(#batShade)"/>
-              <ellipse class="bat__spec" cx="62" cy="180" rx="7" ry="105"/>
-            </g>
+          <!-- Data series, drawn per-frame by app.js. Blue sits under
+               cream so between doses (where the two coincide) the cream
+               supply line reads on top; the spikes rise above it. -->
+          <path class="chart__blue-area" d=""/>
+          <path class="chart__blue-glow" d=""/>
+          <path class="chart__blue-line" d=""/>
+          <path class="chart__cream-area" d=""/>
+          <path class="chart__cream-line" d=""/>
+          <circle class="chart__marker" cx="46" cy="34" r="4"/>
 
-            <text class="bat__pct bat__pct--ink" clip-path="url(#batFillW)" x="110" y="260"><tspan class="bat__num">100</tspan><tspan class="bat__sign" dy="-10">%</tspan></text>
-            <text class="bat__pct bat__pct--cream" clip-path="url(#batEmptyW)" x="110" y="260"><tspan class="bat__num">100</tspan><tspan class="bat__sign" dy="-10">%</tspan></text>
+          <!-- Time axis. -->
+          <text class="chart__xlab" x="46"  y="264">20</text>
+          <text class="chart__xlab" x="172" y="264">40</text>
+          <text class="chart__xlab" x="360" y="264">70</text>
+          <text class="chart__axis-title chart__axis-title--x" x="203" y="279">AGE (YEARS)</text>
 
-            <!-- The blue pill, dropped into the terminal at three ages
-                 by app.js (transform + opacity are driven per frame).
-                 Keep the group if the art is ever swapped. -->
-            <g class="bat-pill" opacity="0" transform="translate(110 6)">
-              <path class="bat-pill__body" d="M -11.5 -4 Q -17 0 -11.5 4 L -4.5 8.7 Q 0 11.7 4.5 8.7 L 11.5 4 Q 17 0 11.5 -4 L 4.5 -8.7 Q 0 -11.7 -4.5 -8.7 Z"/>
-              <ellipse class="bat-pill__spec" cx="-3.5" cy="-4.5" rx="7" ry="3"/>
-            </g>
-
-            <text class="bat__label" x="110" y="472">of your Nitric Oxide is left</text>
-          </svg>
-        </figure>
+          <!-- Two-line legend: which series is which, journal-figure
+               plain (a swatch and an uppercase label each). -->
+          <g class="chart__legend">
+            <line class="chart__leg-cream" x1="244" y1="50" x2="260" y2="50"/>
+            <text class="chart__leg-text" x="266" y="53">YOUR NITRIC OXIDE</text>
+            <line class="chart__leg-blue" x1="244" y1="68" x2="260" y2="68"/>
+            <text class="chart__leg-text" x="266" y="71">THE BLUE PILL</text>
+          </g>
+        </svg>
       </div>
 
       <div class="hero__action">
-        <!-- Two sentences on the whole slide, both landing after the
-             scene has already shown them. No orange type in the room. -->
+        <!-- Lands as the pill's first spike falls back to the line.
+             Honest: it works, on a shrinking supply — not a placebo.
+             No product named yet; the slide seats the problem. -->
         <p class="hero__lede">
-          Each blue pill runs on what&rsquo;s left.
+          The blue pill doesn&rsquo;t recharge you.
+          It runs on what&rsquo;s left.
         </p>
+      </div>
+    </section>
+  </div>
 
-        <p class="supply__handoff">So recharge the supply.</p>
+  <!-- ============================================================
+       SLIDE 5 — THE SOURCE (the second dark room)
+       The bridge Ewan asked for: slide 4 says the pill can't refill
+       your supply, so what can? This slide answers with the mechanism
+       before any product is shown — dietary nitrates. Staying dark
+       keeps the two problem/mechanism slides together in the "science"
+       register and saves the dark-to-bright snap for the product on
+       slide 6.
+
+       One object, transforming in place: the nitrate-nitrite-NO
+       pathway your body runs. A nitrate molecule (one nitrogen, three
+       oxygens) sheds an oxygen to become nitrite, sheds another to
+       become the Nitric Oxide pair the visitor already met on slides
+       2-3 — same navy-N / orange-O motif (orange is the molecule's own
+       colour, exempt from the room's no-orange-TYPE rule). As the NO
+       forms, a warm halo blooms behind it: the supply, replenished.
+       The changing label names each state in slide 3-4's uppercase
+       specimen idiom (NOT slide 2's serif caption, which Ewan reserved
+       to that slide). app.js times the conversion beats and the
+       headline word-rise, then loops the scene while it is on screen:
+       the finished pair drifts off into circulation and a fresh
+       nitrate rides back in — the body keeps making it. is-made
+       releases the lede, which lands once and holds through the loop.
+       Replays on return; reduced motion rests on the finished NO pair,
+       halo up, copy shown. -->
+  <div class="fold fold--dark" id="the-source">
+
+    <section class="hero">
+      <h2 class="hero__headline">
+        Restore your supply, <em class="hl-accent">naturally</em>.
+      </h2>
+
+      <figure class="conv">
+        <!-- The molecule transforms in place, on a loop; app.js drives
+             the beats (nitrate -> nitrite -> nitric oxide -> drift off
+             -> next nitrate) as CSS classes, the atoms move on CSS
+             transitions. Base markup below is the finished state (the
+             no-JS / reduced-motion poster); the no-preference query
+             rewinds it to nitrate to start. -->
+        <svg class="conv__svg" viewBox="0 0 240 210" role="img"
+             aria-label="A dietary nitrate molecule converting into Nitric Oxide: it sheds one oxygen to become nitrite, then another to become the Nitric Oxide molecule the body uses, which glows as the supply is replenished.">
+          <defs>
+            <radialGradient id="convN" cx="0.34" cy="0.28" r="0.95">
+              <stop offset="0" stop-color="#46538f"/>
+              <stop offset="0.55" stop-color="#1c2356"/>
+              <stop offset="1" stop-color="#06092a"/>
+            </radialGradient>
+            <radialGradient id="convO" cx="0.34" cy="0.28" r="0.95">
+              <stop offset="0" stop-color="#f09a74"/>
+              <stop offset="0.55" stop-color="#dc5a35"/>
+              <stop offset="1" stop-color="#a93a1e"/>
+            </radialGradient>
+            <radialGradient id="convGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#e77a58" stop-opacity="0.55"/>
+              <stop offset="0.6" stop-color="#e77a58" stop-opacity="0.12"/>
+              <stop offset="1" stop-color="#e77a58" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Warm halo behind the pair: the supply coming back. -->
+          <circle class="conv__glow" cx="126" cy="96" r="78" fill="url(#convGlow)"/>
+
+          <!-- Three oxygens (two peel away) and one nitrogen. Each is a
+               group positioned by CSS transform so the conversion can
+               animate; the white ring lifts them off the ink. -->
+          <g class="conv__o conv__o1">
+            <circle r="20" fill="url(#convO)"/>
+            <text class="conv__sym">O</text>
+          </g>
+          <g class="conv__o conv__o3">
+            <circle r="20" fill="url(#convO)"/>
+            <text class="conv__sym">O</text>
+          </g>
+          <g class="conv__o conv__o2">
+            <circle r="20" fill="url(#convO)"/>
+            <text class="conv__sym">O</text>
+          </g>
+          <g class="conv__n">
+            <circle r="26" fill="url(#convN)"/>
+            <text class="conv__sym conv__sym--n">N</text>
+          </g>
+
+          <text class="conv__label" x="120" y="196">NITRIC OXIDE</text>
+        </svg>
+      </figure>
+
+      <div class="hero__action">
+        <!-- The mechanism, in plain words: the raw material and what
+             the body does with it. The product is not named yet —
+             slide 6 reveals what delivers these nitrates. -->
+        <p class="hero__lede">
+          Leafy greens and beets are rich in dietary nitrates.
+          Your body turns them into Nitric&nbsp;Oxide.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 6 — THE REVEAL
+       The answer to the dark room's verdict ("The blue pill doesn't
+       recharge you. It runs on what's left."): the thing that does
+       recharge you, standing in the page's brightest room. On snap
+       scroll the cut itself is the beat — the screen floods with
+       light coming out of the dark and the bottle is there.
+
+       The object is the real 60ct render (assets/no-support-60.png,
+       trimmed + downscaled from Ewan's 4000px transparent source),
+       the same bottle the visitor meets on the product page next —
+       scent continuity into the click-through. Behind it, the demo
+       page's stamp ring rebuilt live in SVG: one repeating phrase
+       (CLINICALLY PROVEN • NITRIC OXIDE SUPPORT •) filling the FULL
+       circle — Ewan flagged the first cut's two floating phrases as
+       leaving dead arcs; app.js fits the letter-spacing to the
+       circumference after fonts load, so the loop closes seamlessly
+       while it turns. No caption under the bottle: the first cut
+       echoed slide 2's tick-and-serif annotation and Ewan cut it —
+       the label already names the product.
+
+       "Capsule", not "pill", in the headline: slide 1's video already
+       performed the word swap (blue pill dissolves into capsules),
+       the product IS a capsule, and the cream capsule wears the colour
+       of slide 4's supply line, the cream your body refills on slide 5;
+       blue borrows, cream restores. The accent is the standard orange
+       serif (never .hl-pill blue; blue is the villain's costume, and
+       orange type returns with the light). The blue pill itself never
+       appears in this room — its story ended in the dark.
+
+       Trust badges (held in snippets/trust-badges.html since slide 2)
+       moved OFF this slide (Jul 8, v2): once the sticky footer got its
+       own badge row, having the identical two badges again in the
+       body — stacked directly above the footer on screen — read as
+       plain duplication. Badges now live only in the footer. In their
+       place: a review line, the natural companion to a product photo
+       and real proof that didn't exist on this slide before ("add the
+       reviews back" — same .trust row idiom, one item, a star instead
+       of the removed badges). v3 (Jul 8): that review line moved off
+       the copy column and ONTO the stage — a rating pill and two mini
+       written-review cards that slide out from behind the bottle
+       (Ewan asked for proof widgets with a feeling of depth, styled
+       after berkeleylife.com's own rating pill and review cards).
+       They sit above the stamp ring but under the bottle in z-order,
+       so their tucked edges genuinely disappear behind the product.
+       Review count shown is 342 per Ewan. The site header (the logo band, slide
+       1's only appearance of it until now) also returns here: Ewan
+       wanted the reveal bookended top and bottom, the same warm band
+       that opens the page and the one the sticky footer now uses to
+       close it — this is the page's commerce moment, so it gets the
+       page's only other piece of persistent-feeling chrome. Still not
+       an actual persistent header (it scrolls with this one fold,
+       like slide 1's); the no-fixed-header rule for slides 2-5 stands.
+       No on-page pricing yet. The brand's four receipts (8+ years of
+       R&D, 28,000 articles, 3 clinical trials, 3,000+ providers) sit
+       as a quiet band under the laurel (Jul 9, Ewan) — a dedicated
+       proof slide was built and cut the same day as one room too
+       many; the numbers belong at the decision, not one flick past
+       it. Choreography: slide 2's conductor —
+       .is-visible at the 0.6 settle, beats as CSS transition delays
+       (bottle rises, ring surfaces and turns, lede, badges).
+       Replays on return; reduced motion gets the settled poster.
+       ============================================================ -->
+  <div class="fold" id="the-capsule">
+
+    <header class="site-header">
+      <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
+    </header>
+
+    <section class="hero">
+      <h2 class="hero__headline">
+        We put it in a <em class="hl-accent">capsule</em>.
+      </h2>
+
+      <figure class="reveal">
+        <div class="reveal__stage">
+          <!-- The stamp ring: one phrase repeated around the FULL
+               circle (like the demo page — no dead arcs), turning
+               slowly (CSS spins .reveal__ring-spin; still under
+               reduced motion). Two repetitions is the right ballpark
+               for the circumference; app.js measures the real text
+               after fonts load and fits the letter-spacing so the
+               loop closes exactly, seam invisible. Decorative — the
+               badge row below carries the claims accessibly. -->
+          <svg class="reveal__ring" viewBox="0 0 400 400" aria-hidden="true">
+            <defs>
+              <path id="revealRing" d="M 14 200 a 186 186 0 1 1 372 0 a 186 186 0 1 1 -372 0"/>
+            </defs>
+            <g class="reveal__ring-spin">
+              <text class="reveal__ring-text"><textPath href="#revealRing">CLINICALLY PROVEN &#8226; NITRIC OXIDE SUPPORT &#8226; CLINICALLY PROVEN &#8226; NITRIC OXIDE SUPPORT &#8226; </textPath></text>
+            </g>
+          </svg>
+
+          <!-- The proof, tucked behind the product: a rating pill and
+               two DOCTOR quote cards (v3, Jul 9 — Ewan swapped the
+               customer titles for named doctors with faces: authority
+               beats anonymity). Each card: rounded-square B&W headshot
+               (square-cropped from Ewan's webp originals into
+               assets/dr-*.jpg; dr-jeffrey-bland.jpg is processed and
+               waiting for a future proof slide), one short VERBATIM
+               sentence from the doctor's full quote on
+               berkeleylife.com, and the uppercase name — the idiom of
+               the brand's own dark doctor cards. No star row on
+               these: the rating lives on the pill, the doctor's face
+               is the credential, and a phone-width card can't fit
+               avatar + stars side by side anyway. Cards sit after the
+               ring and before the bottle so DOM order stacks them
+               above the watermark but under the bottle (z-index 1);
+               each starts hidden at the bottle's center and slides
+               out to its resting tilt. Each widget carries its tuck
+               depth as extra padding on the tucked side, so no text
+               ever sits in the hidden zone (styles.css). The pill
+               hides behind the CAP, not the body — the cap is ~72% as
+               wide as the PNG box, so at cap height even a small
+               phone has room for the pill's full text. -->
+          <!-- Star row is 4.7-accurate: five grey base stars, a green
+               overlay clipped at 4 stars + 70% of the fifth (x=83.2 of
+               the 88-unit row). Green, not brand orange, per Ewan —
+               the universal review-trust colour, and this palette has
+               no other green to collide with. NO review count (Jul 9,
+               Ewan: 342 reads small — and any count here risks
+               contradicting the PDP's own live widget one click
+               later; a bare rating never can). Dropping the count
+               made room for "Rating" again in the cap-height gutter.
+               Keep the sticky footer's stats row in sync. -->
+          <p class="reveal__pill">
+            <svg class="reveal__pill-stars" viewBox="0 0 88 16" role="img" aria-label="4.7 out of 5 stars">
+              <defs>
+                <path id="pill-star" d="M8 1 L9.6 5.7 L14.7 5.8 L10.7 8.9 L12.1 13.7 L8 10.8 L3.9 13.7 L5.3 8.9 L1.3 5.8 L6.3 5.7 Z"/>
+                <clipPath id="pill-star-clip"><rect x="0" y="0" width="83.2" height="16"/></clipPath>
+              </defs>
+              <g class="reveal__pill-stars-bg">
+                <use href="#pill-star"/><use href="#pill-star" x="18"/><use href="#pill-star" x="36"/><use href="#pill-star" x="54"/><use href="#pill-star" x="72"/>
+              </g>
+              <g class="reveal__pill-stars-fill" clip-path="url(#pill-star-clip)">
+                <use href="#pill-star"/><use href="#pill-star" x="18"/><use href="#pill-star" x="36"/><use href="#pill-star" x="54"/><use href="#pill-star" x="72"/>
+              </g>
+            </svg>
+            4.7 Rating
+          </p>
+
+          <!-- Realness pass (Jul 9, Ewan: "make these doctors look
+               more real"): quote first, then a BYLINE — photo, name,
+               credential as one identity unit, stacked (side-by-side
+               doesn't fit the ~85px inner width of a phone card).
+               Credentials are verifiable, never invented: Snyder's
+               "Women's health expert" is her own published title
+               (drmariza.com / LinkedIn); Moore has no public title
+               anywhere, so his line is "Men's health clinic" — the
+               institution his own quote names, claiming nothing
+               else. The byline is a real button: tap opens the
+               doctor's FULL quote in a peek over the stage (.doc-pop
+               below) — depth-on-demand is the authenticity cue, fake
+               testimonials never have a longer version. The dotted
+               underline on the name is the page's established "more
+               here" affordance (Nobel pop). alt="" on avatars: the
+               adjacent name IS the accessible label. -->
+          <blockquote class="reveal__card reveal__card--right">
+            <p class="reveal__card-quote">&ldquo;I recommend Berkeley&nbsp;Life.&rdquo;</p>
+            <button class="reveal__card-byline" type="button"
+                    aria-expanded="false" aria-controls="doc-pop-snyder">
+              <img class="reveal__card-avatar" src="assets/dr-mariza-snyder.jpg"
+                   alt="" width="160" height="160" loading="lazy">
+              <span class="reveal__card-name">Dr. Mariza Snyder</span>
+              <span class="reveal__card-cred">Women&rsquo;s health expert</span>
+            </button>
+          </blockquote>
+
+          <blockquote class="reveal__card reveal__card--left">
+            <p class="reveal__card-quote">&ldquo;Our patients are loving the results.&rdquo;</p>
+            <button class="reveal__card-byline" type="button"
+                    aria-expanded="false" aria-controls="doc-pop-moore">
+              <img class="reveal__card-avatar" src="assets/dr-richard-moore.jpg"
+                   alt="" width="160" height="160" loading="lazy">
+              <span class="reveal__card-name">Dr. Richard Moore</span>
+              <span class="reveal__card-cred">Men&rsquo;s health clinic</span>
+            </button>
+          </blockquote>
+
+          <img class="reveal__bottle" src="assets/no-support-60.png"
+               alt="A white Berkeley Life supplement bottle. The label reads Nitric Oxide Support, promotes blood flow for energy and heart health, 60 capsules."
+               width="536" height="1000">
+
+          <!-- Full-quote peeks: the Nobel peek's grammar (tap-out,
+               scroll, Escape and the X all dismiss; never a modal)
+               centered over the stage, above the bottle. Quotes are
+               VERBATIM from berkeleylife.com's expert carousel, with
+               one edit: the dash in Moore's original ("men's clinic
+               – our patients...") became a period, per the no-dashes
+               rule. -->
+          <div class="doc-pop" id="doc-pop-snyder" role="note" aria-hidden="true">
+            <button class="doc-pop__close" type="button" aria-label="Close">
+              <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+            <img class="doc-pop__photo" src="assets/dr-mariza-snyder.jpg"
+                 alt="" width="160" height="160" loading="lazy">
+            <p class="doc-pop__quote">&ldquo;I view Nitric Oxide as a keystone for women&rsquo;s health. When it&rsquo;s supported, everything from exercise recovery to cognitive sharpness to everyday energy improves. That&rsquo;s why I recommend Berkeley&nbsp;Life. It&rsquo;s clinically effective, easy for women to integrate, and truly makes a difference.&rdquo;</p>
+            <footer class="doc-pop__byline">
+              <span class="doc-pop__name">Dr. Mariza Snyder</span>
+              <span class="doc-pop__cred">Women&rsquo;s health expert</span>
+            </footer>
+          </div>
+
+          <div class="doc-pop" id="doc-pop-moore" role="note" aria-hidden="true">
+            <button class="doc-pop__close" type="button" aria-label="Close">
+              <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+            <img class="doc-pop__photo" src="assets/dr-richard-moore.jpg"
+                 alt="" width="160" height="160" loading="lazy">
+            <p class="doc-pop__quote">&ldquo;Blood flow and healing are critical to the success of our treatments, and the integration of Nitric Oxide has really helped. We continue to promote Berkeley&rsquo;s N.O. for all of our body procedures as well as men presenting to our men&rsquo;s clinic. Our patients are loving the results.&rdquo;</p>
+            <footer class="doc-pop__byline">
+              <span class="doc-pop__name">Dr. Richard Moore</span>
+              <span class="doc-pop__cred">Men&rsquo;s health clinic</span>
+            </footer>
+          </div>
+        </div>
+      </figure>
+
+      <div class="hero__action">
+        <!-- Clinicians' Choice (Jul 9): the FrontrowMD award from the
+             live PDP, redrawn in the page's own idiom instead of
+             embedding their banner art or widget script — the wide
+             black laurel PNG reads as another site's stamp, and the
+             interactive card is a third-party embed whose full
+             version already lives one click later on the PDP. Sits
+             directly under the bottle (Ewan moved it out of the
+             header — it crowded the logo band) as the award beneath
+             the awarded object. The source line is the legitimacy: it
+             names the awarder and the no-compensation condition,
+             near-verbatim from the widget. "400+" not the widget's
+             live "422" — the PDP count updates and an exact number
+             here could contradict it one click later (same reasoning
+             that cut the review count from the rating pill). -->
+        <div class="laurel">
+          <p class="laurel__title">
+            <!-- One branch drawn once: a stem arc (circle center
+                 22,20 r14 in these units) with six almond leaves
+                 seated on it, each rotated 25deg past its radial so
+                 the row leans the way a laurel grows. The right
+                 branch reuses the group and mirrors in CSS. -->
+            <svg class="laurel__branch" viewBox="-1 -2 19 37" aria-hidden="true">
+              <defs>
+                <path id="laurelLeaf" d="M0 0 C 2.6 -2.1 6 -2.1 8.4 0 C 6 2.1 2.6 2.1 0 0 Z"/>
+              </defs>
+              <g id="laurelBranch">
+                <path d="M16.1 32.7 A 14 14 0 0 1 16.1 7.3" fill="none" stroke="currentColor" stroke-width="1.1"/>
+                <use href="#laurelLeaf" transform="translate(13 30.7) rotate(155)"/>
+                <use href="#laurelLeaf" transform="translate(9.3 25.9) rotate(180)"/>
+                <use href="#laurelLeaf" transform="translate(8 20) rotate(205)"/>
+                <use href="#laurelLeaf" transform="translate(9.3 14.1) rotate(230)"/>
+                <use href="#laurelLeaf" transform="translate(13 9.3) rotate(255)"/>
+                <use href="#laurelLeaf" transform="translate(16.1 7.3) rotate(270)"/>
+              </g>
+            </svg>
+            Clinicians&rsquo; Choice
+            <svg class="laurel__branch laurel__branch--r" viewBox="-1 -2 19 37" aria-hidden="true">
+              <use href="#laurelBranch"/>
+            </svg>
+          </p>
+          <p class="laurel__source">400+ clinicians share this product on <em>FrontrowMD</em> without compensation.</p>
+        </div>
+
+        <!-- The receipts band (Jul 9, Ewan): the brand's four
+             credibility numbers in one quiet strip — the stats-band
+             idiom of the brand's own site, in the trust row's
+             legit-commerce register (value in ink, uppercase specimen
+             label, hairline dividers), never the louder discount-
+             badge treatment. Wordings are load-bearing: "ARTICLES ON
+             NITRIC OXIDE" scopes the 28,000 to the field's
+             literature, not the company's own research (they didn't
+             write 28,000 papers, and the band must not imply it);
+             "CLINICAL TRIALS ON OUR FORMULA" pins the 3 to the
+             company's own formulation (Ewan, Jul 9 — the trials back
+             the formula specifically, and the label must say so);
+             the footer's dormant stats row echoes the 3,000+ (see
+             the sticky CTA comments). A slide-7 proof room for these
+             was built and cut the same day — the receipts belong on
+             the slide where the visitor decides. The band is pinned
+             to the fold's FOOT (absolute, just above the sticky bar,
+             see styles.css) rather than flowing after the laurel:
+             the page's leftover height gathers between award and
+             band, not in a dead strip above the CTA (Ewan, Jul 9). -->
+        <ul class="stats" role="list">
+          <li class="stats__item">
+            <p class="stats__value">8+</p>
+            <p class="stats__label">YEARS OF R&amp;D</p>
+          </li>
+          <li class="stats__item">
+            <p class="stats__value">28,000</p>
+            <p class="stats__label">ARTICLES ON NITRIC&nbsp;OXIDE</p>
+          </li>
+          <li class="stats__item">
+            <p class="stats__value">3</p>
+            <p class="stats__label">CLINICAL&nbsp;TRIALS ON&nbsp;OUR&nbsp;FORMULA</p>
+          </li>
+          <li class="stats__item">
+            <p class="stats__value">3,000+</p>
+            <p class="stats__label">HEALTHCARE PROVIDERS</p>
+          </li>
+        </ul>
+
+        <!-- No lede on this slide anymore (Jul 9): "Each capsule
+             delivers those dietary nitrates. Day after day." was cut
+             as redundant — slide 5 already teaches the mechanism, and
+             the reveal reads cleaner as object + award. The laurel's
+             source line is the slide's only body copy now. -->
+
+        <!-- No trust row here anymore (Jul 8, v3): the review proof
+             moved onto the stage as the pill + cards behind the
+             bottle. A second star line directly below them would be
+             the same duplication the badges were cut for. The count
+             on the pill matches the footer's stats row so the two
+             never disagree if both are ever on screen together. -->
       </div>
     </section>
   </div>
@@ -440,6 +824,109 @@
        slide 1 has the screen to itself. Decorative only: no taps, so
        hidden from assistive tech. -->
   <div class="dotrail" aria-hidden="true"></div>
+
+  <!-- Sticky bottom CTA: a quiet exit ramp for the visitor who's ready
+       to buy before the page finishes making its case. app.js shows it
+       once slide 6 (#the-capsule, "the reveal") is on screen — the
+       first screen with an actual product on it, and some share of
+       this ad's traffic is pre-sold enough to want it right there.
+
+       v3 (Jul 8): Ewan judged v2's outlined-pill-on-glass as "a button
+       plopped over a footer" — disconnected from the page, and not on
+       brand. Fixed on three fronts:
+       (1) The BAR reads as a real footer shelf now, not a floating
+           sheet of glass: solid --header-bg fill and a top border
+           matching the site header's border-bottom — the same warm
+           band that opens the page closes it too, a deliberate
+           bookend, plus a real shadow for lift.
+       (2) The BUTTON is the brand's actual CTA voice from the moment
+           it appears — solid filled brand orange, the same .cta
+           treatment used everywhere else — not an outline that
+           upgrades later. The earlier "stay quiet so slide 6 doesn't
+           look like the offer" caution is overridden here: Ewan wants
+           the on-brand look now, so escalation moved to the proof
+           row's CONTENT instead of the button's style (below).
+       (3) It's more than the button: a proof row sits under it by
+           default, using badges already shown moments earlier on this
+           same slide (prescription free / backed by clinical
+           research) — not new information, just a footer-scaled
+           repeat, so "more than a button" never means "unearned
+           numbers." Once a slide with id="the-proof" exists and is
+           reached, app.js swaps .sticky-cta__proof--badges for
+           .sticky-cta__proof--stats (rating + provider count) via
+           is-escalated — those numbers only appear once the page has
+           actually shown them.
+       Links straight to the live product page for now, since there's
+       no on-page checkout yet; this is a real link, not decorative,
+       so it stays out of aria-hidden and out of the tab order only
+       while visually hidden (see .sticky-cta's visibility toggle in
+       styles.css). -->
+  <div class="sticky-cta">
+    <div class="sticky-cta__inner">
+      <a class="sticky-cta__link" href="https://berkeleylife.com/collections/shop-all/products/nitric-oxide-support">
+        Shop Nitric&nbsp;Oxide Support <span class="cta__arrow">&rarr;</span>
+      </a>
+
+      <!-- Default proof: an echo of the badges already shown on this
+           slide, footer-scaled. Swaps out for --stats once escalated. -->
+      <ul class="sticky-cta__proof sticky-cta__proof--badges" role="list">
+        <li class="sticky-cta__proof-item">
+          <svg class="sticky-cta__proof-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="3.4" y="6.1" width="9.2" height="3.8" rx="1.9" fill="#fff" stroke="#d54f2f" stroke-width="1.2" transform="rotate(-45 8 8)"/>
+            <path d="M8 6.1 V9.9" stroke="#d54f2f" stroke-width="1.2" transform="rotate(-45 8 8)"/>
+            <circle cx="8" cy="8" r="6.7" fill="none" stroke="#d54f2f" stroke-width="1.2"/>
+            <path d="M3.6 3.6 L12.4 12.4" stroke="#d54f2f" stroke-width="1.2"/>
+          </svg>
+          Prescription free
+        </li>
+        <li class="sticky-cta__proof-item">
+          <svg class="sticky-cta__proof-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 1.2 L14 3.4 V8 C14 11.6 11.5 14 8 15.2 C4.5 14 2 11.6 2 8 V3.4 Z" fill="#3d4db7"/>
+            <path d="M5.2 8.1 L7.2 10.1 L10.9 6.1" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Clinically backed
+        </li>
+        <!-- Third badge (Jul 9, Ewan). Flag icon from the reference
+             row in snippets/trust-badges.html. All three share ONE
+             line: "Backed by clinical research" became "Clinically
+             backed" (Ewan) to buy the width; fits to ~360px with the
+             tightened item padding in styles.css. -->
+        <li class="sticky-cta__proof-item">
+          <svg class="sticky-cta__proof-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="1" y="3" width="14" height="10" rx="1.5" fill="#fff" stroke="#080b2b" stroke-width="1"/>
+            <path d="M2 5.4 H14 M2 7.8 H14 M2 10.2 H14" stroke="#b73a3a" stroke-width="1.4"/>
+            <rect x="1" y="3" width="7" height="5.2" fill="#2b3a6e"/>
+            <rect x="1" y="3" width="14" height="10" rx="1.5" fill="none" stroke="#080b2b" stroke-width="1"/>
+          </svg>
+          Made in USA
+        </li>
+      </ul>
+
+      <!-- Escalated proof: real numbers, shown only once the page has
+           actually established them (app.js toggles is-escalated once
+           a slide with id="the-proof" is reached — no such slide
+           exists since the Jul 9 proof room was cut, so this row is
+           DORMANT markup, kept as the ready-made hook it always was.
+           If a proof slide returns, mind the duplication rule first:
+           the 3,000+ count now lives in slide 6's receipts band,
+           directly above this bar. -->
+      <ul class="sticky-cta__proof sticky-cta__proof--stats" role="list">
+        <li class="sticky-cta__proof-item">
+          <svg class="sticky-cta__proof-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 1 L9.6 5.7 L14.7 5.8 L10.7 8.9 L12.1 13.7 L8 10.8 L3.9 13.7 L5.3 8.9 L1.3 5.8 L6.3 5.7 Z" fill="#d54f2f"/>
+          </svg>
+          4.7 Rating
+        </li>
+        <li class="sticky-cta__proof-item">
+          <svg class="sticky-cta__proof-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 1.2 L14 3.4 V8 C14 11.6 11.5 14 8 15.2 C4.5 14 2 11.6 2 8 V3.4 Z" fill="#3d4db7"/>
+            <path d="M5.2 8.1 L7.2 10.1 L10.9 6.1" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Trusted by 3,000+ Providers
+        </li>
+      </ul>
+    </div>
+  </div>
 
 </body>
 </html>

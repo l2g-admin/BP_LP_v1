@@ -105,6 +105,20 @@ if (vesselFold) {
   const flowGrad = vesselFold.querySelector('#vesFlow');
   const cellLayer = vesselFold.querySelector('.vessel__cells');
 
+  // Headline word-rise, like slides 1 and 2.
+  const vesselHeadlineWords = splitWords(vesselFold.querySelector('.vessel-scene__headline'));
+  const HEADLINE_WORD_MS = 90;
+  let headlineTimers = [];
+  const clearHeadlineTimers = () => {
+    headlineTimers.forEach(clearTimeout);
+    headlineTimers = [];
+  };
+  const riseHeadline = () => {
+    vesselHeadlineWords.forEach((w, i) =>
+      headlineTimers.push(setTimeout(() => w.classList.add('is-on'), i * HEADLINE_WORD_MS))
+    );
+  };
+
   // Geometry, in viewBox units. The vessel is a horizontal channel
   // around y=130; openness 0 pinches the middle to a 36-unit gap,
   // openness 1 relaxes it to the full 116.
@@ -347,6 +361,8 @@ if (vesselFold) {
 
   const resetScene = () => {
     clearBeats();
+    clearHeadlineTimers();
+    vesselHeadlineWords.forEach((w) => w.classList.remove('is-on'));
     releaseStart = null;
     breatheEpoch = null;
     openness = 0;
@@ -371,6 +387,7 @@ if (vesselFold) {
         if (entry.intersectionRatio >= 0.6) {
           resetScene();
           vesselFold.classList.add('is-visible');
+          riseHeadline();
           BEATS.forEach(([cls, at]) =>
             beatTimers.push(setTimeout(() => {
               vesselFold.classList.add(cls);
@@ -393,104 +410,154 @@ if (vesselFold) {
 }
 
 // --------------------------------------------------------------------------
-// Slide 4 choreography: "the battery" (v2, vertical). The fold rides
-// the same .is-visible / .is-resetting conductor as slide 2; this block
-// owns the whole scene on one rAF clock. The age climbs 20 -> 70
-// (linear — years tick steadily; the front-loaded drop comes from the
-// supply data itself) and the level, the split number's two clip
-// rects, the fill color, and both readouts all read off it, so they
-// can only ever agree. The pill is the recurring actor: at three ages
-// it drops into the terminal and buys a blue buffer on top of the
-// level — each one a fixed share of whatever's left, so each one
-// smaller — and the buffer drains away while the supply keeps sinking
-// underneath. The readout NEVER counts the buffer, and the supply
-// data never reacts to the pill: the number is the supply, honestly.
-// Beats fire from the clock: is-pill on the first drop (the lede keys
-// off it in styles.css), is-drained when the level settles (the
-// handoff); the last buffer dies after the drain has already ended —
-// the closing beat. Resets off screen and replays on return. Reduced
-// motion gets the settled end state: age 70, 25%, warmed fill, no
-// pill in sight, copy visible via the base CSS.
+// Slide 4 choreography: "the supply" (v5, the lifespan chart). The fold
+// rides the same .is-visible / .is-resetting conductor as slides 2-3;
+// this block draws the whole chart on one rAF clock. As the age sweeps
+// 20 -> 70, the cream supply line falls from 100% to ~25%. From age 40 a
+// second, blue series enters — the pill: brief spikes of blood flow that
+// rise off the cream line and fall straight back to it, short-term and
+// local, and SHRINKING as the line drops. That shrink is the argument:
+// the pill only prolongs the Nitric Oxide you still have (it makes none),
+// so its help is proportional to what's left and fades with the supply.
+// The two series never sum — the spikes ride on the supply, never lift
+// it. is-pill fires when the spikes begin (the lede keys off it in
+// styles.css). Resets off screen and replays on return. Reduced motion
+// gets the settled chart: full decline, every shrinking spike, copy.
 // --------------------------------------------------------------------------
 const supplyFold = document.getElementById('the-supply');
 if (supplyFold) {
-  const fill = supplyFold.querySelector('.bat__fill');
-  const buffer = supplyFold.querySelector('.bat__buffer');
-  const clipFill = supplyFold.querySelector('.bat__clip-fill');
-  const clipEmpty = supplyFold.querySelector('.bat__clip-empty');
-  const nums = supplyFold.querySelectorAll('.bat__num');
-  const pill = supplyFold.querySelector('.bat-pill');
-  const ageEl = supplyFold.querySelector('.bat-age');
+  const creamLine = supplyFold.querySelector('.chart__cream-line');
+  const creamArea = supplyFold.querySelector('.chart__cream-area');
+  const blueLine = supplyFold.querySelector('.chart__blue-line');
+  const blueArea = supplyFold.querySelector('.chart__blue-area');
+  const blueGlow = supplyFold.querySelector('.chart__blue-glow');
+  const marker = supplyFold.querySelector('.chart__marker');
 
-  // Chamber geometry, matching the SVG's inner rects.
-  const IN_TOP = 79;
-  const IN_BOT = 441;
-  const IN_H = 362;
+  // Headline word-rise, like slides 1-3.
+  const supplyHeadlineWords = splitWords(supplyFold.querySelector('.hero__headline'));
+  const HEADLINE_WORD_MS = 90;
+  let headlineTimers = [];
+  const clearHeadlineTimers = () => {
+    headlineTimers.forEach(clearTimeout);
+    headlineTimers = [];
+  };
+  const riseHeadline = () => {
+    supplyHeadlineWords.forEach((w, i) =>
+      headlineTimers.push(setTimeout(() => w.classList.add('is-on'), i * HEADLINE_WORD_MS))
+    );
+  };
 
-  // The supply, in % left by age — same defensible figures as the
-  // curve version (anchored to the 20s peak; ~50% gone by 40, ~75%
-  // by the 70s; see the slide's HTML comment for citations).
+  // Plot geometry, matching the SVG's gridlines and axis.
+  const LX = 46, RX = 360, TY = 34, BY = 248;
+  const A0 = 20, A1 = 70;
+  const ageToX = (a) => LX + ((a - A0) / (A1 - A0)) * (RX - LX);
+  const pctToY = (p) => BY - (p / 100) * (BY - TY);
+
+  // The supply, in % left by age — the same defensible figures as the
+  // battery before it (20s peak = 100%, ~50% by 40, ~25% by the 70s;
+  // see the slide's HTML comment for citations). Catmull-Rom through the
+  // anchors (rather than joining them with straight segments) so the
+  // curve decelerates smoothly instead of elbowing at each one.
   const ANCHORS = [[20, 100], [30, 75], [40, 50], [50, 38], [60, 30], [70, 25]];
+  const catmullRom = (p0, p1, p2, p3, t) => {
+    const t2 = t * t;
+    const t3 = t2 * t;
+    return 0.5 * (
+      2 * p1 +
+      (-p0 + p2) * t +
+      (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 +
+      (-p0 + 3 * p1 - 3 * p2 + p3) * t3
+    );
+  };
   const supplyAt = (age) => {
-    for (let i = 1; i < ANCHORS.length; i += 1) {
-      const [a1, p1] = ANCHORS[i - 1];
-      const [a2, p2] = ANCHORS[i];
-      if (age <= a2) return p1 + ((p2 - p1) * (age - a1)) / (a2 - a1);
+    const last = ANCHORS.length - 1;
+    for (let i = 0; i < last; i += 1) {
+      const [a1, p1] = ANCHORS[i];
+      const [a2, p2] = ANCHORS[i + 1];
+      if (age <= a2 || i === last - 1) {
+        const p0 = ANCHORS[Math.max(i - 1, 0)][1];
+        const p3 = ANCHORS[Math.min(i + 2, last)][1];
+        const t = (age - a1) / (a2 - a1);
+        return catmullRom(p0, p1, p2, p3, t);
+      }
     }
-    return ANCHORS[ANCHORS.length - 1][1];
+    return ANCHORS[last][1];
   };
 
-  // The charge warms from cream toward the room's low-battery orange
-  // as the level falls through 50. Set as the rect's fill ATTRIBUTE —
-  // there is deliberately no CSS fill rule on .bat__fill to override
-  // it (a stylesheet rule froze the charge cream in v1).
-  const CREAM = [246, 244, 240];
-  const LOW = [231, 122, 88];
-
-  // Returns the level's y so the frame loop can stack the buffer on it.
-  const setSupply = (age) => {
-    const pct = supplyAt(age);
-    const levelY = IN_BOT - (IN_H * pct) / 100;
-    const h = (IN_BOT - levelY).toFixed(1);
-    fill.setAttribute('y', levelY.toFixed(1));
-    fill.setAttribute('height', h);
-    clipFill.setAttribute('y', levelY.toFixed(1));
-    clipFill.setAttribute('height', h);
-    clipEmpty.setAttribute('height', Math.max(levelY - IN_TOP, 0).toFixed(1));
-
-    let warm = Math.min(Math.max((50 - pct) / 20, 0), 1);
-    warm = warm * warm * (3 - 2 * warm);
-    const c = CREAM.map((v, i) => Math.round(v + (LOW[i] - v) * warm));
-    fill.setAttribute('fill', `rgb(${c.join(',')})`);
-
-    const rounded = Math.round(pct);
-    nums.forEach((n) => { n.textContent = rounded; });
-    ageEl.textContent = Math.round(age);
-    return levelY;
+  // The pill: doses from age 40 on, each a narrow bump above the supply
+  // line. Its height rides supplyAt(dose), so the spikes shrink as the
+  // supply falls — the pill's benefit is proportional to the Nitric
+  // Oxide still present. The bumps add only to the blue series.
+  const PILL_AGE = 40;
+  const DOSES = [42, 48, 54, 60, 66];
+  const SIGMA = 1.7;
+  const SPIKE = 30;
+  const bumpAt = (age) => {
+    let b = 0;
+    for (const d of DOSES) {
+      b += (SPIKE * supplyAt(d) / 100) * Math.exp(-(((age - d) / SIGMA) ** 2));
+    }
+    return b;
   };
 
-  const AGE0 = 20;
-  const AGE1 = 70;
-  const DRAIN_MS = 6000;   // the drain itself
-  const DRAIN_DELAY = 800; // after .is-visible, once the cell is up
+  const STEP = 0.5;
+  const agesTo = (from, to) => {
+    const out = [];
+    for (let a = from; a < to; a += STEP) out.push(a);
+    out.push(to);
+    return out;
+  };
+  const linePath = (ages, yOf) =>
+    ages.map((a, i) => `${i ? 'L' : 'M'} ${ageToX(a).toFixed(1)} ${yOf(a).toFixed(1)}`).join(' ');
 
-  // The pill events: drop through the terminal, buffer rises, holds a
-  // breath, and is spent — while the level keeps falling underneath.
-  // Ages chosen so the rhythm quickens as the buffers shrink.
-  const PILL_AGES = [45, 55, 65];
-  const DROP_MS = 400;
-  const RISE_MS = 200;
-  const HOLD_MS = 150;
-  const SPEND_MS = 700;
-  const EVENT_MS = DROP_MS + RISE_MS + HOLD_MS + SPEND_MS;
-  const BOOST = 0.3; // a buffer is 30% of what's left — never a refill
+  const supplyY = (a) => pctToY(supplyAt(a));
 
-  const eventStart = (age) => ((age - AGE0) / (AGE1 - AGE0)) * DRAIN_MS;
-  const LAST_EVENT_END = eventStart(PILL_AGES[PILL_AGES.length - 1]) + EVENT_MS;
+  // The marker's fill tracks the line's own gradient (orange at 20,
+  // cream by 70) so the leading dot always reads as part of the line
+  // it's riding, not a separate color.
+  const LINE_FROM = [0xd5, 0x4f, 0x2f];
+  const LINE_TO = [0xf6, 0xf4, 0xf0];
+  const lineColorAt = (age) => {
+    const t = Math.min(1, Math.max(0, (age - A0) / (A1 - A0)));
+    const [r, g, b] = LINE_FROM.map((c, i) => Math.round(c + (LINE_TO[i] - c) * t));
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+
+  const render = (cur) => {
+    const ages = agesTo(A0, cur);
+    const cream = linePath(ages, supplyY);
+    creamLine.setAttribute('d', cream);
+    creamArea.setAttribute('d',
+      `${cream} L ${ageToX(cur).toFixed(1)} ${BY} L ${ageToX(A0).toFixed(1)} ${BY} Z`);
+
+    // The pill series: the spike top forward, the supply line back —
+    // the lobe between them is the pill's temporary contribution.
+    if (cur > PILL_AGE) {
+      const dAges = agesTo(PILL_AGE, cur);
+      const top = linePath(dAges, (a) => pctToY(supplyAt(a) + bumpAt(a)));
+      const back = [...dAges].reverse()
+        .map((a) => `L ${ageToX(a).toFixed(1)} ${supplyY(a).toFixed(1)}`).join(' ');
+      blueLine.setAttribute('d', top);
+      blueGlow.setAttribute('d', top);
+      blueArea.setAttribute('d', `${top} ${back} Z`);
+    } else {
+      blueLine.setAttribute('d', '');
+      blueGlow.setAttribute('d', '');
+      blueArea.setAttribute('d', '');
+    }
+
+    marker.setAttribute('cx', ageToX(cur).toFixed(1));
+    marker.setAttribute('cy', supplyY(cur).toFixed(1));
+    marker.style.fill = lineColorAt(cur);
+  };
+
+  const DRAW_MS = 6000;    // the sweep, age 20 -> 70
+  const DRAW_DELAY = 800;  // after .is-visible, once the chart is up
+  const PILL_T = ((PILL_AGE - A0) / (A1 - A0)) * DRAW_MS;
 
   let raf = null;
   let delayTimer = null;
-  let firstDrop = false;
+  let dosed = false;
 
   const stop = () => {
     cancelAnimationFrame(raf);
@@ -498,10 +565,10 @@ if (supplyFold) {
   };
 
   const resetScene = () => {
-    firstDrop = false;
-    buffer.setAttribute('height', 0);
-    pill.style.opacity = 0;
-    setSupply(AGE0);
+    clearHeadlineTimers();
+    supplyHeadlineWords.forEach((w) => w.classList.remove('is-on'));
+    dosed = false;
+    render(A0);
   };
 
   const play = () => {
@@ -509,62 +576,25 @@ if (supplyFold) {
     const step = (now) => {
       if (start === null) start = now;
       const elapsed = now - start;
-      const t = Math.min(elapsed / DRAIN_MS, 1);
-      const levelY = setSupply(AGE0 + (AGE1 - AGE0) * t);
+      const t = Math.min(elapsed / DRAW_MS, 1);
+      render(A0 + (A1 - A0) * t);
 
-      // The pill events. One sprite serves all three drops (they never
-      // overlap); overlapping buffer tails resolve to the tallest.
-      let buf = 0;
-      let pillY = null;
-      let pillA = 0;
-      for (const pillAge of PILL_AGES) {
-        const e = elapsed - eventStart(pillAge);
-        if (e <= 0) continue;
-        if (!firstDrop) {
-          firstDrop = true;
-          supplyFold.classList.add('is-pill');
-        }
-        if (e < DROP_MS) {
-          // Falls, accelerating, into the terminal; fades as it enters.
-          const p = e / DROP_MS;
-          pillY = 6 + 52 * p * p;
-          pillA = Math.min(e / 120, 1) * Math.min((DROP_MS - e) / 90, 1);
-        } else if (e < EVENT_MS) {
-          // The buffer it bought: a share of what was left at swallow
-          // time, so each one is smaller than the last.
-          const pctThen = supplyAt(
-            AGE0 + (AGE1 - AGE0) * Math.min((eventStart(pillAge) + DROP_MS) / DRAIN_MS, 1)
-          );
-          const B = (IN_H * BOOST * pctThen) / 100;
-          const r = e - DROP_MS;
-          let b;
-          if (r < RISE_MS) b = B * (1 - (1 - r / RISE_MS) ** 2);
-          else if (r < RISE_MS + HOLD_MS) b = B;
-          else b = B * (1 - (r - RISE_MS - HOLD_MS) / SPEND_MS);
-          buf = Math.max(buf, b);
-        }
+      // The spikes begin as the age passes 40; the lede keys off this.
+      if (!dosed && elapsed >= PILL_T) {
+        dosed = true;
+        supplyFold.classList.add('is-pill');
       }
 
-      buffer.setAttribute('y', (levelY - buf).toFixed(1));
-      buffer.setAttribute('height', Math.max(buf, 0).toFixed(1));
-      if (pillY === null) {
-        pill.style.opacity = 0;
-      } else {
-        pill.setAttribute('transform', `translate(110 ${pillY.toFixed(1)})`);
-        pill.style.opacity = pillA.toFixed(3);
-      }
-
-      if (t >= 1) supplyFold.classList.add('is-drained');
-      if (t < 1 || elapsed < LAST_EVENT_END) raf = requestAnimationFrame(step);
+      if (t < 1) raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
   };
 
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    // Settled end state; the copy shows via the base CSS (the
-    // choreography lives inside the no-preference query) and the
-    // pill sprite stays parked hidden, so only the cell needs setting.
-    setSupply(AGE1);
+    // Settled chart: full decline, every shrinking spike; the copy
+    // shows via the base CSS (choreography is in the no-preference
+    // query, so the lede is not hidden here).
+    render(A1);
   } else {
     resetScene();
 
@@ -574,11 +604,12 @@ if (supplyFold) {
           stop();
           resetScene();
           supplyFold.classList.add('is-visible');
-          delayTimer = setTimeout(play, DRAIN_DELAY);
+          riseHeadline();
+          delayTimer = setTimeout(play, DRAW_DELAY);
         } else if (!entry.isIntersecting) {
           stop();
           supplyFold.classList.add('is-resetting');
-          supplyFold.classList.remove('is-visible', 'is-pill', 'is-drained');
+          supplyFold.classList.remove('is-visible', 'is-pill');
           resetScene();
           requestAnimationFrame(() =>
             requestAnimationFrame(() => supplyFold.classList.remove('is-resetting'))
@@ -590,8 +621,172 @@ if (supplyFold) {
 }
 
 // --------------------------------------------------------------------------
+// Slide 5 choreography: "the source". Same conductor as slides 2-3, but
+// this scene loops while it is on screen. Each pass: rewind the label to
+// "DIETARY NITRATE", add step-nitrite (one oxygen peels off), then
+// step-no + is-made (the second peels, the N and O settle into the pair,
+// the halo blooms and the lede lands). After a hold, step-exit drifts the
+// finished pair up and off; we silently rewind to nitrate below the stage
+// (step-enter, under is-resetting) and play the pass again — the body
+// keeps making it. is-made stays on across passes so the lede lands once
+// and holds. The atom motion, halo and seam are all CSS — here we just
+// swap the label text and flip classes. Resets off screen and replays on
+// return. Reduced motion rests on the finished NO pair (base CSS shows
+// it), so this whole block is skipped in that case.
+// --------------------------------------------------------------------------
+const sourceFold = document.getElementById('the-source');
+if (sourceFold && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+  const label = sourceFold.querySelector('.conv__label');
+  const headlineWords = splitWords(sourceFold.querySelector('.hero__headline'));
+  const HEADLINE_WORD_MS = 90;
+  const NITRITE_AT = 1200;
+  const NO_AT = 2500;
+  const HOLD_MS = 2400;  // rest on the finished pair before it drifts off
+  const EXIT_MS = 800;   // covers the 0.7s step-exit fade
+
+  let wordTimers = [];
+  let beatTimers = [];
+  let gen = 0; // bumped on every reset so a stale loop callback dies
+  const clearTimers = () => {
+    wordTimers.forEach(clearTimeout);
+    beatTimers.forEach(clearTimeout);
+    wordTimers = [];
+    beatTimers = [];
+  };
+  const riseHeadline = () => {
+    headlineWords.forEach((w, i) =>
+      wordTimers.push(setTimeout(() => w.classList.add('is-on'), i * HEADLINE_WORD_MS))
+    );
+  };
+
+  const rewindMolecule = () => {
+    sourceFold.classList.remove('step-nitrite', 'step-no', 'step-exit', 'step-enter');
+    label.textContent = 'DIETARY NITRATE';
+  };
+
+  const resetScene = () => {
+    gen++;
+    clearTimers();
+    headlineWords.forEach((w) => w.classList.remove('is-on'));
+    sourceFold.classList.remove('is-made');
+    rewindMolecule();
+  };
+
+  // One pass of the conversion, then around again: exit, silent rewind,
+  // re-enter on the same transition the first pass rode in on.
+  const playCycle = () => {
+    const myGen = gen;
+    beatTimers.push(setTimeout(() => {
+      sourceFold.classList.add('step-nitrite');
+      label.textContent = 'NITRITE';
+    }, NITRITE_AT));
+    beatTimers.push(setTimeout(() => {
+      sourceFold.classList.add('step-no', 'is-made');
+      label.textContent = 'NITRIC OXIDE';
+    }, NO_AT));
+    beatTimers.push(setTimeout(() => {
+      sourceFold.classList.add('step-exit');
+    }, NO_AT + HOLD_MS));
+    beatTimers.push(setTimeout(() => {
+      rewindMolecule();
+      sourceFold.classList.add('is-resetting', 'step-enter');
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          if (myGen !== gen) return;
+          sourceFold.classList.remove('is-resetting', 'step-enter');
+          playCycle();
+        })
+      );
+    }, NO_AT + HOLD_MS + EXIT_MS));
+  };
+
+  resetScene();
+
+  new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.intersectionRatio >= 0.6) {
+        resetScene();
+        sourceFold.classList.add('is-visible');
+        riseHeadline();
+        playCycle();
+      } else if (!entry.isIntersecting) {
+        sourceFold.classList.add('is-resetting');
+        sourceFold.classList.remove('is-visible');
+        resetScene();
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => sourceFold.classList.remove('is-resetting'))
+        );
+      }
+    }
+  }, { threshold: [0, 0.6] }).observe(sourceFold);
+}
+
+// --------------------------------------------------------------------------
+// Slide 6 choreography: "the reveal". Slide 2's conductor verbatim:
+// one .is-visible class once the slide settles (0.6 ratio), the beats
+// live in styles.css as transition delays (bottle, ring, lede, review
+// pill + cards), and the ring's slow turn is a CSS animation. Resets
+// off screen, replays on return; .is-resetting keeps a quick
+// scroll-back from catching the bottle mid-fade.
+//
+// The stamp ring's text must fill its circle exactly — the phrase
+// repeats around the loop and the ring spins, so any shortfall shows
+// as a dead arc and any overflow clips at the seam. Metrics depend on
+// the loaded font, so once fonts are in we measure the real length
+// and absorb the difference into letter-spacing (a fraction of a unit
+// per character; SVG user units, resolution-independent, so one fit
+// serves every screen size).
+// --------------------------------------------------------------------------
+const capsuleFold = document.getElementById('the-capsule');
+if (capsuleFold) {
+  const ringText = capsuleFold.querySelector('.reveal__ring-text');
+  const RING_C = 2 * Math.PI * 186; // circumference of #revealRing
+  const fitRing = () => {
+    const chars = ringText.textContent.length;
+    const spacing = parseFloat(getComputedStyle(ringText).letterSpacing) || 0;
+    const length = ringText.getComputedTextLength();
+    ringText.style.letterSpacing =
+      `${(spacing + (RING_C - length) / chars).toFixed(3)}px`;
+  };
+  fitRing();
+  document.fonts.ready.then(fitRing);
+
+  const headlineWords = splitWords(capsuleFold.querySelector('.hero__headline'));
+  const HEADLINE_WORD_MS = 90;
+
+  let wordTimers = [];
+  const clearWordTimers = () => {
+    wordTimers.forEach(clearTimeout);
+    wordTimers = [];
+  };
+  const riseHeadline = () => {
+    headlineWords.forEach((w, i) =>
+      wordTimers.push(setTimeout(() => w.classList.add('is-on'), i * HEADLINE_WORD_MS))
+    );
+  };
+
+  new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.intersectionRatio >= 0.6) {
+        capsuleFold.classList.add('is-visible');
+        clearWordTimers();
+        riseHeadline();
+      } else if (!entry.isIntersecting) {
+        capsuleFold.classList.add('is-resetting');
+        capsuleFold.classList.remove('is-visible');
+        clearWordTimers();
+        headlineWords.forEach((w) => w.classList.remove('is-on'));
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => capsuleFold.classList.remove('is-resetting'))
+        );
+      }
+    }
+  }, { threshold: [0, 0.6] }).observe(capsuleFold);
+}
+
+// --------------------------------------------------------------------------
 // Optional peeks: the Nobel proof on slide 2. (Slide 4's "what about
-// the pill?" peek retired Jul 8 — the battery scene answers the
+// the pill?" peek retired Jul 8 — slide 4's scene answers the
 // objection itself.) Tap the trigger to open a small card; scroll,
 // tap-out, Escape (and the close button where present) dismiss it.
 // A peek, never a modal — the page never stops moving under it.
@@ -632,13 +827,65 @@ for (const block of ['nobel-pop']) {
 }
 
 // --------------------------------------------------------------------------
-// Dot rail. One dot per .fold, built here so future slides join the
-// map without touching the markup. The same 0.6 settle ratio the
-// choreography uses marks the active dot; the rail itself only shows
-// once the visitor has moved past slide 1, so the opening scene stays
-// chrome-free (returning to slide 1 tucks it away again).
+// Doctor full-quote peeks on slide 6: each review card's byline button
+// opens its doctor's whole quote (.doc-pop) centered over the stage.
+// Same peek grammar as the Nobel pop above — tap-out, scroll, Escape
+// and the X all dismiss, never a modal — but trigger and card live in
+// different subtrees (byline in the review card, pop over the stage),
+// so aria-controls carries the pairing. Only one pop open at a time.
+// --------------------------------------------------------------------------
+const docPops = [];
+document.querySelectorAll('.reveal__card-byline[aria-controls]').forEach((btn) => {
+  const pop = document.getElementById(btn.getAttribute('aria-controls'));
+  if (!pop) return;
+
+  const setOpen = (open) => {
+    if (open) docPops.forEach((d) => { if (d.pop !== pop) d.setOpen(false); });
+    pop.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', open);
+    pop.setAttribute('aria-hidden', !open);
+  };
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setOpen(!pop.classList.contains('is-open'));
+  });
+  pop.addEventListener('click', (e) => e.stopPropagation());
+  pop.querySelector('.doc-pop__close')?.addEventListener('click', () => setOpen(false));
+
+  docPops.push({ pop, setOpen });
+});
+
+if (docPops.length) {
+  const closeAll = () => docPops.forEach(({ pop, setOpen }) => {
+    if (pop.classList.contains('is-open')) setOpen(false);
+  });
+  document.addEventListener('click', closeAll);
+  window.addEventListener('scroll', closeAll, { passive: true });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAll();
+  });
+}
+
+// --------------------------------------------------------------------------
+// Dot rail (+ the sticky CTA, which rides the same active-slide signal).
+// One dot per .fold, built here so future slides join the map without
+// touching the markup. The same 0.6 settle ratio the choreography uses
+// marks the active dot; the rail itself only shows once the visitor
+// has moved past slide 1, so the opening scene stays chrome-free
+// (returning to slide 1 tucks it away again).
+//
+// The sticky bar piggybacks on this same observer rather than running
+// a second one: it turns on from slide 6 (#the-capsule, "the reveal")
+// onward — the first slide with a product to buy — and off again on
+// the way back up. proofIndex looks up a slide with id="the-proof" —
+// none exists (the Jul 9 proof room was cut; its receipts moved onto
+// slide 6 as the stats band), so the escalation hook stays dormant:
+// if a proof slide ever returns with that id, the bar escalates there
+// with no other code change.
 // --------------------------------------------------------------------------
 const dotrail = document.querySelector('.dotrail');
+const stickyCta = document.querySelector('.sticky-cta');
 const folds = Array.from(document.querySelectorAll('.fold'));
 if (dotrail && folds.length > 1) {
   const dots = folds.map(() => {
@@ -647,6 +894,9 @@ if (dotrail && folds.length > 1) {
     dotrail.appendChild(dot);
     return dot;
   });
+
+  const revealIndex = folds.findIndex((fold) => fold.id === 'the-capsule');
+  const proofIndex = folds.findIndex((fold) => fold.id === 'the-proof');
 
   const railObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
@@ -659,11 +909,57 @@ if (dotrail && folds.length > 1) {
           'dotrail--dark',
           folds[active].classList.contains('fold--dark')
         );
+        if (stickyCta) {
+          stickyCta.classList.toggle('is-on', revealIndex !== -1 && active >= revealIndex);
+          if (proofIndex !== -1) {
+            stickyCta.classList.toggle('is-escalated', active >= proofIndex);
+          }
+        }
       }
     }
   }, { threshold: 0.6 });
   folds.forEach((fold) => railObserver.observe(fold));
 }
+
+// --------------------------------------------------------------------------
+// Keep-scrolling cue. After each middle slide's choreography settles, a
+// text-less chevron fades in at the slide's foot to nudge the visitor on
+// — slide 1 has its own labelled cue, and the last slide gets none
+// (nothing below it yet). Built per-fold like the dot rail, so new slides
+// inherit it; each delay is tuned to land just as that slide's motion
+// finishes. The cue re-arms with the slide, so a scroll-back shows it
+// again.
+// --------------------------------------------------------------------------
+const KEEP_CUE_DELAY = {
+  'the-molecule': 3600, // lede + Nobel line have landed
+  'the-vessel': 4800,   // release + payoff line done (breath is ambient)
+  'the-supply': 7000,   // the chart has finished drawing to age 70
+  'the-source': 3800,   // the NO pair has formed and the lede has landed
+};
+folds.slice(1, -1).forEach((fold) => {
+  const cue = document.createElement('div');
+  cue.className = 'keepcue';
+  cue.setAttribute('aria-hidden', 'true');
+  cue.innerHTML =
+    '<svg viewBox="0 0 16 9" class="keepcue__chevron"><path d="M1.5 1 L8 7.5 L14.5 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  fold.appendChild(cue);
+
+  let cueTimer = null;
+  new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.intersectionRatio >= 0.6) {
+        clearTimeout(cueTimer);
+        cueTimer = setTimeout(
+          () => fold.classList.add('is-cue'),
+          KEEP_CUE_DELAY[fold.id] ?? 3800
+        );
+      } else if (!entry.isIntersecting) {
+        clearTimeout(cueTimer);
+        fold.classList.remove('is-cue');
+      }
+    }
+  }, { threshold: [0, 0.6] }).observe(fold);
+});
 
 // --------------------------------------------------------------------------
 // Slide 1 choreography. The video plays from the moment the slide is
