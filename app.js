@@ -817,9 +817,11 @@ for (const block of ['nobel-pop']) {
   });
 
   // The peek never blocks the page: scrolling on dismisses it.
+  // Capture phase: the page scrolls inside .deck (not the window),
+  // and scroll events don't bubble — capture still reaches them.
   window.addEventListener('scroll', () => {
     if (pop.classList.contains('is-open')) setOpen(false);
-  }, { passive: true });
+  }, { passive: true, capture: true });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') setOpen(false);
@@ -861,7 +863,8 @@ if (docPops.length) {
     if (pop.classList.contains('is-open')) setOpen(false);
   });
   document.addEventListener('click', closeAll);
-  window.addEventListener('scroll', closeAll, { passive: true });
+  // Capture, like the Nobel pop's: .deck's scroll doesn't bubble.
+  window.addEventListener('scroll', closeAll, { passive: true, capture: true });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeAll();
   });

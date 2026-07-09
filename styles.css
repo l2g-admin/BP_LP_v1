@@ -23,14 +23,19 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 /* Vertical slideshow: native scroll with each full-screen slide
-   snapping into place. No scroll-jacking. */
-html {
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-}
+   snapping into place. No scroll-jacking.
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+   The scroller is .deck, a fixed-height inner container — NOT the
+   document (v2, Jul 9). Document scroll let mobile Safari collapse
+   its URL bar mid-swipe, growing the visual viewport past 100svh:
+   every svh-sized slide then sat short of the screen and the next
+   slide bled in at the foot, and the height change re-snapped the
+   last slide late ("snaps and extends"). With the document pinned
+   and only the deck scrolling, the browser chrome never collapses,
+   so the viewport — and every snap point — holds still on any
+   phone. */
+html, body {
+  height: 100%;
 }
 
 body {
@@ -40,7 +45,19 @@ body {
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  overflow-x: clip;
+  overflow: hidden;
+}
+
+.deck {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck { scroll-behavior: auto; }
 }
 
 /* --------------------------------------------------------------------------
@@ -49,7 +66,15 @@ body {
    -------------------------------------------------------------------------- */
 
 .fold {
-  min-height: 100svh;
+  /* 100% of the deck — the stable, chrome-independent viewport. */
+  min-height: 100%;
+  /* Each fold clips its own horizontal overflow (the old body-level
+     overflow-x: clip, relocated). The deck can't carry it — clip on
+     one axis of a scroller computes to hidden, and hidden still
+     allows PROGRAMMATIC x-scroll (a hash jump or a Tab focus could
+     shove the whole page sideways). With every fold clipped, the
+     deck simply never has horizontal overflow to scroll to. */
+  overflow-x: clip;
   display: flex;
   flex-direction: column;
   scroll-snap-align: start;
@@ -1349,16 +1374,23 @@ body {
 
 /* Each card's tucked side (left for the right-hand card, right for
    the left-hand one) absorbs the 20px tuck as padding — the text
-   block always starts at the bottle's visible edge. */
+   block always starts at the bottle's visible edge.
+
+   Cards anchor by BOTTOM, not top (Jul 9): card height is content-
+   driven (the vw-scaled quote wraps more lines on a narrow phone),
+   so a top anchor let the taller phone cards hang past the stage's
+   foot and cover the Clinicians' Choice laurel below it. Pinning
+   each bottom inside the stage caps how far down a card can reach
+   at every size; the top edge is the side that varies. */
 .reveal__card--right {
-  top: 26%;
+  bottom: 28%;
   left: calc(100% - 20px);
   padding-left: 32px;
   --pose: rotate(2.5deg);
 }
 
 .reveal__card--left {
-  top: 40%;
+  bottom: 8%;
   right: calc(100% - 20px);
   padding-right: 32px;
   --pose: rotate(-2.5deg);

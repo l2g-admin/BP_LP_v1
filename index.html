@@ -19,6 +19,14 @@
 </head>
 <body>
 
+  <!-- The deck: the page's one real scroller. The document itself is
+       pinned (html/body height 100%, body overflow hidden) so mobile
+       browser chrome never collapses mid-swipe — a collapsing URL bar
+       grows the viewport past the slides' height and the next slide
+       bleeds in at the foot. Every .fold lives inside; the fixed
+       chrome (dot rail, sticky CTA) stays outside. -->
+  <div class="deck">
+
   <!-- ============================================================
        SLIDE 1 — THE ANSWER
        The ad ends "...there's a better way." The page opens by
@@ -817,6 +825,8 @@
       </div>
     </section>
   </div>
+
+  </div><!-- /.deck -->
 
   <!-- Dot rail: one dot per slide, fixed to the right edge — a quiet
        "you are here, and the end is in sight" signal. app.js builds
