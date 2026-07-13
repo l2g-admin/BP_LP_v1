@@ -449,12 +449,13 @@ body {
             slide 2's molecule made, now for the product — and the stamp
             ring surfaces WITH it, already turning;
      1.25s  the lede lands;
-     1.65s+ the review pill and the two review cards slide out from
-            behind the bottle, staggered — the slide's quiet receipts,
-            arriving as objects from the same physical world — and the
-            ring bows out beneath them (Ewan, Jul 13: once the widgets
-            are up the ring read as clutter half-hidden behind them;
-            it's an entrance flourish now, not part of the poster).
+     1.65s  the review ticker rises in under the bottle, and its
+            marquee drift is already running — the strip arrives
+            mid-motion, like a band of the page that was always
+            turning. The ring STAYS this time (Ewan, Jul 13: with
+            nothing tucked behind the bottle anymore it's no longer
+            clutter half-hidden behind widgets — the spinning stamp
+            is part of the resting poster again).
    (A caption under the bottle — "This is Nitric Oxide Support." in
    slide 2's tick idiom — shipped in the first cut; Ewan cut the echo.
    The label names the product itself.) */
@@ -479,8 +480,12 @@ body {
     transition: opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s;
   }
 
+  /* Surfaces with the bottle and stays — only opacity animates (the
+     element's transform is the centering translate, never touch it;
+     the turn lives on the inner group). */
   #the-capsule .reveal__ring {
     opacity: 0;
+    transition: opacity 0.7s ease 0.4s;
   }
 
   /* The award takes the old lede beat — with the "Each capsule..."
@@ -503,66 +508,30 @@ body {
     transition: opacity 0.55s ease 1.45s, transform 0.55s ease 1.45s;
   }
 
-  /* The review widgets start tucked at the bottle's center — rotation
-     zeroed, a touch smaller, hidden behind the product — and travel
-     out to their resting poses. Opacity arrives on a shorter clock
-     than the transform so most of the slide-out happens in the open;
-     the translate %s are of each widget's own box, sized so the
-     journey starts under the bottle's silhouette at every clamp()
-     size. Staggered, pill first, then card by card. */
-  #the-capsule .reveal__pill,
-  #the-capsule .reveal__card {
+  /* The review ticker rises in as the last beat, on the same quiet
+     fade-rise grammar as the award and stats above it — a band of
+     the page arriving, not a widget popping. Its marquee drift runs
+     from load (CSS animation, no visibility gate): arriving
+     mid-motion is the point, and off screen it costs nothing that
+     matters. */
+  #the-capsule .reveal__strip {
     opacity: 0;
-  }
-
-  /* The pill lives at the CAP, whose silhouette is narrower — its
-     tucked travel is shorter than the cards' so the rounded end never
-     pokes out the cap's far side mid-slide. */
-  #the-capsule .reveal__pill {
-    transform: translate(30%, 20%) scale(0.9) rotate(0deg);
-    transition: opacity 0.4s ease 1.65s,
-                transform 0.8s cubic-bezier(0.22, 0.9, 0.3, 1) 1.65s;
-  }
-
-  #the-capsule .reveal__card--right {
-    transform: translate(-48%, -8%) scale(0.92) rotate(0deg);
-    transition: opacity 0.4s ease 1.85s,
-                transform 0.8s cubic-bezier(0.22, 0.9, 0.3, 1) 1.85s;
-  }
-
-  #the-capsule .reveal__card--left {
-    transform: translate(48%, -8%) scale(0.92) rotate(0deg);
-    transition: opacity 0.4s ease 2s,
-                transform 0.8s cubic-bezier(0.22, 0.9, 0.3, 1) 2s;
+    transform: translateY(14px);
+    transition: opacity 0.55s ease 1.65s, transform 0.55s ease 1.65s;
   }
 
   #the-capsule.is-visible .reveal__bottle,
   #the-capsule.is-visible .frontrow-award,
-  #the-capsule.is-visible .stats {
+  #the-capsule.is-visible .stats,
+  #the-capsule.is-visible .reveal__strip {
     opacity: 1;
     transform: none;
   }
 
-  /* Settle to --pose (each widget's tilt), never transform: none —
-     the tilt is part of the resting poster. */
-  #the-capsule.is-visible .reveal__pill,
-  #the-capsule.is-visible .reveal__card {
-    opacity: 1;
-    transform: var(--pose);
-  }
-
-  /* The ring is a CAMEO (Ewan, Jul 13): it surfaces with the bottle,
-     holds while the object stands alone, and bows out as the review
-     widgets slide over it — half-hidden behind the popped widgets it
-     just read as clutter. Keyframes, not a transition: one run needs
-     a fade-in AND a fade-out, and `both` keeps the settled poster
-     ring-free. Only opacity animates — the element's transform is
-     the centering translate (never touch it); the turn lives on the
-     inner group, around the viewBox's exact center. Percentages of
-     the 2.45s run: in over the bottle's beat (0.3-1.0s), hold, out
-     across the widgets' arrival (1.65-2.45s). */
+  /* Opacity ONLY — transform: none here would wipe the ring's
+     centering translate. */
   #the-capsule.is-visible .reveal__ring {
-    animation: ring-cameo 2.45s ease both;
+    opacity: 1;
   }
 
   #the-capsule .reveal__ring-spin {
@@ -579,12 +548,6 @@ body {
 
 @keyframes ring-turn {
   to { transform: rotate(360deg); }
-}
-
-@keyframes ring-cameo {
-  0%, 12.2% { opacity: 0; }
-  40.8%, 67.3% { opacity: 1; }
-  100% { opacity: 0; }
 }
 
 .site-header {
@@ -1312,16 +1275,12 @@ body {
     padding-bottom: 14px;
   }
 
-  #the-capsule .reveal__bottle {
-    height: min(34svh, 420px);
-  }
-
-  /* The shorter bottle shrinks the stage the cards anchor to, and at
-     28% the right card's top corner rode up over the headline's last
-     word. 16% keeps its whole box below the headline at both tested
-     heights while staying inside the stage's foot. */
-  #the-capsule .reveal__card--right {
-    bottom: 16%;
+  /* The ticker is thin already; on short screens shave its last few
+     pixels of air so the flex-sized bottle above keeps as much of
+     the fold's leftover as it can. */
+  #the-capsule .reveal__strip {
+    margin-top: 10px;
+    padding: 6px 0 7px;
   }
 
   #the-capsule .stats {
@@ -1329,10 +1288,21 @@ body {
   }
 }
 
+/* v5 sizing: the strip under the bottle is new vertical spend, so
+   the bottle stops carrying a fixed clamp() height and absorbs
+   EXACTLY the fold's leftover instead — the figure takes the hero's
+   free space (flex: 1), the stage takes the figure's (the strip
+   keeps its content height), and the bottle fills the stage. Every
+   device gets the biggest bottle its screen can afford, and the
+   stats band can never be the thing that overflows. Capped at 420px
+   (the old clamp ceiling) so desktop keeps proportion. */
 .reveal {
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-self: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .reveal__stage {
@@ -1340,17 +1310,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  align-self: stretch;
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: 420px;
 }
 
-/* Floor lowered 270 -> 240 (Jul 8): with the sticky CTA's footprint
-   reserved at the fold's foot, short phones need the stage to give a
-   little back or the lede has no room. Only bites when 38svh < 270,
-   i.e. screens under ~710px tall. */
 .reveal__bottle {
   position: relative;
   z-index: 1;
   display: block;
-  height: clamp(240px, 38svh, 420px);
+  height: 100%;
   width: auto;
 }
 
@@ -1380,193 +1350,174 @@ body {
   fill: rgba(8, 11, 43, 0.17);
 }
 
-/* Review widgets: the slide's proof, staged as physical objects tucked
-   behind the bottle (they sit under its z-index 1, over the ring), each
-   resting at a slight tilt with a real drop shadow — the depth cue.
+/* The review ticker (v5, Jul 13): the slide's review proof as one
+   thin full-bleed marquee band under the bottle, drifting sideways
+   on its own, seamlessly (Ewan: "a thin strip that side scrolls...
+   automatically"). Cream fill + hairlines = the header's and sticky
+   bar's band, so the strip reads as page architecture — the fix for
+   two earlier treatments: cards flanking the bottle read as sus
+   popup toasts, and a centered card column cost ~150px of a fold
+   that has none (see the sizing note above .reveal). Full bleed by
+   brute width: the strip is a centered flex item 100vw wide, so it
+   overflows the hero's 680px column equally on both sides and
+   .fold's overflow-x: clip eats the excess; the strip itself clips
+   the drifting track. */
+.reveal__strip {
+  width: 100vw;
+  margin-top: 14px;
+  padding: 8px 0 9px;
+  background: var(--header-bg);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  overflow: hidden;
+}
 
-   Anchoring (v3, Jul 9). Two invariants, learned the hard way across
-   v1 (stage-% anchors buried half of each card behind the bottle on
-   phones) and v2 (a fixed 28px tuck still ate the TEXT, because the
-   tucked side of the right card is where its lines start, and of the
-   pill where its line ends):
+/* The marquee: the track holds two identical runs and drifts left
+   by exactly one run's width (the -50% is of the track, and the
+   track is precisely two runs), then loops — seamless because run 2
+   has moved into run 1's opening position at the wrap instant. Each
+   run carries the inter-item gap as trailing padding so the seam
+   keeps the rhythm. ~30px/s: readable drift, not a stock ticker. */
+.reveal__strip-track {
+  display: flex;
+  width: max-content;
+  animation: strip-drift 30s linear infinite;
+}
 
-   1. The tuck (20px) is carried as extra PADDING on each widget's
-      tucked side, so by construction no text can ever sit in the
-      hidden zone, at any screen size. Content had to meet geometry
-      halfway too: the cards carry the reviews' short TITLES, not
-      full quotes — a phone's gutter beside the bottle is ~90px of
-      line width, and only title-length copy survives that.
-   2. Card width equals the side gutter exactly (50vw reaches from
-      the bottle's center — the stage is centered — to the screen
-      edge; minus 50% = half the stage). With the 20px tuck, the
-      outer edge then rests 20px short of the screen: clear of the
-      dot rail's 12-18px band. Capped at 185px so desktop cards
-      stay cards.
+/* Hover or keyboard focus holds the strip still: the bylines are
+   buttons, and a moving tap target is a hostile one. */
+.reveal__strip:hover .reveal__strip-track,
+.reveal__strip:focus-within .reveal__strip-track {
+  animation-play-state: paused;
+}
 
-   The pill tucks behind the CAP (right edge at the cap's left flank,
-   18% of the box, + 20px), not the body: the cap is ~72% as wide as
-   the PNG box (alpha 14-86% up top, full width only from ~25% down),
-   so at cap height even a 360px phone fits the pill's whole text in
-   the open. --pose carries each widget's resting tilt so the
-   choreography can zero it while tucked and settle every widget with
-   one shared rule. Base styles below are the settled poster (the
-   no-JS / reduced-motion state). */
+.reveal__strip-run {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  padding-right: 36px;
+}
 
-/* top 8% -> 3% (Jul 13): on 375px-and-under phones the left card's
-   content-driven height brings its top corner up into the pill's
-   band; 3% keeps most of the pill clear of it (the card still grazes
-   the pill's tail, which now paints on top — see the DOM-order note
-   in index.html) while staying at cap height on tall screens. */
-.reveal__pill {
-  position: absolute;
-  top: 3%;
-  right: calc(82% - 20px);
+@keyframes strip-drift {
+  to { transform: translateX(-50%); }
+}
+
+/* Reduced motion: no auto-drift. The duplicate run disappears and
+   the real one becomes a hand-swipeable row — every quote still
+   reachable, nothing moves on its own. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal__strip {
+    overflow-x: auto;
+  }
+
+  .reveal__strip-track {
+    animation: none;
+  }
+
+  .reveal__strip-run[aria-hidden] {
+    display: none;
+  }
+
+  .reveal__strip-run {
+    padding: 0 24px;
+  }
+}
+
+.reveal__strip-item {
   display: inline-flex;
   align-items: center;
-  gap: 0.45em;
+  gap: 10px;
   white-space: nowrap;
-  padding: 0.55em calc(0.9em + 20px) 0.55em 0.9em;
-  background: #fff;
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  box-shadow: 0 12px 26px rgba(8, 11, 43, 0.14);
-  font-size: min(0.82rem, 3vw);
+}
+
+.reveal__strip-stars {
+  gap: 0.4em;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--ink);
-  --pose: rotate(-3deg);
-  transform: var(--pose);
 }
 
 /* 4.7 of 5 stars, in review-trust green (the page's only green — a
    deliberate outsider to the brand palette, like every real ratings
    widget). Grey base row underneath keeps the unfilled 30% of the
    fifth star legible. */
-.reveal__pill-stars {
+.reveal__strip-starsvg {
   width: 3.9em;
   height: 0.75em;
   flex-shrink: 0;
 }
 
-.reveal__pill-stars-bg {
+.reveal__strip-starsvg-bg {
   fill: #ddd9d0;
 }
 
-.reveal__pill-stars-fill {
+.reveal__strip-starsvg-fill {
   fill: #3e7d51;
 }
 
-.reveal__card {
-  position: absolute;
-  width: min(185px, calc(50vw - 50%));
-  padding: 12px 12px 11px;
-  background: #fff;
-  border: 1px solid var(--hairline);
-  border-radius: 14px;
-  box-shadow: 0 14px 30px rgba(8, 11, 43, 0.13);
-  text-align: left;
-  transform: var(--pose);
-}
-
-/* Each card's tucked side (left for the right-hand card, right for
-   the left-hand one) absorbs the 20px tuck as padding — the text
-   block always starts at the bottle's visible edge.
-
-   Cards anchor by BOTTOM, not top (Jul 9): card height is content-
-   driven (the vw-scaled quote wraps more lines on a narrow phone),
-   so a top anchor let the taller phone cards hang past the stage's
-   foot and cover the Clinicians' Choice award below it. Pinning
-   each bottom inside the stage caps how far down a card can reach
-   at every size; the top edge is the side that varies. */
-.reveal__card--right {
-  bottom: 28%;
-  left: calc(100% - 20px);
-  padding-left: 32px;
-  --pose: rotate(2.5deg);
-}
-
-.reveal__card--left {
-  bottom: 8%;
-  right: calc(100% - 20px);
-  padding-right: 32px;
-  --pose: rotate(-2.5deg);
-}
-
-/* 380px-and-under phones: the stage is short enough that the left
-   card's top corner and the pill want the same band, and the pill
-   (painting on top, see index.html) was sitting on the quote's first
-   line. Pill to the stage's very top, card down to the stage's foot:
-   the two now only graze at the card's top padding, never its text. */
-@media (max-width: 380px) {
-  .reveal__pill {
-    top: 0;
-  }
-
-  .reveal__card--left {
-    bottom: 2%;
-  }
-}
-
-.reveal__card-quote {
+.reveal__strip-quote {
   font-family: var(--serif);
   font-style: italic;
   font-weight: 600;
-  font-size: min(0.95rem, 3.8vw);
+  font-size: 0.95rem;
   line-height: 1.3;
   color: var(--ink);
 }
 
-/* The byline: the doctor's identity as one unit at the card's foot —
-   face, name, credential, stacked (side-by-side needs ~130px, a
-   phone card's inner width is ~85). It's a real <button>: tap opens
-   the full-quote peek. Name wears the dotted underline, the page's
-   "more here, not a link" affordance (Nobel pop). */
-.reveal__card-byline {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-  margin-top: 9px;
+/* The byline: face, name, credential in one line. A real <button>:
+   tap opens the full-quote peek over the stage. Name wears the
+   dotted underline, the page's "more here, not a link" affordance
+   (Nobel pop). */
+.reveal__strip-byline {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   padding: 0;
   background: none;
   border: none;
   font: inherit;
   color: inherit;
-  text-align: left;
   cursor: pointer;
 }
 
-.reveal__card-byline:focus-visible {
+.reveal__strip-byline:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
   border-radius: 4px;
 }
 
-/* The face is the card's credential (photos are B&W already; the
-   mask is ours). Rounded square, not a circle (Ewan, Jul 9): reads
-   more like an ID badge, less like a social avatar. Radius is ~30%
-   of the 44px box; keep that ratio if the size changes. Intrinsic
-   160px, shown at 44 — crisp on 2-3x screens. */
-.reveal__card-avatar {
+/* Same rounded-square ID-badge mask as ever (Ewan, Jul 9: never a
+   social-circle avatar); ~30% radius ratio at this size. Intrinsic
+   160px, shown at 22 — crisp on 2-3x screens. */
+.reveal__strip-avatar {
   display: block;
-  width: 44px;
-  height: 44px;
-  border-radius: 13px;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
   object-fit: cover;
 }
 
-.reveal__card-name {
-  font-size: min(0.7rem, 2.9vw);
+.reveal__strip-name {
+  font-size: 0.72rem;
   font-weight: 700;
   color: var(--ink);
   text-decoration: underline dotted rgba(8, 11, 43, 0.4);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
+  white-space: nowrap;
 }
 
-.reveal__card-cred {
-  font-size: min(0.62rem, 2.6vw);
+.reveal__strip-cred {
+  font-size: 0.68rem;
   font-weight: 600;
   color: var(--muted);
+  white-space: nowrap;
+}
+
+/* The middot belongs to the credential so name + cred read as one
+   phrase; decorative, so generated rather than marked up. */
+.reveal__strip-cred::before {
+  content: "\00B7\00A0";
 }
 
 /* Full-quote peeks: tap a byline and the doctor's whole quote pops

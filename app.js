@@ -935,15 +935,19 @@ for (const block of ['nobel-pop']) {
 }
 
 // --------------------------------------------------------------------------
-// Doctor full-quote peeks on slide 6: each review card's byline button
+// Doctor full-quote peeks on slide 6: each review-strip byline button
 // opens its doctor's whole quote (.doc-pop) centered over the stage.
 // Same peek grammar as the Nobel pop above — tap-out, scroll, Escape
-// and the X all dismiss, never a modal — but trigger and card live in
-// different subtrees (byline in the review card, pop over the stage),
-// so aria-controls carries the pairing. Only one pop open at a time.
+// and the X all dismiss, never a modal — but trigger and pop live in
+// different subtrees (byline in the strip, pop over the stage), so
+// aria-controls carries the pairing. Only one pop open at a time.
+// The ticker's duplicate run repeats every byline for the seamless
+// loop; those copies are inert (unreachable) and stay unwired so a
+// pop is only ever owned by the real button.
 // --------------------------------------------------------------------------
 const docPops = [];
-document.querySelectorAll('.reveal__card-byline[aria-controls]').forEach((btn) => {
+document.querySelectorAll('.reveal__strip-byline[aria-controls]').forEach((btn) => {
+  if (btn.closest('[inert]')) return;
   const pop = document.getElementById(btn.getAttribute('aria-controls'));
   if (!pop) return;
 
@@ -963,6 +967,33 @@ document.querySelectorAll('.reveal__card-byline[aria-controls]').forEach((btn) =
 
   docPops.push({ pop, setOpen });
 });
+
+// --------------------------------------------------------------------------
+// Review-ticker coverage: the CSS marquee shifts the track by -50%,
+// which is seamless for ANY track of 2k identical runs — but only
+// gapless while k runs are at least a viewport wide (at the wrap
+// instant exactly half the track is on screen). The markup ships the
+// minimum two runs (~one run is ~800px, fine for phones); here we
+// clone more inert runs until k covers the widest case, +1 run of
+// slack so a late font swap can't leave the tail short. Skipped under
+// reduced motion: CSS turns the marquee off and hides every
+// duplicate, so extra clones would be dead weight.
+// --------------------------------------------------------------------------
+const stripTrack = document.querySelector('.reveal__strip-track');
+if (stripTrack && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+  const growTrack = () => {
+    const [realRun, dupRun] = stripTrack.children;
+    const runWidth = realRun?.getBoundingClientRect().width;
+    if (!runWidth || !dupRun) return;
+    const runsNeeded = 2 * (Math.ceil(window.innerWidth / runWidth) + 1);
+    while (stripTrack.children.length < runsNeeded) {
+      stripTrack.appendChild(dupRun.cloneNode(true));
+    }
+  };
+  growTrack();
+  // Re-check once everything (fonts included) has settled widths.
+  window.addEventListener('load', growTrack);
+}
 
 if (docPops.length) {
   const closeAll = () => docPops.forEach(({ pop, setOpen }) => {

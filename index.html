@@ -614,100 +614,6 @@
             </g>
           </svg>
 
-          <!-- The proof, tucked behind the product: a rating pill and
-               two DOCTOR quote cards (v3, Jul 9 — Ewan swapped the
-               customer titles for named doctors with faces: authority
-               beats anonymity). Each card: rounded-square B&W headshot
-               (square-cropped from Ewan's webp originals into
-               assets/dr-*.jpg; dr-jeffrey-bland.jpg is processed and
-               waiting for a future proof slide), one short VERBATIM
-               sentence from the doctor's full quote on
-               berkeleylife.com, and the uppercase name — the idiom of
-               the brand's own dark doctor cards. No star row on
-               these: the rating lives on the pill, the doctor's face
-               is the credential, and a phone-width card can't fit
-               avatar + stars side by side anyway. Cards sit after the
-               ring and before the bottle so DOM order stacks them
-               above the watermark but under the bottle (z-index 1);
-               each starts hidden at the bottle's center and slides
-               out to its resting tilt. Each widget carries its tuck
-               depth as extra padding on the tucked side, so no text
-               ever sits in the hidden zone (styles.css). The pill
-               hides behind the CAP, not the body — the cap is ~72% as
-               wide as the PNG box, so at cap height even a small
-               phone has room for the pill's full text. -->
-          <!-- Realness pass (Jul 9, Ewan: "make these doctors look
-               more real"): quote first, then a BYLINE — photo, name,
-               credential as one identity unit, stacked (side-by-side
-               doesn't fit the ~85px inner width of a phone card).
-               Credentials are verifiable, never invented: Snyder's
-               "Women's health expert" is her own published title
-               (drmariza.com / LinkedIn); Moore has no public title
-               anywhere, so his line is "Men's health clinic" — the
-               institution his own quote names, claiming nothing
-               else. The byline is a real button: tap opens the
-               doctor's FULL quote in a peek over the stage (.doc-pop
-               below) — depth-on-demand is the authenticity cue, fake
-               testimonials never have a longer version. The dotted
-               underline on the name is the page's established "more
-               here" affordance (Nobel pop). alt="" on avatars: the
-               adjacent name IS the accessible label. -->
-          <blockquote class="reveal__card reveal__card--right">
-            <!-- No nbsp in "Berkeley Life." here (Jul 13): the joined
-                 pair is wider than a phone card's ~80px text column
-                 and overflowed the box on every phone width tested. -->
-            <p class="reveal__card-quote">&ldquo;I recommend Berkeley Life.&rdquo;</p>
-            <button class="reveal__card-byline" type="button"
-                    aria-expanded="false" aria-controls="doc-pop-snyder">
-              <img class="reveal__card-avatar" src="assets/dr-mariza-snyder.jpg"
-                   alt="" width="160" height="160" loading="lazy">
-              <span class="reveal__card-name">Dr. Mariza Snyder</span>
-              <span class="reveal__card-cred">Women&rsquo;s health expert</span>
-            </button>
-          </blockquote>
-
-          <blockquote class="reveal__card reveal__card--left">
-            <p class="reveal__card-quote">&ldquo;Our patients are loving the results.&rdquo;</p>
-            <button class="reveal__card-byline" type="button"
-                    aria-expanded="false" aria-controls="doc-pop-moore">
-              <img class="reveal__card-avatar" src="assets/dr-richard-moore.jpg"
-                   alt="" width="160" height="160" loading="lazy">
-              <span class="reveal__card-name">Dr. Richard Moore</span>
-              <span class="reveal__card-cred">Men&rsquo;s health clinic</span>
-            </button>
-          </blockquote>
-
-          <!-- Star row is 4.7-accurate: five grey base stars, a green
-               overlay clipped at 4 stars + 70% of the fifth (x=83.2 of
-               the 88-unit row). Green, not brand orange, per Ewan —
-               the universal review-trust colour, and this palette has
-               no other green to collide with. NO review count (Jul 9,
-               Ewan: 342 reads small — and any count here risks
-               contradicting the PDP's own live widget one click
-               later; a bare rating never can). Dropping the count
-               made room for "Rating" again in the cap-height gutter.
-               Keep the sticky footer's stats row in sync.
-               Pill sits AFTER the cards (Jul 13): on 375px-and-under
-               phones the left card's top corner reaches the pill's
-               band and, painting later in DOM order, used to bury it
-               — pill-over-card keeps the rating legible and still
-               tucks behind the bottle (z-index 1). -->
-          <p class="reveal__pill">
-            <svg class="reveal__pill-stars" viewBox="0 0 88 16" role="img" aria-label="4.7 out of 5 stars">
-              <defs>
-                <path id="pill-star" d="M8 1 L9.6 5.7 L14.7 5.8 L10.7 8.9 L12.1 13.7 L8 10.8 L3.9 13.7 L5.3 8.9 L1.3 5.8 L6.3 5.7 Z"/>
-                <clipPath id="pill-star-clip"><rect x="0" y="0" width="83.2" height="16"/></clipPath>
-              </defs>
-              <g class="reveal__pill-stars-bg">
-                <use href="#pill-star"/><use href="#pill-star" x="18"/><use href="#pill-star" x="36"/><use href="#pill-star" x="54"/><use href="#pill-star" x="72"/>
-              </g>
-              <g class="reveal__pill-stars-fill" clip-path="url(#pill-star-clip)">
-                <use href="#pill-star"/><use href="#pill-star" x="18"/><use href="#pill-star" x="36"/><use href="#pill-star" x="54"/><use href="#pill-star" x="72"/>
-              </g>
-            </svg>
-            4.7 Rating
-          </p>
-
           <img class="reveal__bottle" src="assets/no-support-60.png"
                alt="A white Berkeley Life supplement bottle. The label reads Nitric Oxide Support, promotes blood flow for energy and heart health, 60 capsules."
                width="536" height="1000">
@@ -743,6 +649,137 @@
               <span class="doc-pop__name">Dr. Richard Moore</span>
               <span class="doc-pop__cred">Men&rsquo;s health clinic</span>
             </footer>
+          </div>
+        </div>
+
+        <!-- The review ticker (v5, Jul 13, Ewan: reviews "centered
+             below" the bottle, as "a thin strip that side scrolls"):
+             the slide's review proof as one slim full-bleed marquee
+             band under the bottle — the same cream that opens
+             (header) and closes (sticky bar) the page, so it reads
+             as page architecture, never a floating widget. Third
+             treatment: flanking cards read as sus popup toasts, and
+             a centered card column cost ~150px of a fold that has
+             none (a 667px SE squeezed the bottle to 76px); a
+             one-line ticker is the thinnest centered-below format
+             there is. The star rating rides IN the ticker between
+             the two quotes, so it recurs every cycle.
+
+             Mechanics: the track holds the run twice; CSS drifts it
+             left by exactly one run width and loops — seamless
+             because the runs are identical and each carries its own
+             trailing gap. The duplicate run is aria-hidden AND inert
+             (its byline buttons must be unreachable by tab or tap;
+             app.js also skips wiring them). Hover or keyboard focus
+             pauses the drift so the bylines are stable targets;
+             reduced-motion gets a hand-swipeable strip instead
+             (overflow-x: auto, duplicate run hidden) — the motion is
+             pure enhancement, nothing is unreachable without it.
+
+             Doctor provenance (v3 rules still hold): quotes are one
+             short VERBATIM sentence from each doctor's full quote on
+             berkeleylife.com; rounded-square B&W headshots cropped
+             from Ewan's originals (dr-jeffrey-bland.jpg processed
+             and waiting for a future proof slide). Credentials are
+             verifiable, never invented: Snyder's "Women's health
+             expert" is her own published title (drmariza.com /
+             LinkedIn); Moore has no public title anywhere, so his
+             line is "Men's health clinic" — the institution his own
+             quote names, claiming nothing else. The byline is a real
+             button: tap opens the FULL quote in a peek over the
+             stage (.doc-pop above) — depth-on-demand is the
+             authenticity cue, fake testimonials never have a longer
+             version. Dotted underline on the name is the page's
+             "more here" affordance (Nobel pop). alt="" on avatars:
+             the adjacent name IS the accessible label.
+
+             Star row is 4.7-accurate: five grey base stars, a green
+             overlay clipped at 4 stars + 70% of the fifth (x=83.2 of
+             the 88-unit row). Green, not brand orange, per Ewan —
+             the universal review-trust colour. NO review count
+             (Jul 9, Ewan: 342 reads small — and any count risks
+             contradicting the PDP's own live widget one click later;
+             a bare rating never can). Keep the sticky footer's stats
+             row in sync. The SVG defs live only in the first run's
+             star svg; the duplicate's <use> refs resolve document-
+             wide, and ids stay unique. -->
+        <div class="reveal__strip">
+          <div class="reveal__strip-track">
+            <div class="reveal__strip-run">
+              <p class="reveal__strip-item reveal__strip-stars">
+                <svg class="reveal__strip-starsvg" viewBox="0 0 88 16" role="img" aria-label="4.7 out of 5 stars">
+                  <defs>
+                    <path id="strip-star" d="M8 1 L9.6 5.7 L14.7 5.8 L10.7 8.9 L12.1 13.7 L8 10.8 L3.9 13.7 L5.3 8.9 L1.3 5.8 L6.3 5.7 Z"/>
+                    <clipPath id="strip-star-clip"><rect x="0" y="0" width="83.2" height="16"/></clipPath>
+                  </defs>
+                  <g class="reveal__strip-starsvg-bg">
+                    <use href="#strip-star"/><use href="#strip-star" x="18"/><use href="#strip-star" x="36"/><use href="#strip-star" x="54"/><use href="#strip-star" x="72"/>
+                  </g>
+                  <g class="reveal__strip-starsvg-fill" clip-path="url(#strip-star-clip)">
+                    <use href="#strip-star"/><use href="#strip-star" x="18"/><use href="#strip-star" x="36"/><use href="#strip-star" x="54"/><use href="#strip-star" x="72"/>
+                  </g>
+                </svg>
+                4.7 Rating
+              </p>
+
+              <blockquote class="reveal__strip-item">
+                <p class="reveal__strip-quote">&ldquo;Our patients are loving the results.&rdquo;</p>
+                <button class="reveal__strip-byline" type="button"
+                        aria-expanded="false" aria-controls="doc-pop-moore">
+                  <img class="reveal__strip-avatar" src="assets/dr-richard-moore.jpg"
+                       alt="" width="160" height="160" loading="lazy">
+                  <span class="reveal__strip-name">Dr. Richard Moore</span>
+                  <span class="reveal__strip-cred">Men&rsquo;s health clinic</span>
+                </button>
+              </blockquote>
+
+              <blockquote class="reveal__strip-item">
+                <p class="reveal__strip-quote">&ldquo;I recommend Berkeley Life.&rdquo;</p>
+                <button class="reveal__strip-byline" type="button"
+                        aria-expanded="false" aria-controls="doc-pop-snyder">
+                  <img class="reveal__strip-avatar" src="assets/dr-mariza-snyder.jpg"
+                       alt="" width="160" height="160" loading="lazy">
+                  <span class="reveal__strip-name">Dr. Mariza Snyder</span>
+                  <span class="reveal__strip-cred">Women&rsquo;s health expert</span>
+                </button>
+              </blockquote>
+            </div>
+
+            <div class="reveal__strip-run" aria-hidden="true" inert>
+              <p class="reveal__strip-item reveal__strip-stars">
+                <svg class="reveal__strip-starsvg" viewBox="0 0 88 16" aria-hidden="true">
+                  <g class="reveal__strip-starsvg-bg">
+                    <use href="#strip-star"/><use href="#strip-star" x="18"/><use href="#strip-star" x="36"/><use href="#strip-star" x="54"/><use href="#strip-star" x="72"/>
+                  </g>
+                  <g class="reveal__strip-starsvg-fill" clip-path="url(#strip-star-clip)">
+                    <use href="#strip-star"/><use href="#strip-star" x="18"/><use href="#strip-star" x="36"/><use href="#strip-star" x="54"/><use href="#strip-star" x="72"/>
+                  </g>
+                </svg>
+                4.7 Rating
+              </p>
+
+              <blockquote class="reveal__strip-item">
+                <p class="reveal__strip-quote">&ldquo;Our patients are loving the results.&rdquo;</p>
+                <button class="reveal__strip-byline" type="button" tabindex="-1"
+                        aria-expanded="false" aria-controls="doc-pop-moore">
+                  <img class="reveal__strip-avatar" src="assets/dr-richard-moore.jpg"
+                       alt="" width="160" height="160" loading="lazy">
+                  <span class="reveal__strip-name">Dr. Richard Moore</span>
+                  <span class="reveal__strip-cred">Men&rsquo;s health clinic</span>
+                </button>
+              </blockquote>
+
+              <blockquote class="reveal__strip-item">
+                <p class="reveal__strip-quote">&ldquo;I recommend Berkeley Life.&rdquo;</p>
+                <button class="reveal__strip-byline" type="button" tabindex="-1"
+                        aria-expanded="false" aria-controls="doc-pop-snyder">
+                  <img class="reveal__strip-avatar" src="assets/dr-mariza-snyder.jpg"
+                       alt="" width="160" height="160" loading="lazy">
+                  <span class="reveal__strip-name">Dr. Mariza Snyder</span>
+                  <span class="reveal__strip-cred">Women&rsquo;s health expert</span>
+                </button>
+              </blockquote>
+            </div>
           </div>
         </div>
       </figure>
@@ -882,7 +919,11 @@
   <div class="sticky-cta">
     <div class="sticky-cta__inner">
       <a class="sticky-cta__link" href="https://berkeleylife.com/collections/shop-all/products/nitric-oxide-support">
-        Shop Nitric&nbsp;Oxide Support <span class="cta__arrow">&rarr;</span>
+        <!-- "Try it" (Jul 13, Ewan): the chill register — "Shop
+             Nitric Oxide Support" was too much text and "Shop now"
+             still read aggressive. Short, low-commitment, and the
+             bar's badges + the slide already name the product. -->
+        Try it <span class="cta__arrow">&rarr;</span>
       </a>
 
       <!-- Default proof: an echo of the badges already shown on this
