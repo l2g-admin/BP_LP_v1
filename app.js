@@ -1208,3 +1208,25 @@ if (morph) {
     }, { threshold: 0.35 }).observe(morph);
   }
 }
+
+// --------------------------------------------------------------------------
+// Ad-traffic plumbing: carry the visitor's campaign tags (utm_*) and
+// Meta's click id (fbclid) through the sticky CTA to the store, so
+// Shopify's own analytics credit the eventual order to the ad that
+// started it. Also tell the pixel when the CTA is actually used —
+// LPCTAClick separates visitors who engaged from those who bounced.
+// --------------------------------------------------------------------------
+{
+  const cta = document.querySelector('.sticky-cta__link');
+  if (cta) {
+    const inbound = new URLSearchParams(location.search);
+    const dest = new URL(cta.href);
+    for (const [key, value] of inbound) {
+      if (/^utm_/i.test(key) || key === 'fbclid') dest.searchParams.set(key, value);
+    }
+    cta.href = dest.toString();
+    cta.addEventListener('click', () => {
+      if (window.fbq) fbq('trackCustom', 'LPCTAClick');
+    });
+  }
+}

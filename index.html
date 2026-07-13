@@ -16,6 +16,33 @@
 
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
+
+  <!-- Meta Pixel: same pixel as the Shopify store ("BerkeleyShopify"),
+       so the ad click, this page view, and the eventual purchase on
+       berkeleylife.com all join into one funnel in Ads Manager. -->
+  <script>
+    // Only track on the real domain — local dev and preview builds
+    // would otherwise pollute the store's live pixel data.
+    if (/berkeleylife\.com$/.test(location.hostname)) {
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1047150816801806');
+    fbq('track', 'PageView');
+    fbq('track', 'ViewContent', {
+      content_name: 'Nitric Oxide Support',
+      content_type: 'product'
+    });
+    }
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt=""
+    src="https://www.facebook.com/tr?id=1047150816801806&ev=PageView&noscript=1"
+  /></noscript>
 </head>
 <body>
 
