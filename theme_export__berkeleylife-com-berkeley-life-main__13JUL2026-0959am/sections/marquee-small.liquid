@@ -1,0 +1,96 @@
+  
+  {%- capture content -%}
+  {%- for block in section.blocks -%}
+    <div class="flex gap-8 {% unless forloop.first %} ml-8 {% endunless %} items-center">
+    <span class="text-white">
+    {{- block.settings.title  -}}
+    </span>
+<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect width="28" height="28" fill="url(#pattern0_100_136)"/>
+<defs>
+<pattern id="pattern0_100_136" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_100_136" transform="scale(0.0111111)"/>
+</pattern>
+<image id="image0_100_136" width="90" height="90" preserveAspectRatio="none" xlink:href="data:image/png;base64,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"/>
+</defs>
+</svg>
+
+    </div>
+  {%- endfor -%}
+  {%- endcapture -%}
+
+  
+  <div class="py-4 overflow-hidden border-t motion-reduce:overflow-auto bg-purple text-cream marquee-section-outer" style="--color-text: {{ section.settings.text_color | default: '#ffffff' }}; --color-bg: {{ section.settings.bg_color | default: '#000000' }}">
+    <h2 class="{% if section.settings.show_title %}h5 text-center mb-4{% else %}sr-only{% endif %}">{{ section.settings.title | default: 'Marquee' }}</h2>
+    <div class="flex uppercase gap-8 select-none ticker odd-ticker marquee-ticker-wrapper">
+      {%- for i in (1..9) -%}
+        <div style="position: initial;" class=" w-max flex item shrink-0 subhead transform-gpu" {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+          {{- content -}}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var section = document.currentScript.closest('section') || document.currentScript.parentElement;
+      if (!section) return;
+      var observer = new MutationObserver(function() {
+        if (document.body.classList.contains('clinical-drawer-no-scroll')) {
+          section.style.display = 'none';
+        } else {
+          section.style.display = '';
+        }
+      });
+      observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    })();
+  </script>
+  
+  {% schema %}
+  {
+    "name": "Marquee - Small",
+    "tag": "section",
+    "max_blocks": 20,
+    "settings": [
+    ],
+    "blocks": [
+      {
+        "type": "phrase",
+        "name": "Phrase",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Text"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Marquee - Small",
+        "blocks": [
+          {
+            "type": "phrase",
+            "settings": {
+              "title": "Callout Lorem"
+            }
+          },
+          {
+            "type": "phrase",
+            "settings": {
+              "title": "Callout Ipsum"
+            }
+          },
+          {
+            "type": "phrase",
+            "settings": {
+              "title": "Callout Dolor"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  {% endschema %}
+  

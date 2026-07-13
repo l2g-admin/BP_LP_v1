@@ -1,0 +1,337 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "1751012860226a7d08": {
+      "type": "apps",
+      "blocks": {
+        "okendo_quizzes_widget_MfwFTJ": {
+          "type": "shopify://apps/okendo/blocks/quizzes-widget/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "channel_quiz_id": "c8a810a8-20f9-4837-ac60-cabe8f0fb269",
+            "full_screen": true,
+            "header_offset": 0
+          }
+        }
+      },
+      "block_order": [
+        "okendo_quizzes_widget_MfwFTJ"
+      ],
+      "settings": {}
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "sticky_product_pKfVLz": {
+      "type": "sticky-product",
+      "settings": {
+        "product": "nitric-oxide-support"
+      }
+    },
+    "image_with_text_V7mVNg": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_AnYdFF": {
+          "type": "heading",
+          "settings": {
+            "heading": "A **Heart Healthy** Molecule",
+            "cursive_color": "text-brand",
+            "heading_level": "h1",
+            "heading_style": "h1"
+          }
+        },
+        "richtext_8NhWCi": {
+          "type": "richtext",
+          "settings": {
+            "richtext": "<p>From <a href=\"/pages/berkeley-life-clinical-study-and-pilot-study\" title=\"Berkeley Life Clinical Study And Pilot Study\">Berkeley Life Clinical Study And Pilot Study</a></p>",
+            "text_size": "text-sm",
+            "enable_border": true
+          }
+        },
+        "text_kHkNUa": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Nitric Oxide (N.O.) was first recognized for its powerful effects on heart health, and it’s still one of the top reasons people use it today—and with the clinical data to back it up.</p>",
+            "columns": false
+          }
+        },
+        "text_MgzEdD": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>BLOOD PRESSURE<br/></strong>Dilates blood vessels to lower blood pressure</p><p><strong>INCREASED CIRCULATION<br/></strong>Enhances blood flow better circulates oxygen and nutrients</p><p><strong>REDUCED RISK<br/></strong>Lower risk of cardiovascular issues</p><p><strong>INCREASED LONGEVITY<br/></strong>Reverse vascular tissue aging </p>",
+            "columns": true
+          }
+        },
+        "button_gP66PX": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Now",
+            "button_link": "shopify://collections/shop-all",
+            "button_style": "button button--tertiary",
+            "mobile_hide": true
+          }
+        }
+      },
+      "block_order": [
+        "heading_AnYdFF",
+        "richtext_8NhWCi",
+        "text_kHkNUa",
+        "text_MgzEdD",
+        "button_gP66PX"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Rectangle_47_1.png",
+        "eager": true,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-cover",
+        "layout": "text_first_both",
+        "split": "md:grid-cols-2",
+        "bg_color": "",
+        "text_color": "",
+        "text_align": "text-center md:text-left",
+        "justify_top": false,
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "full_width": true,
+        "border": true,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "rich_text_wFcp4n": {
+      "type": "rich-text",
+      "blocks": {
+        "text_xBMRJx": {
+          "type": "text",
+          "settings": {
+            "text": "<p>As we <strong>AGE</strong>, or with lack of <strong>EXERCISE</strong> and poor <strong>DIET</strong>, buildup can start to form in our large and small blood vessels—the routes that carry blood to the heart and other vital organs. This buildup makes it harder for blood to flow freely. </p><p>—</p><p>That’s where N.O. comes in. It helps with vasodilation, or widening those blood vessels, so blood, oxygen, and nutrients can move more easily throughout the body, reducing strain on the heart and helping everything work smoothly.</p>",
+            "columns": false,
+            "text_style": "text-2xl"
+          }
+        }
+      },
+      "block_order": [
+        "text_xBMRJx"
+      ],
+      "settings": {
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "full_width": true,
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "hover_state": false,
+        "show_hover_product": false,
+        "product": ""
+      }
+    },
+    "stats_ieQFYx": {
+      "type": "stats",
+      "blocks": {
+        "collapsible_tab_amHrmm": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "**10%** Decrease In Blood Pressure In 90 Days",
+            "content": "<p>Clinically proven to significantly reduce systolic pressure with daily use for 12 weeks.</p>"
+          }
+        },
+        "collapsible_tab_BwW8Qd": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "**28%** Increase In Circulation In 90 Days",
+            "content": "<p>Clinically proven to significantly increase blood flow with daily use for 12 weeks as measured.</p>"
+          }
+        },
+        "collapsible_tab_XHn7gA": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Up To **20%** Reduction In Inflammatory Blood Markers",
+            "content": "<p>Clinically proven to reduce LDL cholesterol, C-Reactive Protein, and blood glucose levels in 12 weeks when taken daily.</p>"
+          }
+        },
+        "collapsible_tab_eAddLj": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Sustains N.O. Levels For **24 Hours**",
+            "content": "<p>Clinically proven peak at 2 hours and maintain elevation for the duration of 24 hours.</p>"
+          }
+        },
+        "richtext_J7pJnw": {
+          "type": "richtext",
+          "settings": {
+            "richtext": "<p>From <a href=\"/pages/berkeley-life-clinical-study-and-pilot-study\" title=\"Berkeley Life Clinical Study And Pilot Study\">Berkeley Life Clinical Study And Pilot Study</a></p>",
+            "text_size": "text-sm"
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_tab_amHrmm",
+        "collapsible_tab_BwW8Qd",
+        "collapsible_tab_XHn7gA",
+        "collapsible_tab_eAddLj",
+        "richtext_J7pJnw"
+      ],
+      "settings": {
+        "heading": "The Proven Benefits on **Heart Health**",
+        "text": "Unlike many supplements, our products are backed by clinical studies. Our studies have shown the incredible benefits of our Nitric Oxide Foundation on heart health.",
+        "image": "shopify://shop_images/Group_20601.png",
+        "header_color": "",
+        "text_color": "",
+        "inner_box_white": false
+      }
+    },
+    "image_with_text_V6CwqA": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_CwNYBe": {
+          "type": "heading",
+          "settings": {
+            "heading": "Support Your Heart Health **Every Day**",
+            "cursive_color": "text-brand",
+            "heading_level": "h2",
+            "heading_style": "h2"
+          }
+        },
+        "text_MHKpDR": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Just two capsules of Nitric Oxide Foundation, once a day, provide an effective dose of N.O. support for heart health throughout the day.</p>",
+            "columns": false
+          }
+        },
+        "button_MAnd37": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Now",
+            "button_link": "shopify://collections/shop-all",
+            "button_style": "button button--tertiary",
+            "mobile_hide": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_CwNYBe",
+        "text_MHKpDR",
+        "button_MAnd37"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Group_20605_d661a700-dffd-4e0e-be33-eb4c7c49c106.png",
+        "eager": false,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-contain",
+        "layout": "image_first",
+        "split": "md:grid-cols-2",
+        "bg_color": "",
+        "text_color": "",
+        "text_align": "text-center md:text-left",
+        "justify_top": true,
+        "spacing_top": 0,
+        "mobile_spacing_top": 0,
+        "spacing_bottom": 0,
+        "mobile_spacing_bottom": 0,
+        "full_width": false,
+        "border": false,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "columns_agw49A": {
+      "type": "columns",
+      "settings": {
+        "bg_color": "#f6f3f0",
+        "text_color": "#090909",
+        "heading": "By The Age of 40, Your N.O. Levels **Decrease By 50%**",
+        "text": "<p>And continue to decline as you age. This leads to decreased blood flow, impairing the delivery of oxygen and nutrients to cells, and contributing to common age-related issues, including poor heart health, hormone imbalance, weakened immune response, and increased inflammation.</p>"
+      }
+    },
+    "interactive_graph_hTNU6W": {
+      "type": "interactive-graph",
+      "settings": {
+        "title": "",
+        "bg_color": "#f6f3f0",
+        "text_color": ""
+      }
+    },
+    "featured_blog_gqBMny": {
+      "type": "featured-blog",
+      "settings": {
+        "bg_color": "",
+        "text_color": "",
+        "heading": "Be In The N.O.",
+        "description": "",
+        "blog": "news",
+        "desktop_post_limit": 5,
+        "post_limit": 5,
+        "show_image": true,
+        "show_date": false,
+        "show_author": false,
+        "show_view_all": true,
+        "mobile_scroll": true
+      }
+    },
+    "newsletter_GedPTg": {
+      "type": "newsletter",
+      "blocks": {
+        "heading_WBbkLK": {
+          "type": "heading",
+          "settings": {
+            "heading": "Stay Updated",
+            "heading_style": "subhead"
+          }
+        },
+        "heading_mmhnDA": {
+          "type": "heading",
+          "settings": {
+            "heading": "**Sign up** to get emails",
+            "heading_style": "h2"
+          }
+        },
+        "email_form_nXQgBQ": {
+          "type": "email_form",
+          "settings": {
+            "button_style": "button button--secondary"
+          }
+        }
+      },
+      "block_order": [
+        "heading_WBbkLK",
+        "heading_mmhnDA",
+        "email_form_nXQgBQ"
+      ],
+      "settings": {
+        "bg_color": "#d54f2f",
+        "text_color": "",
+        "image": "shopify://shop_images/Group_20604.png"
+      }
+    }
+  },
+  "order": [
+    "1751012860226a7d08",
+    "main",
+    "sticky_product_pKfVLz",
+    "image_with_text_V7mVNg",
+    "rich_text_wFcp4n",
+    "stats_ieQFYx",
+    "image_with_text_V6CwqA",
+    "columns_agw49A",
+    "interactive_graph_hTNU6W",
+    "featured_blog_gqBMny",
+    "newsletter_GedPTg"
+  ]
+}

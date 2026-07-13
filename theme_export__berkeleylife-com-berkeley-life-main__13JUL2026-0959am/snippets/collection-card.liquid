@@ -1,0 +1,22 @@
+<a href="{{ card_collection.url }}" class="group block">
+  <div class="" >
+      <div class="{{ image_ratio }} overflow-hidden grid grid-cols-1 grid-rows-1">
+        {%-liquid
+          assign base_image_classes = 'col-span-1 col-start-1 row-span-1 row-start-1 h-full'
+          if image_override != blank
+            render 'image', image: image_override, fit: 'object-cover' classes: 'col-span-1 col-start-1 row-span-1 row-start-1 h-full', fade_in: false
+            assign base_image_classes = base_image_classes | append: ' opacity-0 md:group-hover:opacity-100 transition-opacity'
+          endif
+          render 'image', image: card_collection.featured_image, fit: 'object-cover', classes: base_image_classes, fade_in: false
+        -%}
+      </div>
+  </div>
+  <h3 class="md:pt-4 group-hover:underline flex items-center pt-2 space-x-1">
+      {%- if card_collection.title != blank -%}
+        <span class="h5">{{- card_collection.title | escape -}}</span>
+        {% render 'icon-arrow' %}
+      {%- else -%}
+        {{ 'onboarding.collection_title' | t }}
+      {%- endif -%}
+  </h3>
+</a>

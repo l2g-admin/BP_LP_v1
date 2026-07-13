@@ -1,0 +1,413 @@
+<style>
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    background-color: {{ section.settings.bg_color }};
+    background-image: url('{{ section.settings.bg_image_desktop | image_url: width: 2000 }}');
+    background-size: cover;
+    background-position: {{ section.settings.bg_position }};
+    background-repeat: no-repeat;
+    color: {{ section.settings.text_color }};
+  }
+
+  {%- if section.settings.bg_image_mobile != blank -%}
+    @media (max-width: 767px) {
+      #{{ section.id }} {
+        background-image: url('{{ section.settings.bg_image_mobile | image_url: width: 800 }}');
+      }
+    }
+  {%- endif -%}
+
+  #{{ section.id }} .hero-sub__container {
+    display: flex;
+    align-items: flex-start;
+    min-height: {{ section.settings.min_height_mobile }}px;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .hero-sub__container {
+      min-height: {{ section.settings.min_height_desktop }}px;
+      align-items: center;
+      justify-content: {{ section.settings.card_position }};
+    }
+  }
+
+  /* --- GLASSMORPHISM CARD --- */
+  #{{ section.id }} .hero-sub__card {
+    background: {{ section.settings.card_bg_color }};
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 64px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: {{ section.settings.card_max_width }}px;
+    box-sizing: border-box;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .hero-sub__card {
+      padding: 3.5rem 3rem;
+    }
+  }
+
+  /* --- TEXT CONTENT --- */
+  #{{ section.id }} .hero-sub__subtitle {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 1rem 0;
+    opacity: 0.9;
+  }
+
+  #{{ section.id }} .hero-sub__title {
+    margin: 0 0 1.25rem 0;
+  }
+
+  #{{ section.id }} .hero-sub__title-italic {
+    display: block;
+  }
+
+  #{{ section.id }} .hero-sub__desc {
+    margin: 0 0 1.5rem 0;
+    opacity: 0.9;
+  }
+
+  /* --- FEATURE PILLS --- */
+  #{{ section.id }} .hero-sub__features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  #{{ section.id }} .feature__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: {{ section.settings.pill_bg_color }};
+    color: {{ section.settings.pill_text_color }};
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  #{{ section.id }} .feature__pill svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* --- ACTIONS --- */
+  #{{ section.id }} .hero-sub__btn {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: {{ section.settings.btn_bg_color }};
+    color: {{ section.settings.btn_text_color }};
+    padding: 1.1rem 2rem;
+    border-radius: 3rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  #{{ section.id }} .hero-sub__btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  #{{ section.id }} .hero-sub__note {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 1rem 0 0 0;
+    opacity: 0.8;
+  }
+</style>
+
+<section id="{{ section.id }}" class="c-hero-subscription">
+  <div class="container-sl">
+    <div class="hero-sub__container">
+
+      <div class="hero-sub__card">
+
+        {%- if section.settings.subtitle != blank -%}
+          <p class="hero-sub__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+
+        <h2 class="hero-sub__title c-title">
+          {{ section.settings.title_1 }}
+          {%- if section.settings.title_2_italic != blank -%}
+            <span class="hero-sub__title-italic c-font-cormorant-title">{{ section.settings.title_2_italic }}</span>
+          {%- endif -%}
+        </h2>
+
+        {%- if section.settings.description != blank -%}
+          <p class="hero-sub__desc c-description">{{ section.settings.description }}</p>
+        {%- endif -%}
+
+        <div class="hero-sub__features">
+          {%- for block in section.blocks -%}
+            <div class="feature__pill" {{ block.shopify_attributes }}>
+              <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+              {{ block.settings.text }}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if section.settings.btn_label != blank -%}
+          <a href="{{ section.settings.btn_link | default: '#' }}" class="hero-sub__btn">
+            {{ section.settings.btn_label }}
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.bottom_note != blank -%}
+          <p class="hero-sub__note">{{ section.settings.bottom_note }}</p>
+        {%- endif -%}
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "select",
+      "id": "card_position",
+      "label": "Card Position (Desktop)",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "flex-end", "label": "Right" }
+      ],
+      "default": "flex-end"
+    },
+    {
+      "type": "range",
+      "id": "card_max_width",
+      "label": "Card Max Width",
+      "min": 320,
+      "max": 700,
+      "step": 10,
+      "default": 480,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "min_height_desktop",
+      "label": "Minimum Height (Desktop)",
+      "min": 400,
+      "max": 1000,
+      "step": 50,
+      "default": 600,
+      "unit": "px",
+      "info": "Ensures enough background image is visible."
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Minimum Height (Mobile)",
+      "min": 500,
+      "max": 1200,
+      "step": 50,
+      "default": 800,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Background Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image_desktop",
+      "label": "Background Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image_mobile",
+      "label": "Background Image (Mobile)",
+      "info": "Highly recommended to frame the product below the card on mobile screens."
+    },
+    {
+      "type": "select",
+      "id": "bg_position",
+      "label": "Background Position",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "center top", "label": "Top Center" },
+        { "value": "center bottom", "label": "Bottom Center" },
+        { "value": "left center", "label": "Left Center" },
+        { "value": "right center", "label": "Right Center" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "header",
+      "content": "Card Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Overline / Subtitle",
+      "default": "SUBSCRIBE & SAVE"
+    },
+    {
+      "type": "text",
+      "id": "title_1",
+      "label": "Title Part 1 (Normal)",
+      "default": "Save 30% on a"
+    },
+    {
+      "type": "text",
+      "id": "title_2_italic",
+      "label": "Title Part 2 (Italic Serif)",
+      "default": "3-Month Foundation Plan."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Get the most researched Nitric Oxide formula delivered every 90 days at your best price. Cancel or adjust any time."
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label",
+      "default": "Start My Plan"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "bottom_note",
+      "label": "Bottom Note",
+      "default": "SHIPS EVERY 90 DAYS"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Fallback Section Background",
+      "default": "#b33821"
+    },
+    {
+      "type": "color_background",
+      "id": "card_bg_color",
+      "label": "Card Background (Use RGBA for Glass Effect)",
+      "default": "rgba(255, 255, 255, 0.2)",
+      "info": "A semi-transparent color makes the glassmorphism blur visible."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Card Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "pill_bg_color",
+      "label": "Feature Pill Background",
+      "default": "rgba(0, 0, 0, 0.25)"
+    },
+    {
+      "type": "color",
+      "id": "pill_text_color",
+      "label": "Feature Pill Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button Background",
+      "default": "#1b1e2a"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Pill",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "30% OFF RECURRING"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Banner",
+      "blocks": [
+        { "type": "feature", "settings": { "text": "30% OFF RECURRING" } },
+        { "type": "feature", "settings": { "text": "FREE NO TEST STRIPS" } },
+        { "type": "feature", "settings": { "text": "FREE SHIPPING" } },
+        { "type": "feature", "settings": { "text": "SKIP OR CANCEL ANYTIME" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

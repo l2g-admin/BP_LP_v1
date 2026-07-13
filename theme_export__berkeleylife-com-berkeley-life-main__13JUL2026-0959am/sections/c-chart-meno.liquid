@@ -1,0 +1,562 @@
+<style>
+    div:empty {
+      display: block !important;
+    }
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+
+    & .section__chart__container {
+      & .section__chart__content {
+        padding-block: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+
+        & .container__chart {
+          
+          overflow: hidden;
+        }
+
+        @media (min-width: 1024px) {
+          & .container__chart {
+            width: 90%;
+            max-width: 760px;
+            margin-inline: auto;
+          }
+        }
+
+        & .chart__title__content {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        & .chart__title {
+          margin: 0;
+          font-size: clamp(1.25rem, 6.75dvw, 3.5rem);
+          text-align: center;
+          color: {{ section.settings.text_color }};
+          line-height: 120%;
+        }
+
+        & .chart__title__span--accent {
+          font-style: italic;
+          font-weight: 300;
+          font-family: "Cormorant Garamond";
+          color: {{ section.settings.accent_color }};
+        }
+
+        & .chart__title__span--underline {
+          text-decoration: underline;
+        }
+
+        & .chart__description {
+          margin: 0;
+          font-size: clamp(1rem, 5dvw, 1.25rem);
+          text-align: center;
+          color: {{ section.settings.text_color }};
+        }
+
+        & .chart__legend {
+          display: flex;
+          gap: 1rem 4rem;
+          flex-wrap: wrap;
+        }
+
+        & .legend__item {
+          width: max-content;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        & .legend__circle__color {
+          width: 1rem;
+          height: 1rem;
+          border-radius: 50%;
+          background-color: var(--color-circle-legend);
+        }
+
+        & .legend__item__text {
+          font-size: 1rem;
+          font-weight: 600;
+          letter-spacing: 1.2px;
+          color: {{ section.settings.text_color }};
+        }
+
+        & .chart__graphic__container {
+          width: 95%;
+          max-width: 800px;
+          margin-inline: auto;
+        }
+
+        & .chart__graphic {
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          padding: 1rem;
+          overflow-x: auto;
+        }
+
+        & .graphic {
+          box-sizing: border-box;
+          min-width: 30rem;
+          width: 100%;
+          display: flex;
+          aspect-ratio: 2/1;
+        }
+
+        & .graphic__content {
+          box-sizing: border-box;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          gap: 0.5rem;
+        }
+
+        & .graphic__column {
+          display: flex;
+          min-width: 1rem;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
+          gap: 0.5rem;
+        }
+
+        & .graphic__line {
+          box-sizing: border-box;
+          flex-grow: 1;
+          width: 1px;
+          border: thin solid {{ section.settings.line_color }};
+          z-index: 2;
+        }
+
+        & .graphic__footer {
+          box-sizing: border-box;
+          flex-shrink: 0;
+        }
+
+        & .graphic__footer__span {
+          box-sizing: border-box;
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: {{ section.settings.text_color }};
+        }
+
+        & .graphic__circle {
+          position: absolute;
+          box-sizing: border-box;
+          inset-inline: 0;
+          min-width: 10px;
+          margin-inline: auto;
+          min-width: 12px;
+          width: min(1.15rem, 3.5dvw);
+          aspect-ratio: 1/1;
+          border-radius: 50%;
+          z-index: 5;
+          transform-style: preserve-3d;
+
+          &::after {
+            content: '';
+            box-sizing: border-box;
+            position: absolute;
+            height: 1px;
+            border-top: thin dashed {{ section.settings.text_color }};
+            left: 50%;
+            top: 40%;
+            transform-origin: left;
+          }
+        }
+
+        & .graphic__circle--1 {
+          background-color: {{ section.settings.accent_color }};
+        }
+
+        & .graphic__circle--2 {
+          background-color: {{ section.settings.secondary_color }};
+        }
+
+        & .column--1 {
+          & .graphic__circle--1 {
+            top: 0;
+
+            &::after {
+              width: clamp(6.5rem, calc(20dvw + 1rem), 11.5rem);
+              transform: rotate(35deg) translateZ(-1px);
+            }
+          }
+
+          & .graphic__circle--2 {
+            top: 17%;
+
+            &::after {
+              width: clamp(6.5rem, calc(20dvw + 0.2rem), 11.5rem);
+              transform: rotate(31deg) translateZ(-1px);
+            }
+          }
+        }
+
+        & .column--2 {
+          & .graphic__circle--1 {
+            top: 27%;
+
+            &::after {
+              width: clamp(6rem, calc(20dvw + 0rem), 10rem);
+              transform: rotate(25deg) translateZ(-1px);
+            }
+          }
+
+          & .graphic__circle--2 {
+            top: 40%;
+            &::after {
+              width: clamp(6rem, calc(20dvw - 0.5rem), 10rem);
+              transform: rotate(18deg) translateZ(-1px);
+            }
+          }
+        }
+
+        & .column--3 {
+          & .graphic__circle--1 {
+            top: 45%;
+
+            &::after {
+              width: clamp(6rem, calc(20dvw - 0.5rem), 9.5rem);
+              transform: rotate(0deg) translateZ(-1px);
+            }
+          }
+
+          & .graphic__circle--2 {
+            top: 52%;
+
+            &::after {
+              width: clamp(6rem, calc(20dvw - 0.5rem), 10rem);
+              transform: rotate(12deg) translateZ(-1px);
+            }
+          }
+        }
+
+        & .column--4 {
+          & .graphic__circle--1 {
+            top: 45%;
+
+            &::after {
+              width: clamp(6rem, calc(20dvw - 0.5rem), 10rem);
+              transform: rotate(15deg) translateZ(-1px);
+            }
+          }
+
+          & .graphic__circle--2 {
+            top: 60%;
+
+            &::after {
+              width: clamp(6rem, calc(20dvw - 0.5rem), 10rem);
+              transform: rotate(23deg) translateZ(-1px);
+            }
+          }
+        }
+
+        & .column--5 {
+          & .graphic__circle--1 {
+            top: 55%;
+
+            &::after {
+              width: clamp(6rem, calc(20dvw - 0.5rem), 10rem);
+              transform: rotate(8deg) translateZ(-1px);
+            }
+          }
+
+          & .graphic__circle--2 {
+            top: 76%;
+
+            &::after {
+              width: clamp(6rem, calc(20dvw - 0.5rem), 9.5rem);
+              transform: rotate(4deg) translateZ(-1px);
+            }
+          }
+        }
+
+        & .column--6 {
+          & .graphic__circle--1 {
+            top: 60%;
+          }
+
+          & .graphic__circle--2 {
+            top: 78%;
+          }
+        }
+
+        & .chart__graphic__footer__span {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: {{ section.settings.text_color }};
+        }
+      }
+    }
+
+    & .chart__button__wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    & .chart__button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background-color: {{ section.settings.button_bg }};
+      border-radius: 9999px;
+      color: {{ section.settings.button_text_color }};
+      font-size: clamp(14px, 2vw, 16px);
+      text-decoration: none;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      font-weight: 400;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 2px solid {{ section.settings.button_bg }};
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+
+  @media (max-width: 640px) {
+    :not(#\20):not(#\20):not(#\20).r-1nf6zx1 {
+      width: 100%;
+      height: auto;
+      flex-grow: 1;
+      min-width: unset;
+      align-self: stretch;
+      flex-basis: 0;
+      flex-shrink: 1;
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="section__chart__container container-sl">
+    <div class="section__chart__content">
+      <div class="chart__title__content container__chart">
+        {% if section.settings.title != blank %}
+          <h2 class="chart__title">
+            {% assign title_formatted = section.settings.title 
+              | replace: '{accent}', '<span class="chart__title__span--accent">' 
+              | replace: '{/accent}', '</span>'
+              | replace: '{underline}', '<span class="chart__title__span--underline">'
+              | replace: '{/underline}', '</span>'
+            %}
+            {{ title_formatted }}
+          </h2>
+        {% endif %}
+        {% if section.settings.description != blank %}
+          <p class="chart__description">{{ section.settings.description }}</p>
+        {% endif %}
+      </div>
+      <div class="chart__legend container__chart">
+        {% if section.settings.legend_1_text != blank %}
+          <div class="legend__item legend__item--1">
+            <span
+              class="legend__circle__color legend__circle__color--1"
+              style="--color-circle-legend: {{ section.settings.secondary_color }}"
+            ></span>
+            <span class="legend__item__text">{{ section.settings.legend_1_text }}</span>
+          </div>
+        {% endif %}
+        {% if section.settings.legend_2_text != blank %}
+          <div class="legend__item legend__item--2">
+            <span
+              class="legend__circle__color legend__circle__color--2"
+              style="--color-circle-legend: {{ section.settings.accent_color }}"
+            ></span>
+            <span class="legend__item__text">{{ section.settings.legend_2_text }}</span>
+          </div>
+        {% endif %}
+      </div>
+      <div class="chart__graphic__container">
+        <div class="chart__graphic">
+          <div class="graphic">
+            <div class="graphic__content">
+              {% assign ages = section.settings.age_labels | split: ',' %}
+              {% for i in (1..6) %}
+                <div class="graphic__column column--{{ i }}">
+                  <div class="graphic__line">
+                    <div class="graphic__circle graphic__circle--1"></div>
+                    <div class="graphic__circle graphic__circle--2"></div>
+                  </div>
+                  <div class="graphic__footer">
+                    <span class="graphic__footer__span">{{ ages[forloop.index0] | default: '' | strip }}</span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% if section.settings.x_axis_label != blank %}
+          <div class="chart__graphic__footer">
+            <span class="chart__graphic__footer__span">{{ section.settings.x_axis_label }}</span>
+          </div>
+        {% endif %}
+      </div>
+      {% if section.settings.button_text != blank %}
+        <div class="chart__button__wrapper">
+          <a href="{{ section.settings.button_link }}" class="chart__button">
+            {{ section.settings.button_text }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "C Chart Meno",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "When {accent}Estrogen{/accent} {underline}Declines{/underline}, Other System Are Affected",
+      "info": "Use {accent}text{/accent} for accent color and {underline}text{/underline} for underline"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "During peri- and post-menopause, declining estrogen impacts circulation, energy levels, and vascular function. Understanding this shift helps explain why targeted support becomes essential at this stage."
+    },
+    {
+      "type": "header",
+      "content": "Legend"
+    },
+    {
+      "type": "text",
+      "id": "legend_1_text",
+      "label": "Legend 1 Text",
+      "default": "= ESTROGEN LEVELS"
+    },
+    {
+      "type": "text",
+      "id": "legend_2_text",
+      "label": "Legend 2 Text",
+      "default": "= NITRIC OXIDE LEVELS"
+    },
+    {
+      "type": "header",
+      "content": "Chart"
+    },
+    {
+      "type": "text",
+      "id": "age_labels",
+      "label": "Age Labels",
+      "default": "30, 40, 50, 60, 70, 80",
+      "info": "Comma-separated values for x-axis"
+    },
+    {
+      "type": "text",
+      "id": "x_axis_label",
+      "label": "X-Axis Label",
+      "default": "AGE"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Line 1)",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "secondary_color",
+      "label": "Secondary Color (Line 2)",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Vertical Line Color",
+      "default": "#aaaaaa"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button Background",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Chart Meno"
+    }
+  ]
+}
+{% endschema %}

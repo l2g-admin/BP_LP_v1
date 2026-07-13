@@ -1,0 +1,243 @@
+<style>
+  .c-buttons-div {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    width: 100%;
+  }
+</style>
+
+<div class=" bg-cream">
+  <div class="grid items-center justify-center max-w-screen-xl grid-cols-1 py-8 mx-auto md:py-20 md:grid-cols-2 gap-x-20">
+    {% if section.settings.image %}
+      {% render 'image', image: section.settings.image, classes: 'z-10 block md:hidden' %}
+    {% endif %}
+    <div class="w-full p-4 space-y-4 text-center md:p-8 md:text-left">
+      {% if section.settings.heading %}
+        <h2 class="mb-4 md:mb-8 h2">
+          {{
+            section.settings.heading
+            | replace_first: '**', "<span class='text-brand font-secondaryHeader'>"
+            | replace: '**', '</span>'
+          }}
+        </h2>
+      {% endif %}
+      {% if section.settings.text %}
+        <div class="text-sm md:text-xl">{{ section.settings.text }}</div>
+      {% endif %}
+    </div>
+    {% if section.settings.image %}
+      {% render 'image', image: section.settings.image, classes: 'z-10 hidden md:block lg:mb-[-45px]' %}
+    {% endif %}
+
+    <div class="m-4 md:col-span-2 {% if section.settings.inner_box_white %} bg-white {% else %} bg-[#EBE8E5] {% endif %} rounded-2xl p-8 md:p-12 !pb-0">
+      <div
+        class="md:py-8"
+        {% if section.settings.enable_page_schema %}
+          itemscope itemtype="https://schema.org/FAQPage"
+        {% endif %}
+      >
+        <div>
+          {%- assign first_header = true -%}
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'collapsible_tab' -%}
+                <div
+                  itemscope
+                  itemprop="mainEntity"
+                  itemtype="https://schema.org/Question"
+                  {{ block.shopify_attributes }}
+                >
+                  <details class="group">
+                    <summary
+                      style="--color-text: {{ section.settings.text_color | default: '#000000' }};"
+                      class="border-t-2 text-text border-navy"
+                    >
+                      <div class="flex items-center justify-between gap-2 py-4 md:py-6">
+                        <h2 class="text-lg md:text-4xl" itemprop="name">
+                          {{
+                            block.settings.heading
+                            | replace_first: '**', "<span class='text-xl md:text-5xl text-brand font-secondaryHeader'>"
+                            | replace_first: '**', '</span>'
+                          }}
+                        </h2>
+                        <span class="transition-transform duration-150 origin-center text-text shrink-0 group-open:rotate-180">
+                          {% render 'icon-plus', classes: 'w-4' %}
+                        </span>
+                      </div>
+                    </summary>
+                    <div
+                      style="--color-text: {{ section.settings.text_color | default: '#000000' }};"
+                      class="pb-4 rte text-text"
+                      itemscope
+                      itemprop="acceptedAnswer"
+                      itemtype="https://schema.org/Answer"
+                    >
+                      <div
+                        itemprop="text"
+                        class="text-sm md:text-xl"
+                        {% if block.settings.faq_id != blank %}
+                          id="{{ block.settings.faq_id }}"
+                        {% endif %}
+                      >
+                        {{ block.settings.content }}
+                      </div>
+                    </div>
+                  </details>
+                </div>
+              {%- when 'richtext' -%}
+                <div
+                  class="
+                    prose mb-4 md:mb-0 motion-safe:transition-all motion-safe:duration-700
+                    {% case block.settings.text_size %}
+                      {% when 'text-sm' %} text-sm
+                      {% when 'text-base' %} text-base
+                      {% when 'text-lg' %} text-lg
+                      {% when 'text-xl' %} text-xl
+                      {% else %} text-base
+                    {% endcase %}
+                  "
+                  {{ block.shopify_attributes }}
+                >
+                  <style>
+                    .prose a {
+                      text-decoration: underline;
+                    }
+                  </style>
+                  {{ block.settings.richtext | raw }}
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'button' -%}
+          <div class="c-buttons-div md:col-span-2" {{ block.shopify_attributes }}>
+            {%- if block.settings.button_url != blank -%}
+              <a href="{{ block.settings.button_url }}" class="{{ block.settings.button_class }}">
+                {{ block.settings.button_text }}
+              </a>
+            {%- endif -%}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Stats",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Lorem Headline",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": " Image"
+    },
+    {
+      "type": "color",
+      "id": "header_color",
+      "label": "Header Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "checkbox",
+      "id": "inner_box_white",
+      "default": false,
+      "label": "Inner box white"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collapsible_tab",
+      "name": "t:sections.main-product.blocks.collapsible_tab.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Collapsible tab",
+          "info": "t:sections.main-product.blocks.collapsible_tab.settings.heading.info",
+          "label": "t:sections.main-product.blocks.collapsible_tab.settings.heading.label"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.main-product.blocks.collapsible_tab.settings.content.label"
+        }
+      ]
+    },
+    {
+      "type": "richtext",
+      "name": "Rich Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "richtext",
+          "default": "<p>Add your rich text content here.</p>",
+          "label": "Rich Text Content"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text Size",
+          "default": "text-base",
+          "options": [
+            { "value": "text-sm", "label": "Small" },
+            { "value": "text-base", "label": "Normal" },
+            { "value": "text-lg", "label": "Large" },
+            { "value": "text-xl", "label": "Extra Large" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Click Here"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        },
+        {
+          "type": "text",
+          "id": "button_class",
+          "label": "Button CSS Class",
+          "default": "button button--primary",
+          "info": "Add custom CSS classes for styling"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Text",
+      "name": "Stats",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

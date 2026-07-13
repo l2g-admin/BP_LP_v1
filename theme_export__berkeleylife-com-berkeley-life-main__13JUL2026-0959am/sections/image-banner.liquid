@@ -1,0 +1,166 @@
+{%-liquid
+  assign show = true
+  assign now = 'now' | date: '%s' | times: 1
+  assign start_date = section.settings.start_date | default: 'now' | date: '%s' | times: 1
+  assign end_date = section.settings.end_date | date: '%s' | times: 1
+  if start_date > now
+    assign show = false
+  endif
+  if end_date > 0 and end_date < now
+    assign show = false
+  endif
+-%}
+{%- if show -%}
+<div class="bg-bg" style="--color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+  <div class="{% unless section.settings.full_width %}max-w-screen-xl mx-auto px-8 {{ section.settings.spacing_top | prepend: 'pt-' }} {{ section.settings.spacing_bottom | prepend: 'pb-' }}{% endunless %} bg-bg">
+    <div class="overflow-hidden">
+      <div class="max-h-[80vh]">
+        <div class="{{ section.settings.image_ratio }} relative h-full w-full">
+          {%- liquid
+            if section.settings.video_file != blank
+              render 'video-autoplay', id: section.id, video: section.settings.video_file, fit: section.settings.image_cover
+            else
+              if section.settings.image != blank
+                render 'image', image: section.settings.image, fit: section.settings.image_cover, eager: section.settings.eager, classes: 'h-full'
+              else
+                echo 'image' | placeholder_svg_tag: 'placeholder-svg'
+              endif
+            endif
+          -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Image Banner",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "eager",
+      "label": "Eager load the image?",
+      "default": false,
+      "info": "Enable this when this is the first image on the page."
+    },
+    {
+      "type": "text",
+      "id": "video_file",
+      "label": "Video",
+      "info": "This file, which you can upload to the [file page](/admin/settings/files), will override the image and autoplay muted and looped."
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "aspect-video",
+          "label": "Wider"
+        },
+        {
+          "value": "aspect-[4/3]",
+          "label": "Wide"
+        },
+        {
+          "value": "aspect-[3/4]",
+          "label": "Portrait"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        },
+        {
+          "value": "aspect-square rounded-full",
+          "label": "Circle"
+        },
+        {
+          "value": "aspect-[9/2] md:aspect-[16/2]",
+          "label": "Small"
+        },
+      ],
+      "default": "aspect-square",
+      "label": "Image Ratio"
+    },
+    {
+      "type": "select",
+      "id": "image_cover",
+      "options": [
+        {
+          "value": "object-cover",
+          "label": "Cover"
+        },
+        {
+          "value": "object-contain",
+          "label": "Contain"
+        }
+      ],
+      "default": "object-cover",
+      "label": "Image Stretch",
+      "info": "Whether the image or video stretches to the container of shrinks to fit."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "range",
+      "id": "spacing_top",
+      "label": "Spacing top",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 8,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom",
+      "label": "Spacing bottom",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 8,
+      "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width?",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Scheduling",
+      "info": "Enter a start date and/or end date to hide and show this section on a schedule."
+    },
+    {
+      "type": "text",
+      "id": "start_date",
+      "label": "Start Date",
+      "info": "Defaults to now"
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "End Date",
+      "info": "Defaults to never",
+      "placeholder": "2021-12-31 23:59 EST"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Banner"
+    }
+  ]
+}
+{% endschema %}
+

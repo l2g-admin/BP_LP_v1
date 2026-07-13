@@ -1,0 +1,9 @@
+{% assign target_article = articles[short_code_value] %}
+{%- if target_article -%}
+  <div class="not-prose bg-slate-50 p-4 {{ base_classes }}">
+    <div class="max-w-xs mx-auto">
+      <h3 class="h5 text-slate-500 mb-4 text-center">Shortcode Article</h3>
+      {% render 'article-card', article: target_article, show_image: true %}
+    </div>
+  </div>
+{%- endif -%}

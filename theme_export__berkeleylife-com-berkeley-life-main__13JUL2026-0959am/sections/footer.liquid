@@ -1,0 +1,534 @@
+{% style %}
+
+  .footer__steplabs {
+    display: inline-flex;
+    padding: 2px 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border-radius: 99px;
+    background: rgba(0, 0, 0, 0.20);
+    color: var(--color-text);
+    font-family: Inter;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 15px */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-left: 18px;
+  }
+
+  .footer__steplabs:hover {
+    background: rgba(0, 0, 0, 0.10);
+  }
+
+  .steplabs_url {
+    color: var(--color-text);
+    font-family: Inter;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%;
+    letter-spacing: 1px;
+    text-decoration-line: none;
+    text-transform: uppercase;
+  }
+
+  .footer-links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .footer-links-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .footer-links-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+{% endstyle %}
+
+<div style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}" class="rounded-b-lg bg-bg">
+  <footer
+    class="px-4 py-4 mx-auto rounded-b-lg md:py-8 max-w-screen-2xl md:px-8 bg-bg text-text" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+    {%- comment -%}The main top part of the footer{%- endcomment -%}
+    <div class="flex flex-col justify-between w-full pb-4 border-b border-black md:grid md:grid-cols-10 md:pb-8 md:flex-row">
+      {%- comment -%}The Logo + Social part{%- endcomment -%}
+      {%- if section.settings.logo or section.settings.svg -%}
+        <div class="col-span-1">
+        {%- if section.settings.footer_url -%}
+          <a href="{{ section.settings.footer_url }}">
+          {% endif %}
+          {%- if section.settings.svg != blank -%}
+            <div class="hidden md:inline-block" style="width: {{ section.settings.logo_width }}px;">
+              {{ section.settings.svg | replace_first: '<svg', '<svg class="w-1/4 md:w-1/2" aria-hidden="true" focusable="false" role="presentation"' }}
+            </div>
+            <div class="block md:hidden" style="width: {{ section.settings.logo_width }}px;">
+              {{ section.settings.mobile_svg | replace_first: '<svg', '<svg class=":w-1/2" aria-hidden="true" focusable="false" role="presentation"' }}
+            </div>
+          {%- elsif section.settings.logo != blank -%}
+            {% render 'image', image: section.settings.logo, classes: 'object-contain w-40' %}
+          {%- else -%}
+            <span class="font-bold">{{ shop.name }}</span>
+          {%- endif -%}
+          {%- if section.settings.footer_url -%}
+          </a>
+      
+        {% endif %}
+        </div>
+      {%- endif -%}
+      <div class="w-full pb-0 md:col-span-9">
+        {%- comment -%}The menu items part{%- endcomment -%}
+        <div class="w-full md:flex md:gap-8 grow lg:h-full">
+          <h2 class="sr-only">Footer Menu(s)</h2>
+          {%- for block in section.blocks -%}
+            <div
+              class="w-full md:col-span-3 md:w-1/3 justify-self-end" {{ block.shopify_attributes }}>
+
+              {%- comment -%}The desktop version of the footer menu{%- endcomment -%}
+              <div class="block">
+                {%- if block.settings.heading != blank -%}
+                  <h3 class="w-full {% if forloop.first %} pt-4 md:pt-0 {% endif %} pb-4 mb-4 text-3xl border-b border-black md:mb-0 md:pb-8">{{- block.settings.heading | escape -}}</h3>
+                {%- endif -%}
+                {%- if block.settings.menu != blank -%}
+                  <ul class="mb-4 md:mb-0 {% if block.settings.heading != blank %}footer-links-grid{% endif %}">
+                    {%- for link in block.settings.menu.links -%}
+                      <li class="py-1">
+                        <a href="{{ link.url }}" class="block text-sm tracking-widest font-bold pb-2 uppercase hover:underline {% if link.active %}font-bold{% endif %}">
+                          {{ link.title }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+
+              
+
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {% if section.settings.show_newsletter %}
+        <div class="p-8 md:p-16">
+          <h3 class="my-2 uppercase h3">{{ section.settings.newsletter_header }}</h3>
+          <p class="mb-4">{{ section.settings.newsletter_description }}</p>
+          {% form 'customer', class: '' %}
+            <input type="hidden" name="contact[tags]">
+            <div class="w-full">
+              <label class="text-xs uppercase" for="NewsletterForm--{{ section.id }}">
+                {{ 'newsletter.label' | t }}
+              </label>
+              <div class="flex items-center pb-px mx-auto my-4 mb-8 border-current border-none focus-within:text-brand group focus-within:pb-0 focus-within:border-2 md:mx-0">
+                <input
+                  id="NewsletterForm--{{ section.id }}"
+                  type="email"
+                  name="contact[email]"
+                  class="rounded-sm focus:!ring-transparent focus:!border-transparent focus-visible:!outline-dashed w-full px-2 placeholder-brandBlack text-brandBlack placeholder-opacity-30 bg-white opacity-25 !border-none border-transparent"
+                  value="{{ form.email }}"
+                  aria-required="true"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  autocomplete="email"
+                  {% if form.errors %}
+                  aria-invalid="true"
+                  aria-describedby="Newsletter-error--{{ section.id }}"
+                  {% elsif form.posted_successfully? %}
+                  aria-describedby="Newsletter-success--{{ section.id }}"
+                  {% endif %}
+                  placeholder="Enter your email address here..."
+                  required>
+              </div>
+              {%- if form.errors -%}
+                <small class="text-warm-red" id="Newsletter-error--{{ section.id }}">{% render 'icon-error' %}{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</small>
+              {%- endif -%}
+            </div>
+            {%- if form.posted_successfully? -%}
+              <h3 class="" id="Newsletter-success--{{ section.id }}">{{ 'newsletter.success' | t }}</h3>
+            {%- endif -%}
+            <div>
+              <button
+                type="submit"
+                class="button--primary button !text-brand !bg-black !border-black hover:!text-black !text-white"
+                name="commit"
+                id="Subscribe"
+                aria-label="{{ 'newsletter.button_label' | t }}">
+                Submit
+              </button>
+            </div>
+          {% endform %}
+        </div>
+      {% endif %}
+
+    </div>
+    <div class="items-start justify-between w-full md:pt-8 md:flex">
+      <div class="items-center md:flex">
+      <p class="pt-4 text-left w-fit md:py-2 text-balance md:flex">
+          <small class="text-xs text-balance">&copy; <a href="{{ routes.root_url }}" aria-label="{{ shop.name }} Homepage">{{ shop.name }} </a> {{ 'now' | date: "%Y" }}. All rights reserved. &nbsp;
+        </small>
+      </p>
+      {%- for link in section.settings.policy_menu.links -%}
+        <a href="{{ link.url }}" class=" md:p-1 hover:underline text-xs text-balance{% if link.active %}font-bold{% endif %}">
+        {{ link.title }}</a>
+        {% unless forloop.last %} | {% endunless %}
+
+      {%- endfor -%}
+      {% if section.settings.show_steplabs %}
+        <a class="footer__steplabs steplabs_url" href="{{ section.settings.steplabs_url }}" target="_blank" rel="noopener">
+        WEBSITE BY STEPLABS 
+        </a>
+      {% endif %}
+    </div>
+    <div class="text-xs md:w-1/4"> {{ section.settings.footer_statement }}</div>
+    <div class="flex items-center sr-only md:justify-self-end">
+      <a href="https://smakkstudios.com" aria-label="Designed and Developed by SMAKK STUDIOS NYC" class="py-2 text-xs font-bold tracking-widest text-center uppercase md:text-sm">Made by SMAKK</a></div>
+    </div>
+    {%- if section.settings.show_social -%}
+
+    <ul class="flex items-center gap-4 my-4" role="list">
+      {%- if section.settings.social_twitter_link != blank -%}
+        <li>
+          <a
+            target="_blank"
+            href="{{ section.settings.social_twitter_link }}"
+            class="flex items-center w-6 h-6"
+            aria-describedby="a11y-external-message">
+            {%- render 'icon-twitter' -%}
+            <span class="sr-only">{{ 'general.social.links.twitter' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+      {%- if section.settings.social_facebook_link != blank -%}
+        <li>
+          <a
+            target="_blank"
+            href="{{ section.settings.social_facebook_link }}"
+            class="flex items-center w-6 h-6"
+            aria-describedby="a11y-external-message">
+            {%- render 'icon-facebook' -%}
+            <span class="sr-only">{{ 'general.social.links.facebook' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+      {%- if section.settings.social_pinterest_link != blank -%}
+        <li>
+          <a
+            target="_blank"
+            href="{{ section.settings.social_pinterest_link }}"
+            class="flex items-center w-6 h-6"
+            aria-describedby="a11y-external-message">
+            {%- render 'icon-pinterest' -%}
+            <span class="sr-only">{{ 'general.social.links.pinterest' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+      {%- if section.settings.social_instagram_link != blank -%}
+        <li>
+          <a
+            target="_blank"
+            href="{{ section.settings.social_instagram_link }}"
+            class="flex items-center w-6 h-6"
+            aria-describedby="a11y-external-message">
+            {%- render 'icon-instagram' -%}
+            <span class="sr-only">{{ 'general.social.links.instagram' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+      {%- if section.settings.social_tiktok_link != blank -%}
+        <li>
+          <a
+            target="_blank"
+            href="{{ section.settings.social_tiktok_link }}"
+            class="flex items-center w-6 h-6"
+            aria-describedby="a11y-external-message">
+            {%- render 'icon-tiktok' -%}
+            <span class="sr-only">{{ 'general.social.links.tiktok' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+      {%- if section.settings.social_tumblr_link != blank -%}
+        <li>
+          <a
+            target="_blank"
+            href="{{ section.settings.social_tumblr_link }}"
+            class="flex items-center w-6 h-6"
+            aria-describedby="a11y-external-message">
+            {%- render 'icon-tumblr' -%}
+            <span class="sr-only">{{ 'general.social.links.tumblr' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+      {%- if section.settings.social_linkedin != blank -%}
+        <li>
+          <a
+            target="_blank"
+            href="{{ section.settings.social_linkedin }}"
+            class="flex items-center w-6 h-6"
+            aria-describedby="a11y-external-message">
+            {%- render 'icon-linkedin' -%}
+            <span class="sr-only">Linkedin</span>
+          </a>
+        </li>
+      {%- endif -%}
+      {%- if section.settings.social_snapchat_link != blank -%}
+        <li>
+          <a
+            target="_blank"
+            href="{{ section.settings.social_snapchat_link }}"
+            class="flex items-center w-6 h-6"
+            aria-describedby="a11y-external-message">
+            {%- render 'icon-snapchat' -%}
+            <span class="sr-only">{{ 'general.social.links.snapchat' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+      {%- if section.settings.social_youtube_link != blank -%}
+        <li>
+          <a
+            target="_blank"
+            href="{{ section.settings.social_youtube_link }}"
+            class="flex items-center w-6 h-6"
+            aria-describedby="a11y-external-message">
+            {%- render 'icon-youtube' -%}
+            <span class="sr-only">{{ 'general.social.links.youtube' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+      {%- if section.settings.social_vimeo_link != blank -%}
+        <li>
+          <a
+            target="_blank"
+            href="{{ section.settings.social_vimeo_link }}"
+            class="flex items-center w-6 h-6"
+            aria-describedby="a11y-external-message">
+            {%- render 'icon-vimeo' -%}
+            <span class="sr-only">{{ 'general.social.links.vimeo' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+    </ul>
+  {%- endif -%}
+  </footer>
+</div>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_steplabs",
+      "label": "Show Steplabs credit",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "steplabs_url",
+      "label": "Steplabs URL",
+    },
+    {
+      "type": "header",
+      "content": "Logo and Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "html",
+      "id": "svg",
+      "label": "SVG for Logo",
+      "info": "This is preferred (without widthor height attribute)."
+    },
+    {
+      "type": "html",
+      "id": "mobile_svg",
+      "label": "Mobile SVG for Logo",
+      "info": "This is preferred (without widthor height attribute)."
+    },
+    {
+      "type": "url",
+      "id": "footer_url",
+      "label": "Footer Logo Url"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "default": true,
+      "label": "Show newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_header",
+      "label": "Newsletter Header"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_description",
+      "label": "Newsletter Description"
+    },
+    {
+      "type": "header",
+      "content": "Social Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": true,
+      "label": "Show social"
+    },
+    {
+      "type": "text",
+      "id": "social_twitter_link",
+      "label": "t:settings_schema.social-media.settings.social_twitter_link.label",
+      "info": "t:settings_schema.social-media.settings.social_twitter_link.info"
+    },
+    {
+      "type": "text",
+      "id": "social_facebook_link",
+      "label": "t:settings_schema.social-media.settings.social_facebook_link.label",
+      "info": "t:settings_schema.social-media.settings.social_facebook_link.info"
+    },
+    {
+      "type": "text",
+      "id": "social_pinterest_link",
+      "label": "t:settings_schema.social-media.settings.social_pinterest_link.label",
+      "info": "t:settings_schema.social-media.settings.social_pinterest_link.info"
+    },
+    {
+      "type": "text",
+      "id": "social_instagram_link",
+      "label": "t:settings_schema.social-media.settings.social_instagram_link.label",
+      "info": "t:settings_schema.social-media.settings.social_instagram_link.info"
+    },
+    {
+      "type": "text",
+      "id": "social_tiktok_link",
+      "label": "t:settings_schema.social-media.settings.social_tiktok_link.label",
+      "info": "t:settings_schema.social-media.settings.social_tiktok_link.info"
+    },
+    {
+      "type": "text",
+      "id": "social_tumblr_link",
+      "label": "t:settings_schema.social-media.settings.social_tumblr_link.label",
+      "info": "t:settings_schema.social-media.settings.social_tumblr_link.info"
+    },
+    {
+      "type": "text",
+      "id": "social_snapchat_link",
+      "label": "t:settings_schema.social-media.settings.social_snapchat_link.label",
+      "info": "t:settings_schema.social-media.settings.social_snapchat_link.info"
+    },
+    {
+      "type": "text",
+      "id": "social_linkedin",
+      "label": "LinkedIn",
+    },
+    {
+      "type": "text",
+      "id": "social_youtube_link",
+      "label": "t:settings_schema.social-media.settings.social_youtube_link.label",
+      "info": "t:settings_schema.social-media.settings.social_youtube_link.info"
+    },
+    {
+      "type": "text",
+      "id": "social_vimeo_link",
+      "label": "t:settings_schema.social-media.settings.social_vimeo_link.label",
+      "info": "t:settings_schema.social-media.settings.social_vimeo_link.info"
+    },
+    {
+      "type": "header",
+      "content": "Misc Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "Show country selector"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "Enable language selector"
+    },
+    {
+      "type": "checkbox",
+      "id": "payment_enable",
+      "default": true,
+      "label": "Show payment options"
+    },
+    {
+      "type": "link_list",
+      "id": "policy_menu",
+      "label": "Policy Menu"
+    },
+    {
+      "type": "text",
+      "id": "footer_statement",
+      "label": "Footer Statement",
+      "default": "* These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "t:sections.footer.blocks.link_list.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Quick links",
+          "label": "t:sections.footer.blocks.link_list.settings.heading.label"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "t:sections.footer.blocks.link_list.settings.menu.label",
+          "info": "t:sections.footer.blocks.link_list.settings.menu.info"
+        },
+        {
+          "type": "checkbox",
+          "id": "collapse",
+          "label": "Collapse on mobile?",
+          "default": true,
+          "info": "Becomes an accorion on mobile if checked."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        {
+          "type": "link_list"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

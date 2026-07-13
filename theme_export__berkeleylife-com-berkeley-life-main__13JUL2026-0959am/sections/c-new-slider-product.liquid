@@ -1,0 +1,601 @@
+<style>
+  
+
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    color: #111111;
+    overflow: hidden;
+
+    & .c-cprods__container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* --- HEADER --- */
+    & .c-cprods__header {
+      text-align: center;
+      max-width: 800px;
+      margin-bottom: 3.5rem;
+    }
+
+    & .c-cprods__eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: {{ section.settings.accent_color }};
+      margin: 0 0 1rem 0;
+    }
+
+    & .c-cprods__title {
+      font-size: clamp(32px, 4vw, 46px);
+      color: #1a1f4c;
+      margin: 0 0 1rem 0;
+      line-height: 1.1;
+
+      & span {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(36px, 4.5vw, 52px);
+        color: {{ section.settings.accent_color }};
+        font-style: italic;
+      }
+    }
+
+    & .c-cprods__subtitle {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #333333;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    /* --- SLIDER --- */
+    & .c-cprods__slider-wrap {
+      width: 100%;
+      margin-bottom: 3.5rem;
+    }
+
+    & .swiper {
+      overflow: visible;
+      width: 100%;
+    }
+
+    & .swiper-wrapper {
+      display: flex;
+      align-items: stretch;
+    }
+
+    & .swiper-slide {
+      height: auto;
+      display: flex;
+    }
+
+    /* --- CARDS --- */
+    & .c-cprod-card {
+      background-color: {{ section.settings.card_bg_color }};
+      border-radius: 16px;
+      padding: 2.5rem 1rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    & .c-cprod-card__badge {
+      position: absolute;
+      top: -0.5rem;
+      left: 1rem;
+      background-color: {{ section.settings.accent_color }};
+      color: #ffffff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      z-index: 2;
+     
+    }
+
+    & .c-cprod-card__img-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    & .c-cprod-card__img {
+      max-width: 75%;
+      height: auto;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+      transition: transform 0.4s ease;
+    }
+
+    & .c-cprod-card:hover .c-cprod-card__img {
+      transform: scale(1.05);
+    }
+
+    & .c-cprod-card__reviews {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+
+    & .c-cprod-card__title {
+      font-size: clamp(24px, 2vw, 32px);
+      font-style: normal;
+      font-weight: 500;
+      line-height: 120%; 
+      color: #1a1f4c;
+      margin: 0 0 1rem 0;
+      min-height: 58px;
+    }
+
+    & .c-cprod-card__desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555555;
+      margin: 0 0 2rem 0;
+      flex-grow: 1;
+    }
+
+    & .c-cprod-card__btn {
+      display: block;
+      width: 100%;
+      background-color: {{ section.settings.btn_bg_color }};
+      color: {{ section.settings.btn_text_color }};
+      padding: 14px 24px;
+      border-radius: 30px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 15px;
+      transition: opacity 0.3s ease;
+      margin-bottom: 1.5rem;
+
+      &:hover {
+        opacity: 0.85;
+      }
+    }
+
+    & .c-cprod-card__learn {
+      align-self: center;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: {{ section.settings.accent_color }};
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 2px;
+      transition: opacity 0.3s ease;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    /* --- FOOTER --- */
+    & .c-cprods__footer {
+      text-align: center;
+      font-size: 15px;
+      color: #333333;
+      margin: 0;
+
+      & a {
+        color: {{ section.settings.accent_color }};
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 1px;
+        text-decoration: none;
+        border-bottom: 1px solid currentColor;
+        padding-bottom: 2px;
+        margin-left: 8px;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (Max 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+      & .c-cprods__header {
+        margin-bottom: 2.5rem;
+      }
+
+      & .c-cprods__title {
+        font-size: 28px;
+      }
+
+      & .c-cprods__slider-wrap {
+        margin-bottom: 2.5rem;
+      }
+
+      & .c-cprod-card {
+        padding: 2rem 1.5rem;
+      }
+
+      & .c-cprod-card__badge {
+        left: -5px;
+      }
+ 
+
+      & .c-cprods__footer {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 14px;
+        padding: 0 1rem;
+
+        & a {
+          margin-left: 0;
+          align-self: center;
+        }
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="c-cprods__container">
+      <div class="c-cprods__header">
+        {% if section.settings.eyebrow != blank %}
+          <p class="c-cprods__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+
+        {% if section.settings.title != blank %}
+          <h2 class="c-cprods__title">{{ section.settings.title | newline_to_br }}</h2>
+        {% endif %}
+
+        {% if section.settings.subtitle != blank %}
+          <p class="c-cprods__subtitle">{{ section.settings.subtitle }}</p>
+        {% endif %}
+      </div>
+
+      <div class="c-cprods__slider-wrap">
+        <div class="swiper js-cprods-swiper-{{ section.id }}">
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              {% assign product = all_products[block.settings.product] %}
+
+              <div class="swiper-slide" {{ block.shopify_attributes }}>
+                <div class="c-cprod-card">
+                  {% if block.settings.badge_text != blank %}
+                    <div class="c-cprod-card__badge">{{ block.settings.badge_text }}</div>
+                  {% endif %}
+
+                  <div class="c-cprod-card__img-wrap">
+                    {% if block.settings.custom_image != blank %}
+                      <img
+                        src="{{ block.settings.custom_image | image_url: width: 400 }}"
+                        alt="{{ block.settings.custom_title | escape }}"
+                        class="c-cprod-card__img"
+                        loading="lazy"
+                      >
+                    {% elsif product.featured_image != blank %}
+                      <img
+                        src="{{ product.featured_image | image_url: width: 400 }}"
+                        alt="{{ product.title | escape }}"
+                        class="c-cprod-card__img"
+                        loading="lazy"
+                      >
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag: 'c-cprod-card__img' }}
+                    {% endif %}
+                  </div>
+
+                  <div class="c-cprod-card__reviews">
+                    {% render 'okendo-reviews-product-rating-summary', product: product %}
+                  </div>
+
+                  <h3 class="c-cprod-card__title">
+                    {{ block.settings.custom_title | default: product.title | default: 'Product Title' }}
+                  </h3>
+                  <p class="c-cprod-card__desc">
+                    {{
+                      block.settings.custom_desc
+                      | default: 'Clinically proven to improve blood flow, energy, sexual health, and full-body wellness.'
+                    }}
+                  </p>
+
+                  <a href="{{ product.url | default: '#' }}" class="c-cprod-card__btn">
+                    {{ section.settings.btn_text | default: 'Set Up Account to Order' }}
+                  </a>
+                  <a href="{{ product.url | default: '#' }}" class="c-cprod-card__learn">
+                    {{ section.settings.learn_text | default: 'LEARN MORE' }}
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      {% if section.settings.footer_text != blank or section.settings.footer_link_text != blank %}
+        <p class="c-cprods__footer">
+          {{ section.settings.footer_text }}
+          {% if section.settings.footer_link_text != blank %}
+            <a href="{{ section.settings.footer_link_url }}">{{ section.settings.footer_link_text }}</a>
+          {% endif %}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const swiperSelector = '.js-cprods-swiper-{{ section.id }}';
+    const swiperContainer = document.querySelector(swiperSelector);
+
+    if (swiperContainer) {
+      new Swiper(swiperSelector, {
+        slidesPerView: {{ section.settings.slides_mobile }},
+        spaceBetween: 16,
+        grabCursor: true,
+        breakpoints: {
+          768: {
+            slidesPerView: {{ section.settings.slides_tablet }},
+            spaceBetween: 24,
+          },
+          992: {
+            slidesPerView: {{ section.settings.slides_desktop }},
+            spaceBetween: 13,
+          },
+        },
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C New Slider Product",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#f4f4f4"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#ebebeb"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#dc5635"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button Background Color",
+      "default": "#1c223a"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Header Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "THE PRODUCT LINE"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Clinically Proven <span>Solutions</span>\nfor Your Patients",
+      "info": "Wrap text in <span></span> to apply the special orange italic font."
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Log in or set up your provider account to access wholesale pricing."
+    },
+    {
+      "type": "header",
+      "content": "Global Buttons"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Primary Button Text",
+      "default": "Set Up Account to Order"
+    },
+    {
+      "type": "text",
+      "id": "learn_text",
+      "label": "Learn More Text",
+      "default": "LEARN MORE"
+    },
+    {
+      "type": "header",
+      "content": "Footer Area"
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer Text",
+      "default": "Provider accounts unlock wholesale pricing, clinical resources, and dedicated support."
+    },
+    {
+      "type": "text",
+      "id": "footer_link_text",
+      "label": "Footer Link Text",
+      "default": "SET UP YOUR ACCOUNT"
+    },
+    {
+      "type": "url",
+      "id": "footer_link_url",
+      "label": "Footer Link URL"
+    },
+    {
+      "type": "header",
+      "content": "Slider Settings"
+    },
+    {
+      "type": "range",
+      "id": "slides_desktop",
+      "label": "Slides per view — Desktop (≥992px)",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "slides_tablet",
+      "label": "Slides per view — Tablet (≥768px)",
+      "min": 1,
+      "max": 4,
+      "step": 0.1,
+      "default": 2.2
+    },
+    {
+      "type": "range",
+      "id": "slides_mobile",
+      "label": "Slides per view — Mobile",
+      "min": 1,
+      "max": 3,
+      "step": 0.1,
+      "default": 1.1
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Product Card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "BEST SELLER"
+        },
+        {
+          "type": "header",
+          "content": "Overrides"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom Title",
+          "info": "Leave blank to use product title"
+        },
+        {
+          "type": "textarea",
+          "id": "custom_desc",
+          "label": "Custom Description",
+          "default": "Clinically proven to improve blood flow, energy, sexual health, and full-body wellness. Two capsules daily for measurable, lasting results."
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image",
+          "info": "Leave blank to use product featured image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C New Slider Product",
+      "blocks": [
+        { "type": "product_card", "settings": { "badge_text": "BEST SELLER", "custom_title": "Nitric Oxide Support" } },
+        {
+          "type": "product_card",
+          "settings": { "badge_text": "NEW", "custom_title": "Menopause and Heart Health Support" }
+        },
+        {
+          "type": "product_card",
+          "settings": { "badge_text": "NEW FORMULA", "custom_title": "Boost Prebiotic Nitrate Gum" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

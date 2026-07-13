@@ -1,0 +1,26 @@
+<cart-notification>
+  <div class="relative hidden">
+    <div
+    data-classes-pre="invisible opacity-0 -translate-y-8"
+    data-classes-post="visible opacity-100 translate-y-0"
+    id="cart-notification" data-cart-notify class="md:max-w-sm md:right-4 top-4 absolute flex flex-col invisible w-full max-w-full gap-4 p-4 transition-all -translate-y-8 bg-white rounded-md shadow-md opacity-0" aria-modal="true" aria-label="{{ 'general.cart.item_added' | t }}" role="dialog" tabindex="-1">
+      <div class="flex items-center justify-between">
+        <h2 class="flex items-center gap-2 text-sm">
+          <span class="block w-6">{%- render 'icon-checkmark' -%} </span>
+          <span>{{ 'general.cart.item_added' | t }}</span>
+        </h2>
+        <button type="button" class="" aria-label="{{ 'accessibility.close' | t }}">
+          <svg class="w-6 h-6" aria-hidden="true" focusable="false"><use href="#icon-close"/></svg>
+        </button>
+      </div>
+      <div id="cart-notification-product" class="flex items-center gap-4"></div>
+      <div class="flex flex-col gap-4">
+        <a href="{{ routes.cart_url }}" id="cart-notification-button" class="button button--secondary button--full-width"></a>
+        <form action="{{ routes.cart_url }}" method="post" id="cart">
+          <button class="button button--primary button--full-width" name="checkout" form="cart">{{ 'sections.cart.checkout' | t }}</button>
+        </form>
+        <button type="button" class="button--text self-center">{{ 'general.continue_shopping' | t }}</button>
+      </div>
+    </div>
+  </div>
+</cart-notification>

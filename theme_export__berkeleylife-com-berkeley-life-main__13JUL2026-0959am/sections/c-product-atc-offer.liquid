@@ -1,0 +1,1764 @@
+{%- comment -%}
+  Section: C Product ATC Offer
+  Description: Product-focused ATC offer with block-driven content, price overrides, promo-code CTA, and accordion details.
+  sl-id: sl-section-product-atc-offer-v1
+  Figma: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5774-4209&m=dev
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-product-atc-offer-v1'
+  assign selected_product = section.settings.product
+  if selected_product == blank and product != blank
+    assign selected_product = product
+  endif
+
+  assign selected_variant = nil
+  assign section_anchor_id = section.settings.sl_anchor_id
+  assign media_image = section.settings.media_image
+  assign media_alt = section.settings.media_alt
+  assign promo_code = section.settings.promo_code | strip
+  assign promo_redirect_target = section.settings.promo_redirect_target | default: 'checkout'
+  assign atc_behavior = section.settings.atc_behavior | default: 'sidecart'
+
+  if selected_product != blank
+    assign selected_variant = selected_product.selected_or_first_available_variant
+    if media_image == blank
+      assign media_image = selected_product.featured_image
+    endif
+    if media_alt == blank
+      assign media_alt = selected_product.title
+    endif
+  endif
+
+  assign override_price = section.settings.override_price
+  assign override_compare_at_price = section.settings.override_compare_at_price
+
+  assign price_display = blank
+  assign compare_display = blank
+
+  if override_price != blank
+    assign override_price_cents = override_price | times: 100
+    assign price_display = override_price_cents | money
+  elsif selected_variant != blank
+    assign price_display = selected_variant.price | money
+  endif
+
+  if override_compare_at_price != blank and override_compare_at_price > 0
+    assign override_compare_cents = override_compare_at_price | times: 100
+    assign compare_display = override_compare_cents | money
+  elsif selected_variant != blank and selected_variant.compare_at_price != blank and selected_variant.compare_at_price > selected_variant.price
+    assign compare_display = selected_variant.compare_at_price | money
+  endif
+
+  if compare_display == price_display
+    assign compare_display = blank
+  endif
+
+  assign cta_target_path = '/checkout'
+  if promo_redirect_target == 'cart'
+    assign cta_target_path = '/cart'
+  endif
+-%}
+
+{%- capture clinical_trials_drawer_body_default -%}
+  <p>Only a small percentage of dietary supplements are tested in gold-standard human clinical trials.</p>
+  <p>Berkeley Life® Nitric Oxide Support has been evaluated in double-blind, placebo-controlled research demonstrating its ability to increase nitric oxide bioavailability in humans.</p>
+  <p>The dietary nitrate ingredients used in our formulation are supported by a growing body of peer-reviewed clinical research validating improvements in vascular function, endothelial health, and blood pressure regulation.</p>
+  <h3>The Impact of Clinical Proof</h3>
+  <p>Double-blind, placebo-controlled trials (DBPCTs) are considered the gold standard in scientific research because they help ensure:</p>
+  <ul>
+    <li>Bias elimination</li>
+    <li>Control for placebo effect</li>
+    <li>Validated efficacy</li>
+    <li>Safety and tolerability assessment</li>
+  </ul>
+  <p>By studying the full nitrate formulation as it is consumed, Berkeley Life® ensures the product is evaluated for real-world effectiveness and safety - not just theoretical ingredient benefits.</p>
+  <h3>Nitric Oxide Production</h3>
+  <p>Berkeley Life® is formulated to increase nitric oxide through the dietary nitrate → nitrite → nitric oxide pathway.</p>
+  <p>Unlike L-arginine-based supplements, this pathway remains active even when endothelial nitric oxide synthase (eNOS) declines with age.</p>
+  <h3>Clinical Trial Results</h3>
+  <p>In a double-blind, placebo-controlled study, participants taking Berkeley Life® demonstrated significant increases in salivary nitrite and plasma nitrite compared to placebo. Test strip readings correlated with laboratory measurements, confirming improved nitric oxide bioavailability.</p>
+  <h3>Vascular &amp; Endothelial Health</h3>
+  <p>Nitric oxide is essential for healthy blood vessel function. It supports vasodilation, circulation, and endothelial integrity - all of which naturally decline with age.</p>
+  <h3>Clinical Trial Results</h3>
+  <p>In clinical research evaluating dietary nitrate supplementation over 12 weeks, participants showed improvements in endothelial function and reductions in carotid artery stiffness, a recognized marker of cardiovascular risk. These findings support the role of nitrate-based nitric oxide in maintaining vascular flexibility and heart health.</p>
+  <h3>Blood Pressure Support</h3>
+  <p>Nitric oxide helps relax and widen blood vessels, supporting healthy blood pressure regulation.</p>
+  <h3>Clinical Trial Results</h3>
+  <p>Clinical studies of dietary nitrates have demonstrated improvements in systolic blood pressure and vascular responsiveness compared to placebo, particularly with consistent daily use over 8-12 weeks.</p>
+  <h3>Energy &amp; Oxygen Efficiency</h3>
+  <p>Nitric oxide plays a critical role in oxygen delivery and mitochondrial signaling. Healthy nitric oxide levels support efficient energy production and muscle performance.</p>
+  <h3>Clinical Research Findings</h3>
+  <p>Research on dietary nitrates has shown improvements in oxygen utilization and exercise efficiency, including reduced oxygen cost during physical activity.</p>
+  <h3>Aging &amp; Nitric Oxide Decline</h3>
+  <p>Nitric oxide production naturally declines with age due to oxidative stress, hormonal shifts, and reduced enzyme activity.</p>
+  <p>Berkeley Life® provides a nitrate-based pathway that supports nitric oxide production independently of age-related enzymatic decline, offering measurable vascular support as the body's natural production decreases.</p>
+{%- endcapture -%}
+
+<section
+  {% if section_anchor_id != blank %}id="{{ section_anchor_id }}"{% endif %}
+  class="c-product-atc-offer"
+  data-sl-id="{{ sl_id }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="c-product-atc-offer"
+>
+  <div class="c-product-atc-offer__container">
+    <div class="c-product-atc-offer__media">
+      <div class="c-product-atc-offer__media-card">
+        {%- if media_image != blank -%}
+          {{
+            media_image
+            | image_url: width: 1200
+            | image_tag:
+              class: 'c-product-atc-offer__image',
+              loading: 'lazy',
+              widths: '400, 600, 800, 1000, 1200',
+              alt: media_alt | escape
+          }}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'c-product-atc-offer__image c-product-atc-offer__image--placeholder' }}
+        {%- endif -%}
+
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'notice_banner' -%}
+            <div class="c-product-atc-offer__notice" {{ block.shopify_attributes }}>
+              <span class="c-product-atc-offer__notice-icon" aria-hidden="true">
+                {%- render 'icon-notice' -%}
+              </span>
+              <div class="c-product-atc-offer__notice-copy">
+                {%- if block.settings.eyebrow != blank -%}
+                  <span class="c-product-atc-offer__notice-eyebrow">{{ block.settings.eyebrow }}</span>
+                {%- endif -%}
+                {%- if block.settings.body != blank -%}
+                  <span class="c-product-atc-offer__notice-body">{{ block.settings.body }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="c-product-atc-offer__content">
+      {%- if selected_product == blank and request.design_mode -%}
+        <div class="c-product-atc-offer__empty-state">
+          Select a product in the section settings to populate the offer content and CTA.
+        </div>
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'notice_banner' -%}
+            {%- comment -%}Rendered inside media-card, absolute bottom{%- endcomment -%}
+
+          {%- when 'pill_label' -%}
+            {%- if block.settings.label != blank -%}
+              <div class="c-product-atc-offer__pill-wrap" {{ block.shopify_attributes }}>
+                <span class="c-product-atc-offer__pill">{{ block.settings.label }}</span>
+              </div>
+            {%- endif -%}
+
+          {%- when 'reviews' -%}
+            <div class="c-product-atc-offer__reviews" {{ block.shopify_attributes }}>
+              {%- if block.settings.use_judgeme and selected_product != blank and selected_product.metafields.judgeme.badge != blank -%}
+                <div class="c-product-atc-offer__reviews-app">{{ selected_product.metafields.judgeme.badge }}</div>
+              {%- else -%}
+                <div class="c-product-atc-offer__reviews-fallback">
+                  <div class="c-product-atc-offer__stars" aria-hidden="true">
+                    {%- for _star in (1..5) -%}
+                      {% render 'c-orange-star' %}
+                    {%- endfor -%}
+                  </div>
+                  {%- if block.settings.rating_text != blank -%}
+                    <span class="c-product-atc-offer__reviews-rating">{{ block.settings.rating_text }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.reviews_text != blank -%}
+                    <span class="c-product-atc-offer__reviews-count">{{ block.settings.reviews_text }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+
+          {%- when 'product_title' -%}
+            {%- liquid
+              assign display_title = block.settings.custom_title
+              if display_title == blank and selected_product != blank
+                assign display_title = selected_product.title
+              endif
+            -%}
+            {%- if display_title != blank or block.settings.accent_line != blank -%}
+              <div class="c-product-atc-offer__title-wrap" {{ block.shopify_attributes }}>
+                {%- if display_title != blank -%}
+                  <h2 class="c-product-atc-offer__title">{{ display_title }}</h2>
+                {%- endif -%}
+                {%- if block.settings.accent_line != blank -%}
+                  <p class="c-product-atc-offer__accent-line">{{ block.settings.accent_line }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+          {%- when 'product_description' -%}
+            {%- liquid
+              assign description_content = block.settings.custom_description
+              if description_content == blank and selected_product != blank
+                assign description_content = selected_product.description | strip_html
+              endif
+            -%}
+            {%- if description_content != blank -%}
+              <div class="c-product-atc-offer__description" {{ block.shopify_attributes }}>
+                {%- if block.settings.use_richtext and block.settings.custom_description != blank -%}
+                  {{ block.settings.custom_description }}
+                {%- else -%}
+                  <p>{{ description_content }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+          {%- when 'feature_row' -%}
+            {%- if block.settings.label != blank or block.settings.value != blank -%}
+              <div class="c-product-atc-offer__feature-row" {{ block.shopify_attributes }}>
+                <span class="c-product-atc-offer__feature-label">{{ block.settings.label }}</span>
+                <span class="c-product-atc-offer__feature-value">{{ block.settings.value }}</span>
+              </div>
+            {%- endif -%}
+
+          {%- when 'cta' -%}
+            <div class="c-product-atc-offer__cta" {{ block.shopify_attributes }}>
+              {%- if price_display != blank -%}
+                <div class="c-product-atc-offer__price-wrap">
+                  <span class="c-product-atc-offer__price">{{ price_display }}</span>
+                  {%- if compare_display != blank -%}
+                    <span class="c-product-atc-offer__compare-price">{{ compare_display }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.caption != blank -%}
+                <div class="c-product-atc-offer__caption">{{ block.settings.caption }}</div>
+              {%- endif -%}
+
+              <div class="c-product-atc-offer__cta-actions">
+                {%- if selected_variant != blank and selected_variant.available -%}
+                  <form
+                    method="post"
+                    action="{{ routes.cart_add_url }}"
+                    id="ProductAtcOfferForm-{{ section.id }}"
+                    class="c-product-atc-offer__form"
+                    novalidate
+                    data-promo-code="{{ promo_code | escape }}"
+                    data-redirect-target="{{ cta_target_path }}"
+                    data-atc-behavior="{{ atc_behavior }}"
+                  >
+                    <input type="hidden" name="form_type" value="product">
+                    <input type="hidden" name="utf8" value="✓">
+                    <input type="hidden" name="id" value="{{ selected_variant.id }}">
+                    <input type="hidden" name="quantity" value="{{ section.settings.quantity | default: 1 }}">
+                    <button
+                      type="submit"
+                      id="ProductAtcOfferSubmit-{{ section.id }}"
+                      class="c-product-atc-offer__button"
+                    >
+                      <span class="c-product-atc-offer__button-label">{{ block.settings.button_label }}</span>
+                    </button>
+                  </form>
+                {%- else -%}
+                  <button type="button" class="c-product-atc-offer__button c-product-atc-offer__button--disabled" disabled>
+                    <span class="c-product-atc-offer__button-label">{{ block.settings.sold_out_label | default: 'Sold out' }}</span>
+                  </button>
+                {%- endif -%}
+
+                <div class="c-product-atc-offer__message" id="ProductAtcOfferMessage-{{ section.id }}" hidden></div>
+              </div>
+            </div>
+
+          {%- when 'clinical_trials' -%}
+            {%- liquid
+              assign block_drawer_body = block.settings.drawer_body
+              assign block_drawer_button_style = block.settings.button_style
+              if block_drawer_body == blank
+                assign block_drawer_body = clinical_trials_drawer_body_default
+              endif
+              if block_drawer_button_style == 'link'
+                assign block_drawer_button_style = 'default'
+              endif
+            -%}
+            <div class="c-product-atc-offer__trials-link-wrap" {{ block.shopify_attributes }}>
+              {%- render 'clinical-drawer',
+                drawer_id: 'product-atc-offer-clinical-drawer-' | append: section.id | append: '-' | append: block.id,
+                button_text: block.settings.button_label,
+                button_style: block_drawer_button_style,
+                drawer_title: block.settings.drawer_title,
+                drawer_body: block_drawer_body,
+                bg_color: block.settings.drawer_bg_color,
+                text_color: block.settings.drawer_text_color
+              -%}
+            </div>
+
+          {%- when 'accordion_text' -%}
+            {%- assign is_open = block.settings.open_by_default -%}
+            <div class="c-product-atc-offer__accordion{% if is_open %} c-product-atc-offer__accordion--open{% endif %}" {{ block.shopify_attributes }}>
+              <button
+                class="c-product-atc-offer__accordion-trigger"
+                type="button"
+                aria-expanded="{{ is_open }}"
+                aria-controls="ProductAtcOfferAccordion-{{ block.id }}"
+              >
+                <span class="c-product-atc-offer__accordion-title">{{ block.settings.title }}</span>
+                <span class="c-product-atc-offer__accordion-icon" aria-hidden="true"></span>
+              </button>
+              <div class="c-product-atc-offer__accordion-body" id="ProductAtcOfferAccordion-{{ block.id }}" role="region">
+                <div class="c-product-atc-offer__accordion-content">
+                  {{ block.settings.content }}
+                </div>
+              </div>
+            </div>
+
+          {%- when 'accordion_ingredients' -%}
+            {%- assign is_open = block.settings.open_by_default -%}
+            <div class="c-product-atc-offer__accordion{% if is_open %} c-product-atc-offer__accordion--open{% endif %}" {{ block.shopify_attributes }}>
+              <button
+                class="c-product-atc-offer__accordion-trigger"
+                type="button"
+                aria-expanded="{{ is_open }}"
+                aria-controls="ProductAtcOfferAccordion-{{ block.id }}"
+              >
+                <span class="c-product-atc-offer__accordion-title">{{ block.settings.title }}</span>
+                <span class="c-product-atc-offer__accordion-icon" aria-hidden="true"></span>
+              </button>
+              <div class="c-product-atc-offer__accordion-body" id="ProductAtcOfferAccordion-{{ block.id }}" role="region">
+                <div class="c-product-atc-offer__accordion-content c-product-atc-offer__accordion-content--ingredients">
+                  {%- for index in (1..5) -%}
+                    {%- liquid
+                      assign ingredient_title_key = 'ingredient_title_' | append: index
+                      assign ingredient_text_key = 'ingredient_text_' | append: index
+                      assign ingredient_image_key = 'ingredient_image_' | append: index
+                      assign ingredient_title = block.settings[ingredient_title_key]
+                      assign ingredient_text = block.settings[ingredient_text_key]
+                      assign ingredient_image = block.settings[ingredient_image_key]
+                    -%}
+                    {%- if ingredient_title != blank or ingredient_text != blank or ingredient_image != blank -%}
+                      <div class="c-product-atc-offer__ingredient">
+                        <div class="c-product-atc-offer__ingredient-image-wrap">
+                          {%- if ingredient_image != blank -%}
+                            {{
+                              ingredient_image
+                              | image_url: width: 160
+                              | image_tag:
+                                class: 'c-product-atc-offer__ingredient-image',
+                                loading: 'lazy',
+                                widths: '64, 96, 128, 160',
+                                alt: ingredient_title | escape
+                            }}
+                          {%- endif -%}
+                        </div>
+                        <div class="c-product-atc-offer__ingredient-copy">
+                          {%- if ingredient_title != blank -%}
+                            <p class="c-product-atc-offer__ingredient-title">{{ ingredient_title }}</p>
+                          {%- endif -%}
+                          {%- if ingredient_text != blank -%}
+                            <div class="c-product-atc-offer__ingredient-text">{{ ingredient_text }}</div>
+                          {%- endif -%}
+                        </div>
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+
+          {%- when 'accordion_image' -%}
+            {%- assign is_open = block.settings.open_by_default -%}
+            <div class="c-product-atc-offer__accordion{% if is_open %} c-product-atc-offer__accordion--open{% endif %}" {{ block.shopify_attributes }}>
+              <button
+                class="c-product-atc-offer__accordion-trigger"
+                type="button"
+                aria-expanded="{{ is_open }}"
+                aria-controls="ProductAtcOfferAccordion-{{ block.id }}"
+              >
+                <span class="c-product-atc-offer__accordion-title">{{ block.settings.title }}</span>
+                <span class="c-product-atc-offer__accordion-icon" aria-hidden="true"></span>
+              </button>
+              <div class="c-product-atc-offer__accordion-body" id="ProductAtcOfferAccordion-{{ block.id }}" role="region">
+                <div class="c-product-atc-offer__accordion-content c-product-atc-offer__accordion-content--image">
+                  {%- if block.settings.image != blank -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 1000
+                      | image_tag:
+                        class: 'c-product-atc-offer__supplement-image',
+                        loading: 'lazy',
+                        widths: '400, 600, 800, 1000',
+                        alt: block.settings.title | escape
+                    }}
+                  {%- endif -%}
+                  {%- if block.settings.caption != blank -%}
+                    <div class="c-product-atc-offer__image-caption">{{ block.settings.caption }}</div>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .c-product-atc-offer {
+    --product-atc-bg: {{ section.settings.background_color }};
+    --product-atc-surface: {{ section.settings.media_background_color }};
+    --product-atc-border: {{ section.settings.border_color }};
+    --product-atc-text: {{ section.settings.text_color }};
+    --product-atc-muted: {{ section.settings.muted_text_color }};
+    --product-atc-accent: {{ section.settings.accent_color }};
+    --product-atc-button-bg: {{ section.settings.button_background_color }};
+    --product-atc-button-text: {{ section.settings.button_text_color }};
+    --product-atc-message-success: {{ section.settings.success_color }};
+    --product-atc-message-error: {{ section.settings.error_color }};
+    background: var(--product-atc-bg);
+    color: var(--product-atc-text);
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__container {
+    box-sizing: border-box;
+    display: grid;
+    gap: 36px;
+    margin: 0 auto;
+    max-width: 1280px;
+    padding: {{ section.settings.padding_top_mobile }}px 20px {{ section.settings.padding_bottom_mobile }}px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__media,
+  #shopify-section-{{ section.id }} .c-product-atc-offer__content {
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__notice {
+    align-items: center;
+    background: {{ section.settings.notice_bg_color }};
+    border-radius:  16px;
+    bottom: 0;
+    display: flex;
+    gap: 16px;
+    left: 0;
+    padding: 18px 20px;
+    position: absolute;
+    right: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__notice-icon {
+    color: {{ section.settings.notice_text_color }};
+    flex-shrink: 0;
+    line-height: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__notice-icon svg {
+    display: block;
+    height: 28px;
+    width: 28px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__notice-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__notice-eyebrow {
+    color: {{ section.settings.notice_text_color }};
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    line-height: 1.4;
+    opacity: 0.7;
+    text-transform: uppercase;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%; /* 16.8px */
+    letter-spacing: 2.1px;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__notice-body {
+    color: {{ section.settings.notice_text_color }};
+    font-family: "Cormorant Garamond", serif;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__media-card {
+    align-items: center;
+    background: var(--product-atc-surface);
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    min-height: 320px;
+    overflow: hidden;
+    padding: 24px;
+    position: relative;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__image {
+    display: block;
+    height: auto;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__image--placeholder {
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__empty-state {
+    background: rgba(213, 79, 47, 0.08);
+    border: 1px solid rgba(213, 79, 47, 0.2);
+    border-radius: 12px;
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    padding: 16px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__pill-wrap {
+    margin-bottom: 16px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__pill {
+    display: inline-block;
+    background: {{ section.settings.pill_bg_color }};
+    color: {{ section.settings.pill_text_color }};
+    border-radius: 999px;
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2.1px;
+    line-height: 1.2;
+    padding: 10px 22px;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__reviews {
+    margin-bottom: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__reviews-fallback {
+    align-items: center;
+    color: var(--product-atc-accent);
+    display: inline-flex;
+    flex-wrap: wrap;
+    font-family: "TT Commons", sans-serif;
+    font-size: 16px;
+    gap: 8px;
+    line-height: 1.5;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__stars {
+    display: inline-flex;
+    gap: 2px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__stars svg {
+    display: block;
+    height: 14px;
+    width: 14px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__reviews-rating,
+  #shopify-section-{{ section.id }} .c-product-atc-offer__reviews-count {
+    color: var(--product-atc-accent);
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__reviews-app,
+  #shopify-section-{{ section.id }} .c-product-atc-offer__reviews-app .jdgm-prev-badge,
+  #shopify-section-{{ section.id }} .c-product-atc-offer__reviews-app .jdgm-preview-badge {
+    color: var(--product-atc-accent);
+    font-family: "TT Commons", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__title-wrap {
+    margin-bottom: 20px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__title {
+    color: var(--product-atc-text);
+    font-family: "TT Commons", sans-serif;
+    font-size: clamp(34px, 8vw, 52px);
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accent-line {
+    color: var(--product-atc-accent);
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(28px, 7vw, 42px);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 6px 0 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__description {
+    border-top: 1px solid var(--product-atc-border);
+    color: var(--product-atc-text);
+    font-family: "TT Commons", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+    padding-top: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__description p {
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__description p + p {
+    margin-top: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__feature-row {
+    align-items: center;
+    border-bottom: 1px solid var(--product-atc-border);
+    display: flex;
+    font-family: "TT Commons", sans-serif;
+    font-size: 16px;
+    gap: 16px;
+    justify-content: space-between;
+    line-height: 1.5;
+    padding: 16px 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__feature-label {
+    color: var(--product-atc-text);
+    font-weight: 500;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__feature-value {
+    color: var(--product-atc-accent);
+    font-weight: 500;
+    text-align: right;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__cta {
+    padding: 28px 0 20px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__price-wrap {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__price {
+    color: var(--product-atc-text);
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(36px, 8vw, 48px);
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__compare-price {
+    color: var(--product-atc-muted);
+    font-family: "Cormorant Garamond", serif;
+    font-size: 24px;
+    font-style: normal;
+    line-height: 1;
+    text-decoration: line-through;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__caption,
+  #shopify-section-{{ section.id }} .c-product-atc-offer__image-caption {
+    color: var(--product-atc-text);
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__caption p,
+  #shopify-section-{{ section.id }} .c-product-atc-offer__image-caption p {
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__cta-actions {
+    margin-top: 18px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__form {
+    display: block;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__button {
+    align-items: center;
+    background: var(--product-atc-button-bg);
+    border: none;
+    border-radius: 42px;
+    color: var(--product-atc-button-text);
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    min-height: 60px;
+    padding: 18px 32px;
+    text-align: center;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__button:hover {
+    opacity: 0.92;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__button[aria-busy='true'],
+  #shopify-section-{{ section.id }} .c-product-atc-offer__button:disabled,
+  #shopify-section-{{ section.id }} .c-product-atc-offer__button--disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__button-label {
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2.1px;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__message {
+    border-radius: 10px;
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 12px;
+    padding: 10px 12px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__message[data-state='success'] {
+    background: rgba(47, 121, 68, 0.08);
+    color: var(--product-atc-message-success);
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__message[data-state='error'] {
+    background: rgba(188, 52, 46, 0.08);
+    color: var(--product-atc-message-error);
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__trials-link-wrap {
+    margin: 20px 0 20px;
+    align-self: center;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__trials-link-wrap .clinical-drawer-trigger {
+    align-items: center;
+    background: none;
+    border: none;
+    border-bottom: 2px solid var(--product-atc-accent);
+    color: var(--product-atc-accent);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    gap: 8px;
+    letter-spacing: 1.4px;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0 0 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__trials-link-wrap .clinical-drawer-trigger::after {
+    content: '\2192';
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__trials-link-wrap .clinical-drawer-trigger:hover {
+    opacity: 0.85;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion {
+    border-bottom: 1px solid var(--product-atc-accent);
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-trigger {
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    padding: 16px 0;
+    text-align: left;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-title {
+    color: var(--product-atc-text);
+    flex: 1;
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2.1px;
+    line-height: 1.2;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-icon {
+    background: var(--product-atc-text);
+    border-radius: 999px;
+    display: inline-block;
+    flex-shrink: 0;
+    height: 24px;
+    position: relative;
+    width: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-icon::before,
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-icon::after {
+    background: {{ section.settings.button_text_color }};
+    border-radius: 2px;
+    content: '';
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-icon::before {
+    height: 2px;
+    width: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-icon::after {
+    height: 12px;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    width: 2px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion--open .c-product-atc-offer__accordion-icon::after {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion--open .c-product-atc-offer__accordion-body {
+    max-height: 2400px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-content {
+    color: var(--product-atc-text);
+    font-family: "TT Commons", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 0 0 16px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-content p {
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__accordion-content p + p {
+    margin-top: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__ingredient {
+    align-items: flex-start;
+    display: flex;
+    gap: 14px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__ingredient + .c-product-atc-offer__ingredient {
+    margin-top: 18px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__ingredient-image-wrap {
+    flex: 0 0 48px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__ingredient-image {
+    border-radius: 999px;
+    display: block;
+    height: 48px;
+    object-fit: cover;
+    width: 48px;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__ingredient-copy {
+    flex: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__ingredient-title {
+    color: var(--product-atc-text);
+    font-family: "TT Commons", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0 0 4px;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__ingredient-text {
+    color: var(--product-atc-text);
+    font-family: "TT Commons", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__ingredient-text p {
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-product-atc-offer__supplement-image {
+    border: 1px solid var(--product-atc-border);
+    display: block;
+    height: auto;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  @media screen and (min-width: 768px) {
+    #shopify-section-{{ section.id }} .c-product-atc-offer__container {
+      gap: 48px;
+      padding-left: 28px;
+      padding-right: 28px;
+    }
+
+    #shopify-section-{{ section.id }} .c-product-atc-offer__media-card {
+      min-height: 420px;
+      padding: 36px;
+    }
+  }
+
+  @media screen and (min-width: 978px) {
+    #shopify-section-{{ section.id }} .c-product-atc-offer__container {
+      align-items: start;
+      gap: 56px;
+      grid-template-columns: minmax(0, 0.88fr) minmax(0, 0.92fr);
+      padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+      padding-top: {{ section.settings.padding_top_desktop }}px;
+    }
+
+    #shopify-section-{{ section.id }} .c-product-atc-offer__media {
+      position: sticky;
+      top: 24px;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    #shopify-section-{{ section.id }} .c-product-atc-offer__container {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+
+    #shopify-section-{{ section.id }} .c-product-atc-offer__media-card {
+      min-height: 500px;
+    }
+  }
+
+  @media screen and (min-width: 1980px) {
+    #shopify-section-{{ section.id }} .c-product-atc-offer__container {
+      max-width: 1440px;
+    }
+  }
+{% endstyle %}
+
+<script>
+  (function () {
+    var sectionEl = document.querySelector('[data-section-id="{{ section.id }}"]');
+    if (!sectionEl) return;
+
+    var accordionTriggers = sectionEl.querySelectorAll('.c-product-atc-offer__accordion-trigger');
+    accordionTriggers.forEach(function (trigger) {
+      trigger.addEventListener('click', function () {
+        var accordion = trigger.closest('.c-product-atc-offer__accordion');
+        if (!accordion) return;
+
+        var isOpen = accordion.classList.contains('c-product-atc-offer__accordion--open');
+        accordion.classList.toggle('c-product-atc-offer__accordion--open', !isOpen);
+        trigger.setAttribute('aria-expanded', (!isOpen).toString());
+      });
+    });
+
+    var form = document.getElementById('ProductAtcOfferForm-{{ section.id }}');
+    var submitButton = document.getElementById('ProductAtcOfferSubmit-{{ section.id }}');
+    var messageEl = document.getElementById('ProductAtcOfferMessage-{{ section.id }}');
+
+    function showMessage(state, text) {
+      if (!messageEl) return;
+      messageEl.hidden = false;
+      messageEl.dataset.state = state;
+      messageEl.textContent = text;
+    }
+
+    function clearMessage() {
+      if (!messageEl) return;
+      messageEl.hidden = true;
+      messageEl.textContent = '';
+      messageEl.removeAttribute('data-state');
+    }
+
+    function refreshCartUi(cartDrawer) {
+      if (cartDrawer) {
+        if (typeof cartDrawer.render === 'function') cartDrawer.render();
+        if (typeof cartDrawer.open === 'function') cartDrawer.open();
+        return;
+      }
+
+      var cartNotification = document.querySelector('cart-notification');
+      if (cartNotification && typeof cartNotification.open === 'function') {
+        cartNotification.open();
+      }
+    }
+
+    async function applyPromoCodeWithoutRedirect(promoCode) {
+      var beforeRes = await fetch('/cart.js', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json'
+        }
+      });
+      var beforeCart = await beforeRes.json();
+      var beforeTotal = beforeCart.total_discount || 0;
+      var beforeCount = (beforeCart.cart_level_discount_applications || []).length;
+
+      await fetch('/discount/' + encodeURIComponent(promoCode), {
+        method: 'GET',
+        redirect: 'follow'
+      });
+
+      var afterRes = await fetch('/cart.js', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json'
+        }
+      });
+      var afterCart = await afterRes.json();
+      var afterTotal = afterCart.total_discount || 0;
+      var afterDiscounts = afterCart.cart_level_discount_applications || [];
+      var applied = afterTotal > beforeTotal || afterDiscounts.length > beforeCount;
+
+      if (applied) {
+        sessionStorage.setItem('discount_success', 'Discount code applied!');
+        document.body.dispatchEvent(new CustomEvent('render-cart'));
+      }
+
+      return {
+        applied: applied,
+        cart: afterCart
+      };
+    }
+
+    if (form && submitButton) {
+      form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      if (submitButton.disabled || submitButton.getAttribute('aria-busy') === 'true') return;
+
+      clearMessage();
+      submitButton.disabled = true;
+      submitButton.setAttribute('aria-busy', 'true');
+
+      var formData = new FormData(form);
+      var promoCode = form.dataset.promoCode || '';
+      var redirectTarget = form.dataset.redirectTarget || '/checkout';
+      var atcBehavior = form.dataset.atcBehavior || 'sidecart';
+
+      try {
+        var addResponse = await fetch((window.routes && window.routes.cart_add_url) || '/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            Accept: 'application/json'
+          },
+          body: formData
+        });
+        var response = await addResponse.json();
+
+        if (response.status) {
+          showMessage('error', response.description || 'Unable to add this item to cart.');
+          return;
+        }
+
+        if (atcBehavior === 'cart') {
+          if (promoCode) {
+            window.location.href = '/discount/' + encodeURIComponent(promoCode) + '?redirect=' + encodeURIComponent(redirectTarget);
+            return;
+          }
+
+          window.location.href = redirectTarget;
+          return;
+        }
+
+        if (promoCode) {
+          var promoResult = await applyPromoCodeWithoutRedirect(promoCode);
+
+          if (!promoResult.applied) {
+            showMessage('error', 'Added to cart, but the promo code could not be applied.');
+          }
+        }
+
+        showMessage('success', promoCode ? 'Added to cart and promo code applied.' : 'Added to cart.');
+
+        var cartDrawer = document.querySelector('cart-drawer');
+        refreshCartUi(cartDrawer);
+      } catch (error) {
+        showMessage('error', 'Something went wrong. Please try again.');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.removeAttribute('aria-busy');
+      }
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "C Product ATC Offer",
+  "tag": "section",
+  "class": "c-product-atc-offer-wrapper",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation",
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_image",
+      "label": "Media image override"
+    },
+    {
+      "type": "text",
+      "id": "media_alt",
+      "label": "Media image alt text",
+    },
+    {
+      "type": "number",
+      "id": "override_price",
+      "label": "Displayed price override",
+      "default": 0,
+      "info": "Set a custom displayed price."
+    },
+    {
+      "type": "number",
+      "id": "override_compare_at_price",
+      "label": "Displayed compare-at price override",
+      "default": 0,
+      "info": "Set a custom crossed-out price. Leave 0 to use the product compare-at price."
+    },
+    {
+      "type": "text",
+      "id": "promo_code",
+      "label": "Promo code",
+      "info": "Applied after add to cart when the CTA is clicked."
+    },
+    {
+      "type": "select",
+      "id": "promo_redirect_target",
+      "label": "Promo redirect target",
+      "default": "checkout",
+      "options": [
+        {
+          "value": "checkout",
+          "label": "Checkout"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "atc_behavior",
+      "label": "ATC success action",
+      "default": "sidecart",
+      "options": [
+        {
+          "value": "sidecart",
+          "label": "Open sidecart"
+        },
+        {
+          "value": "cart",
+          "label": "Go to cart page"
+        }
+      ]
+    },
+    {
+      "type": "number",
+      "id": "quantity",
+      "label": "Quantity",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Pill Label Colors"
+    },
+    {
+      "type": "color",
+      "id": "pill_bg_color",
+      "label": "Pill background",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "pill_text_color",
+      "label": "Pill text",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "header",
+      "content": "Notice Banner Colors"
+    },
+    {
+      "type": "color",
+      "id": "notice_bg_color",
+      "label": "Notice background",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "notice_text_color",
+      "label": "Notice text",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "color",
+      "id": "media_background_color",
+      "label": "Media background",
+      "default": "#efebe7"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#dfdbd9"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Muted text",
+      "default": "#9e9aa3"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button background",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "color",
+      "id": "success_color",
+      "label": "Success message color",
+      "default": "#2f7944"
+    },
+    {
+      "type": "color",
+      "id": "error_color",
+      "label": "Error message color",
+      "default": "#bc342e"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top padding mobile",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom padding mobile",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Top padding desktop",
+      "min": 0,
+      "max": 220,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Bottom padding desktop",
+      "min": 0,
+      "max": 220,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pill_label",
+      "name": "Pill Label",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "LIMITED PACKS AVAILABLE"
+        }
+      ]
+    },
+    {
+      "type": "notice_banner",
+      "name": "Notice Banner",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "LIMITED PACKS AVAILABLE"
+        },
+        {
+          "type": "text",
+          "id": "body",
+          "label": "Body text",
+          "default": "Reserved for Super Age readers. While supplies last."
+        }
+      ]
+    },
+    {
+      "type": "reviews",
+      "name": "Reviews",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "use_judgeme",
+          "label": "Use Judge.me badge when available",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "rating_text",
+          "label": "Fallback rating text",
+          "default": "4.8"
+        },
+        {
+          "type": "text",
+          "id": "reviews_text",
+          "label": "Fallback review count text",
+          "default": "872+ reviews"
+        }
+      ]
+    },
+    {
+      "type": "product_title",
+      "name": "Product title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom title",
+        },
+        {
+          "type": "text",
+          "id": "accent_line",
+          "label": "Accent line",
+          "default": "Zero risk, real results."
+        }
+      ]
+    },
+    {
+      "type": "product_description",
+      "name": "Product description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "use_richtext",
+          "label": "Use custom richtext",
+          "default": false
+        },
+        {
+          "type": "richtext",
+          "id": "custom_description",
+          "label": "Custom description",
+          "default": "<p>You'll receive 3 individual sample packs, one complete daily dose per pack - so you can test, track, and support your Nitric Oxide levels over 3 days.</p>"
+        }
+      ]
+    },
+    {
+      "type": "feature_row",
+      "name": "Feature row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Nitric Oxide Support capsules"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "6 total (2/day)"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "CTA",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Claim my free sample kit"
+        },
+        {
+          "type": "text",
+          "id": "sold_out_label",
+          "label": "Sold out label",
+          "default": "Sold out"
+        },
+        {
+          "type": "richtext",
+          "id": "caption",
+          "label": "Caption",
+          "default": "<p>Sample packs are free. Shipping applies at checkout.</p>"
+        }
+      ]
+    },
+    {
+      "type": "clinical_trials",
+      "name": "Clinical trials",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "See clinical trials"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "link",
+              "label": "Underlined link"
+            },
+            {
+              "value": "default",
+              "label": "Default button"
+            }
+          ],
+          "default": "link"
+        },
+        {
+          "type": "text",
+          "id": "drawer_title",
+          "label": "Drawer title",
+          "default": "Nitric Oxide Support"
+        },
+        {
+          "type": "richtext",
+          "id": "drawer_body",
+          "label": "Drawer content",
+          "info": "Leave empty to use the default clinical trials content."
+        },
+        {
+          "type": "color",
+          "id": "drawer_bg_color",
+          "label": "Drawer background color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "drawer_text_color",
+          "label": "Drawer text color",
+          "default": "#080b2b"
+        }
+      ]
+    },
+    {
+      "type": "accordion_text",
+      "name": "Accordion: text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Who is this for?"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>For adults looking for clinically supported daily Nitric Oxide support with measurable results.</p><p>Suitable for men and women over 18 who want simple, trackable support for blood flow, energy, sexual wellness and healthy aging.</p>"
+        }
+      ]
+    },
+    {
+      "type": "accordion_ingredients",
+      "name": "Accordion: ingredients",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Ingredients"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_image_1",
+          "label": "Ingredient 1 image"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_title_1",
+          "label": "Ingredient 1 title",
+          "default": "Beet Root extract & Nitrate Blend"
+        },
+        {
+          "type": "richtext",
+          "id": "ingredient_text_1",
+          "label": "Ingredient 1 text",
+          "default": "<p>A potent source of dietary nitrates that is broken down in the body to form nitric oxide. Two of our capsules has the dietary nitrate equivalent of 7oz of beetroot.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_image_2",
+          "label": "Ingredient 2 image"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_title_2",
+          "label": "Ingredient 2 title",
+          "default": "Vitamin C"
+        },
+        {
+          "type": "richtext",
+          "id": "ingredient_text_2",
+          "label": "Ingredient 2 text",
+          "default": "<p>An essential vitamin and potent antioxidant, Vitamin C helps convert nitrite to nitric oxide.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_image_3",
+          "label": "Ingredient 3 image"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_title_3",
+          "label": "Ingredient 3 title",
+          "default": "Magnesium"
+        },
+        {
+          "type": "richtext",
+          "id": "ingredient_text_3",
+          "label": "Ingredient 3 text",
+          "default": "<p>A crucial mineral respected for its ability to relax blood vessels; sufficient magnesium intake is important for cardiovascular health.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_image_4",
+          "label": "Ingredient 4 image"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_title_4",
+          "label": "Ingredient 4 title",
+        },
+        {
+          "type": "richtext",
+          "id": "ingredient_text_4",
+          "label": "Ingredient 4 text",
+          "default": "<p></p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_image_5",
+          "label": "Ingredient 5 image"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_title_5",
+          "label": "Ingredient 5 title"
+        },
+        {
+          "type": "richtext",
+          "id": "ingredient_text_5",
+          "label": "Ingredient 5 text",
+          "default": "<p></p>"
+        }
+      ]
+    },
+    {
+      "type": "accordion_image",
+      "name": "Accordion: image",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Supplement Facts"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "caption",
+          "label": "Caption",
+          "default": "<p></p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Product ATC Offer",
+      "blocks": [
+        {
+          "type": "reviews"
+        },
+        {
+          "type": "product_title"
+        },
+        {
+          "type": "product_description"
+        },
+        {
+          "type": "feature_row"
+        },
+        {
+          "type": "feature_row",
+          "settings": {
+            "label": "NO Test Strips",
+            "value": "12 total (4/day)"
+          }
+        },
+        {
+          "type": "feature_row",
+          "settings": {
+            "label": "Price",
+            "value": "Free - pay shipping only"
+          }
+        },
+        {
+          "type": "cta"
+        },
+        {
+          "type": "accordion_text"
+        },
+        {
+          "type": "accordion_ingredients"
+        },
+        {
+          "type": "accordion_text",
+          "settings": {
+            "title": "How to use",
+            "content": "<p><strong>Nitric Oxide Support</strong><br>Take two capsules once a day with water after food. This dosage boosts Nitric Oxide levels throughout for up to 24 hours. Do not exceed the recommended daily intake unless under the direction of your physician.</p><p><strong>Nitric Oxide Test Strips</strong><br>1. Place the test strip on your tongue with the saliva here side facing down. Hold for 5 seconds.<br>2. Fold the strip in half, pressing the sides together gently for 10 seconds.<br>3. Unfold and compare your results with the Nitric Oxide Scale on the package.</p>"
+          }
+        },
+        {
+          "type": "accordion_image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

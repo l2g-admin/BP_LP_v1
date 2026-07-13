@@ -1,0 +1,892 @@
+<style>
+  #{{ section.id }} {
+    & .section__social-proof__container {
+      position: relative;
+      overflow: hidden;
+      padding-top: {{ section.settings.padding_top_mobile }}rem;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}rem;
+
+      & > *:not(.overlay__blur) {
+        position: relative;
+        z-index: 1;
+      }
+
+      {%- if section.settings.background_image != blank -%}
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url('{{ section.settings.background_image | image_url: width: 1920 }}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur({{ section.settings.background_blur }}px);
+        z-index: 0;
+      }
+      {%- endif -%}
+
+      & .overlay__blur {
+        position: absolute;
+        inset: 0;
+        background-color: {{ section.settings.overlay_color }};
+        z-index: 0;
+      }
+
+      & .section__social-proof__content {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      & .social-proof__header {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        overflow: hidden;
+        width: 95%;
+        max-width: {{ section.settings.max_width }}px;
+        margin-inline: auto;
+      }
+
+      & .social-proof__title {
+        margin: 0;
+        font-size: clamp(28px, 5vw, 48px);
+        color: {{ section.settings.title_color }};
+
+        & span {
+          font-style: italic;
+          font-weight: 300;
+          font-size: clamp(28px, 5vw, 48px);
+          font-family: "Cormorant Garamond";
+          }
+      }
+
+      & .social-proof__description {
+        margin: 0;
+        font-size: clamp(18px, 3.75dvw, 20px);
+        font-weight: 300;
+        color: {{ section.settings.description_color }};
+      }
+
+      & .social-proof__content {
+        padding-bottom: 1rem;
+        margin-top: 32px;
+      }
+
+      & .social-proof__media__container {
+        border-radius: 1rem;
+        position: relative;
+        width: 100%;
+        display: flex;
+        aspect-ratio: 9/16;
+        overflow: hidden;
+      }
+
+      & .social-proof__img,
+      & .social-proof__video {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        object-position: center;
+        cursor: pointer;
+      }
+
+      & .overlay__media__container {
+        box-sizing: border-box;
+        position: absolute;
+        bottom: 0;
+        inset: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+      }
+
+      & .overlay__play {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      & .icon-hide {
+        display: none;
+      }
+
+      & .overlay__content {
+        position: absolute;
+        padding: min(1.25rem, 6dvw);
+        bottom: 0;
+        inset-inline: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        overflow: hidden;
+        margin-top: auto;
+        user-select: none;
+        pointer-events: none;
+      }
+
+      & .overlay__quote {
+        margin: 0;
+        font-size: 0.875rem;
+        font-weight: 300;
+        color: {{ section.settings.overlay_text_color }};
+      }
+
+      & .overlay__footer {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      & .overlay__profile__img {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      & .overlay__author {
+        margin: 0;
+        font-size: clamp(0.75rem, 3.75dvw, 1rem);
+         font-family: "Cormorant Garamond";
+          font-style: italic;
+          font-weight: 300;
+        color: {{ section.settings.overlay_text_color }};
+      }
+
+      & .swiper-slide {
+        height: auto !important;
+        aspect-ratio: 9/16;
+      }
+
+      & .social-proof__texts__container {
+        border-radius: 1rem;
+        padding: min(1.25rem, 5dvw);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        backdrop-filter: blur(6px);
+        background-color: {{ section.settings.text_card_bg_color }};
+        height: 100%;
+        user-select: none;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      & .social-proof__texts__content {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        width: 100%;
+      }
+
+      & .social-proof__texts__stars {
+        display: flex;
+        gap: 2px;
+
+
+        & > svg {
+          flex-shrink: 0;
+        }
+      }
+
+      & .social-proof__texts__description {
+        margin: 0;
+         font-size: clamp(18px, 3.75dvw, 24px);
+        color: {{ section.settings.text_card_text_color }};
+         font-style: normal;
+        font-weight: 400;
+        line-height: 140%;
+        text-wrap: balance;
+
+      }
+
+      & .social-proof__texts__footer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      & .text__footer__author {
+        margin: 0;
+        font-family: "Cormorant Garamond";
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(28px, 3.75dvw, 30px);
+        color: {{ section.settings.text_card_text_color }};
+      }
+
+      & .text__footer__span {
+        font-size: 14px;
+        font-weight: 300;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 120%; /* 19.2px */
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: #D54F2F !important;
+      }
+
+      & .btns__navigation__pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+        width: 95%;
+        max-width: {{ section.settings.max_width }}px;
+        margin-inline: auto;
+      }
+
+      & .btns {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+      }
+
+      & .btn__swiper {
+        cursor: pointer;
+        background-color: {{ section.settings.button_bg_color }};
+        border: thin solid {{ section.settings.button_border_color }};
+        outline: none;
+        box-sizing: border-box;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        transform: rotate(var(--angle));
+        color: {{ section.settings.button_icon_color }};
+      }
+
+      & .swiper-pagination {
+        display: none;
+        position: static;
+        width: max-content;
+      }
+
+      & .social-proof__cta {
+        width: 100%;
+        box-sizing: border-box;
+        background-color: {{ section.settings.cta_bg_color }};
+        color: {{ section.settings.cta_text_color }};
+        text-decoration: none;
+        border-radius: 2rem;
+        padding: 1rem;
+        text-align: center;
+        font-size: clamp(0.75rem, 3.75dvw, 1rem);
+        font-weight: 600;
+        letter-spacing: 1px;
+        cursor: pointer;
+        overflow: hidden;
+        width: 95%;
+        max-width: {{ section.settings.max_width }}px;
+        margin-inline: auto;
+      }
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    #{{ section.id }} {
+      & .section__social-proof__container {
+        padding-top: {{ section.settings.padding_top_desktop }}rem;
+        padding-bottom: {{ section.settings.padding_bottom_desktop }}rem;
+      }
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    #{{ section.id }} {
+      & .section__social-proof__container {
+        & .section__social-proof__content {
+          & .btns__navigation__pagination {
+            justify-content: space-between;
+          }
+
+          & .swiper-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            & .swiper-pagination-bullet {
+              border-radius: 4px;
+              transition: width 0.4s;
+              transform-origin: 0% 0%;
+            }
+
+            & .swiper-pagination-bullet-active {
+              background-color: {{ section.settings.pagination_active_color }};
+              border-radius: 8px;
+              width: 24px;
+              height: 8px;
+            }
+          }
+
+          & .social-proof__cta {
+            width: max-content;
+            padding: 1.15rem 1.5rem;
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="section__social-proof__container ">
+    <div class="overlay__blur"></div>
+    <div class="section__social-proof__content container-sl">
+      {%- if section.settings.title != blank or section.settings.description != blank -%}
+        <div class="social-proof__header">
+          {%- if section.settings.title != blank -%}
+            <h2 class="social-proof__title">{{ section.settings.title }}</h2>
+          {%- endif -%}
+          {%- if section.settings.description != blank -%}
+            <p class="social-proof__description">{{ section.settings.description }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <section class="social-proof__content">
+          <div class="swiper swiper__social-proof">
+            <div class="swiper-wrapper">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'video_testimonial' -%}
+                  <article class="swiper-slide" {{ block.shopify_attributes }}>
+                    <div class="social-proof__media__container">
+                      {%- if block.settings.video != blank -%}
+                        <video
+                          class="social-proof__video"
+                          {% if block.settings.video_controls %}
+                            controls
+                          {% endif %}
+                          playsinline
+                        >
+                          {%- for source in block.settings.video.sources -%}
+                            <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                          {%- endfor -%}
+                        </video>
+                      {%- elsif block.settings.image != blank -%}
+                        <img
+                          src="{{ block.settings.image | image_url: width: 600 }}"
+                          alt="{{ block.settings.image_alt | escape }}"
+                          class="social-proof__img"
+                          loading="lazy"
+                          width="600"
+                          height="1067"
+                        >
+                      {%- endif -%}
+
+                      {%- if block.settings.quote != blank or block.settings.author != blank -%}
+                        <div class="overlay__media__container">
+                          {%- if block.settings.video != blank and block.settings.show_play_button -%}
+                            <div class="overlay__play">
+                              {%- render 'icon-play-button' -%}
+                            </div>
+                          {%- endif -%}
+                          <div class="overlay__content">
+                            {%- if block.settings.author != blank -%}
+                              <div class="overlay__footer">
+                                {%- render 'icon-verified', color: block.settings.verified_color -%}
+                                {%- if block.settings.author != blank -%}
+                                  <h3 class="overlay__author">{{ block.settings.author }}</h3>
+                                {%- endif -%}
+                              </div>
+                            {%- endif -%}
+                            {%- if block.settings.quote != blank -%}
+                              <p class="overlay__quote">{{ block.settings.quote }}</p>
+                            {%- endif -%}
+                          </div>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </article>
+                {%- elsif block.type == 'text_testimonial' -%}
+                  <article class="swiper-slide" {{ block.shopify_attributes }}>
+                    <div class="social-proof__texts__container">
+                      <div class="social-proof__texts__content">
+                        {%- if block.settings.text_quote != blank -%}
+                          <p class="social-proof__texts__description">{{ block.settings.text_quote }}</p>
+                        {%- endif -%}
+                        {%- if block.settings.show_stars -%}
+                          <div class="social-proof__texts__stars">
+                            {%- for i in (1..block.settings.stars_count) -%}
+                              {% render 'c-orange-star' %}
+                            {%- endfor -%}
+                          </div>
+                        {%- endif -%}
+
+                        {%- if block.settings.text_author != blank -%}
+                          <div class="social-proof__texts__footer">
+                            <h3 class="text__footer__author">{{ block.settings.text_author }}</h3>
+                            {%- if block.settings.show_verified -%}
+                              <span class="text__footer__span">{{ block.settings.verified_text }}</span>
+                            {%- endif -%}
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </article>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            {%- if section.settings.show_navigation -%}
+              <div class="btns__navigation__pagination">
+                <div class="swiper-pagination"></div>
+                <div class="btns">
+                  <div class="button-prev">
+                    <button class="btn__swiper btn__swiper--prev" style="--angle: -90deg;" aria-label="Previous slide">
+                      {%- render 'icon-arrow' -%}
+                    </button>
+                  </div>
+                  <div class="button-next">
+                    <button class="btn__swiper btn__swiper--next" style="--angle: 90deg;" aria-label="Next slide">
+                      {%- render 'icon-arrow' -%}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        </section>
+      {%- endif -%}
+
+      {%- if section.settings.cta_text != blank -%}
+        <a href="{{ section.settings.cta_link }}" class="social-proof__cta">
+          {{ section.settings.cta_text }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.mjs';
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const swiper = new Swiper('.swiper__social-proof', {
+      slidesPerView: 1.3,
+      spaceBetween: 12,
+      navigation: {
+        nextEl: '.button-next .btn__swiper--next',
+        prevEl: '.button-prev .btn__swiper--prev',
+      },
+      pagination: {
+        el: '.swiper-pagination',
+      },
+      breakpoints: {
+        768: {
+          slidesPerView: 2.5,
+          spaceBetween: 16,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 16,
+        },
+      },
+    });
+
+    // DOM
+    const $videosContainer = document.querySelectorAll('.social-proof__media__container');
+
+    // Métodos
+    const handlePlayVideo = (videoContainer) => {
+      const video = videoContainer.querySelector('.social-proof__video');
+      const playIcon = videoContainer.querySelector('.overlay__play');
+      const overlay = videoContainer.querySelector('.overlay__media__container');
+
+      if (!video) return;
+
+      const toggleVideo = () => {
+        if (video.paused) {
+          video.play();
+          if (playIcon) playIcon.classList.add('icon-hide');
+        } else {
+          video.pause();
+          if (playIcon) playIcon.classList.remove('icon-hide');
+        }
+      };
+
+      video.addEventListener('click', toggleVideo);
+      video.addEventListener('ended', () => {
+        if (playIcon) playIcon.classList.remove('icon-hide');
+      });
+      if (overlay) {
+        overlay.addEventListener('click', toggleVideo);
+      }
+    };
+
+    // Eventos
+    $videosContainer.forEach(handlePlayVideo);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Social Proof",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Padding Mobile"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top Mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 3,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom Mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 3,
+      "unit": "rem"
+    },
+    {
+      "type": "header",
+      "content": "Padding Desktop"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Padding Top Desktop",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Padding Bottom Desktop",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "range",
+      "id": "background_blur",
+      "label": "Background Blur",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 8,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "rgba(255, 255, 255, 0.7)"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#1b2152"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description Color",
+      "default": "#1b2152"
+    },
+    {
+      "type": "color",
+      "id": "overlay_text_color",
+      "label": "Overlay Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Navigation Button Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Navigation Button Border",
+      "default": "#1b2152"
+    },
+    {
+      "type": "color",
+      "id": "button_icon_color",
+      "label": "Navigation Button Icon",
+      "default": "#1b2152"
+    },
+    {
+      "type": "color",
+      "id": "pagination_active_color",
+      "label": "Pagination Active Color",
+      "default": "#1b2152"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg_color",
+      "label": "CTA Background Color",
+      "default": "#1b2152"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "CTA Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Text Card Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_card_bg_color",
+      "label": "Text Card Background",
+      "default": "#ffffffa0"
+    },
+    {
+      "type": "color",
+      "id": "text_card_text_color",
+      "label": "Text Card Text Color",
+      "default": "#1b2152"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show Navigation & Pagination",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max Width",
+      "min": 600,
+      "max": 1200,
+      "step": 50,
+      "default": 850,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Why customers trust SoWell"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Real experiences from people using SoWell as part of their daily routine — from GLP-1 users to everyday hydration seekers."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "TRY SOWELL ELECTROLYTES"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_testimonial",
+      "name": "Video Testimonial",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Media (Video or Image)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended: 600x1067px (9:16 ratio)"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image Alt Text"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Video will be used instead of image if both are provided"
+        },
+        {
+          "type": "checkbox",
+          "id": "video_controls",
+          "label": "Show Video Controls",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_play_button",
+          "label": "Show Play Button Overlay (for videos)",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Overlay Content"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "SoWell is the only hydration I can tolerate on GLP-1 days."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "@USERNAME"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author Profile Image"
+        }
+      ]
+    },
+    {
+      "type": "text_testimonial",
+      "name": "Text Testimonial",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_stars",
+          "label": "Show Stars",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "stars_count",
+          "label": "Number of Stars",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "color",
+          "id": "stars_color",
+          "label": "Stars Color",
+          "default": "#FF6C33"
+        },
+        {
+          "type": "textarea",
+          "id": "text_quote",
+          "label": "Quote",
+          "default": "Can we talk about the lemon flavor - it's like a refreshing splash of sunshine in a bottle!"
+        },
+        {
+          "type": "text",
+          "id": "text_author",
+          "label": "Author",
+          "default": "- Alia"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_verified",
+          "label": "Show Verified Badge",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "verified_text",
+          "label": "Verified Text",
+          "default": "Verified Customer"
+        },
+        {
+          "type": "color",
+          "id": "verified_color",
+          "label": "Verified Icon Color",
+          "default": "#1B2152"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Social Proof",
+      "blocks": [
+        {
+          "type": "video_testimonial",
+          "settings": {
+            "quote": "SoWell is the only hydration I can tolerate on GLP-1 days.",
+            "author": "@USERNAME"
+          }
+        },
+        {
+          "type": "text_testimonial",
+          "settings": {
+            "text_quote": "Can we talk about the lemon flavor - it's like a refreshing splash of sunshine in a bottle!",
+            "text_author": "- Alia",
+            "show_stars": true,
+            "stars_count": 5,
+            "show_verified": true
+          }
+        },
+        {
+          "type": "video_testimonial",
+          "settings": {
+            "quote": "Amazing product! Highly recommended.",
+            "author": "@CUSTOMER2"
+          }
+        },
+        {
+          "type": "text_testimonial",
+          "settings": {
+            "text_quote": "The best electrolyte drink I've ever tried!",
+            "text_author": "- Sarah",
+            "show_stars": true,
+            "stars_count": 5,
+            "show_verified": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,142 @@
+    {% assign feat_products = article.metafields.custom.featured_products.value %}
+    {% comment %} Desktop {% endcomment %}
+    <div class="hidden md:block text-text bg-[#EBE8E5] rounded-[40px] md:top-16 md:right-0  md:text-center overflow-hidden md:col-span-2 sticky bottom-0 self-start  p-4 mt-[3rem] ml-4 ">
+      <h6 class="text-base font-bold uppercase text-navy"> Shop This Article:</h6>
+      <ul class="flex gap-2 md:flex-col md:gap-4">
+        {% for product in feat_products %}
+          {%- if product.selected_or_first_available_variant.available -%}
+          {%- comment -%} Find the correct variant based on metafields {%- endcomment -%}
+          {%- assign display_variant = product.selected_or_first_available_variant -%}
+          {%- for variant in product.variants -%}
+            {%- if variant.metafields.custom.one_time_purchase == true -%}
+              {%- assign display_variant = variant -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <a href="{{ product.url }}" aria-label=" Shop {{ product.title }}">
+          <li class="w-fit  min-w-[200px] md:min-w-full gap-4 my-4 text-xs">
+         {% render 'image', image: product.featured_image, classes:"w-1/2 mx-auto aspect-square" %}
+         <div class="">
+          <p class="text-lg underline font-navy "> {{ product.title }}</p>
+          <p class="text-2xl italic !tracking-normal font-secondaryHeader text-brand"> {{ display_variant.price | money }}</p>
+          {%- if product.available -%}
+          {%- if redirect_to_pdp -%}
+            <a href="{{ product.url }}" aria-label="View {{ product.title }}" class="flex items-center justify-center p-2 mx-auto bg-white rounded-full text-navy hover:bg-brand hover:text-white" style="width: max-content !important;">
+              {% render 'icon-plus', classes: "w-4 h-4" %}
+            </a>
+          {%- else -%}
+        {%- assign product_form_id = 'product-form-' | append: product.id -%}
+            <product-form class="block mb-4 product-form">
+              <div
+                data-product-form-errors
+                role="alert"
+                hidden>
+                <span data-product-form-error-msg></span>
+              </div>
+              {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                <input
+                  type="hidden"
+                  name="id"
+                  value="{{ product.selected_or_first_available_variant.id }}">
+                <div class="product-form__buttons">
+                  <div class="flex gap-2 mt-2 mb-2">
+                    <button
+                      aria-label="Add to cart"
+                      type="button"
+                      class="p-2 mx-auto bg-white rounded-full text-navy product-form__submit"
+                      data-product-handle="{{ product.handle }}"
+                      data-product-id="{{ product.selected_or_first_available_variant.id }}"
+                      data-subscription="{% if product.selling_plan_groups.size > 0 %}true{% else %}false{% endif %}"
+                      data-productrating="{{ product_rating | strip_newlines | escape }}"
+                      data-featuredImage="https:{{ product.featured_media | image_url }}"
+                      data-disableFlyout="{{ product.metafields.custom.disable_subscription_flyout }}"
+                      data-metadata='[
+                        {% for variant in product.variants %}
+                          {
+                            "id": {{ variant.id }},
+                            "is_most_popular_subscription": "{{ variant.metafields.custom.is_most_popular_subscription | escape }}",
+                            "disable_one_time_purchase": "{{ variant.metafields.custom.disable_one_time_purchase | escape }}"
+                          }{% unless forloop.last %},{% endunless %}
+                        {% endfor %}
+                      ]'
+                      >
+                      {% render 'icon-plus', classes: "w-4 h-4" %}
+                    </button>
+                  </div>
+                </div>
+              {%- endform -%}
+            </product-form>
+          {%- endif -%}
+          {% endif %}
+        </div>
+          </li>
+          </a>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+
+    {% comment %} Mobile {% endcomment %}
+    <details class="group open:text-navy md:hidden open:bg-cream bg-brand rounded-t-[20px]  overflow-hidden  sticky bottom-0 self-start block p-4 mt-[3rem] ">
+
+      <summary class="flex items-center justify-between ">
+            <h6 class="text-base font-bold uppercase text-cream group-open:text-navy"> Shop This Article</h6>
+            {% render 'icon-chevron' , classes: "w-3 text-cream group-open:text-navy group-open:rotate-180"%}
+      </summary>
+      <ul class="flex flex-col gap-2 md:gap-4">
+        {% for product in feat_products %}
+          {%- if product.selected_or_first_available_variant.available -%}
+          {%- comment -%} Find the correct variant based on metafields {%- endcomment -%}
+          {%- assign display_variant = product.selected_or_first_available_variant -%}
+          {%- for variant in product.variants -%}
+            {%- if variant.metafields.custom.one_time_purchase == true -%}
+              {%- assign display_variant = variant -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <a href="{{ product.url }}" aria-label=" Shop {{ product.title }}">
+          <li class="w-fit  min-w-[200px] md:min-w-full gap-4 my-4 text-xs">
+         {% render 'image', image: product.featured_image, classes:"w-1/2 mx-auto aspect-square" %}
+         <div class="">
+          <p class="text-lg underline font-navy "> {{ product.title }}</p>
+          <p class="text-2xl italic font-secondaryHeader !tracking-normal text-brand"> {{ display_variant.price | money }}</p>
+          {%- if redirect_to_pdp -%}
+            <a href="{{ product.url }}" aria-label="View {{ product.title }}" class="flex items-center justify-center p-2 mx-auto text-center uppercase bg-white rounded-full text-navy hover:bg-brand hover:text-white" style="width: max-content !important;">
+              {% render 'icon-plus', classes: "w-6 h-6" %}
+            </a>
+          {%- else -%}
+          {%- assign product_form_id = 'product-form-mobile-' | append: product.id -%}
+          <product-form class="mb-4 product-form">
+            <div
+              data-product-form-errors
+              role="alert"
+              hidden>
+              <span data-product-form-error-msg></span>
+            </div>
+            {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              <input
+                type="hidden"
+                name="id"
+                value="{{ product.selected_or_first_available_variant.id }}">
+              <div class="product-form__buttons">
+                <div class="flex gap-2 mt-2 mb-2">
+                  <button
+                    aria-label="Add to cart"
+                    type="submit"
+                    name="add"
+                    class="flex items-center justify-center p-2 mx-auto text-center uppercase bg-white rounded-full text-navy product-form__submit hover:bg-brand hover:text-white ">
+                      {% render 'icon-plus', classes:"w-6 h-6" %}
+                  </button>
+                </div>
+              </div>
+            {%- endform -%}
+          </product-form>
+          {%- endif -%}
+        </div>
+          </li>
+          </a>
+        {% endif %}
+        {% endfor %}
+      </ul>
+
+  </details>

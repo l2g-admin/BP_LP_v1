@@ -1,0 +1,268 @@
+{%- doc -%}
+  C Prime Countdown - Countdown bar with leading title, live timer (days/hrs/min/sec) and trailing end-date label.
+
+  Parameters:
+  - uid: Unique identifier for scoping CSS/JS (required — e.g. section.id or block.id)
+  - title: Leading title (default: 'Prime Savings Match Ends')
+  - end_date: ISO end date string (required for live countdown)
+  - end_label: Trailing date label (default: 'June 26 · 11:59PM')
+  - days_label / hours_label / minutes_label / seconds_label: Unit labels
+  - bg_color: Background color
+  - title_color: Title color
+  - number_color: Number color
+  - label_color: Unit label color
+  - accent_color: Accent color (dots + end label)
+  - padding_top / padding_bottom: Desktop padding in px
+  - padding_top_mobile / padding_bottom_mobile: Mobile padding in px
+  - border_radius: Border radius in px (default: 24)
+
+  Usage:
+    {% render 'c-prime-countdown',
+      uid: section.id,
+      title: section.settings.title,
+      end_date: section.settings.end_date,
+      end_label: section.settings.end_label
+    %}
+{%- enddoc -%}
+
+{%- liquid
+  assign pc_uid = uid | default: 'c-prime-countdown'
+  assign pc_root_id = 'c-prime-countdown-' | append: pc_uid
+  assign pc_title = title | default: 'Prime Savings Match Ends'
+  assign pc_end_date = end_date | default: ''
+  assign pc_end_label = end_label | default: ''
+  assign pc_days_label = days_label | default: 'Days'
+  assign pc_hours_label = hours_label | default: 'Hrs'
+  assign pc_minutes_label = minutes_label | default: 'Min'
+  assign pc_seconds_label = seconds_label | default: 'Sec'
+  assign pc_bg_color = bg_color | default: '#1B1E2A'
+  assign pc_title_color = title_color | default: '#8A8E99'
+  assign pc_number_color = number_color | default: '#FFFFFF'
+  assign pc_label_color = label_color | default: '#8A8E99'
+  assign pc_accent_color = accent_color | default: '#D54F2F'
+  assign pc_pt = padding_top | default: 28
+  assign pc_pb = padding_bottom | default: 28
+  assign pc_pt_m = padding_top_mobile | default: 24
+  assign pc_pb_m = padding_bottom_mobile | default: 24
+  assign pc_br = border_radius | default: 24
+-%}
+
+<div id="{{ pc_root_id }}" class="c-prime-countdown" data-prime-countdown-root>
+  <div class="c-prime-countdown__inner">
+    {%- if pc_title != blank -%}
+      <p class="c-prime-countdown__title">{{ pc_title }}</p>
+    {%- endif -%}
+
+    <div
+      class="c-prime-countdown__timer"
+      data-end-date="{{ pc_end_date | escape }}"
+      aria-label="Countdown timer"
+    >
+      <div class="c-prime-countdown__unit" data-timer-unit="days">
+        <span class="c-prime-countdown__number" data-timer-number="days">00</span>
+        <span class="c-prime-countdown__label">{{ pc_days_label }}</span>
+      </div>
+
+      <span class="c-prime-countdown__separator" aria-hidden="true">
+        <span class="c-prime-countdown__dot"></span>
+        <span class="c-prime-countdown__dot"></span>
+      </span>
+
+      <div class="c-prime-countdown__unit" data-timer-unit="hours">
+        <span class="c-prime-countdown__number" data-timer-number="hours">00</span>
+        <span class="c-prime-countdown__label">{{ pc_hours_label }}</span>
+      </div>
+
+      <span class="c-prime-countdown__separator" aria-hidden="true">
+        <span class="c-prime-countdown__dot"></span>
+        <span class="c-prime-countdown__dot"></span>
+      </span>
+
+      <div class="c-prime-countdown__unit" data-timer-unit="minutes">
+        <span class="c-prime-countdown__number" data-timer-number="minutes">00</span>
+        <span class="c-prime-countdown__label">{{ pc_minutes_label }}</span>
+      </div>
+
+      <span class="c-prime-countdown__separator" aria-hidden="true">
+        <span class="c-prime-countdown__dot"></span>
+        <span class="c-prime-countdown__dot"></span>
+      </span>
+
+      <div class="c-prime-countdown__unit" data-timer-unit="seconds">
+        <span class="c-prime-countdown__number" data-timer-number="seconds">00</span>
+        <span class="c-prime-countdown__label">{{ pc_seconds_label }}</span>
+      </div>
+    </div>
+
+    {%- if pc_end_label != blank -%}
+      <p class="c-prime-countdown__end-label">{{ pc_end_label }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  #{{ pc_root_id }} {
+    --sl-c-prime-countdown-bg: {{ pc_bg_color }};
+    --sl-c-prime-countdown-title: {{ pc_title_color }};
+    --sl-c-prime-countdown-number: {{ pc_number_color }};
+    --sl-c-prime-countdown-label: {{ pc_label_color }};
+    --sl-c-prime-countdown-accent: {{ pc_accent_color }};
+    --sl-c-prime-countdown-pt: {{ pc_pt_m }}px;
+    --sl-c-prime-countdown-pb: {{ pc_pb_m }}px;
+    --sl-c-prime-countdown-br: {{ pc_br }}px;
+
+    --sl-c-prime-countdown-title-size: 12px;
+    --sl-c-prime-countdown-title-ls: 0.18em;
+    --sl-c-prime-countdown-number-size: 32px;
+    --sl-c-prime-countdown-label-size: 11px;
+    --sl-c-prime-countdown-label-ls: 0.18em;
+    --sl-c-prime-countdown-end-size: 13px;
+    --sl-c-prime-countdown-end-ls: 0.12em;
+
+    padding-top: var(--sl-c-prime-countdown-pt);
+    padding-bottom: var(--sl-c-prime-countdown-pb);
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: var(--sl-c-prime-countdown-bg);
+    border-radius: var(--sl-c-prime-countdown-br);
+  }
+
+  #{{ pc_root_id }} .c-prime-countdown__inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  #{{ pc_root_id }} .c-prime-countdown__title {
+    margin: 0;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--sl-c-prime-countdown-title);
+    font-family: "TT Commons Pro", var(--font-heading-family), sans-serif;
+    font-size: var(--sl-c-prime-countdown-title-size);
+    font-weight: 600;
+    letter-spacing: var(--sl-c-prime-countdown-title-ls);
+    line-height: 1.4;
+  }
+
+  #{{ pc_root_id }} .c-prime-countdown__timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  #{{ pc_root_id }} .c-prime-countdown__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 44px;
+  }
+
+  #{{ pc_root_id }} .c-prime-countdown__number {
+    margin: 0;
+    color: var(--sl-c-prime-countdown-number);
+    font-family: "TT Commons Pro", var(--font-heading-family), sans-serif;
+    font-size: var(--sl-c-prime-countdown-number-size);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  #{{ pc_root_id }} .c-prime-countdown__label {
+    margin: 0;
+    color: var(--sl-c-prime-countdown-label);
+    font-family: "TT Commons Pro", var(--font-body-family), sans-serif;
+    font-size: var(--sl-c-prime-countdown-label-size);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: var(--sl-c-prime-countdown-label-ls);
+    text-transform: uppercase;
+  }
+
+  #{{ pc_root_id }} .c-prime-countdown__separator {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    height: var(--sl-c-prime-countdown-number-size);
+  }
+
+  #{{ pc_root_id }} .c-prime-countdown__dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--sl-c-prime-countdown-accent);
+  }
+
+  #{{ pc_root_id }} .c-prime-countdown__end-label {
+    margin: 0;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--sl-c-prime-countdown-accent);
+    font-family: "TT Commons Pro", var(--font-heading-family), sans-serif;
+    font-size: var(--sl-c-prime-countdown-end-size);
+    font-weight: 700;
+    letter-spacing: var(--sl-c-prime-countdown-end-ls);
+    line-height: 1.4;
+  }
+</style>
+
+<script>
+  (function () {
+    var rootEl = document.getElementById('{{ pc_root_id }}');
+    if (!rootEl) return;
+
+    var timerEl = rootEl.querySelector('.c-prime-countdown__timer');
+    if (!timerEl) return;
+
+    var endDateRaw = timerEl.getAttribute('data-end-date') || '';
+    var parsedEndDate = Date.parse(endDateRaw);
+
+    var daysEl = timerEl.querySelector('[data-timer-number="days"]');
+    var hoursEl = timerEl.querySelector('[data-timer-number="hours"]');
+    var minutesEl = timerEl.querySelector('[data-timer-number="minutes"]');
+    var secondsEl = timerEl.querySelector('[data-timer-number="seconds"]');
+
+    function setValue(element, value) {
+      if (element) {
+        element.textContent = value;
+      }
+    }
+
+    function updateCountdown() {
+      if (Number.isNaN(parsedEndDate)) {
+        setValue(daysEl, '00');
+        setValue(hoursEl, '00');
+        setValue(minutesEl, '00');
+        setValue(secondsEl, '00');
+        return;
+      }
+
+      var now = Date.now();
+      var distance = Math.max(0, parsedEndDate - now);
+
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setValue(daysEl, String(days).padStart(2, '0'));
+      setValue(hoursEl, String(hours).padStart(2, '0'));
+      setValue(minutesEl, String(minutes).padStart(2, '0'));
+      setValue(secondsEl, String(seconds).padStart(2, '0'));
+    }
+
+    if (rootEl.__slPrimeCountdownTimer) {
+      clearInterval(rootEl.__slPrimeCountdownTimer);
+    }
+
+    updateCountdown();
+    rootEl.__slPrimeCountdownTimer = setInterval(updateCountdown, 1000);
+  })();
+</script>

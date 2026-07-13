@@ -1,0 +1,339 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "DreamTheme",
+    "theme_version": "2.2.0",
+    "theme_author": "SMAKK STUDIOS",
+    "theme_documentation_url": "https://github.com/smkkstudios/dreamtheme-2",
+    "theme_support_url": "https://smakkstudios.com/"
+  },
+  {
+    "name": "t:settings_schema.colors.name",
+    "settings": [
+      {
+        "type": "color",
+        "id": "colors_text",
+        "default": "#000000",
+        "label": "Default Text Color"
+      },
+      {
+        "type": "color",
+        "id": "colors_bg",
+        "default": "#FFFFFF",
+        "label": "Default Background Color"
+      },
+      {
+        "type": "color",
+        "id": "colors_brand",
+        "default": "#0d9488",
+        "label": "Main Theme Brand Color"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.typography.name",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:settings_schema.typography.settings.header__1.content"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "default": "assistant_n4",
+        "label": "t:settings_schema.typography.settings.type_header_font.label",
+        "info": "t:settings_schema.typography.settings.type_header_font.info"
+      },
+      {
+        "type": "header",
+        "content": "t:settings_schema.typography.settings.header__2.content"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "assistant_n4",
+        "label": "t:settings_schema.typography.settings.type_body_font.label",
+        "info": "t:settings_schema.typography.settings.type_body_font.info"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.layout.name",
+    "settings": [
+      {
+        "type": "select",
+        "id": "page_width",
+        "options": [
+          {
+            "value": "1200",
+            "label": "t:settings_schema.layout.settings.page_width.options__1.label"
+          },
+          {
+            "value": "1600",
+            "label": "t:settings_schema.layout.settings.page_width.options__2.label"
+          }
+        ],
+        "default": "1600",
+        "label": "t:settings_schema.layout.settings.page_width.label"
+      }
+    ]
+  },
+  {
+    "name": "Header Settings",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Header Configuration"
+      },
+      {
+        "type": "select",
+        "id": "header_type",
+        "label": "Header Type",
+        "options": [
+          {
+            "value": "default",
+            "label": "Default Header"
+          },
+          {
+            "value": "megamenu",
+            "label": "Megamenu Header"
+          }
+        ],
+        "default": "default",
+        "info": "Choose between the default header or the new megamenu header"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.social-media.name",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:settings_schema.social-media.settings.header.content"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "t:settings_schema.social-media.settings.social_twitter_link.label",
+        "info": "t:settings_schema.social-media.settings.social_twitter_link.info"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "t:settings_schema.social-media.settings.social_facebook_link.label",
+        "info": "t:settings_schema.social-media.settings.social_facebook_link.info"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "t:settings_schema.social-media.settings.social_pinterest_link.label",
+        "info": "t:settings_schema.social-media.settings.social_pinterest_link.info"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "t:settings_schema.social-media.settings.social_instagram_link.label",
+        "info": "t:settings_schema.social-media.settings.social_instagram_link.info"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "t:settings_schema.social-media.settings.social_tiktok_link.label",
+        "info": "t:settings_schema.social-media.settings.social_tiktok_link.info"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": "t:settings_schema.social-media.settings.social_tumblr_link.label",
+        "info": "t:settings_schema.social-media.settings.social_tumblr_link.info"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": "t:settings_schema.social-media.settings.social_snapchat_link.label",
+        "info": "t:settings_schema.social-media.settings.social_snapchat_link.info"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "t:settings_schema.social-media.settings.social_youtube_link.label",
+        "info": "t:settings_schema.social-media.settings.social_youtube_link.info"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_link",
+        "label": "t:settings_schema.social-media.settings.social_vimeo_link.label",
+        "info": "t:settings_schema.social-media.settings.social_vimeo_link.info"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "t:settings_schema.favicon.settings.favicon.label",
+        "info": "t:settings_schema.favicon.settings.favicon.info"
+      },
+      {
+        "type": "text",
+        "id": "favicon_emoji",
+        "label": "Favicon emoji"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.currency_format.name",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:settings_schema.currency_format.settings.content"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:settings_schema.currency_format.settings.paragraph"
+      },
+      {
+        "type": "checkbox",
+        "id": "currency_code_enabled",
+        "label": "t:settings_schema.currency_format.settings.currency_code_enabled.label",
+        "default": false
+      }
+    ]
+  },
+  {
+  "name": "Free Shipping",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Free Shipping"
+    },
+    {
+      "type": "range",
+      "id": "free_shipping_target",
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "unit": "$",
+      "label": "Dollar amount for free shipping message in the quick cart",
+      "default": 75
+    },
+    {
+      "type": "range",
+      "id": "b2b_free_shipping_target",
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "unit": "$",
+      "label": "B2B Dollar amount for free shipping message in the quick cart",
+      "default": 200
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_no",
+      "label": "Message to encourage a customer to hit the target.",
+      "default": "Only [amount] to free shipping!",
+      "info": "Must keep the '[amount]' keyword as a placeholder."
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_yes",
+      "label": "Message for once a customer reaches the free shipping target",
+      "default": "You've qualified for free shipping!"
+    },
+    {
+      "type": "url",
+      "id": "keep_shopping_link",
+      "label": "Keep Shopping Link"
+    },
+    {
+      "type": "text",
+      "id": "keep_shopping_text",
+      "label": "Keep Shopping Text",
+      "default": "Keep Shopping"
+    }
+  ]
+},
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_drawer",
+        "label": "Cart Drawer?",
+        "default": true
+      },
+      {
+        "type": "product",
+        "id": "gift_wrap_product",
+        "label": "Gift Wrap Product",
+        "info": "This is the product that is used for *Gift Wrap* (i.e. only one per order, and the whole order is a gift.)"
+      },
+      {
+        "type": "product",
+        "id": "gift_bag_product",
+        "label": "Gift Bag Product",
+        "info": "This is the product that is used for *Gift Bsgs* (i.e. the customer just wants to add these as items to their order.)"
+      }
+    ]
+  },
+  {
+    "name": "Klaviyo",
+    "settings": [
+      {
+        "type": "text",
+        "id": "klaviyo_key",
+        "label": "Klaviyo Public API Key",
+        "info": "Fill this out if you want to turn on the Klaviyo snippet"
+      }
+    ]
+  },
+  {
+    "name": "Clarity",
+    "settings": [
+      {
+        "type": "text",
+        "id": "clarity_id",
+        "label": "Clarity ID",
+        "info": "Fill this out if you want to turn on the Clarity snippet. (Note: you need to already have a [Microsoft Clarity](https:\/\/clarity.microsoft.com\/) account set up, and know your ID"
+      },
+      {
+        "type": "checkbox",
+        "id": "clarity_enable",
+        "label": "Enable Clarity",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Animation",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "use_animations",
+        "label": "Enable animations",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Dev",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "ct_enable",
+        "label": "Enable ct.css",
+        "info": "This will help a developer see the render blocking pieces of the <head>",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "alt_text",
+        "label": "Reveal images w\/o alt text",
+        "info": "This will help a developer see the images on the page with no alt text",
+        "default": false
+      }
+    ]
+  }
+]

@@ -1,0 +1,719 @@
+<style>
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    color: {{ section.settings.text_color }};
+    overflow: hidden;
+
+
+
+    & .c-starter__header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    & .c-starter__title {
+      font-size: clamp(36px, 4vw, 48px);
+      line-height: 1.2;
+      color: {{ section.settings.title_color }};
+      margin: 0;
+
+      & span {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        color: {{ section.settings.accent_color }};
+        font-size: clamp(40px, 4.5vw, 54px);
+      }
+    }
+
+    & .c-starter__card {
+      background-color: {{ section.settings.card_bg }};
+      border-radius: 16px;
+      box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.15);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+    }
+
+    & .c-starter__media {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    & .c-starter__img {
+      width: 100%;
+      height: auto;
+      max-width: 500px;
+      object-fit: contain;
+    }
+
+    & .c-starter__content {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    & .c-starter__trust {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    & .c-starter__stars {
+      display: flex;
+      gap: 2px;
+      color: {{ section.settings.accent_color }};
+
+      & svg {
+        width: 16px;
+        height: 16px;
+
+      }
+    }
+
+    & .c-starter__trust-text {
+      font-size: clamp(14px, 2vw, 16px);
+      color: {{ section.settings.title_color }};
+      margin: 0;
+    }
+
+    & .c-starter__product-title {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: clamp(42px, 3.5vw, 52px);
+      color: {{ section.settings.title_color }};
+      margin: 0 0 1.5rem 0;
+      font-style: italic;
+        font-weight: 500;
+        line-height: 120%;
+    }
+
+    & .c-starter__desc {
+      font-size: clamp(18px, 2vw, 20px);
+      font-style: normal;
+        font-weight: 400;
+        line-height: 150%; 
+      color: {{ section.settings.text_color }};
+      margin: 0 0 1.5rem 0;
+    }
+
+    & .c-starter__includes {
+      font-size: clamp(18px, 2vw, 20px);
+      color: {{ section.settings.title_color }};
+      margin: 0 0 2rem 0;
+      font-style: normal;
+    font-weight: 400;
+    line-height: 150%; 
+    }
+
+    & .c-starter__features {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      margin-bottom: 2.5rem;
+    }
+
+    & .c-starter__feature {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid {{ section.settings.accent_color }};
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    & .c-starter__feature-icon {
+      width: 20px;
+      height: 20px;
+      color: {{ section.settings.accent_color }};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & svg {
+        width: 100%;
+        height: 100%;
+
+      }
+    }
+
+    & .c-starter__feature-text {
+      font-size: 14px;
+      color: {{ section.settings.title_color }};
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    & .c-starter__container-btn {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    & .c-starter__btn-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    & .c-starter__btn {
+      background-color: {{ section.settings.accent_color }};
+      color: #ffffff;
+      width: fit-content;
+      padding: 16px 45px;
+      border-radius: 40px;
+      text-decoration: none;
+      text-align: center;
+      transition: opacity 0.3s ease ;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        opacity: 0.9;
+    
+      }
+    }
+
+    & .c-starter__btn-main {
+      font-size: 16px;
+      margin: 0;
+    }
+
+    & .c-starter__btn-sub {
+      font-size: 14px;
+      margin: 4px 0 0 0;
+      opacity: 0.9;
+    }
+
+    & .c-starter__btn-price {
+      font-size: 13px;
+      margin: 6px 0 0 0;
+      opacity: 0.85;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    & .c-starter__btn-price-compare {
+      opacity: 0.7;
+      text-decoration: line-through;
+    }
+
+    & .c-starter__btn-price-current {
+      font-weight: 600;
+      opacity: 1;
+    }
+
+    & .c-starter__disclaimer {
+      font-size: 14px;
+      color: {{ section.settings.text_color }};
+      margin: 1rem 0 0 0;
+      font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+
+
+      & .c-starter__header {
+        margin-bottom: 2rem;
+      }
+
+      & .c-starter__card {
+        flex-direction: column;
+        padding: 2rem 1.5rem;
+        gap: 2rem;
+      }
+
+      & .c-starter__img {
+        max-width: 100%;
+      }
+
+      & .c-starter__trust {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 1rem;
+      }
+
+      & .c-starter__product-title {
+        font-size: 32px;
+        margin-bottom: 1rem;
+      }
+
+      & .c-starter__features {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      & .c-starter__feature {
+        justify-content: flex-start;
+        padding: 16px 20px;
+      }
+
+      & .c-starter__btn-wrap {
+        max-width: 100%;
+      }
+
+      & .c-starter__btn {
+        padding: 18px 24px;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="c-starter__container">
+      <div class="c-starter__header">
+        {% if section.settings.title != blank %}
+          <h2 class="c-starter__title">{{ section.settings.title | newline_to_br }}</h2>
+        {% endif %}
+      </div>
+
+      <div class="c-starter__card">
+        <div class="c-starter__media">
+          {% if section.settings.image != blank %}
+            <img
+              src="{{ section.settings.image | image_url: width: 800 }}"
+              alt="{{ section.settings.product_title | escape }}"
+              class="c-starter__img"
+              loading="lazy"
+            >
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag: 'c-starter__img' }}
+          {% endif %}
+        </div>
+
+        <div class="c-starter__content">
+          <div class="c-starter__trust">
+            <div class="c-starter__stars">
+              {% for i in (1..5) %}
+                {% render 'c-orange-star' %}
+              {% endfor %}
+            </div>
+            <p class="c-starter__trust-text">{{ section.settings.trust_text }}</p>
+          </div>
+
+          <h3 class="c-starter__product-title">{{ section.settings.product_title }}</h3>
+
+          <p class="c-starter__desc">{{ section.settings.description }}</p>
+
+          <p class="c-starter__includes">
+            <strong>{{ section.settings.includes_label }}</strong> {{ section.settings.includes_text }}
+          </p>
+
+          <div class="c-starter__features">
+            {% for block in section.blocks %}
+              <div class="c-starter__feature" {{ block.shopify_attributes }}>
+                <div class="c-starter__feature-icon">
+                  {% if block.settings.custom_svg != blank %}
+                    {{ block.settings.custom_svg }}
+                  {% else %}
+                    <svg viewBox="0 0 24 24">
+                      <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                  {% endif %}
+                </div>
+                <p class="c-starter__feature-text">{{ block.settings.text }}</p>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="c-starter__container-btn">
+            <div class="c-starter__btn-wrap">
+              {%- liquid
+                assign cta_product = section.settings.cta_product
+                assign cta_variant = nil
+                if cta_product != blank
+                  assign cta_variant = cta_product.selected_or_first_available_variant
+                endif
+
+                assign manual_price = section.settings.manual_price
+                assign manual_compare = section.settings.manual_compare_at_price
+
+                assign price_display = blank
+                assign compare_display = blank
+
+                if manual_price != blank and manual_price > 0
+                  assign manual_price_cents = manual_price | times: 100
+                  assign price_display = manual_price_cents | money
+                elsif cta_variant != blank
+                  assign price_display = cta_variant.price | money
+                endif
+
+                if manual_compare != blank and manual_compare > 0
+                  assign manual_compare_cents = manual_compare | times: 100
+                  assign compare_display = manual_compare_cents | money
+                elsif cta_variant != blank and cta_variant.compare_at_price != blank and cta_variant.compare_at_price > 0
+                  assign compare_display = cta_variant.compare_at_price | money
+                elsif cta_variant != blank
+                  assign compare_display = cta_variant.price | money
+                endif
+
+                if price_display == compare_display
+                  assign compare_display = blank
+                endif
+              -%}
+              {% if cta_variant != blank and cta_variant.available %}
+                <form
+                  method="post"
+                  action="{{ routes.cart_add_url }}"
+                  id="NewProductInfoForm-{{ section.id }}"
+                  accept-charset="UTF-8"
+                  enctype="multipart/form-data"
+                  class="c-starter__form"
+                  novalidate
+                >
+                  <input type="hidden" name="form_type" value="product">
+                  <input type="hidden" name="utf8" value="✓">
+                  <input type="hidden" name="id" value="{{ cta_variant.id }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button
+                    type="submit"
+                    class="c-starter__btn"
+                    id="NewProductInfoAddBtn-{{ section.id }}"
+                  >
+                    <span class="c-starter__btn-main js-btn-text">{{ section.settings.btn_main_text }}</span>
+                    {% if section.settings.btn_sub_text != blank %}
+                      <span class="c-starter__btn-sub">{{ section.settings.btn_sub_text }}</span>
+                    {% endif %}
+                    {%- if price_display != blank -%}
+                      <span class="c-starter__btn-price">
+                        {%- if compare_display != blank -%}
+                          <span class="c-starter__btn-price-compare">{{ compare_display }}</span>
+                        {%- endif -%}
+                        <span class="c-starter__btn-price-current">{{ price_display }}</span>
+                      </span>
+                    {%- endif -%}
+                  </button>
+                </form>
+              {% else %}
+                <a href="{{ section.settings.btn_link }}" class="c-starter__btn">
+                  <span class="c-starter__btn-main">{{ section.settings.btn_main_text }}</span>
+                  {% if section.settings.btn_sub_text != blank %}
+                    <span class="c-starter__btn-sub">{{ section.settings.btn_sub_text }}</span>
+                  {% endif %}
+                  {%- if price_display != blank -%}
+                    <span class="c-starter__btn-price">
+                      {%- if compare_display != blank -%}
+                        <span class="c-starter__btn-price-compare">{{ compare_display }}</span>
+                      {%- endif -%}
+                      <span class="c-starter__btn-price-current">{{ price_display }}</span>
+                    </span>
+                  {%- endif -%}
+                </a>
+              {% endif %}
+              {% if section.settings.disclaimer != blank %}
+                <p class="c-starter__disclaimer">{{ section.settings.disclaimer }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const sectionId = '{{ section.id }}';
+    const form = document.getElementById('NewProductInfoForm-' + sectionId);
+    const button = document.getElementById('NewProductInfoAddBtn-' + sectionId);
+    if (!form || !button) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (button.disabled || button.classList.contains('loading')) return;
+
+      button.classList.add('loading');
+      button.setAttribute('aria-disabled', 'true');
+
+      const formData = new FormData(form);
+
+      fetch(window.routes?.cart_add_url || '/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          Accept: 'application/json',
+        },
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.status) {
+            console.error('Error adding to cart:', response.description);
+            return;
+          }
+
+          const btnText = button.querySelector('.js-btn-text');
+          if (btnText) btnText.textContent = 'Added';
+
+          const cartDrawer = document.querySelector('cart-drawer');
+          if (cartDrawer) {
+            cartDrawer.render();
+            cartDrawer.open();
+          } else {
+            const cartNotification = document.querySelector('cart-notification');
+            if (cartNotification && typeof cartNotification.open === 'function') {
+              cartNotification.open();
+            }
+          }
+        })
+        .catch((error) => console.error('Add to cart failed:', error))
+        .finally(() => {
+          button.classList.remove('loading');
+          button.removeAttribute('aria-disabled');
+        });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "C New Product Info",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#fafafa"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#1a1f4c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "General Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d25435"
+    },
+    {
+      "type": "header",
+      "content": "Header Text"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Main Title",
+      "default": "Start Your\n<span>N.O. Journey</span>",
+      "info": "Wrap text in <span></span> to apply the italic serif font and accent color."
+    },
+    {
+      "type": "header",
+      "content": "Product Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Product Image"
+    },
+    {
+      "type": "text",
+      "id": "trust_text",
+      "label": "Trust Text (Next to stars)",
+      "default": "Trusted by 3,000+ healthcare providers."
+    },
+    {
+      "type": "text",
+      "id": "product_title",
+      "label": "Product Title",
+      "default": "Nitric Oxide Starter Kit"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Everything you need to test, track, and support your N.O. levels"
+    },
+    {
+      "type": "text",
+      "id": "includes_label",
+      "label": "Includes Label",
+      "default": "Includes:"
+    },
+    {
+      "type": "textarea",
+      "id": "includes_text",
+      "label": "Includes Text",
+      "default": "60 N.O. Support capsules + 10 Test Strips"
+    },
+    {
+      "type": "header",
+      "content": "Button & CTA"
+    },
+    {
+      "type": "product",
+      "id": "cta_product",
+      "label": "Add to Cart Product",
+      "info": "If a product is selected, the button will add it to the cart and open the cart drawer instead of redirecting to the URL below."
+    },
+    {
+      "type": "text",
+      "id": "btn_main_text",
+      "label": "Button Main Text",
+      "default": "Claim 30% Off + Free Strips"
+    },
+    {
+      "type": "text",
+      "id": "btn_sub_text",
+      "label": "Button Sub Text (Optional)",
+      "default": "Use code: HELLO30"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link (Fallback)",
+      "info": "Used only when no Add to Cart product is selected above."
+    },
+    {
+      "type": "text",
+      "id": "manual_price",
+      "label": "Price (manual override)",
+      "info": "Optional. Numeric value in shop base currency (e.g. 39.99). Formatted with the active store/market currency."
+    },
+    {
+      "type": "text",
+      "id": "manual_compare_at_price",
+      "label": "Compare at price (manual override)",
+      "info": "Optional. Numeric value (e.g. 59.99). Shown with strikethrough next to the price."
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer Text",
+      "default": "Limited time offer • No code required"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Pill",
+      "settings": [
+        {
+          "type": "html",
+          "id": "custom_svg",
+          "label": "SVG Icon (Raw HTML)",
+          "info": "Paste raw SVG code. Uses 'stroke' for coloring."
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Feature Text",
+          "default": "Clinically Backed"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C New Product Info",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "text": "Clinically Backed",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><path d=\"M9 3v2m6-2v2M9 14h6m-3-3v6m-7 6h14a2 2 0 0 0 2-2v-3.5a1.5 1.5 0 0 0-1-1.4l-4.5-1.5V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v6.6l-4.5 1.5a1.5 1.5 0 0 0-1 1.4V21a2 2 0 0 0 2 2z\"/></svg>"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "text": "Easy to use",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01\"/></svg>"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "text": "Trusted by Providers",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/><polyline points=\"9 12 11 14 15 10\"/></svg>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

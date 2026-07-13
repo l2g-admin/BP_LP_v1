@@ -1,0 +1,55 @@
+{% unless template == 'index' or template == 'cart' or template == 'list-collections' %}
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList" class="{{ classes | default: "col-span-2 p-4 md:p-8 text-sm mx-auto w-full" }}" role="navigation" aria-label="Breadcrumbs">
+    <li class="inline" itemprop="itemListElement" itemscope
+      itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="/" title="Home" class="underline">
+        <span itemprop="name" >Home</span></a>
+        <meta itemprop="position" content="1" />
+    </li>
+    {% if template contains 'page' %}
+      <span aria-hidden="true">&rsaquo;</span>
+      <span itemprop="name">{{ page.title }}</span>
+
+    {% elsif template contains 'product' %}
+      {% if collection.url %}
+        <span aria-hidden="true">&rsaquo;</span>
+        <li class="inline underline" itemprop="itemListElement" itemscope
+          itemtype="https://schema.org/ListItem"> <span itemprop="name" class="underline">{{ collection.title | link_to: collection.url }}</span>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span aria-hidden="true">&rsaquo;</span>
+        <span itemprop="name">{{ product.title }}</span>
+        {% else %}
+        <span aria-hidden="true">&rsaquo;</span>
+        <span itemprop="name">{{ product.title }}</span>
+
+      {% endif %}
+
+    {% elsif template contains 'collection' and collection.handle %}
+      <span aria-hidden="true">&rsaquo;</span>
+      {% if current_tags %}
+        {% capture url %}/collections/{{ collection.handle }}{% endcapture %}
+        <li class="inline underline" itemprop="itemListElement" itemscope
+          itemtype="https://schema.org/ListItem"> <span itemprop="name" class="underline">{{ collection.title | link_to: url }}</span>
+          <meta itemprop="position" content="2" />
+
+        </li>
+        <span aria-hidden="true">&rsaquo;</span>
+        <span>{{ current_tags | join: " + " }}</span>
+      {% else %}
+      <span itemprop="name">{{ collection.title }}</span>
+      {% endif %}
+    {% elsif template == 'article' %}
+    <li class="inline underline" itemprop="itemListElement" itemscope
+      itemtype="https://schema.org/ListItem">  <span aria-hidden="true">&rsaquo;</span>
+      <span itemprop="name">{{ blog.title | link_to: blog.url }}</span>
+      <meta itemprop="position" content="2" />
+    </li>
+      <span aria-hidden="true">&rsaquo;</span>
+       <span itemprop="name">{{ article.title }}</span>
+    {% else %}
+      <span aria-hidden="true">&rsaquo;</span>
+      <span itemprop="name">{{ page_title }}</span>
+    {% endif %}
+  </ol>
+{% endunless %}

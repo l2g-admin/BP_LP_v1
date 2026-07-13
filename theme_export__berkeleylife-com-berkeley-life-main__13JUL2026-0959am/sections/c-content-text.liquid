@@ -1,0 +1,480 @@
+<style>
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    font-family: inherit;
+    overflow: hidden;
+
+    & .ct__container {
+      display: flex;
+      /* Mobile Layout */
+      flex-direction: {{ section.settings.mobile_layout }};
+      gap: 3rem;
+    }
+
+    @media (min-width: 992px) {
+      & .ct__container {
+        /* Desktop Layout */
+        flex-direction: {{ section.settings.desktop_layout }};
+        align-items: center;
+        gap: 5%;
+      }
+    }
+
+    /* --- TEXT COLUMN --- */
+    & .ct__text-col {
+      flex: 1 1 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    & .ct__title {
+      margin: 0;
+      color: inherit;
+    }
+
+    & .ct__title-highlight {
+      display: block;
+      color: {{ section.settings.highlight_color }};
+      margin-top: 0.25rem;
+    }
+
+    & .ct__richtext {
+      margin: 0;
+      opacity: 0.85;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    & .ct__richtext p {
+      margin: 0;
+    }
+
+    & .ct__btns {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    /* --- QUOTE BLOCK --- */
+    & .ct__quote-block {
+      border-left: 3px solid;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      border-radius: 0 0.25rem 0.25rem 0;
+    }
+
+    & .ct__quote-text {
+      font-style: italic;
+      margin: 0;
+      line-height: 1.6;
+      font-size: clamp(22px, 1.5vw, 28px);
+    }
+
+    & .ct__quote-author {
+      margin: 0;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    & .ct__quote-sub {
+      margin: 0.75rem 0 0;
+      font-weight: 700 !important;
+    }
+
+    /* --- IMAGE COLUMN --- */
+    & .ct__image-col {
+      flex: 1 1 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    & .ct__img-wrapper {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    & .ct__img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* Logic for optional mobile image */
+    & .ct__img--mobile {
+      display: block;
+    }
+    
+    & .ct__img--desktop-hide {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      & .ct__img--mobile {
+        display: none;
+      }
+      & .ct__img--desktop-hide {
+        display: block;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}" class="c-content-text-section">
+  <div class="container-sl">
+    <div class="ct__container">
+    
+    <div class="ct__text-col">
+      <h2 class="ct__title c-title">
+        {{ section.settings.heading_1 }}
+        {%- if section.settings.heading_2_italic != blank -%}
+          <span class="ct__title-highlight c-font-cormorant-title">{{ section.settings.heading_2_italic }}</span>
+        {%- endif -%}
+      </h2>
+
+      {%- if section.settings.text != blank -%}
+        <div class="ct__richtext c-description">
+          {{ section.settings.text }}
+        </div>
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'quote' -%}
+          <div class="ct__quote-block"
+               style="border-color: {{ block.settings.border_color }}; background: {{ block.settings.bg_color }};"
+               {{ block.shopify_attributes }}>
+            {%- if block.settings.quote_text != blank -%}
+              <p class="ct__quote-text c-font-cormorant-title" style="color: {{ block.settings.text_color }};">
+                "{{ block.settings.quote_text }}"
+              </p>
+            {%- endif -%}
+            {%- if block.settings.author != blank -%}
+              <p class="ct__quote-author" style="color: {{ block.settings.author_color }};">
+                {{ block.settings.author }}
+              </p>
+            {%- endif -%}
+          </div>
+          {%- if block.settings.sub_text != blank -%}
+            <div class="ct__quote-sub c-description" style="color: {{ block.settings.text_color }};">
+              {{ block.settings.sub_text }}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if section.settings.btn_label != blank or section.settings.btn_2_label != blank -%}
+        <div class="ct__btns">
+          {%- if section.settings.btn_label != blank -%}
+            {% render 'c-btn',
+              variant: section.settings.btn_variant,
+              text: section.settings.btn_label,
+              link: section.settings.btn_link,
+              bg_color: section.settings.btn_bg_color,
+              text_color: section.settings.btn_text_color,
+              show_arrow: section.settings.btn_show_arrow
+            %}
+          {%- endif -%}
+
+          {%- if section.settings.btn_2_label != blank -%}
+            {% render 'c-btn',
+              variant: section.settings.btn_2_variant,
+              text: section.settings.btn_2_label,
+              link: section.settings.btn_2_link,
+              bg_color: section.settings.btn_2_bg_color,
+              text_color: section.settings.btn_2_text_color,
+              show_arrow: section.settings.btn_2_show_arrow
+            %}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="ct__image-col">
+      <div class="ct__img-wrapper">
+        
+        {%- if section.settings.image_mobile != blank -%}
+          {{ section.settings.image_mobile | image_url: width: 800 | image_tag: loading: 'lazy', class: 'ct__img ct__img--mobile' }}
+          {{ section.settings.image_desktop | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'ct__img ct__img--desktop-hide' }}
+        {%- else -%}
+          {%- if section.settings.image_desktop != blank -%}
+            {{ section.settings.image_desktop | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'ct__img' }}
+          {%- else -%}
+            {{ 'collection-1' | placeholder_svg_tag: 'ct__img' }}
+          {%- endif -%}
+        {%- endif -%}
+
+      </div>
+    </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Content Text",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop Layout",
+      "options": [
+        { "value": "row", "label": "Text Left, Image Right" },
+        { "value": "row-reverse", "label": "Image Left, Text Right" }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile Layout",
+      "options": [
+        { "value": "column", "label": "Text Top, Image Bottom" },
+        { "value": "column-reverse", "label": "Image Top, Text Bottom" }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Desktop Image",
+      "info": "This image will be used for all devices if no mobile image is provided."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Image (Optional)",
+      "info": "Upload a specific image for mobile devices."
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "type": "text",
+      "id": "heading_1",
+      "label": "Heading (Normal Text)",
+      "default": "Small Molecule."
+    },
+    {
+      "type": "text",
+      "id": "heading_2_italic",
+      "label": "Heading (Italic/Accent)",
+      "default": "Big Impact."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Paragraphs",
+      "default": "<p>Nitric Oxide (NO) helps signal your blood vessels to relax and expand, allowing oxygen and nutrients to move more efficiently throughout the body. It plays a key role in supporting energy, endurance, circulation, heart health, and sexual performance.</p><p>Berkeley Life is designed to help restore healthy Nitric Oxide levels, supporting blood flow, healthy blood pressure, daily energy, recovery, and overall performance so you can feel and function at your best every day.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Button 1 (Primary)"
+    },
+    {
+      "type": "select",
+      "id": "btn_variant",
+      "label": "Variant",
+      "options": [
+        { "value": "pill", "label": "Pill (filled)" },
+        { "value": "underline", "label": "Underline (text)" }
+      ],
+      "default": "pill"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Background (Pill only)",
+      "default": "#d15234"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "btn_show_arrow",
+      "label": "Show arrow (→) in button?",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Button 2 (Secondary)"
+    },
+    {
+      "type": "select",
+      "id": "btn_2_variant",
+      "label": "Variant",
+      "options": [
+        { "value": "pill", "label": "Pill (filled)" },
+        { "value": "underline", "label": "Underline (text)" }
+      ],
+      "default": "underline"
+    },
+    {
+      "type": "text",
+      "id": "btn_2_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "btn_2_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_2_bg_color",
+      "label": "Background (Pill only)",
+      "default": "#d15234"
+    },
+    {
+      "type": "color",
+      "id": "btn_2_text_color",
+      "label": "Text Color",
+      "default": "#d15234"
+    },
+    {
+      "type": "checkbox",
+      "id": "btn_2_show_arrow",
+      "label": "Show arrow (→) in button?",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f4efe9"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#2b2e38"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlight Color (Italic Title)",
+      "default": "#d15234"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "quote",
+      "name": "Quote / Testimonial",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote_text",
+          "label": "Quote Text",
+          "default": "After a few weeks on an NO supplement, that 3 p.m. slump disappeared. My focus returned, and I could finally finish my to-do list."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Dr. Mariza Snyder, D.C. — Functional Practitioner & Women's Hormone Expert"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Left Border Color",
+          "default": "#d15234"
+        },
+        {
+          "type": "color_background",
+          "id": "bg_color",
+          "label": "Background Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Quote Text Color",
+          "default": "#2b2e38"
+        },
+        {
+          "type": "color",
+          "id": "author_color",
+          "label": "Author Color",
+          "default": "#d15234"
+        },
+        {
+          "type": "richtext",
+          "id": "sub_text",
+          "label": "Sub Text (below quote)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Content Text"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,314 @@
+<div {% if section.settings.full_width %}class="bg-bg"{% else %}class="max-w-screen-xl px-4 mx-auto my-8 md:px-8"{% endif %} style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+  <div class="{{ section.settings.mobile_spacing_bottom | prepend: 'pb-' }} {{ section.settings.mobile_spacing_top | prepend: 'pt-' }} {{ section.settings.spacing_top | prepend: 'md:pt-' }} {{ section.settings.spacing_bottom | prepend: 'md:pb-' }} relative max-w-screen-xl mx-auto px-4 md:px-8 {{  section.settings.text_align}} bg-bg text-text">
+    {%- if section.settings.video_file != blank -%}
+      <div class="absolute inset-0">
+        {% render 'video-autoplay', video: section.settings.video_file, image: section.settings.bg_image %}
+      </div>
+    {%- elsif section.settings.bg_image != blank -%}
+      <!-- Desktop Image -->
+      <div class="{% if section.settings.mobile_bg_image != blank or section.settings.hide_image %}hidden {% endif %} md:block absolute inset-0">
+        <img
+          srcset=" {{ section.settings.bg_image | image_url: width: 3000 }} 3000w"
+          src="{{ section.settings.bg_image | image_url: width: 3000 }}"
+          sizes="{{ img_size | default: '(min-width: 750px) 50vw, 100vw' }}"
+          alt=""
+          height="{{ section.settings.bg_image.height }}"
+          width="{{ section.settings.bg_image.width }}"
+          loading="eager"
+          class="motion-safe:transition-all transform-gpu object-cover w-full h-full {{ transition | default: 'opacity-0 transition-opacity duration-700' }}"
+          onload="imgLoaded(this, 'opacity-0', 'opacity-100')">
+      </div>
+      <!-- Mobile background image -->
+      {% if section.settings.mobile_bg_image != blank %}
+        <div class="block md:hidden absolute inset-0 {% if section.settings.header_overlay %}after:content-[''] after:bg-black after:w-full after:h-full after:absolute after:left-0 after:top-0 after:opacity-40{% endif %}">
+          {% render 'image', image: section.settings.mobile_bg_image, classes: 'h-full' %}
+        </div>
+      {% endif %}
+    {%- endif -%}
+    <div class="relative mx-auto space-y-4 max-w-prose md:max-w-screen-md md:space-y-6">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'heading' -%}
+          <{{ block.settings.heading_level | default: 'p' }} class="{{ block.settings.heading_style }}" {{ block.shopify_attributes }}>
+            {{ block.settings.heading | replace_first: "**", "<span class='text-brand font-secondaryHeader'>" | replace_first: "**", "</span>"  }}
+          </{{ block.settings.heading_level | default: 'p' }}>
+          {%- when 'text' -%}
+          <div class="rte {% if block.settings.indent %} md:ml-20{% endif %}" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+          {%- when 'button' -%}
+          <a
+            {%- if block.settings.button_link == blank %}
+            aria-disabled="true"
+            {% else %}
+            href="{{ block.settings.button_link }}"
+            {% endif %}
+            class="{{ block.settings.button_style }} mx-2"
+            {{ block.shopify_attributes }}>
+            {{ block.settings.button_label | escape }}
+          </a>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page Header",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image and Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_bg_image",
+      "label": "Mobile Background Image"
+    },
+    {
+      "type": "text",
+      "id": "video_file",
+      "label": "Video File Link",
+      "info": "Find this under Settings > Files. This overrides the image if not empty. Uses the image above as a placeholder."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Padding and Margin Settings"
+    },
+    {
+      "type": "range",
+      "id": "spacing_top",
+      "label": "Spacing top",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 8,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_top",
+      "label": "Mobile Spacing Top",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom",
+      "label": "Spacing bottom",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 8,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_bottom",
+      "label": "Mobile Spacing bottom",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Align Text",
+      "options": [
+        {
+          "value": "text-center",
+          "label": "Center all"
+        },
+        {
+          "value": "text-left",
+          "label": "Left all"
+        },
+        {
+          "value": "text-right",
+          "label": "Right all"
+        },
+        {
+          "value": "text-center md:text-left",
+          "label": "Desktop left, Mobile center"
+        },
+        {
+          "value": "text-center md:text-right",
+          "label": "Desktop right, Mobile center"
+        }
+      ],
+      "default": "text-center"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "t:sections.rich-text.blocks.heading.name",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "heading",
+          "default": "Lorem Headline",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "heading_level",
+          "label": "Heading Heirarchy",
+          "info": "Keep in mind, there should never be more than one H! on a page",
+          "default": "p",
+          "options": [
+            {
+              "value": "h1",
+              "label": "Heading 1"
+            },
+            {
+              "value": "h2",
+              "label": "Heading 2"
+            },
+            {
+              "value": "h3",
+              "label": "Heading 3"
+            },
+            {
+              "value": "h4",
+              "label": "Heading 4"
+            },
+            {
+              "value": "h5",
+              "label": "Heading 5"
+            },
+            {
+              "value": "p",
+              "label": "Paragraph"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "heading_style",
+          "label": "Heading Style",
+          "options": [
+            {
+              "value": "h1",
+              "label": "Heading 1"
+            },
+            {
+              "value": "h2",
+              "label": "Heading 2"
+            },
+            {
+              "value": "h3",
+              "label": "Heading 3"
+            },
+            {
+              "value": "h4",
+              "label": "Heading 4"
+            },
+            {
+              "value": "h5",
+              "label": "Heading 5"
+            },
+            {
+              "value": "subhead",
+              "label": "Small Caps"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Rich Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "checkbox",
+          "id": "indent",
+          "label": "Indent alignment",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button Style",
+          "default": "button button--primary",
+          "options": [
+            {
+              "value": "button button--primary",
+              "label": "Primary Button"
+            },
+            {
+              "value": "button button--secondary",
+              "label": "Secondary Button"
+            },
+            {
+              "value": "button button--tertiary",
+              "label": "Tertiary Button"
+            },
+            {
+              "value": "button--text",
+              "label": "Text Link"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page Header",
+      "blocks": [
+        {
+          "type": "heading"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

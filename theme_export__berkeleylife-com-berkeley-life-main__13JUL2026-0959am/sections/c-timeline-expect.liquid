@@ -1,0 +1,502 @@
+<style>
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    {% if section.settings.main_image != blank %}
+    background-image: url('{{ section.settings.main_image | image_url: width: 1200 }}');
+    {% endif %}
+    background-repeat: no-repeat;
+    background-position: right center;
+
+    position: relative;
+    overflow: hidden;
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    color: {{ section.settings.text_color }};
+    display: flex;
+    align-items: center;
+
+    & .c-expect__container {
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    & .c-expect__left {
+      flex: 0 0 40%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    & .c-expect__title {
+      font-size: clamp(28px, 5vw + 1rem, 48px);
+      color: {{ section.settings.text_color }};
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    & .c-expect__title--accent {
+      color: {{ section.settings.accent_color }};
+      font-style: italic;
+      font-family: "Cormorant Garamond", serif;
+    }
+
+    & .c-expect__text {
+      font-size: clamp(16px, 3.75dvw, 18px);
+      
+      margin: 0;
+      color: {{ section.settings.text_color }};
+        font-style: normal;
+        line-height: 150%; /* 30px */
+    }
+
+    & .c-expect__info-card {
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    & .c-expect__info-card-title {
+      font-size: clamp(18px, 4dvw, 22px);
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    & .c-expect__info-card-text {
+      font-size: clamp(14px, 3dvw, 16px);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    & .c-expect__cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background-color: {{ section.settings.btn_bg_color }};
+      color: {{ section.settings.btn_text_color }};
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      width: fit-content;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      margin-top: 1rem;
+
+      &:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+
+      & svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    & .c-expect__right {
+      flex: 0 0 45%;
+      position: relative;
+      padding-right: 15%;
+      min-height: 500px;
+    }
+
+    & .c-expect__timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      position: relative;
+    }
+
+    & .c-expect__timeline::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      bottom: 40px;
+      left: 20px;
+      width: 2px;
+      border-left: 2px dashed {{ section.settings.timeline_line_color }};
+      z-index: 0;
+    }
+
+    & .c-expect__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    & .c-expect__icon {
+      width: 40px;
+      height: 40px;
+      margin-top: .5rem;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: {{ section.settings.bg_color }};
+      border-radius: 50%;
+      position: relative;
+      z-index: 2;
+
+      & svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    & .c-expect__item-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    & .c-expect__item-title {
+      font-size: clamp(18px, 4.5dvw, 24px);
+      color: {{ section.settings.text_color }};
+      margin: 0;
+    }
+
+    & .c-expect__item-text {
+      font-size: clamp(14px, 3.75dvw, 16px);
+      line-height: 1.5;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+  
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (Max 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      background-position: center bottom;
+      background-size: contain;
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+      flex-direction: column;
+
+      & .c-expect__container {
+        flex-direction: column;
+        gap: 3rem;
+      }
+
+      & .c-expect__left {
+        flex: none;
+        width: 100%;
+        text-align: left;
+      }
+
+      & .c-expect__right {
+        flex: none;
+        width: 100%;
+        padding-right: 0;
+        min-height: 300px;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="c-expect__container">
+      <div class="c-expect__left">
+        {% if section.settings.title != blank %}
+          {%- assign title_with_accent = section.settings.title
+            | replace: '{accent}', '<span class="c-expect__title--accent">'
+            | replace: '{/accent}', '</span>'
+          -%}
+          <h2 class="c-expect__title">{{ title_with_accent }}</h2>
+        {% endif %}
+
+        {% if section.settings.text != blank %}
+          <p class="c-expect__text">{{ section.settings.text }}</p>
+        {% endif %}
+
+        {%- assign info_card_block = section.blocks | where: 'type', 'info_card' | first -%}
+        {% if info_card_block %}
+          <div class="c-expect__info-card" style="background-color: {{ info_card_block.settings.card_bg_color }}; color: {{ info_card_block.settings.card_text_color }};" {{ info_card_block.shopify_attributes }}>
+            {% if info_card_block.settings.card_title != blank %}
+              <p class="c-expect__info-card-title" style="color: {{ info_card_block.settings.card_text_color }};">{{ info_card_block.settings.card_title }}</p>
+            {% endif %}
+            {% if info_card_block.settings.card_text != blank %}
+              <p class="c-expect__info-card-text" style="color: {{ info_card_block.settings.card_text_color }};">{{ info_card_block.settings.card_text }}</p>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if section.settings.btn_text != blank %}
+          <a href="{{ section.settings.btn_link }}" class="c-expect__cta">
+            {{ section.settings.btn_text }}
+            {% if section.settings.btn_show_icon %}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path d="M17.3172 10.442L11.6922 16.067C11.5749 16.1843 11.4159 16.2502 11.25 16.2502C11.0841 16.2502 10.9251 16.1843 10.8078 16.067C10.6905 15.9498 10.6247 15.7907 10.6247 15.6249C10.6247 15.459 10.6905 15.2999 10.8078 15.1827L15.3664 10.6249H3.125C2.95924 10.6249 2.80027 10.559 2.68306 10.4418C2.56585 10.3246 2.5 10.1656 2.5 9.99986C2.5 9.8341 2.56585 9.67513 2.68306 9.55792C2.80027 9.44071 2.95924 9.37486 3.125 9.37486H15.3664L10.8078 4.81705C10.6905 4.69977 10.6247 4.54071 10.6247 4.37486C10.6247 4.20901 10.6905 4.04995 10.8078 3.93267C10.9251 3.8154 11.0841 3.74951 11.25 3.74951C11.4159 3.74951 11.5749 3.8154 11.6922 3.93267L17.3172 9.55767C17.3753 9.61572 17.4214 9.68465 17.4529 9.76052C17.4843 9.8364 17.5005 9.91772 17.5005 9.99986C17.5005 10.082 17.4843 10.1633 17.4529 10.2392C17.4214 10.3151 17.3753 10.384 17.3172 10.442Z" fill="white"/>
+              </svg>
+            {% endif %}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="c-expect__right">
+        <div class="c-expect__timeline">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'timeline_step' %}
+                <div class="c-expect__item" {{ block.shopify_attributes }}>
+                  <div class="c-expect__icon">
+                    {% render 'c-time-verified' %}
+                  </div>
+              <div class="c-expect__item-content">
+                <h3 class="c-expect__item-title">{{ block.settings.step_title }}</h3>
+                <p class="c-expect__item-text">{{ block.settings.step_text }}</p>
+              </div>
+            </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Timeline Expect",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f4f5f9"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1a1f4c"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#f4a261"
+    },
+    {
+      "type": "header",
+      "content": "Left Content"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "What You Can\n{accent}Expect{/accent} Over Time",
+      "info": "Use {accent}text{/accent} to highlight text in accent color"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Description",
+      "default": "Formulated specifically for GLP-1 users to support hydration, reduce nausea, improve energy, and help your body adapt smoothly to treatment."
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "START TODAY"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button Background Color",
+      "default": "#1a1f4c"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "btn_show_icon",
+      "label": "Show Arrow Icon",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Right Side Image"
+    },
+    {
+      "type": "color",
+      "id": "timeline_line_color",
+      "label": "Timeline Line Color",
+      "default": "#b8bdf0"
+    },
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Main Bleed Image (Hand/Product)"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "info_card",
+      "name": "Info Card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "color",
+          "id": "card_bg_color",
+          "label": "Card Background Color",
+          "default": "#f0f0f0"
+        },
+        {
+          "type": "color",
+          "id": "card_text_color",
+          "label": "Card Text Color",
+          "default": "#1a1f4c"
+        },
+        {
+          "type": "textarea",
+          "id": "card_title",
+          "label": "Card Title",
+          "default": "A naturally occurring signaling molecule—and one your patients are likely deficient in."
+        },
+        {
+          "type": "textarea",
+          "id": "card_text",
+          "label": "Card Description",
+          "default": "NO production declines significantly with age, sedentary lifestyle, and poor diet—putting cardiovascular health, energy, and metabolic function at increasing risk after 40."
+        }
+      ]
+    },
+    {
+      "type": "timeline_step",
+      "name": "Timeline Step",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_title",
+          "label": "Step Title",
+          "default": "Day 1"
+        },
+        {
+          "type": "textarea",
+          "id": "step_text",
+          "label": "Step Description",
+          "default": "Improved hydration, smoother mornings, gentle reduction in nausea."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Timeline Expect",
+      "blocks": [
+        {
+          "type": "timeline_step",
+          "settings": {
+            "step_title": "Day 1",
+            "step_text": "Improved hydration, smoother mornings, gentle reduction in nausea."
+          }
+        },
+        {
+          "type": "timeline_step",
+          "settings": {
+            "step_title": "Day 3",
+            "step_text": "More consistent energy. Less fatigue. Users feel the difference in daily routines."
+          }
+        },
+        {
+          "type": "timeline_step",
+          "settings": {
+            "step_title": "Day 30",
+            "step_text": "Hydration stability, reduced episodes of dizziness, and improved tolerance to medication."
+          }
+        },
+        {
+          "type": "timeline_step",
+          "settings": {
+            "step_title": "Day 180",
+            "step_text": "Sustained hydration, better digestion comfort, more predictable energy throughout the day."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

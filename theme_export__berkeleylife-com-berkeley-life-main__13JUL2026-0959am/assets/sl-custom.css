@@ -1,0 +1,81 @@
+.container-sl {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .container-sl {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container-sl {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container-sl {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container-sl {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container-sl {
+    max-width: 1320px;
+  }
+}
+
+.c-hero-title {
+    font-size: clamp(40px, 4.5vw, 54px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%;
+}
+
+.c-font-cormorant {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(40px, 4.5vw, 64px) !important;
+}
+
+.c-font-cormorant-title {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: inherit;
+}
+
+
+.c-title {
+    font-size: clamp(38px, 4vw, 40px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 140%;
+}
+
+.c-description {
+    font-size: clamp(18px, 1.6vw, 20px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    letter-spacing: 0.6px;
+}
+
+.c-md-title {
+    font-size: clamp(24px, 3vw, 32px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 140%;
+}

@@ -1,0 +1,600 @@
+<style>
+  #{{section.id}} {
+    & .section__bf__container {
+      position: relative;
+
+      & .section__bf__content {
+        & .bf__hero {
+          display: flex;
+          flex-direction: column-reverse;
+          overflow: hidden;
+
+          {% if section.settings.background_image != blank %}
+            background-image: url('{{ section.settings.background_image | image_url: width: 1800 }}');
+          {% else %}
+            background-color: {{ section.settings.background_color }};
+          {% endif %}
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+
+        & .bf__hero__figure {
+          margin: 0;
+          width: 100%;
+          height: auto;
+          display: flex;
+        }
+
+        & .bf__hero__img {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+          object-position: center;
+          border-radius: 1.5rem;
+        }
+
+        & .bf__hero__texts {
+          padding: 1rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        & .bf__hero__dsc {
+          padding: 0.3rem 0.75rem;
+          background-color: #000;
+          border-radius: 0.5rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          width: max-content;
+        }
+
+        & .bf__hero__span {
+          color: {{ section.settings.text_color }};
+          font-size: 0.875rem;
+        }
+
+        & .bf__hero__title {
+          color: {{ section.settings.text_color }};
+          font-size: 2.25rem;
+          text-align: center;
+          margin: 0;
+          margin-top: 1rem;
+          line-height: normal;
+        }
+
+        & .bf__hero__title--span {
+          color: {{ section.settings.accent_color }};
+          font-style: italic;
+          font-family: "Cormorant Garamond";
+        }
+
+        & .bf__hero__description {
+          color: {{ section.settings.text_color }};
+          text-align: center;
+          margin: 0;
+        }
+
+        & .btns__account {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          width: 100%;
+        }
+
+        & .btn__account {
+          color: {{ section.settings.primary_button_text }};
+          text-decoration: none;
+          padding: 0.75rem 2.5rem;
+          border: thin solid {{ section.settings.primary_button_bg }};
+          background-color: {{ section.settings.primary_button_bg }};
+          border-radius: 2rem;
+          text-align: center;
+          overflow: hidden;
+        }
+
+        & .btn__account--login {
+          background-color: transparent;
+          color: {{ section.settings.accent_color }};
+          border-color: {{ section.settings.accent_color }};
+        }
+      }
+    }
+  }
+
+  /* Timer styles */
+  #{{section.id}} {
+    & .bf-timer {
+    
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+      color: #fff;
+      padding: 12px 0;
+      text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    & .bf-timer__content {
+      width: 100%;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    & .bf-timer__title {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+
+    & .bf-timer__countdown {
+      display: flex;
+      gap: 8px;
+    }
+
+    & .bf-timer__unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+
+    & .bf-timer__number {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+      margin: 0;
+    }
+
+    & .bf-timer__label {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    & .bf-timer__separator {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+    }
+  }
+
+  @media screen and (width >= 1024px) {
+    #{{section.id}} {
+      & .section__bf__container {
+        & .section__bf__content {
+          & .bf__hero {
+            flex-direction: row;
+            gap: 1rem;
+          }
+
+          & .bf__hero__texts {
+            justify-content: center;
+            padding: 3rem;
+            max-width: 56rem;
+          }
+
+          & .bf__hero__title {
+            text-align: start;
+            margin: 0;
+            font-size: 3.75rem;
+          }
+
+          & .bf__hero__description {
+            text-align: start;
+          }
+
+          & .bf__hero__figure {
+            width: max-content;
+            margin-left: auto;
+            max-width: 48rem;
+          }
+
+          & .bf__hero__img {
+            height: 100%;
+          }
+
+          & .btn__account {
+            width: max-content;
+          }
+        }
+      }
+
+      & .bf-timer {
+        padding: 16px 0;
+      }
+
+      & .bf-timer__title {
+        font-size: 24px;
+      }
+
+      & .bf-timer__countdown {
+        gap: 12px;
+      }
+
+      & .bf-timer__unit {
+        flex: 1;
+      }
+
+      & .bf-timer__number {
+        font-size: 64px;
+      }
+
+      & .bf-timer__label {
+        font-size: 16px;
+        margin-top: 8px;
+      }
+
+      & .bf-timer__separator {
+        font-size: 64px;
+      }
+    }
+  }
+</style>
+
+<section id="{{section.id}}">
+  <div class="section__bf__container">
+    <div class="section__bf__content">
+      <div class="bf__hero">
+        <div class="bf__hero__texts">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'badge_discount' %}
+                <div class="bf__hero__dsc" {{ block.shopify_attributes }}>
+                  {% if block.settings.svg_code != blank %}
+                    {{ block.settings.svg_code }}
+                  {% endif %}
+
+                  <span class="bf__hero__span">
+                    {{ block.settings.text_content }}
+                  </span>
+                </div>
+            {% endcase %}
+          {% endfor %}
+
+          {% if section.settings.hero_title != blank %}
+            <h2 class="bf__hero__title">
+              {% assign title_with_accent = section.settings.hero_title
+                | replace: '{accent}', '<span class="bf__hero__title--span">'
+                | replace: '{/accent}', '</span>'
+              %}
+              {{ title_with_accent }}
+            </h2>
+          {% endif %}
+
+          {% if section.settings.hero_description != blank %}
+            <p class="bf__hero__description">
+              {{ section.settings.hero_description }}
+            </p>
+          {% endif %}
+
+          {%- assign register_count = section.blocks | where: 'type', 'register_btn' | size -%}
+          {%- assign login_count = section.blocks | where: 'type', 'login_btn' | size -%}
+
+          {%- if register_count > 0 or login_count > 0 -%}
+            <div class="btns__account">
+              {%- for block in section.blocks -%}
+                {%- case block.type -%}
+                    {%- comment -%} Bloque de Registro (Create Account) {%- endcomment -%}
+                  {%- when 'register_btn' -%}
+                    {%- if block.settings.btn_text != blank -%}
+                      <a
+                        href="{{ block.settings.btn_link }}"
+                        class="btn__account btn__account--register"
+                        {{ block.shopify_attributes }}
+                      >
+                        {{ block.settings.btn_text }}
+                      </a>
+                    {%- endif -%}
+
+                    {%- comment -%} Bloque de Login (Log In) {%- endcomment -%}
+                  {%- when 'login_btn' -%}
+                    {%- if block.settings.btn_text != blank -%}
+                      <a
+                        href="{{ block.settings.btn_link }}"
+                        class="btn__account btn__account--login"
+                        {{ block.shopify_attributes }}
+                      >
+                        {{ block.settings.btn_text }}
+                      </a>
+                    {%- endif -%}
+                {%- endcase -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {% if section.settings.hero_image != blank %}
+          <figure class="bf__hero__figure">
+            <img
+              src="{{ section.settings.hero_image | image_url: width: 3000 }}"
+              alt="{{ section.settings.hero_image.alt | escape }}"
+              class="bf__hero__img"
+              width="1200"
+              height="auto"
+              loading="lazy"
+            >
+          </figure>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Timer block -->
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'bf_timer' %}
+          <div
+            class="bf-timer"
+            style="background-color: {{ block.settings.timer_bg_color }}; color: {{ block.settings.timer_text_color }};"
+            {{ block.shopify_attributes }}
+          >
+            <div class="bf-timer__content">
+              <h3 class="bf-timer__title" style="color: {{ block.settings.timer_text_color }};">
+                {{ block.settings.timer_title }}
+              </h3>
+              <div class="bf-timer__countdown">
+                <div class="bf-timer__unit">
+                  <div
+                    class="bf-timer__number"
+                    id="days-{{ block.id }}"
+                    style="color: {{ block.settings.timer_text_color }};"
+                  >
+                    00
+                  </div>
+                  <div class="bf-timer__label" style="color: {{ block.settings.timer_text_color }};">Days</div>
+                </div>
+                <div class="bf-timer__separator" style="color: {{ block.settings.timer_text_color }};">：</div>
+                <div class="bf-timer__unit">
+                  <div
+                    class="bf-timer__number"
+                    id="hours-{{ block.id }}"
+                    style="color: {{ block.settings.timer_text_color }};"
+                  >
+                    00
+                  </div>
+                  <div class="bf-timer__label" style="color: {{ block.settings.timer_text_color }};">Hrs</div>
+                </div>
+                <div class="bf-timer__separator" style="color: {{ block.settings.timer_text_color }};">：</div>
+                <div class="bf-timer__unit">
+                  <div
+                    class="bf-timer__number"
+                    id="minutes-{{ block.id }}"
+                    style="color: {{ block.settings.timer_text_color }};"
+                  >
+                    00
+                  </div>
+                  <div class="bf-timer__label" style="color: {{ block.settings.timer_text_color }};">Min</div>
+                </div>
+                <div class="bf-timer__separator" style="color: {{ block.settings.timer_text_color }};">：</div>
+                <div class="bf-timer__unit">
+                  <div
+                    class="bf-timer__number"
+                    id="seconds-{{ block.id }}"
+                    style="color: {{ block.settings.timer_text_color }};"
+                  >
+                    00
+                  </div>
+                  <div class="bf-timer__label" style="color: {{ block.settings.timer_text_color }};">Sec</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <script>
+            var countDownDate{{ block.id }} = new Date("{{ block.settings.target_date }}").getTime();
+
+            // Update the count down every 1 second
+            var timer{{ block.id }} = setInterval(function() {
+
+              var now = new Date().getTime();
+              var distance = countDownDate{{ block.id }} - now;
+
+              var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+              var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+              var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+              document.getElementById("days-{{ block.id }}").innerHTML = days.toString().padStart(2, '0');
+              document.getElementById("hours-{{ block.id }}").innerHTML = hours.toString().padStart(2, '0');
+              document.getElementById("minutes-{{ block.id }}").innerHTML = minutes.toString().padStart(2, '0');
+              document.getElementById("seconds-{{ block.id }}").innerHTML = seconds.toString().padStart(2, '0');
+
+              // If the count down is finished, write some text
+              if (distance < 0) {
+                clearInterval(timer{{ block.id }});
+                document.getElementById("days-{{ block.id }}").innerHTML = "00";
+                document.getElementById("hours-{{ block.id }}").innerHTML = "00";
+                document.getElementById("minutes-{{ block.id }}").innerHTML = "00";
+                document.getElementById("seconds-{{ block.id }}").innerHTML = "00";
+              }
+            }, 1000);
+          </script>
+      {% endcase %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C BF Whole Hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color (fallback)",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Hero Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_title",
+      "label": "Hero Title",
+      "default": "Support Your Patients' Health With {accent}Blood Flow{/accent}",
+      "info": "Use {accent} and {/accent} to wrap text with accent color"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_description",
+      "label": "Hero Description",
+      "default": "Berkeley Life offers science-backed Nitric Oxide support to help your patients improve circulation, cardiovascular health, energy, and more—through a solution that's simple, measurable, and effective."
+    },
+    {
+      "type": "header",
+      "content": "Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#ff5500"
+    },
+    {
+      "type": "color",
+      "id": "primary_button_bg",
+      "label": "Primary Button Background",
+      "default": "#ff5500"
+    },
+    {
+      "type": "color",
+      "id": "primary_button_text",
+      "label": "Primary Button Text",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge_discount",
+      "name": "Discount Badge",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "svg_code",
+          "label": "SVG Code",
+          "info": "Paste the full <svg> code here.",
+          "default": "<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24'><rect width='24' height='24' fill='none' /><g fill='none' stroke='#fff' stroke-width='1'><path stroke-width='1.5' d='M10.51 3.665a2 2 0 0 1 2.98 0l.7.782a2 2 0 0 0 1.601.663l1.05-.058a2 2 0 0 1 2.107 2.108l-.058 1.049a2 2 0 0 0 .663 1.6l.782.7a2 2 0 0 1 0 2.981l-.782.7a2 2 0 0 0-.663 1.601l.058 1.05a2 2 0 0 1-2.108 2.107l-1.049-.058a2 2 0 0 0-1.6.663l-.7.782a2 2 0 0 1-2.981 0l-.7-.782a2 2 0 0 0-1.601-.663l-1.05.058a2 2 0 0 1-2.107-2.108l.058-1.049a2 2 0 0 0-.663-1.6l-.782-.7a2 2 0 0 1 0-2.981l.782-.7a2 2 0 0 0 .663-1.601l-.058-1.05A2 2 0 0 1 7.16 5.053l1.049.058a2 2 0 0 0 1.6-.663z' /><path stroke-linejoin='round' stroke-width='2.25' d='M9.5 9.5h.01v.01H9.5zm5 5h.01v.01h-.01z' /><path stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m15 9l-6 6' /></g></svg>"
+        },
+        {
+          "type": "text",
+          "id": "text_content",
+          "label": "Badge Text",
+          "default": "Black Friday 25% Off"
+        }
+      ]
+    },
+   {
+      "type": "register_btn",
+      "name": "Register Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "btn_text",
+          "label": "Button Text",
+          "default": "CREATE ACCOUNT"
+        },
+        {
+          "type": "url",
+          "id": "btn_link",
+          "label": "Button Link",
+       
+        }
+      ]
+    },
+    {
+      "type": "login_btn",
+      "name": "Login Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "btn_text",
+          "label": "Button Text",
+          "default": "LOG IN"
+        },
+        {
+          "type": "url",
+          "id": "btn_link",
+          "label": "Button Link",
+         
+        }
+      ]
+    },
+    {
+      "type": "bf_timer",
+      "name": "Black Friday Timer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "timer_title",
+          "label": "Timer Title",
+          "default": "BLACK FRIDAY OFFER ENDS IN:"
+        },
+        {
+          "type": "text",
+          "id": "target_date",
+          "label": "Target Date & Time",
+          "default": "December 1, 2024 23:59:59",
+          "info": "Format: Month Day, Year HH:MM:SS (e.g., 'December 1, 2024 23:59:59' or 'Dec 1 2024 11:59 PM')"
+        },
+        {
+          "type": "color",
+          "id": "timer_bg_color",
+          "label": "Timer Background Color",
+          "default": "#1a1a1a"
+        },
+        {
+          "type": "color",
+          "id": "timer_text_color",
+          "label": "Timer Text Color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C BF Whole Hero",
+    }
+  ]
+}
+{% endschema %}

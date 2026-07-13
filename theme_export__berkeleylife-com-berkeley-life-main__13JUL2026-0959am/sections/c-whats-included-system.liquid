@@ -1,0 +1,681 @@
+{%- comment -%}
+  Section: C What's Included System
+  Description: Two product cards with Okendo rating, custom description, and benefit list.
+  sl-id: sl-section-whats-included-system-v1
+  Figma: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=4706-16966&m=dev
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-whats-included-system-v1'
+-%}
+
+{% style %}
+  #{{ section.id }} {
+    --sl-c-whats-included-bg: {{ section.settings.bg_color | default: '#f6f3f0' }};
+    --sl-c-whats-included-card-bg: {{ section.settings.card_bg_color | default: '#ebe8e6' }};
+    --sl-c-whats-included-heading: {{ section.settings.heading_color | default: '#1b1c29' }};
+    --sl-c-whats-included-accent: {{ section.settings.accent_color | default: '#d54f2f' }};
+    --sl-c-whats-included-text: {{ section.settings.text_color | default: '#1b1c29' }};
+    --sl-c-whats-included-section-pt: {{ section.settings.padding_top }}px;
+    --sl-c-whats-included-section-pb: {{ section.settings.padding_bottom }}px;
+    --sl-c-whats-included-card-radius: 24px;
+    --sl-c-whats-included-card-gap: 24px;
+    --sl-c-whats-included-card-padding: 32px;
+
+    background: var(--sl-c-whats-included-bg);
+    padding-top: var(--sl-c-whats-included-section-pt);
+    padding-bottom: var(--sl-c-whats-included-section-pb);
+  }
+
+  #{{ section.id }} .c-whats-included-system__container {
+    width: min(100%, 1280px);
+    margin: 0 auto;
+    padding: 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  #{{ section.id }} .c-whats-included-system__header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  #{{ section.id }} .c-whats-included-system__eyebrow {
+    margin: 0;
+    color: var(--sl-c-whats-included-accent);
+    text-transform: uppercase;
+    letter-spacing: 2.1px;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  #{{ section.id }} .c-whats-included-system__title {
+    margin: 0;
+    color: var(--sl-c-whats-included-heading);
+    font-size: 48px;
+    line-height: 1.2;
+    font-weight: 500;
+  }
+
+  #{{ section.id }} .c-whats-included-system__title-accent {
+    display: block;
+    color: var(--sl-c-whats-included-accent);
+    font-family: "Cormorant Garamond", serif;
+    font-size: 52px;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  #{{ section.id }} .c-whats-included-system__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sl-c-whats-included-card-gap);
+  }
+
+  #{{ section.id }} .c-whats-included-system__card {
+    position: relative;
+    background: var(--sl-c-whats-included-card-bg);
+    border-radius: var(--sl-c-whats-included-card-radius);
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 32px;
+    padding: var(--sl-c-whats-included-card-padding);
+  }
+
+  #{{ section.id }} .c-whats-included-system__badge {
+    position: absolute;
+    top: -14px;
+    left: 26px;
+    border-radius: 4px;
+    background: var(--sl-c-whats-included-accent);
+    color: #f6f3f0;
+    padding: 4px 16px 6px;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  #{{ section.id }} .c-whats-included-system__media {
+    padding: 8px;
+    height: 100%;
+  }
+
+  #{{ section.id }} .c-whats-included-system__image-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+  }
+
+  #{{ section.id }} .c-whats-included-system__image,
+  #{{ section.id }} .c-whats-included-system__image svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #{{ section.id }} .c-whats-included-system__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+  }
+
+  #{{ section.id }} .c-whats-included-system__reviews {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--sl-c-whats-included-accent);
+  }
+
+  #{{ section.id }} .c-whats-included-system__title-product {
+    margin: 0;
+    color: var(--sl-c-whats-included-heading);
+    font-size: 42px;
+    line-height: 1.2;
+    font-weight: 500;
+  }
+
+  #{{ section.id }} .c-whats-included-system__description {
+    margin: 0;
+    color: var(--sl-c-whats-included-text);
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.48px;
+  }
+
+  #{{ section.id }} .c-whats-included-system__benefits {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  #{{ section.id }} .c-whats-included-system__benefit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--sl-c-whats-included-text);
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0.42px;
+  }
+
+  #{{ section.id }} .c-whats-included-system__benefit-icon {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    flex-shrink: 0;
+    color: var(--sl-c-whats-included-accent);
+  }
+
+  #{{ section.id }} .c-whats-included-system__cta-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  #{{ section.id }} .c-whats-included-system__cta-btn {
+    display: inline-block;
+    background: var(--sl-c-whats-included-accent);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 18px 48px;
+    border-radius: 32px;
+    text-decoration: none;
+    box-shadow: 0 2px 16px 0 rgba(213, 79, 47, 0.10);
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  #{{ section.id }} .c-whats-included-system__cta-btn:hover,
+  #{{ section.id }} .c-whats-included-system__cta-btn:focus {
+    background: #b93e1f;
+    color: #fff;
+    box-shadow: 0 4px 24px 0 rgba(213, 79, 47, 0.18);
+  }
+
+  @media (max-width: 1199px) {
+    #{{ section.id }} .c-whats-included-system__title {
+      font-size: 42px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__title-accent {
+      font-size: 46px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__card {
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__title-product {
+      font-size: 36px;
+    }
+  }
+
+  @media (max-width: 977px) {
+    #{{ section.id }} {
+      --sl-c-whats-included-section-pt: {{ section.settings.padding_top_mobile }}px;
+      --sl-c-whats-included-section-pb: {{ section.settings.padding_bottom_mobile }}px;
+      --sl-c-whats-included-card-padding: 24px;
+      --sl-c-whats-included-card-gap: 16px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__container {
+      padding: 0 16px;
+      gap: 40px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__title {
+      font-size: 34px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__title-accent {
+      font-size: 38px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-top: 14px;
+      padding-bottom: 8px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__row::-webkit-scrollbar {
+      height: 0;
+    }
+
+    #{{ section.id }} .c-whats-included-system__card {
+      flex: 0 0 min(92vw, 560px);
+      scroll-snap-align: start;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 16px;
+      padding: 20px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__badge {
+      top: -12px;
+      left: 18px;
+      font-size: 12px;
+      letter-spacing: 1.2px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__title-product {
+      font-size: 32px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    #{{ section.id }} .c-whats-included-system__title {
+      font-size: 30px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__title-accent {
+      font-size: 34px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__card {
+      flex: 0 0 88%;
+      grid-template-columns: 1fr;
+      padding: 16px;
+      gap: 14px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__media {
+      padding: 0;
+      height: auto;
+    }
+
+    #{{ section.id }} .c-whats-included-system__image-wrap {
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 4 / 5;
+    }
+
+    #{{ section.id }} .c-whats-included-system__image,
+    #{{ section.id }} .c-whats-included-system__image svg {
+      object-fit: contain;
+    }
+
+    #{{ section.id }} .c-whats-included-system__content {
+      gap: 16px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__title-product {
+      font-size: 30px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__description {
+      font-size: 14px;
+      letter-spacing: 0.42px;
+    }
+
+    #{{ section.id }} .c-whats-included-system__benefit {
+      font-size: 13px;
+      letter-spacing: 0.39px;
+    }
+  }
+
+  @media (min-width: 1980px) {
+    #{{ section.id }} .c-whats-included-system__container {
+      width: min(100%, 1400px);
+    }
+  }
+{% endstyle %}
+
+<section
+  id="{{ section.id }}"
+  class="c-whats-included-system"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-whats-included-system"
+  {% if section.settings.sl_anchor_id != blank %}
+    data-anchor-id="{{ section.settings.sl_anchor_id | escape }}"
+  {% endif %}
+>
+  <div class="c-whats-included-system__container">
+    <header class="c-whats-included-system__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="c-whats-included-system__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <h2 class="c-whats-included-system__title">
+        {{ section.settings.title }}
+        {%- if section.settings.title_accent != blank -%}
+          <span class="c-whats-included-system__title-accent">{{ section.settings.title_accent }}</span>
+        {%- endif -%}
+      </h2>
+    </header>
+
+    <div class="c-whats-included-system__row" role="list">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'product_box_block' -%}
+        {%- liquid
+          assign selected_product = block.settings.product
+          if selected_product == blank and block.settings.product != blank
+            assign selected_product = all_products[block.settings.product]
+          endif
+
+          assign product_title = block.settings.custom_title
+          if product_title == blank and selected_product != blank
+            assign product_title = selected_product.title
+          endif
+
+          assign product_description = block.settings.custom_description
+          if product_description == blank and selected_product != blank
+            assign product_description = selected_product.description | strip_html | truncatewords: 35
+          endif
+
+          assign benefits_source = block.settings.benefits
+          assign benefits_lines = benefits_source | newline_to_br | split: '<br />'
+        -%}
+
+        <article class="c-whats-included-system__card" role="listitem" {{ block.shopify_attributes }}>
+          {%- if block.settings.show_badge and block.settings.badge_text != blank -%}
+            <span class="c-whats-included-system__badge">{{ block.settings.badge_text }}</span>
+          {%- endif -%}
+
+          <div class="c-whats-included-system__media">
+            <div class="c-whats-included-system__image-wrap">
+              {%- if block.settings.custom_image != blank -%}
+                {{
+                  block.settings.custom_image
+                  | image_url: width: 560
+                  | image_tag:
+                    class: 'c-whats-included-system__image',
+                    loading: 'lazy',
+                    widths: '220,320,420,560',
+                    sizes: '(max-width: 767px) 140px, (max-width: 977px) 170px, 240px',
+                    alt: product_title
+                }}
+              {%- elsif selected_product != blank and selected_product.featured_image != blank -%}
+                {{
+                  selected_product.featured_image
+                  | image_url: width: 560
+                  | image_tag:
+                    class: 'c-whats-included-system__image',
+                    loading: 'lazy',
+                    widths: '220,320,420,560',
+                    sizes: '(max-width: 767px) 140px, (max-width: 977px) 170px, 240px',
+                    alt: selected_product.title
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'c-whats-included-system__image' }}
+              {%- endif -%}
+            </div>
+          </div>
+
+          <div class="c-whats-included-system__content">
+            <div class="c-whats-included-system__reviews">
+              {%- if selected_product != blank -%}
+                {% render 'okendo-reviews-product-rating-summary', product: selected_product %}
+              {%- endif -%}
+            </div>
+
+            {%- if product_title != blank -%}
+              <h3 class="c-whats-included-system__title-product">{{ product_title }}</h3>
+            {%- endif -%}
+
+            {%- if product_description != blank -%}
+              <p class="c-whats-included-system__description">{{ product_description }}</p>
+            {%- endif -%}
+
+            <ul class="c-whats-included-system__benefits" role="list">
+              {%- for benefit in benefits_lines -%}
+                {%- assign clean_benefit = benefit | strip -%}
+                {%- if clean_benefit != blank -%}
+                  <li class="c-whats-included-system__benefit">
+                    <svg class="c-whats-included-system__benefit-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M12.5098 5.47148C12.3173 5.27078 12.1188 5.06352 12.0537 4.90656C11.9957 4.76656 11.9913 4.47836 11.9875 4.22461C11.9793 3.67773 11.9689 2.99742 11.4855 2.51453C11.002 2.03164 10.3223 2.02234 9.77539 2.0125C9.52164 2.00867 9.23344 2.0043 9.09344 1.94633C8.93648 1.88125 8.72922 1.68273 8.52852 1.49023C8.14133 1.11891 7.65898 0.65625 7 0.65625C6.34102 0.65625 5.85867 1.11891 5.47148 1.49023C5.27078 1.68273 5.06352 1.88125 4.90656 1.94633C4.76656 2.0043 4.47836 2.00867 4.22461 2.0125C3.67773 2.02344 2.99742 2.03109 2.51562 2.51562C2.03383 3.00016 2.02344 3.67773 2.0125 4.22461C2.00867 4.47836 2.0043 4.76656 1.94633 4.90656C1.88125 5.06352 1.68273 5.27078 1.49023 5.47148C1.11891 5.85867 0.65625 6.34375 0.65625 7C0.65625 7.65625 1.11891 8.14133 1.49023 8.53125C1.68273 8.73195 1.88125 8.93922 1.94633 9.09617C2.0043 9.23617 2.00867 9.52437 2.0125 9.77812C2.0207 10.325 2.03109 11.0053 2.51453 11.4882C2.99797 11.9711 3.67773 11.9804 4.22461 11.9902C4.47836 11.9941 4.76656 11.9984 4.90656 12.0564C5.06352 12.1215 5.27078 12.32 5.47148 12.5125C5.85867 12.8811 6.34375 13.3438 7 13.3438C7.65625 13.3438 8.14133 12.8811 8.52852 12.5098C8.72922 12.3173 8.93648 12.1188 9.09344 12.0537C9.23344 11.9957 9.52164 11.9913 9.77539 11.9875C10.3223 11.9793 11.0026 11.9689 11.4855 11.4855C11.9684 11.002 11.9777 10.3223 11.9875 9.77539C11.9913 9.52164 11.9957 9.23344 12.0537 9.09344C12.1188 8.93648 12.3173 8.72922 12.5098 8.52852C12.8811 8.14133 13.3438 7.65898 13.3438 7C13.3438 6.34102 12.8811 5.85867 12.5098 5.47148ZM11.5626 7.62016C11.299 7.89359 11.0004 8.20641 10.8413 8.59141C10.687 8.96328 10.681 9.36578 10.6772 9.7557C10.6728 10.0488 10.6668 10.4508 10.5596 10.5574C10.4524 10.6641 10.051 10.6706 9.75789 10.675C9.36797 10.681 8.96547 10.687 8.59359 10.8391C8.21078 10.9982 7.89742 11.2968 7.62234 11.5604C7.42547 11.7491 7.13125 12.0312 7 12.0312C6.86875 12.0312 6.57453 11.7491 6.37984 11.5626C6.10641 11.299 5.79359 11.0004 5.40859 10.8413C5.03672 10.687 4.63422 10.681 4.2443 10.6772C3.95117 10.6728 3.54922 10.6668 3.44258 10.5596C3.33594 10.4524 3.32938 10.051 3.325 9.75789C3.31898 9.36797 3.31297 8.96547 3.16094 8.59359C3.0018 8.21078 2.7032 7.89742 2.43961 7.62234C2.25094 7.42547 1.96875 7.13125 1.96875 7C1.96875 6.86875 2.25094 6.57453 2.43742 6.37984C2.70102 6.10641 2.99961 5.79359 3.15875 5.40859C3.31297 5.03672 3.31898 4.63422 3.32281 4.2443C3.32937 3.95117 3.33594 3.54922 3.44531 3.44531C3.55469 3.34141 3.95391 3.33211 4.24703 3.32773C4.63695 3.32172 5.03945 3.3157 5.41133 3.16367C5.79414 3.00453 6.1075 2.70594 6.38258 2.44234C6.57453 2.25094 6.86875 1.96875 7 1.96875C7.13125 1.96875 7.42547 2.25094 7.62016 2.43742C7.89359 2.70102 8.20641 2.99961 8.59141 3.15875C8.96328 3.31297 9.36578 3.31898 9.7557 3.32281C10.0488 3.32719 10.4508 3.3332 10.5574 3.44039C10.6641 3.54758 10.6706 3.94898 10.675 4.24211C10.681 4.63203 10.687 5.03453 10.8391 5.40641C10.9982 5.78922 11.2968 6.10258 11.5604 6.37766C11.7469 6.57234 12.0291 6.86656 12.0291 6.99781C12.0291 7.12906 11.7491 7.42547 11.5626 7.62016ZM9.6518 5.2232C9.71298 5.28417 9.76152 5.35662 9.79464 5.43638C9.82776 5.51615 9.84481 5.60168 9.84481 5.68805C9.84481 5.77442 9.82776 5.85994 9.79464 5.93971C9.76152 6.01948 9.71298 6.09192 9.6518 6.15289L6.5893 9.21539C6.52833 9.27657 6.45588 9.32511 6.37612 9.35824C6.29635 9.39136 6.21082 9.40841 6.12445 9.40841C6.03808 9.40841 5.95256 9.39136 5.87279 9.35824C5.79302 9.32511 5.72058 9.27657 5.65961 9.21539L4.34711 7.90289C4.28607 7.84185 4.23764 7.76938 4.20461 7.68962C4.17157 7.60986 4.15456 7.52438 4.15456 7.43805C4.15456 7.35172 4.17157 7.26623 4.20461 7.18648C4.23764 7.10672 4.28607 7.03425 4.34711 6.9732C4.40815 6.91216 4.48062 6.86374 4.56038 6.8307C4.64014 6.79766 4.72562 6.78066 4.81195 6.78066C4.89828 6.78066 4.98377 6.79766 5.06352 6.8307C5.14328 6.86374 5.21575 6.91216 5.2768 6.9732L6.125 7.82031L8.7232 5.22156C8.78426 5.16065 8.85672 5.11238 8.93645 5.07949C9.01617 5.04661 9.1016 5.02976 9.18784 5.02991C9.27408 5.03007 9.35945 5.04721 9.43906 5.08038C9.51867 5.11355 9.59096 5.16208 9.6518 5.2232Z" fill="#D54F2F"/>
+                    </svg>
+                    <span>{{ clean_benefit }}</span>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- assign cta_block = section.blocks | where: 'type', 'cta_button' | first -%}
+    {%- if cta_block != blank and cta_block.settings.cta_label != blank -%}
+      <div class="c-whats-included-system__cta-wrap" {{ cta_block.shopify_attributes }}>
+        <a
+          class="c-whats-included-system__cta-btn"
+          href="{{ cta_block.settings.cta_link | default: '#' }}"
+        >
+          {{ cta_block.settings.cta_label }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C What's Included System",
+  "tag": "section",
+  "class": "c-whats-included-system-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "WHAT'S INCLUDED"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Two products."
+    },
+    {
+      "type": "text",
+      "id": "title_accent",
+      "label": "Accent title",
+      "default": "One complete system."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background",
+      "default": "#ebe8e6"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Body color",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom (desktop)",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_box_block",
+      "name": "Product box",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_badge",
+          "label": "Show badge",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge text",
+          "default": "BEST SELLER"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom image",
+          "info": "Optional override for the product featured image."
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom title",
+          "info": "Leave blank to use the product title."
+        },
+        {
+          "type": "textarea",
+          "id": "custom_description",
+          "label": "Custom description",
+          "default": "A clinically proven daily formula designed to restore your body's natural Nitric Oxide levels - supporting circulation, heart health, energy, and healthy aging."
+        },
+        {
+          "type": "textarea",
+          "id": "benefits",
+          "label": "Benefits list",
+          "info": "One benefit per line.",
+          "default": "60 capsules - 1 month supply\nTwo capsules, once daily\nSupports energy, focus and heart health\nWorks via dietary nitrate. NO pathway"
+        }
+      ]
+    },
+    {
+      "type": "cta_button",
+      "name": "CTA Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C What's Included System",
+      "blocks": [
+        {
+          "type": "product_box_block",
+          "settings": {
+            "show_badge": true,
+            "badge_text": "BEST SELLER",
+            "custom_title": "Nitric Oxide Support",
+            "custom_description": "A clinically proven daily formula designed to restore your body's natural Nitric Oxide levels - supporting circulation, heart health, energy, and healthy aging.",
+            "benefits": "60 capsules - 1 month supply\nTwo capsules, once daily\nSupports energy, focus and heart health\nWorks via dietary nitrate. NO pathway"
+          }
+        },
+        {
+          "type": "product_box_block",
+          "settings": {
+            "show_badge": false,
+            "badge_text": "",
+            "custom_title": "Nitric Oxide Test Strips",
+            "custom_description": "Simple at-home saliva test strips that let you see your Nitric Oxide levels in seconds so you can track how your body responds and know it's working.",
+            "benefits": "50 count - results in 10 seconds\nCorrelates with lab measurements\nTest anytime, morning, before meals, after dosing\nColor-coded scale for easy reading"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

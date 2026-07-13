@@ -1,0 +1,18 @@
+{% schema %}
+{
+  "name": "Subscription Options",
+  "templates": ["product"],
+  "settings": [],
+  "blocks": [
+    {
+      "type": "subscription",
+      "name": "Recharge Widget",
+      "limit": 1
+    }
+  ]
+}
+{% endschema %}
+
+{% if product.selling_plan_groups.size > 0 %}
+  {% render 'recharge-widget' %}
+{% endif %}

@@ -1,0 +1,600 @@
+{% comment %}
+  ================================================================================================================
+  Este bloque de CSS define los estilos para la sección, las tarjetas y sus elementos.
+  Utiliza Flexbox para el layout y es responsivo para adaptarse a dispositivos móviles.
+  ================================================================================================================
+{% endcomment %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<style>
+  
+
+  .custom-product-cards-section {
+    width: 100%;
+    padding: 60px 20px;
+    box-sizing: border-box;
+    background-color: {{ section.settings.section_bg_color }};
+  }
+
+  .custom-product-cards-container {
+    max-width: 1280px;
+    padding-top: 20px;
+    /* justify-items: center;more to this */
+    margin: 0 auto;
+    gap:20px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 769px) {
+    .wrapper-desktop{
+      gap:20px;
+      justify-content: center;
+    }
+  }
+  
+
+  .custom-product-card {
+    /* Eliminar estilos de flexbox que interfieren con Swiper */
+    border-radius: 16px;
+    max-width: 380px;
+    padding: 30px;
+    box-sizing: border-box;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: auto;
+  }
+
+  .custom-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .card-badge {
+    position: absolute;
+    top: -15px;
+    background-color: #D44F2F;
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .card-heading{
+    font-weight: 600;
+    /* font-style: bold; */
+    font-size: 24px;
+    line-height: 150%;    
+  }
+
+  .card-subheading{
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%;
+  }
+
+  .card-product-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-size: 40px;
+    margin: 0 0 15px 0;
+    color: #080B2B;
+    line-height: normal;
+  }
+
+  .variant-prices{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .card-price {
+    font-size: 64px;
+ 
+    line-height: normal;
+    color: #080B2B;
+  }
+
+  .card-description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    margin: 15px 0;
+  }
+  
+  .card-features {
+    text-align: left;
+    margin: 20px 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .card-features ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .card-features li {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+    /* font-size: 15px; */
+  }
+
+  .card-features .icon-check {
+    color: #28a745;
+    margin-right: 10px;
+  }
+
+  .card-button {
+    display: inline-block;
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #D44F2F;
+    color: white;
+    text-decoration: none;
+    border-radius: 32px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .card-button:hover {
+    background-color: #e5673a;
+  }
+
+  @media (max-width: 768px) {
+    .custom-product-cards-section {
+      padding: 60px 0px;
+    }
+
+    .custom-product-card {
+      width: 100%;
+    }
+  }
+  
+  .swiper-wrapper {
+    display: flex;
+  }
+  
+  .swiper-slide {
+    flex-shrink: 0;
+  }
+</style>
+<div class="custom-product-cards-section ">
+  <div class="custom-product-cards-container">
+<div id="{{section.id}}" class="swiperCards">
+  <div class="swiper-wrapper wrapper-desktop">
+    {% comment %}
+      ================================================================================================================
+      Este es el bucle que renderiza cada bloque (tarjeta) definido en el personalizador de temas.
+      Cada elemento HTML dentro del bucle está envuelto en una condición 'if' para asegurar que solo se muestre
+      si el comerciante ha proporcionado la información correspondiente.
+      ================================================================================================================
+    {% endcomment %}
+    {% for block in section.blocks %}
+      <div class="swiper-slide custom-product-card" style="background-color: {{ block.settings.card_bg_color }};">
+        
+        {% comment %} Insignia (ej. "MÁS POPULAR") {% endcomment %}
+        {% if block.settings.badge_text != blank %}
+          <div class="card-badge" style="background-color: {{ block.settings.badge_bg_color | default: '#D44F2F' }}">{{ block.settings.badge_text }}</div>
+        {% endif %}
+
+
+        {% if block.settings.product_heading != blank %}
+          <div class="card-heading" style="color: {{block.settings.text_color}}">{{ block.settings.product_heading }}</div>
+        {% endif %}
+
+
+        {% if block.settings.product_subheading != blank %}
+          <div class="card-subheading" style="color: {{block.settings.text_color}}">{{ block.settings.product_subheading }}</div>
+        {% endif %}
+
+        {% comment %} Imagen del producto {% endcomment %}
+        {% if block.settings.product.featured_image != blank and block.settings.product_image == blank %}
+          <img
+            class="card-product-image"
+            src="{{ block.settings.product.featured_image | image_url: width: 400 }}"
+            alt="{{ block.settings.product.featured_image.alt | escape }}"
+            width="{{ block.settings.product.featured_image.width }}"
+            height="{{ block.settings.product.featured_image.height }}"
+            loading="lazy">
+        {% endif %}
+
+         {% if block.settings.product_image != blank %}
+          <img
+            class="card-product-image"
+            src="{{ block.settings.product_image | image_url: width: 400 }}"
+            width="{{ block.settings.product.featured_image.width }}"
+            height="{{ block.settings.product.featured_image.height }}"
+            loading="lazy">
+        {% endif %}
+
+        {% comment %} Título del producto {% endcomment %}
+        {% if block.settings.product.title != blank %}
+          {% if block.settings.product_title != blank %}
+            <h3 class="card-title font-secondaryHeader" style="color: {{block.settings.text_color}}">{{ block.settings.product_title }}</h3>
+          {% else %}
+            <h3 class="card-title font-secondaryHeader" style="color: {{block.settings.text_color}}">{{ block.settings.product.title }}</h3>
+          {% endif %}
+        {% endif %}
+        
+        {% comment %}
+          Precio del producto. Se busca la variante específica si se proporciona un ID.
+          Si no, se muestra el precio del producto (usualmente el de la primera variante).
+          Si use_static_pricing está habilitado, usa los precios estáticos.
+        {% endcomment %}
+        {% if block.settings.use_static_pricing %}
+          {% comment %} Usar precios estáticos {% endcomment %}
+          {% if block.settings.static_price != blank %}
+            {% if block.settings.use_bf_version %}
+              <div class="variant-prices" style="flex-direction: column; align-items: center; gap: 5px;">
+                {% if block.settings.static_compare_price != blank %}
+                  <div style="font-size: clamp(18px, 4vw, 24px); text-decoration: line-through; color: #D44F2F; display: flex; align-items: center; gap: 10px;">
+                    {{ block.settings.static_compare_price }}
+                    {% if block.settings.additional_text_aside_strikethrough != blank %}
+                      <span style="font-size: 20px; text-decoration: none;">{{ block.settings.additional_text_aside_strikethrough }}</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+                <div class="card-price" style="color: {{block.settings.text_color}}; display: flex; align-items: center; gap: 10px;">
+                  {{ block.settings.static_price }}
+                  {% if block.settings.additional_text_aside_price != blank %}
+                    <span style="font-size: 20px;">{{ block.settings.additional_text_aside_price }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% else %}
+              <div class="variant-prices">
+                <div class="card-price" style="color: {{block.settings.text_color}}; display: flex; align-items: center; gap: 10px;">
+                  {{ block.settings.static_price }}
+                  {% if block.settings.additional_text_aside_price != blank %}
+                    <span style="font-size: 20px;">{{ block.settings.additional_text_aside_price }}</span>
+                  {% endif %}
+                </div>
+                {% if block.settings.static_compare_price != blank %}
+                  <div class="text-xs line-through opacity-50" style="color: {{block.settings.text_color}}">{{ block.settings.static_compare_price }}</div>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endif %}
+        {% elsif block.settings.product.price != blank %}
+          {% comment %} Usar precios dinámicos del producto/variante {% endcomment %}
+          {% assign variant_id = block.settings.variant_id | plus:0 %}
+          {%- assign selected_variant = block.settings.product.variants | where: 'id', variant_id | first -%}
+          {% comment %} <span style="color:{{block.settings.text_color}}">{{ block.settings.product.variants | map: 'id' | join: ', ' }}</span> {% endcomment %}
+          {% comment %} {{ selected_variant }} {% endcomment %}
+          {% if selected_variant %}
+            {%- for allocation in selected_variant.selling_plan_allocations -%}
+              {%- assign subscription_price = allocation.price_adjustments.first.price -%}
+            {% endfor %}
+            {% if block.settings.use_bf_version %}
+              <div class="variant-prices" style="flex-direction: column; align-items: center; gap: 5px;">
+                <div style="font-size: clamp(18px, 4vw, 24px); line-through; color: #D44F2F; display: flex; align-items: center; gap: 10px;">
+                  {{ selected_variant.price | money }}
+                  {% if block.settings.additional_text_aside_strikethrough != blank %}
+                    <span style="font-size: 20px;">{{ block.settings.additional_text_aside_strikethrough }}</span>
+                  {% endif %}
+                </div>
+                <div class="card-price" style="color: {{block.settings.text_color}}; display: flex; align-items: center; gap: 10px;">
+                  {{ subscription_price | money }}
+                  {% if block.settings.additional_text_aside_price != blank %}
+                    <span style="font-size: 20px;">{{ block.settings.additional_text_aside_price }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% else %}
+              <div class="variant-prices">
+                <div class="card-price" style="color: {{block.settings.text_color}}; display: flex; align-items: center; gap: 10px;">
+                  {{ subscription_price | money }}
+                  {% if block.settings.additional_text_aside_price != blank %}
+                    <span style="font-size: 20px;">{{ block.settings.additional_text_aside_price }}</span>
+                  {% endif %}
+                </div>
+                <div class="text-xs line-through opacity-50" style="color: {{block.settings.text_color}}">{{ selected_variant.price | money }}</div>
+              </div>
+            {% endif %}
+             
+          {% else %}
+             <div class="card-price" style="color: {{block.settings.text_color}}; display: flex; align-items: center; gap: 10px;">
+               {{ block.settings.product.price | money }}
+               {% if block.settings.additional_text_aside_price != blank %}
+                 <span style="font-size: 20px;">{{ block.settings.additional_text_aside_price }}</span>
+               {% endif %}
+             </div>
+          {% endif %}
+        {% endif %}
+
+        {% comment %} Elementos que cambian de orden según el checkbox {% endcomment %}
+        
+
+        {% if block.settings.button_below_description %}
+          {% if block.settings.description != blank %}
+            <div class="card-description" style="color: {{block.settings.text_color}}">{{ block.settings.description }}</div>
+          {% endif %}
+          {% if block.settings.button_text != blank and block.settings.button_url != blank %}
+            <a href="{{ block.settings.button_url }}" class="card-button">
+              {{ block.settings.button_text }}
+            </a>
+          {% endif %}
+        {% else %}
+          {% if block.settings.button_text != blank and block.settings.button_url != blank %}
+            <a href="{{ block.settings.button_url }}" class="card-button">
+              {{ block.settings.button_text }}
+            </a>
+          {% endif %}
+          {% if block.settings.description != blank %}
+            <div class="card-description" style="color: {{block.settings.text_color}}">{{ block.settings.description }}</div>
+          {% endif %}
+        {% endif %}
+        
+        {% comment %} Lista de características con íconos de check {% endcomment %}
+        {% if block.settings.features_list != blank %}
+          <div class="card-features" style="color: {{block.settings.text_color}}">
+            {{ block.settings.features_list }}
+          </div>
+        {% endif %}
+
+      </div>
+    {% endfor %}
+  </div>
+</div>
+  </div>
+
+</div>
+
+
+<script type="module">
+  import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs';
+
+ 
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('Inicializando Swiper...');
+    
+   
+    const swiperContainer = document.querySelector('.swiperCards');
+    
+    if (swiperContainer) {
+      const isMobile = window.matchMedia('(max-width: 768px)').matches; // Adjust breakpoint as needed
+
+      if(isMobile){
+const swiper = new Swiper('.swiperCards', {
+        slidesPerView: 1.2,
+        initialSlide: 1,
+        centeredSlides:true,
+        spaceBetween: 16,
+        breakpoints: {
+          768: {
+            slidesPerView: 2.5,
+            spaceBetween: 20,
+          },
+          1024: {
+            slidesPerView: 3.5,
+            spaceBetween: 24,
+          },
+          1200: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          },
+        },
+       
+        grabCursor: true,
+        on: {
+          init: function () {
+            console.log('Swiper inicializado correctamente');
+          },
+        },
+      });
+      }
+      
+    } else {
+      console.error('No se encontró el contenedor .swiperCards');
+    }
+  });
+</script>
+
+{% comment %}
+  ================================================================================================================
+  SCHEMA DE SHOPIFY
+  Define la estructura de la sección y sus bloques en el personalizador de temas.
+  - section.settings: Configuraciones generales de la sección (ej. color de fondo).
+  - section.blocks: Define los elementos repetibles (las tarjetas).
+  - block.settings: Las opciones de personalización para cada tarjeta individual.
+  ================================================================================================================
+{% endcomment %}
+{% schema %}
+{
+  "name": "C Product Card",
+  "tag": "section",
+  "class": "custom-product-cards-wrapper",
+  "settings": [
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section Background color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Product card",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Main Content"
+        },
+        {
+          "type": "text",
+          "id":"product_heading",
+          "label": "Product Heading"
+        },
+        {
+          "type": "text",
+          "id":"product_subheading",
+          "label": "Product Subheading"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "1. Select Product"
+        },
+        {
+          "type": "image_picker",
+          "id":"product_image",
+          "label": "Product Image",
+          "info": "Product Image in case default product image is not the one you like."
+        },
+        {
+          "type": "text",
+          "id": "product_title",
+          "label": "2. Title (Optional)",
+          "info": "Type the title you want the product to show, if left blank it will show the product's actual title"
+        },
+        {
+          "type": "text",
+          "id": "variant_id",
+          "label": "3. Variant ID (Optional)",
+          "info": "Type the variant ID to show the variant's price, if no variant is indicated then it will show regular product price"
+        },
+        {
+          "type": "header",
+          "content": "Static Pricing (Optional)"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_static_pricing",
+          "label": "Use Static Pricing",
+          "info": "Enable this to use custom static prices instead of product/variant prices",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "static_price",
+          "label": "Static Price",
+          "info": "Enter the price (e.g., $29.99 or 29.99). Only used when 'Use Static Pricing' is enabled"
+        },
+        {
+          "type": "text",
+          "id": "static_compare_price",
+          "label": "Static Compare At Price (Strikethrough)",
+          "info": "Enter the compare at price (e.g., $39.99 or 39.99). Only used when 'Use Static Pricing' is enabled"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_bf_version",
+          "label": "use version bf?",
+          "info": "Enable this to use BF styling for prices (column layout, orange strikethrough)",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "additional_text_aside_price",
+          "label": "Additional text aside price",
+          "info": "Text that will appear next to the main price"
+        },
+        {
+          "type": "text",
+          "id": "additional_text_aside_strikethrough",
+          "label": "Additional text aside strikethrough price",
+          "info": "Text that will appear next to the strikethrough price"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "4. Descripción",
+          "default": "<p>Use this text to describe the product.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "features_list",
+          "label": "5. Bullet List",
+          "info": "A bullet list with a check icon",
+          "default": "<ul><li>✓ 15% savings with subscription</li><li>✓ Supply delivered every 3 months</li><li>✓ Free US Shipping</li><li>✓ Pause or cancel at anytime, risk-free</li></ul>"
+        },
+        {
+          "type": "header",
+          "content": "Button Configuration"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "BUY NOW"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_below_description",
+          "label": "Button under description",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Card Style"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text (Opcional)",
+          "info": "Ej: MOST POPULAR"
+        },
+        {
+          "type": "color",
+          "id": "badge_bg_color",
+          "label": "Badge Background Color",
+          "default": "#D44F2F"
+        },
+        {
+          "type": "color",
+          "id": "card_bg_color",
+          "label": "Card Background color",
+          "default": "#f9f9f9"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Card Text Color",
+          "default": "#000"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Product Card",
+      "blocks": [
+        {
+          "type": "product_card"
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "badge_text": "MÁS POPULAR"
+          }
+        },
+        {
+          "type": "product_card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

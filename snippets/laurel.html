@@ -1,0 +1,35 @@
+<!-- Clinicians' Choice laurel, redrawn. SHIPPED Jul 9 on slide 6
+     (#the-capsule), RETIRED Jul 13: FrontrowMD requires their real
+     clickable widget wherever the award is shown, so the slide now
+     embeds their live quant badge (see index.html) — which is also
+     what this lockup was drawn after. This file is the reference
+     copy. Styles are .laurel / .laurel__title / .laurel__branch /
+     .laurel__source in styles.css. -->
+<div class="laurel">
+  <p class="laurel__title">
+    <!-- One branch drawn once: a stem arc (circle center
+         22,20 r14 in these units) with six almond leaves
+         seated on it, each rotated 25deg past its radial so
+         the row leans the way a laurel grows. The right
+         branch reuses the group and mirrors in CSS. -->
+    <svg class="laurel__branch" viewBox="-1 -2 19 37" aria-hidden="true">
+      <defs>
+        <path id="laurelLeaf" d="M0 0 C 2.6 -2.1 6 -2.1 8.4 0 C 6 2.1 2.6 2.1 0 0 Z"/>
+      </defs>
+      <g id="laurelBranch">
+        <path d="M16.1 32.7 A 14 14 0 0 1 16.1 7.3" fill="none" stroke="currentColor" stroke-width="1.1"/>
+        <use href="#laurelLeaf" transform="translate(13 30.7) rotate(155)"/>
+        <use href="#laurelLeaf" transform="translate(9.3 25.9) rotate(180)"/>
+        <use href="#laurelLeaf" transform="translate(8 20) rotate(205)"/>
+        <use href="#laurelLeaf" transform="translate(9.3 14.1) rotate(230)"/>
+        <use href="#laurelLeaf" transform="translate(13 9.3) rotate(255)"/>
+        <use href="#laurelLeaf" transform="translate(16.1 7.3) rotate(270)"/>
+      </g>
+    </svg>
+    Clinicians&rsquo; Choice
+    <svg class="laurel__branch laurel__branch--r" viewBox="-1 -2 19 37" aria-hidden="true">
+      <use href="#laurelBranch"/>
+    </svg>
+  </p>
+  <p class="laurel__source">400+ clinicians share this product on <em>FrontrowMD</em> without compensation.</p>
+</div>

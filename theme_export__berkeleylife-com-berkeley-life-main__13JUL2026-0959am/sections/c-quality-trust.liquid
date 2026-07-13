@@ -1,0 +1,409 @@
+{%- comment -%}
+  Section: Quality & Trust
+  Description: Two-column section with mixed-font heading and icon trust cards. Stacks vertically on mobile with horizontal cards; switches to side-by-side layout on desktop with vertical cards.
+  sl-id: sl-section-quality-trust-v1
+  Figma Desktop: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5281-14030
+  Figma Mobile:  https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5358-26044
+{%- endcomment -%}
+
+<style>
+  /* =========================================
+     SECTION WRAPPER
+     ========================================= */
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  #{{ section.id }} .c-qt__container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* =========================================
+     INNER LAYOUT — mobile: single column
+     ========================================= */
+  #{{ section.id }} .c-qt__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: flex-start;
+  }
+
+  /* =========================================
+     HEADING COLUMN
+     ========================================= */
+  #{{ section.id }} .c-qt__heading-col {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-qt__eyebrow {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2.1px;
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin: 0;
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-qt__heading {
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -1.38px;
+    margin: 0;
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-qt__heading em {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* =========================================
+     CARDS COLUMN — mobile: stacked vertically, cards are horizontal
+     ========================================= */
+  #{{ section.id }} .c-qt__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-qt__card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 24px;
+    background-color: {{ section.settings.card_bg }};
+    border: 1px solid {{ section.settings.card_border }};
+    border-radius: 24px;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-qt__card-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #{{ section.id }} .c-qt__card-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  #{{ section.id }} .c-qt__card-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  #{{ section.id }} .c-qt__card-text {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
+    color: {{ section.settings.text_color }};
+    margin: 0;
+  }
+
+  /* =========================================
+     DESKTOP STYLES — 768px+
+     ========================================= */
+  @media screen and (min-width: 768px) {
+    #{{ section.id }} .c-qt__container {
+      padding-top: {{ section.settings.padding_top_desktop }}px;
+      padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+      padding-left: 80px;
+      padding-right: 80px;
+    }
+
+    /* Side-by-side layout */
+    #{{ section.id }} .c-qt__inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 66px;
+    }
+
+    /* Fixed-width heading column */
+    #{{ section.id }} .c-qt__heading-col {
+      flex: 0 0 357px;
+      width: 357px;
+    }
+
+    #{{ section.id }} .c-qt__heading {
+      font-size: 48px;
+    }
+
+    /* Cards in a row, vertical layout */
+    #{{ section.id }} .c-qt__cards {
+      flex-direction: row;
+      gap: 19px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    #{{ section.id }} .c-qt__card {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 25px 16px 22px;
+      width: 200px;
+      min-height: 162px;
+      flex-shrink: 0;
+    }
+
+    #{{ section.id }} .c-qt__card-text {
+      text-align: center;
+    }
+  }
+
+  /* =========================================
+     LARGE DESKTOP — 1200px+
+     ========================================= */
+  @media screen and (min-width: 1200px) {
+    #{{ section.id }} .c-qt__card {
+      width: 200px;
+    }
+  }
+</style>
+
+<section
+  id="{{ section.id }}"
+  class="c-quality-trust"
+  data-sl-id="sl-section-quality-trust-v1"
+  data-section-id="{{ section.id }}"
+  data-section-type="c-quality-trust"
+>
+  {%- if section.settings.sl_anchor_id != blank -%}
+    <span id="{{ section.settings.sl_anchor_id }}" class="c-qt__anchor" aria-hidden="true"></span>
+  {%- endif -%}
+
+  <div class="c-qt__container">
+    <div class="c-qt__inner">
+
+      {%- comment -%} ===== HEADING COLUMN ===== {%- endcomment -%}
+      <div class="c-qt__heading-col">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="c-qt__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="c-qt__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ===== CARDS COLUMN ===== {%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="c-qt__cards" role="list">
+          {%- for block in section.blocks -%}
+            <div
+              class="c-qt__card"
+              role="listitem"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.icon != blank -%}
+                {%- assign icon_alt = block.settings.text | strip_html | truncate: 50 -%}
+                <div class="c-qt__card-icon">
+                  {{
+                    block.settings.icon
+                    | image_url: width: 92
+                    | image_tag:
+                      loading: 'lazy',
+                      alt: icon_alt
+                  }}
+                </div>
+              {%- elsif block.settings.icon_svg != blank -%}
+                <div class="c-qt__card-icon" aria-hidden="true">
+                  {{ block.settings.icon_svg }}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.text != blank -%}
+                <p class="c-qt__card-text">{{ block.settings.text }}</p>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Quality & Trust",
+  "tag": "section",
+  "class": "c-quality-trust-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "Optional HTML anchor for in-page navigation (e.g. quality-trust)"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "QUALITY & TRUST"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "A <em>Higher Standard</em> For Supplements",
+      "info": "Wrap text in <em></em> to apply the italic Cormorant serif style."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card Background",
+      "default": "#22243a"
+    },
+    {
+      "type": "color",
+      "id": "card_border",
+      "label": "Card Border Color",
+      "default": "#2e3050"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Desktop)",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_card",
+      "name": "Trust Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon Image",
+          "info": "Recommended: 92×92px PNG or SVG export"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_svg",
+          "label": "Custom SVG Code",
+          "info": "Paste raw <svg> code here. Used only if no Icon Image is set above."
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Card Text",
+          "default": "Trust card text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Quality & Trust",
+      "blocks": [
+        {
+          "type": "trust_card",
+          "settings": {
+            "text": "Clinically studied formulation"
+          }
+        },
+        {
+          "type": "trust_card",
+          "settings": {
+            "text": "Manufactured to rigorous quality standards"
+          }
+        },
+        {
+          "type": "trust_card",
+          "settings": {
+            "text": "Measurable results with our at-home test strips"
+          }
+        },
+        {
+          "type": "trust_card",
+          "settings": {
+            "text": "Trusted by 3,000+ healthcare practitioners"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

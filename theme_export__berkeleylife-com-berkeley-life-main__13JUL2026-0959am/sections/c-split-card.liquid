@@ -1,0 +1,259 @@
+{%- liquid
+  assign section_id = section.settings.custom_id | default: section.id
+  assign sc_product  = section.settings.product
+  assign sc_image    = sc_product.featured_image | default: section.settings.image
+  assign sc_link     = section.settings.btn_link | default: sc_product.url
+-%}
+
+<style>
+  #{{ section_id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.section_bg_color | default: 'transparent' }};
+  }
+
+  #{{ section_id }} .sc__card {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    border-radius: 20px;
+    border: 2px solid {{ section.settings.border_color | default: '#D54F2F' }};
+    background-color: {{ section.settings.card_bg_color | default: '#F5F2EE' }};
+    overflow: hidden;
+  }
+
+  #{{ section_id }} .sc__image-col {
+    flex: 0 0 42%;
+    max-width: 42%;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 0 2.5rem 2.5rem;
+  }
+
+  #{{ section_id }} .sc__image-col img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  #{{ section_id }} .sc__content-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 3rem 3rem 3rem 0;
+  }
+
+  #{{ section_id }} .sc__title {
+    margin: 0;
+    color: {{ section.settings.title_color | default: '#D54F2F' }};
+  }
+
+  #{{ section_id }} .sc__description {
+    color: {{ section.settings.text_color | default: '#2D2D2D' }};
+  }
+
+  #{{ section_id }} .sc__description p {
+    margin-bottom: 0.75rem;
+  }
+
+  #{{ section_id }} .sc__description p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 767px) {
+    #{{ section_id }} .sc__card {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    #{{ section_id }} .sc__image-col {
+      flex: 0 0 auto;
+      max-width: unset;
+      width: 100%;
+      padding: 0;
+      align-self: center;
+    }
+
+    #{{ section_id }} .sc__content-col {
+      padding: 1.5rem 1.75rem 2rem;
+    }
+  }
+</style>
+
+<section id="{{ section_id }}">
+  <div class="container-sl">
+    <div class="sc__card">
+      {%- if sc_image != blank -%}
+        <div class="sc__image-col">
+          {{
+            sc_image
+            | image_url: width: 700
+            | image_tag:
+              loading: 'lazy',
+              alt: sc_image.alt | default: section.settings.title,
+              widths: '300, 500, 700'
+          }}
+        </div>
+      {%- endif -%}
+
+      <div class="sc__content-col">
+        {%- if section.settings.title != blank -%}
+          <h2 class="sc__title c-title c-font-cormorant-title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <div class="sc__description c-description">{{ section.settings.description }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.btn_text != blank -%}
+          {%- render 'c-btn',
+            text: section.settings.btn_text,
+            link: sc_link,
+            bg_color: section.settings.btn_bg_color,
+            text_color: section.settings.btn_text_color,
+            show_arrow: section.settings.btn_show_arrow
+          -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Split Card",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom_id",
+      "label": "Custom Section ID",
+      "info": "Optional. Defaults to section ID if empty."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "Pulls featured image and product URL automatically. Overrides manual image and button link."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image (fallback)"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button link (fallback if no product)"
+    },
+    {
+      "type": "checkbox",
+      "id": "btn_show_arrow",
+      "label": "Show arrow (→)",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button background",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Description color",
+      "default": "#2D2D2D"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background",
+      "default": "#F5F2EE"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Card border",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section background"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Split Card"
+    }
+  ]
+}
+{% endschema %}

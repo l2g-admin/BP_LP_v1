@@ -1,0 +1,104 @@
+{%- comment -%}This section is for a basic instagram setup.{%- endcomment -%}
+<div class="bg-bg text-text" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+  <div class="md:px-8 md:py-16 max-w-screen-xl px-4 py-12 mx-auto">
+    <div class="space-y-4 text-center">
+      {%- unless section.settings.title == blank -%}
+        <h2 class="h2 max-w-xl mx-auto">{{ section.settings.title }}</h2>
+      {%- endunless -%}
+
+      {%- unless section.settings.handle == blank -%}
+        <div class="flex items-center justify-center">
+          <span class="w-4 mr-1">{% render 'icon-instagram' %}</span>
+          <a class="decoration-1 underline-offset-2 hover:decoration-2 text-xs font-bold tracking-widest underline uppercase transition-all" href="https://instagram.com/{{ section.settings.handle }}">{{ section.settings.handle }}</a>
+        </div>
+      {%- endunless -%}
+
+      {%- unless section.settings.embed == blank -%}
+        <div class="md:pt-20 pt-8">
+          {{ section.settings.embed }}
+        </div>
+      {%- endunless -%}
+
+      {%- unless section.blocks.size == 0 -%}
+        <div data-parent class="md:pt-16 py-8 md:grid-cols-{{ section.blocks.size | at_most: 4 }} grid grid-cols-2 gap-8">
+          {%- for block in section.blocks -%}
+            <div data-pre="opacity-0" data-post="opacity-100 {% if section.settings.alternate_transform %}{% cycle 'md:-translate-y-5', 'md:translate-y-5' %}{% endif %}" class="motion-safe:transition-all motion-safe:duration-700 aspect-square">
+              {% render 'image', image: block.settings.image, classes: 'h-full' %}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endunless -%}
+
+    </div>
+
+    <style>
+    @media (min-width: 768px) {
+      .fs-entry-container:nth-child(odd) {
+        transform: translateY(-20px);
+      }
+      .fs-entry-container:nth-child(even) {
+        transform: translateY(20px);
+      }
+    }
+    </style>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Instagram",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Follow Us",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "handle",
+      "label": "Instragram Handle"
+    },
+    {
+      "type": "textarea",
+      "id": "embed",
+      "label": "Embed Code"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "checkbox",
+      "id": "alternate_transform",
+      "label": "Alternate position of Posts?",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "post",
+      "name": "Post",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instagram"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,686 @@
+{%- comment -%}
+  Section: Comparison Table
+  Description: Three-column comparative table with a highlighted Berkeley Life column vs competitor supplements
+  sl-id: sl-section-comparison-table-v1
+  Figma Desktop: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5281-20453
+  Figma Mobile:  https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5347-25861
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-comparison-table-v1'
+-%}
+
+{%- capture icon_check -%}
+<svg class="c-comparison-table__icon-svg" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <circle cx="15" cy="15" r="15" fill="#C05E42"/>
+  <path d="M8.5 15.5L12.5 19.5L21.5 10.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+{%- endcapture -%}
+
+{%- capture icon_x -%}
+<svg class="c-comparison-table__icon-svg" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <circle cx="15" cy="15" r="13.5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+  <path d="M10.5 10.5L19.5 19.5M19.5 10.5L10.5 19.5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+{%- endcapture -%}
+
+<section
+  id="{{ section.id }}"
+  class="c-comparison-table"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-comparison-table"
+  {%- if section.settings.sl_anchor_id != blank %} data-anchor="{{ section.settings.sl_anchor_id }}"{% endif %}
+>
+
+  {%- comment -%} ========== BACKGROUND IMAGE ========== {%- endcomment -%}
+  {%- if section.settings.bg_image != blank -%}
+    <div class="c-comparison-table__bg" aria-hidden="true">
+      {{- section.settings.bg_image
+        | image_url: width: 1800
+        | image_tag:
+          loading: 'lazy',
+          class: 'c-comparison-table__bg-img',
+          alt: ''
+      -}}
+    </div>
+  {%- endif -%}
+
+  <div class="c-comparison-table__container">
+
+    {%- comment -%} ========== HEADING ========== {%- endcomment -%}
+    {%- if section.settings.heading_text != blank or section.settings.heading_italic != blank -%}
+      <div class="c-comparison-table__header">
+        <h2 class="c-comparison-table__heading">
+          {%- unless section.settings.heading_text == blank -%}
+            <span class="c-comparison-table__heading-plain">{{ section.settings.heading_text }}</span>
+          {%- endunless -%}
+          {%- unless section.settings.heading_italic == blank -%}
+            <em class="c-comparison-table__heading-italic">{{ section.settings.heading_italic }}</em>
+          {%- endunless -%}
+        </h2>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ========== TABLE ========== {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="c-comparison-table__table-wrap">
+        <table class="c-comparison-table__table">
+          <colgroup>
+            <col class="c-comparison-table__col--feature">
+            <col class="c-comparison-table__col--bkl">
+            <col class="c-comparison-table__col--other">
+          </colgroup>
+
+          <thead>
+            <tr>
+              <th class="c-comparison-table__th c-comparison-table__th--feature" scope="col"></th>
+
+              <th class="c-comparison-table__th c-comparison-table__th--bkl" scope="col">
+                <div class="c-comparison-table__col-inner">
+                  {%- if section.settings.col2_logo != blank -%}
+                    {{- section.settings.col2_logo
+                      | image_url: width: 260
+                      | image_tag:
+                        class: 'c-comparison-table__logo',
+                        alt: section.settings.col2_label,
+                        loading: 'lazy'
+                    -}}
+                  {%- elsif section.settings.col2_label != blank -%}
+                    <span class="c-comparison-table__col-name">{{ section.settings.col2_label }}</span>
+                  {%- endif -%}
+                </div>
+              </th>
+
+              <th class="c-comparison-table__th c-comparison-table__th--other" scope="col">
+                <div class="c-comparison-table__col-inner">
+                  <span class="c-comparison-table__col-name c-comparison-table__col-name--other">{{ section.settings.col3_label }}</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="c-comparison-table__tbody">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'row' -%}
+                <tr class="c-comparison-table__tr" {{ block.shopify_attributes }}>
+                  <td class="c-comparison-table__td c-comparison-table__td--feature">
+                    <span class="c-comparison-table__feature-text">{{ block.settings.feature_text }}</span>
+                  </td>
+
+                  <td class="c-comparison-table__td c-comparison-table__td--bkl">
+                    <div class="c-comparison-table__cell-icon">
+                      {%- if block.settings.col2_positive -%}
+                        <span aria-label="{{ 'general.accessibility.yes' | t }}">
+                          {%- if section.settings.col2_check_icon != blank -%}
+                            <img src="{{ section.settings.col2_check_icon | image_url: width: 60 }}" alt="" class="c-comparison-table__icon-svg" aria-hidden="true">
+                          {%- else -%}
+                            {{ icon_check }}
+                          {%- endif -%}
+                        </span>
+                      {%- else -%}
+                        <span aria-label="{{ 'general.accessibility.no' | t }}">
+                          {%- if section.settings.col2_cross_icon != blank -%}
+                            <img src="{{ section.settings.col2_cross_icon | image_url: width: 60 }}" alt="" class="c-comparison-table__icon-svg" aria-hidden="true">
+                          {%- else -%}
+                            {{ icon_x }}
+                          {%- endif -%}
+                        </span>
+                      {%- endif -%}
+                    </div>
+                  </td>
+
+                  <td class="c-comparison-table__td c-comparison-table__td--other">
+                    <div class="c-comparison-table__cell-icon">
+                      {%- if block.settings.col3_positive -%}
+                        <span aria-label="{{ 'general.accessibility.yes' | t }}">
+                          {%- if section.settings.col3_check_icon != blank -%}
+                            <img src="{{ section.settings.col3_check_icon | image_url: width: 60 }}" alt="" class="c-comparison-table__icon-svg" aria-hidden="true">
+                          {%- else -%}
+                            {{ icon_check }}
+                          {%- endif -%}
+                        </span>
+                      {%- else -%}
+                        <span aria-label="{{ 'general.accessibility.no' | t }}">
+                          {%- if section.settings.col3_cross_icon != blank -%}
+                            <img src="{{ section.settings.col3_cross_icon | image_url: width: 60 }}" alt="" class="c-comparison-table__icon-svg" aria-hidden="true">
+                          {%- else -%}
+                            {{ icon_x }}
+                          {%- endif -%}
+                        </span>
+                      {%- endif -%}
+                    </div>
+                  </td>
+                </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ========== CTA BUTTON ========== {%- endcomment -%}
+    {%- if section.settings.btn_text != blank -%}
+      <div class="c-comparison-table__cta">
+        {% render 'c-btn',
+          text: section.settings.btn_text,
+          link: section.settings.btn_link,
+          bg_color: section.settings.btn_bg_color,
+          text_color: section.settings.btn_text_color
+        %}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{%- comment -%} ========== STYLES ========== {%- endcomment -%}
+<style>
+  #{{ section.id }} {
+    --sl-c-ct-accent:        {{ section.settings.accent_color }};
+    --sl-c-ct-text:          #f6f3f0;
+    --sl-c-ct-table-bg:      rgba(27, 28, 41, 0.12);
+    --sl-c-ct-table-border:  rgba(246, 243, 240, 0.26);
+    --sl-c-ct-table-divider: rgba(246, 243, 240, 0.18);
+    --sl-c-ct-table-glow:    rgba(8, 11, 43, 0.18);
+    --sl-c-ct-bg-overlay-a:  rgba(7, 9, 28, 0.52);
+    --sl-c-ct-bg-overlay-b:  rgba(7, 9, 28, 0.66);
+    --sl-c-ct-radius:        18px;
+    --sl-c-ct-pt:            {{ section.settings.padding_top }}px;
+    --sl-c-ct-pb:            {{ section.settings.padding_bottom }}px;
+    --sl-c-ct-pad-inline:    12px;
+    --sl-c-ct-bkl-w:         116px;
+    --sl-c-ct-other-w:       111px;
+
+    position: relative;
+    padding-top: var(--sl-c-ct-pt);
+    padding-bottom: var(--sl-c-ct-pb);
+    overflow: hidden;
+  }
+
+  /* ---- Background ---- */
+  #{{ section.id }} .c-comparison-table__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  #{{ section.id }} .c-comparison-table__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 56%),
+      linear-gradient(180deg, var(--sl-c-ct-bg-overlay-a) 0%, var(--sl-c-ct-bg-overlay-b) 100%);
+    pointer-events: none;
+  }
+
+  #{{ section.id }} .c-comparison-table__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  /* ---- Container ---- */
+  #{{ section.id }} .c-comparison-table__container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: flex-start;
+    max-width: 960px;
+    margin-inline: auto;
+    padding-inline: 18px;
+  }
+
+  /* ---- Heading ---- */
+  #{{ section.id }} .c-comparison-table__heading {
+    font-family: 'TT Commons', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 40px;
+    line-height: 1.2;
+    letter-spacing: -1.38px;
+    color: var(--sl-c-ct-text);
+    margin: 0;
+  }
+
+  #{{ section.id }} .c-comparison-table__heading-plain {
+    display: inline;
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  #{{ section.id }} .c-comparison-table__heading-italic {
+    display: inline;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 48px;
+  }
+
+  /* ---- Table wrapper (glass card) ---- */
+  #{{ section.id }} .c-comparison-table__table-wrap {
+    position: relative;
+    width: 100%;
+    background: var(--sl-c-ct-table-bg);
+    border: 1px solid var(--sl-c-ct-table-border);
+    border-radius: var(--sl-c-ct-radius);
+    box-shadow: 0 18px 40px var(--sl-c-ct-table-glow), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    padding: 36px 12px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    overflow: visible;
+  }
+
+  #{{ section.id }} .c-comparison-table__table-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(8, 11, 43, 0.12) 0%, rgba(8, 11, 43, 0.22) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- BKL column overflow card ---- */
+  #{{ section.id }} .c-comparison-table__table-wrap::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    bottom: -20px;
+    right: calc(var(--sl-c-ct-pad-inline) + var(--sl-c-ct-other-w));
+    width: var(--sl-c-ct-bkl-w);
+    border: 2px solid rgba(192, 94, 66, 0.95);
+    border-radius: var(--sl-c-ct-radius);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* ---- Table base ---- */
+  #{{ section.id }} .c-comparison-table__table {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+  }
+
+  /* ---- Column widths (mobile) ---- */
+  #{{ section.id }} .c-comparison-table__col--bkl  { width: 116px; }
+  #{{ section.id }} .c-comparison-table__col--other { width: 111px; }
+
+  /* ---- Header cells ---- */
+  #{{ section.id }} .c-comparison-table__th {
+    height: 50px;
+    padding: 0;
+    vertical-align: middle;
+    font-weight: normal;
+  }
+
+  #{{ section.id }} .c-comparison-table__col-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 8px;
+  }
+
+  #{{ section.id }} .c-comparison-table__logo {
+    display: block;
+    max-width: 88px;
+    height: auto;
+  }
+
+  #{{ section.id }} .c-comparison-table__col-name {
+    color: white;
+    font-family: 'TT Commons', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    text-align: center;
+    display: block;
+  }
+
+  /* ---- Data rows ---- */
+  #{{ section.id }} .c-comparison-table__td {
+    height: 53px;
+    padding: 0;
+    vertical-align: middle;
+  }
+
+  #{{ section.id }} .c-comparison-table__th--bkl,
+  #{{ section.id }} .c-comparison-table__td--bkl,
+  #{{ section.id }} .c-comparison-table__th--other,
+  #{{ section.id }} .c-comparison-table__td--other {
+    border-left: 1px solid var(--sl-c-ct-table-divider);
+  }
+
+  #{{ section.id }} .c-comparison-table__th {
+    border-bottom: 1px solid rgba(246, 243, 240, 0.22);
+  }
+
+  #{{ section.id }} .c-comparison-table__feature-text {
+    display: block;
+    color: white;
+    font-family: 'TT Commons', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.5;
+    padding-right: 8px;
+  }
+
+  #{{ section.id }} .c-comparison-table__cell-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  #{{ section.id }} .c-comparison-table__icon-svg {
+    display: block;
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+  }
+
+  /* BKL column border is handled by .c-comparison-table__table-wrap::before */
+
+  /* ---- Row dividers ---- */
+  #{{ section.id }} .c-comparison-table__tr + .c-comparison-table__tr .c-comparison-table__td {
+    border-top: 1px solid var(--sl-c-ct-table-divider);
+  }
+
+  /* ---- CTA ---- */
+  #{{ section.id }} .c-comparison-table__cta {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ======== TABLET 768px ======== */
+  @media (min-width: 768px) {
+    #{{ section.id }} {
+      --sl-c-ct-pad-inline: 36px;
+      --sl-c-ct-bkl-w:      202px;
+      --sl-c-ct-other-w:    203px;
+    }
+
+    #{{ section.id }} .c-comparison-table__container {
+      gap: 75px;
+    }
+
+    #{{ section.id }} .c-comparison-table__heading {
+      font-size: 48px;
+      max-width: 461px;
+    }
+
+    #{{ section.id }} .c-comparison-table__table-wrap {
+      padding: 36px;
+    }
+
+    #{{ section.id }} .c-comparison-table__col--bkl  { width: 202px; }
+    #{{ section.id }} .c-comparison-table__col--other { width: 203px; }
+
+    #{{ section.id }} .c-comparison-table__logo {
+      max-width: 130px;
+    }
+
+    #{{ section.id }} .c-comparison-table__col-name {
+      font-size: 14px;
+      letter-spacing: 2.1px;
+      max-width: 128px;
+    }
+
+    #{{ section.id }} .c-comparison-table__feature-text {
+      font-size: 16px;
+      padding-right: 16px;
+    }
+
+    #{{ section.id }} .c-comparison-table__td {
+      height: 52.5px;
+    }
+  }
+
+  /* ======== LAPTOP 978px ======== */
+  @media (min-width: 978px) {
+    #{{ section.id }} .c-comparison-table__container {
+      padding-inline: 0;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Comparison Table",
+  "tag": "section",
+  "class": "c-comparison-table-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading (plain)",
+      "default": "A Smarter Approach To"
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading (italic)",
+      "default": "Nitric Oxide"
+    },
+    {
+      "type": "header",
+      "content": "Column 2 — Highlighted"
+    },
+    {
+      "type": "image_picker",
+      "id": "col2_logo",
+      "label": "Column 2 Logo"
+    },
+    {
+      "type": "text",
+      "id": "col2_label",
+      "label": "Column 2 Label (fallback if no logo)",
+      "default": "Berkeley Life"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Highlight Border Color",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "image_picker",
+      "id": "col2_check_icon",
+      "label": "Column 2 Check icon",
+      "info": "Overrides the default check SVG."
+    },
+    {
+      "type": "image_picker",
+      "id": "col2_cross_icon",
+      "label": "Column 2 Cross icon",
+      "info": "Overrides the default cross SVG."
+    },
+    {
+      "type": "header",
+      "content": "Column 3 — Competitor"
+    },
+    {
+      "type": "text",
+      "id": "col3_label",
+      "label": "Column 3 Label",
+      "default": "OTHER NO SUPPLEMENTS"
+    },
+    {
+      "type": "image_picker",
+      "id": "col3_check_icon",
+      "label": "Column 3 Check icon",
+      "info": "Overrides the default check SVG."
+    },
+    {
+      "type": "image_picker",
+      "id": "col3_cross_icon",
+      "label": "Column 3 Cross icon",
+      "info": "Overrides the default cross SVG."
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button Background",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Feature Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_text",
+          "label": "Feature Description",
+          "default": "Feature description"
+        },
+        {
+          "type": "checkbox",
+          "id": "col2_positive",
+          "label": "Column 2 has this feature?",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "col3_positive",
+          "label": "Column 3 has this feature?",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison Table",
+      "blocks": [
+        {
+          "type": "row",
+          "settings": {
+            "feature_text": "Targets dietary nitrate pathway (effective with age)",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature_text": "Clinically studies formulation",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature_text": "Standardization, effective nitrate dosing",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature_text": "Measurable results with test strips",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature_text": "Supports full nitric oxide pathway (system approach)",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature_text": "Transparent, science-backed positioning",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

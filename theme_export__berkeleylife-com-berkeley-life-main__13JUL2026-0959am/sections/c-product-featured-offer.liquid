@@ -1,0 +1,1622 @@
+{%- comment -%}
+  Section: C Product Featured Offer
+  Description: Product offer card with subscription plan blocks, OTP button block, and side-cart add to cart behavior.
+  sl-id: sl-section-product-featured-offer-v1
+  Figma: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=6045-1281
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-product-featured-offer-v1'
+  assign section_id = section.settings.sl_anchor_id | default: section.id
+
+  assign selected_product = section.settings.product
+  if selected_product == blank
+    assign selected_product = product
+  endif
+  if selected_product == blank
+    assign selected_product = collections.all.products.first
+  endif
+
+  assign product_form_id = 'c-product-featured-offer-form-' | append: section.id
+
+  assign plan_blocks = section.blocks | where: 'type', 'plan'
+
+  assign default_plan_index = -1
+  for plan_b in plan_blocks
+    if plan_b.settings.default_selected
+      assign default_plan_index = forloop.index0
+      break
+    endif
+  endfor
+  if default_plan_index == -1 and plan_blocks.size > 0
+    assign default_plan_index = 0
+  endif
+
+  assign initial_variant_id = ''
+  if default_plan_index >= 0
+    assign default_plan = plan_blocks[default_plan_index]
+    assign initial_variant_id = default_plan.settings.variant_id | strip
+  endif
+  if initial_variant_id == blank and selected_product != blank
+    assign initial_variant_id = selected_product.selected_or_first_available_variant.id
+  endif
+
+  assign otp_block = section.blocks | where: 'type', 'otp_button' | first
+-%}
+
+{% style %}
+  #{{ section_id }} {
+    --offer-navy: #1b1c29;
+    --offer-orange: #d54f2f;
+    --offer-bg: #f6f3f0;
+    --offer-card: #ffffff;
+    --offer-card-muted: #f3f1f0;
+    --offer-border: #dfdbd9;
+
+    background-color: {{ section.settings.background_color }};
+    padding-block: {{ section.settings.padding_top }}rem {{ section.settings.padding_bottom }}rem;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__container {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 16px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__heading-wrap {
+    text-align: center;
+    margin: 0 auto 24px;
+    max-width: 900px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__heading {
+    margin: 0;
+    font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+    font-size: clamp(38px, 6vw, 58px);
+    line-height: 1.1;
+    font-weight: 500;
+    color: var(--offer-navy);
+  }
+
+  #{{ section_id }} .c-product-featured-offer__heading-accent {
+    display: inline;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--offer-orange);
+  }
+
+  #{{ section_id }} .c-product-featured-offer__description {
+    margin: 12px auto 0;
+    max-width: 760px;
+    font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+    font-size: clamp(18px, 2.5vw, 20px);
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    color: var(--offer-navy);
+  }
+
+  #{{ section_id }} .c-product-featured-offer__card {
+    border: 1px solid var(--offer-border);
+    border-radius: 16px;
+    background-color: var(--offer-card);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__media {
+    background-color: #ffffff;
+    padding: 24px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__media img {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    display: block;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__reviews {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__stars {
+    color: var(--offer-orange);
+    font-size: 16px;
+    line-height: 1;
+    letter-spacing: 0.1em;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__reviews-link {
+    color: var(--offer-orange);
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    text-decoration: underline;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__title {
+    margin: 0;
+    color: var(--offer-navy);
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(38px, 5vw, 54px);
+    line-height: 1.1;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__product-description {
+    margin: 0;
+    color: var(--offer-navy);
+    font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+    font-size: 20px;
+    line-height: 1.5;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__feature {
+    border: 1px solid var(--offer-orange);
+    border-radius: 8px;
+    min-height: 58px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+    color: var(--offer-navy);
+    font-family: "TT Commons", sans-serif;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__feature-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__feature-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plans {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 2px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan {
+    position: relative;
+    border: 1px solid var(--offer-border);
+    border-radius: 6px;
+    background-color: var(--offer-bg);
+    padding: 14px;
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan--selected {
+    border-color: var(--offer-orange);
+    background-color: #fcf3ef;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-radio {
+    margin-top: 22px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    appearance: none;
+    border: 1px solid var(--offer-orange);
+    background-color: #fff;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-radio:checked::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: var(--offer-orange);
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-title-wrap {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-title {
+    margin: 0;
+    color: var(--offer-navy);
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 1.1;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-pill {
+    border: 1px solid var(--offer-orange);
+    border-radius: 999px;
+    padding: 4px 10px;
+    color: var(--offer-orange);
+    font-family: "TT Commons", sans-serif;
+    font-size: 11px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-frequency {
+    margin: 4px 0 0;
+    color: var(--offer-navy);
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    line-height: 1.2;
+    font-style: italic;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-price-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-price {
+    margin: 0;
+    color: var(--offer-orange);
+    font-family: "TT Commons", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-compare {
+    color: #d8b7ae;
+    font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 1px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-compare s {
+    text-decoration: line-through;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-compare-per-mo {
+    font-size: 14px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__plan-message {
+    margin: 0;
+    color: var(--offer-orange);
+    font-family: "TT Commons", sans-serif;
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: right;
+    max-width: 230px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__perks {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__perk {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    color: var(--offer-orange);
+    font-family: "TT Commons", sans-serif;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__perk svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__otp {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--offer-border);
+    border-radius: 4px;
+    background-color: var(--offer-bg);
+    min-height: 56px;
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--offer-orange);
+    font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__otp s {
+    color: #d8b7ae;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__cta {
+    width: 100%;
+    min-height: 57px;
+    border: none;
+    border-radius: 42px;
+    background-color: var(--offer-orange);
+    color: #f6f3f0;
+    font-family: "TT Commons", sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 600;
+    padding: 14px 24px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__cta:hover {
+    opacity: 0.9;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__cta:disabled,
+  #{{ section_id }} .c-product-featured-offer__otp:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__cta.loading,
+  #{{ section_id }} .c-product-featured-offer__otp.loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__disclaimer {
+    border: 1px solid var(--offer-border);
+    border-radius: 16px;
+    background-color: var(--offer-card);
+    padding: 16px;
+    color: var(--offer-navy);
+    font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    letter-spacing: 0.02em;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__supp-facts {
+    font-size: 16px;
+    color: var(--offer-navy);
+    text-decoration: underline;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin: 0;
+    display: inline-block;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: "TT Commons", sans-serif;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__supp-facts-modal {
+    box-sizing: border-box;
+    opacity: 0;
+    position: fixed;
+    visibility: hidden;
+    z-index: -1;
+    margin: 0 auto;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    width: 100%;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    height: 100%;
+    transition: opacity 0.25s cubic-bezier(0.104, 0.204, 0.492, 1),
+      visibility 0.25s cubic-bezier(0.104, 0.204, 0.492, 1);
+  }
+
+  #{{ section_id }} .c-product-featured-offer__supp-facts-modal[open] {
+    opacity: 1;
+    visibility: visible;
+    z-index: 200;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__supp-facts-modal__content {
+    overflow: auto;
+    max-height: 90vh;
+    max-width: clamp(300px, 90vw, 700px);
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__supp-facts-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
+    border-radius: 8px 8px 0 0;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__supp-facts-modal__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__supp-facts-modal__close {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: inherit;
+    line-height: 0;
+    flex-shrink: 0;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__supp-facts-modal__body {
+    padding: 24px;
+    overflow-y: auto;
+  }
+
+  #{{ section_id }} .c-product-featured-offer__supp-facts-modal__body img {
+    display: block;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  #{{ section_id }} .no-js-inline {
+    display: none;
+  }
+
+  .no-js #{{ section_id }} .no-js-inline {
+    display: inline-block;
+  }
+
+  @media (max-width: 767px) {
+    #{{ section_id }} .c-product-featured-offer__heading-wrap {
+      max-width: 500px;
+      margin-bottom: 16px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__heading {
+      font-size: clamp(30px, 10vw, 52px);
+    }
+
+    #{{ section_id }} .c-product-featured-offer__description {
+      font-size: 17px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__features {
+      gap: 8px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__feature {
+      min-height: 54px;
+      font-size: 12px;
+      padding: 6px;
+      gap: 6px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan {
+      border-radius: 4px;
+      padding: 16px;
+      gap: 6px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-radio {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-radio:checked::after {
+      inset: 4px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-main {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-top {
+      gap: 12px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-title-wrap {
+      gap: 12px;
+      align-items: center;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-title {
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-pill {
+      padding: 6px;
+      font-size: 10px;
+      border-radius: 35px;
+      line-height: 1;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-frequency {
+      margin-top: 2px;
+      font-size: 14px;
+      line-height: 1.5;
+      font-style: normal;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-price-wrap {
+      gap: 4px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-price-row {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-price {
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-compare {
+      font-size: 16px;
+      line-height: 1.5;
+      opacity: 0.4;
+      gap: 0;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-compare-per-mo {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-message {
+      font-size: 10px;
+      line-height: 1.5;
+      max-width: 90px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__perks {
+      margin-top: 0;
+      gap: 10px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__perk {
+      gap: 4px;
+      font-size: 12px;
+      line-height: 1.35;
+      align-items: flex-start;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__perk svg {
+      width: 18px;
+      height: 18px;
+      margin-top: -1px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__otp {
+      min-height: 46px;
+      padding-inline: 10px;
+      font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-position: from-font;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__cta {
+      min-height: 44px;
+      padding: 10px 14px;
+      font-family: "TT Commons", sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__disclaimer {
+      font-size: 12px;
+      padding: 14px;
+    }
+  }
+
+  @media (min-width: 978px) {
+    #{{ section_id }} .c-product-featured-offer__card {
+      grid-template-columns: minmax(360px, 42%) 1fr;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__media {
+      padding: 30px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__content {
+      padding: 28px;
+      gap: 16px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__title {
+      font-size: clamp(46px, 3.2vw, 60px);
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-title {
+      font-size: 37px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-price {
+      font-size: 24px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__plan-compare {
+      font-size: 16px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__otp {
+      min-height: 75px;
+    }
+
+    #{{ section_id }} .c-product-featured-offer__cta {
+      min-height: 75px;
+    }
+  }
+{% endstyle %}
+
+<section
+  {% if section.settings.sl_anchor_id != blank %}id="{{ section.settings.sl_anchor_id }}"{% else %}id="{{ section.id }}"{% endif %}
+  class="c-product-featured-offer"
+  data-sl-id="{{ sl_id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="c-product-featured-offer__container">
+    {%- if section.settings.heading != blank -%}
+      <div class="c-product-featured-offer__heading-wrap">
+        <h2 class="c-product-featured-offer__heading">
+          {% assign heading_with_accent = section.settings.heading | replace: '{accent}', '<span class="c-product-featured-offer__heading-accent">' | replace: '{/accent}', '</span>' %}
+          {{ heading_with_accent }}
+        </h2>
+        {%- if section.settings.description != blank -%}
+          <p class="c-product-featured-offer__description">{{ section.settings.description }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if selected_product != blank -%}
+      <div class="c-product-featured-offer__card">
+        <div class="c-product-featured-offer__media">
+          {%- if section.settings.image_override != blank -%}
+            {{
+              section.settings.image_override
+              | image_url: width: 800
+              | image_tag:
+                alt: section.settings.image_override.alt | default: selected_product.title,
+                loading: 'lazy',
+                widths: '400, 600, 800'
+            }}
+          {%- elsif selected_product.featured_image != blank -%}
+            {{
+              selected_product.featured_image
+              | image_url: width: 800
+              | image_tag:
+                alt: selected_product.featured_image.alt | default: selected_product.title,
+                loading: 'lazy',
+                widths: '400, 600, 800'
+            }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+
+        <div class="c-product-featured-offer__content">
+
+          <h3 class="c-product-featured-offer__title">{{ section.settings.product_title | default: selected_product.title }}</h3>
+
+          {%- if section.settings.product_description != blank -%}
+            <p class="c-product-featured-offer__product-description">{{ section.settings.product_description }}</p>
+          {%- elsif selected_product.description != blank -%}
+            <p class="c-product-featured-offer__product-description">{{ selected_product.description | strip_html | truncate: 95 }}</p>
+          {%- endif -%}
+
+          {%- assign features_wrapper_open = false -%}
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'okendo_reviews' -%}
+                <div class="c-product-featured-offer__reviews" {{ block.shopify_attributes }}>
+                  <span class="c-product-featured-offer__stars" aria-hidden="true">★★★★★</span>
+                  <a href="{{ block.settings.reviews_link | default: '#' }}" class="c-product-featured-offer__reviews-link">
+                    {{ block.settings.reviews_text | default: 'Verified Reviews' }}
+                  </a>
+                </div>
+
+              {%- when 'feature' -%}
+                {%- unless features_wrapper_open -%}
+                  {%- assign features_wrapper_open = true -%}
+                  <div class="c-product-featured-offer__features">
+                {%- endunless -%}
+
+                <div class="c-product-featured-offer__feature" {{ block.shopify_attributes }}>
+                  {%- if block.settings.icon != blank -%}
+                    <span class="c-product-featured-offer__feature-icon">
+                      {{ block.settings.icon | image_url: width: 40 | image_tag: loading: 'lazy', alt: '' }}
+                    </span>
+                  {%- endif -%}
+                  <span>{{ block.settings.text }}</span>
+                </div>
+
+                {%- assign next_block_index = forloop.index0 | plus: 1 -%}
+                {%- assign next_block = section.blocks[next_block_index] -%}
+                {%- if next_block == blank or next_block.type != 'feature' -%}
+                  </div>
+                  {%- assign features_wrapper_open = false -%}
+                {%- endif -%}
+
+              {%- when 'supplement_facts' -%}
+                {%- assign sf_label = block.settings.link_label | default: 'SUPPLEMENT FACTS' -%}
+                <div {{ block.shopify_attributes }}>
+                  <modal-opener class="c-product-featured-offer__supp-facts-opener no-js-hidden" data-modal="#OfferSuppFactsModal-{{ block.id }}">
+                    <button
+                      id="OfferSuppFactsBtn-{{ block.id }}"
+                      class="c-product-featured-offer__supp-facts"
+                      type="button"
+                      aria-haspopup="dialog"
+                    >
+                      {{- sf_label -}}
+                    </button>
+                  </modal-opener>
+                  {%- if block.settings.page != blank -%}
+                    <a href="{{ block.settings.page.url }}" class="c-product-featured-offer__supp-facts no-js-inline" target="_blank" rel="noopener">{{- sf_label -}}</a>
+                  {%- elsif block.settings.image != blank -%}
+                    <a href="{{ block.settings.image | image_url: width: 1200 }}" class="c-product-featured-offer__supp-facts no-js-inline" target="_blank" rel="noopener">{{- sf_label -}}</a>
+                  {%- endif -%}
+                </div>
+
+                <modal-dialog id="OfferSuppFactsModal-{{ block.id }}" class="c-product-featured-offer__supp-facts-modal">
+                  <div
+                    role="dialog"
+                    aria-label="{{ sf_label }}"
+                    aria-modal="true"
+                    class="c-product-featured-offer__supp-facts-modal__content"
+                    tabindex="-1"
+                  >
+                    <div class="c-product-featured-offer__supp-facts-modal__header">
+                      <h3 class="c-product-featured-offer__supp-facts-modal__title">{{- sf_label -}}</h3>
+                      <button
+                        id="ModalClose-{{ block.id }}"
+                        type="button"
+                        class="c-product-featured-offer__supp-facts-modal__close"
+                        aria-label="{{ 'accessibility.close' | t }}"
+                      >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      </button>
+                    </div>
+                    <div class="c-product-featured-offer__supp-facts-modal__body">
+                      {%- if block.settings.image != blank -%}
+                        {{
+                          block.settings.image
+                          | image_url: width: 800
+                          | image_tag:
+                            alt: sf_label,
+                            loading: 'lazy',
+                            widths: '400, 600, 800'
+                        }}
+                      {%- elsif block.settings.page != blank -%}
+                        <h4>{{ block.settings.page.title }}</h4>
+                        {{ block.settings.page.content }}
+                      {%- elsif block.settings.content != blank -%}
+                        {{ block.settings.content }}
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </modal-dialog>
+
+            {%- endcase -%}
+          {%- endfor -%}
+
+          <product-form class="c-product-featured-offer__product-form">
+            <div data-product-form-errors role="alert" hidden><span data-product-form-error-msg></span></div>
+            {%- form 'product', selected_product, id: product_form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              <input type="hidden" name="id" id="offer-variant-{{ section.id }}" value="{{ initial_variant_id }}">
+              <input type="hidden" name="selling_plan" id="offer-selling-plan-{{ section.id }}" value="">
+              <input type="hidden" name="quantity" value="1">
+
+              {%- if plan_blocks.size > 0 -%}
+                <div class="c-product-featured-offer__plans" data-offer-plans>
+                  {%- for plan_block in plan_blocks -%}
+                    {%- assign p_variant_id = plan_block.settings.variant_id | strip -%}
+                    {%- assign p_selling_plan_id = plan_block.settings.selling_plan_id | strip -%}
+                    {%- assign is_default = false -%}
+                    {%- if forloop.index0 == default_plan_index -%}
+                      {%- assign is_default = true -%}
+                    {%- endif -%}
+
+                    {%- comment -%} Look up the variant by ID so blank override fields can fall back to the variant data. {%- endcomment -%}
+                    {%- assign plan_variant = nil -%}
+                    {%- if p_variant_id != blank -%}
+                      {%- assign p_vid_num = p_variant_id | plus: 0 -%}
+                      {%- for v in selected_product.variants -%}
+                        {%- if v.id == p_vid_num -%}
+                          {%- assign plan_variant = v -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+
+                    {%- if plan_block.settings.auto_selling_plan and p_selling_plan_id == blank and plan_variant -%}
+                      {%- assign p_selling_plan_id = plan_variant.selling_plan_allocations.first.selling_plan.id | append: '' -%}
+                    {%- endif -%}
+
+                    {%- if p_selling_plan_id != blank -%}
+                      {%- assign p_radio_value = p_variant_id | append: '-' | append: p_selling_plan_id -%}
+                    {%- else -%}
+                      {%- assign p_radio_value = p_variant_id | append: '-otp' -%}
+                    {%- endif -%}
+
+                    {%- assign plan_sp_allocation = nil -%}
+                    {%- assign plan_sp = nil -%}
+                    {%- if plan_variant and p_selling_plan_id != blank -%}
+                      {%- assign p_spid_num = p_selling_plan_id | plus: 0 -%}
+                      {%- for spa in plan_variant.selling_plan_allocations -%}
+                        {%- if spa.selling_plan.id == p_spid_num -%}
+                          {%- assign plan_sp_allocation = spa -%}
+                          {%- assign plan_sp = spa.selling_plan -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+
+                    {%- assign p_price = plan_block.settings.price_override -%}
+                    {%- if p_price == blank -%}
+                      {%- if plan_sp_allocation -%}
+                        {%- assign p_price = plan_sp_allocation.price | money -%}
+                      {%- elsif plan_variant -%}
+                        {%- assign p_price = plan_variant.price | money -%}
+                      {%- endif -%}
+                    {%- endif -%}
+
+                    {%- assign p_compare = plan_block.settings.compare_price_override -%}
+                    {%- if p_compare == blank -%}
+                      {%- if plan_sp_allocation and plan_sp_allocation.compare_at_price != blank and plan_sp_allocation.compare_at_price > plan_sp_allocation.price -%}
+                        {%- assign p_compare = plan_sp_allocation.compare_at_price | money -%}
+                      {%- elsif plan_variant and plan_variant.compare_at_price != blank and plan_variant.compare_at_price > plan_variant.price -%}
+                        {%- assign p_compare = plan_variant.compare_at_price | money -%}
+                      {%- endif -%}
+                    {%- endif -%}
+
+                    <label class="c-product-featured-offer__plan{% if is_default %} c-product-featured-offer__plan--selected{% endif %}" data-offer-plan-label {{ plan_block.shopify_attributes }}>
+                      <input
+                        type="radio"
+                        class="c-product-featured-offer__plan-radio"
+                        name="variant_selling_plan_{{ section.id }}"
+                        value="{{ p_radio_value }}"
+                        data-offer-plan-radio
+                        data-variant-id="{{ p_variant_id }}"
+                        data-selling-plan-id="{{ p_selling_plan_id }}"
+                        data-subscribe-text="{{ plan_block.settings.subscribe_cta_text | default: '' | escape }}"
+                        {% if is_default %}checked{% endif %}
+                      >
+
+                      <div class="c-product-featured-offer__plan-main">
+                        <div class="c-product-featured-offer__plan-top">
+                          <div>
+                            {%- if plan_block.settings.title != blank or plan_block.settings.pill_label != blank -%}
+                              <div class="c-product-featured-offer__plan-title-wrap">
+                                {%- if plan_block.settings.title != blank -%}
+                                  <p class="c-product-featured-offer__plan-title">{{ plan_block.settings.title }}</p>
+                                {%- endif -%}
+                                {%- if plan_block.settings.pill_label != blank -%}
+                                  <span class="c-product-featured-offer__plan-pill">{{ plan_block.settings.pill_label }}</span>
+                                {%- endif -%}
+                              </div>
+                            {%- endif -%}
+                            {%- if plan_block.settings.frequency_text != blank -%}
+                              <p class="c-product-featured-offer__plan-frequency">{{ plan_block.settings.frequency_text }}</p>
+                            {%- endif -%}
+                          </div>
+
+                          <div class="c-product-featured-offer__plan-price-wrap">
+                            <div class="c-product-featured-offer__plan-price-row">
+                              {%- if p_price != blank -%}
+                                <p class="c-product-featured-offer__plan-price">{{ p_price }}</p>
+                              {%- endif -%}
+                              {%- if p_compare != blank -%}
+                                <span class="c-product-featured-offer__plan-compare"><s>{{ p_compare }}</s>{%- if plan_block.settings.compare_price_suffix != blank -%}<span class="c-product-featured-offer__plan-compare-per-mo">{{ plan_block.settings.compare_price_suffix }}</span>{%- endif -%}</span>
+                              {%- endif -%}
+                            </div>
+                            {%- if plan_block.settings.message_below_price != blank -%}
+                              <p class="c-product-featured-offer__plan-message">{{ plan_block.settings.message_below_price }}</p>
+                            {%- endif -%}
+                          </div>
+                        </div>
+
+                        {%- assign has_any_perk = false -%}
+                        {%- for i in (1..5) -%}
+                          {%- assign perk_key = 'perk_' | append: i -%}
+                          {%- if plan_block.settings[perk_key] != blank -%}
+                            {%- assign has_any_perk = true -%}
+                            {%- break -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+
+                        {%- if has_any_perk -%}
+                          <ul class="c-product-featured-offer__perks">
+                            {%- for i in (1..5) -%}
+                              {%- assign perk_key = 'perk_' | append: i -%}
+                              {%- assign perk_icon_key = 'perk_' | append: i | append: '_icon' -%}
+                              {%- assign perk_text = plan_block.settings[perk_key] -%}
+                              {%- assign perk_icon = plan_block.settings[perk_icon_key] -%}
+                              {%- if perk_text != blank -%}
+                                <li class="c-product-featured-offer__perk">
+                                  {%- if perk_icon != blank -%}
+                                    {{ perk_icon }}
+                                  {%- else -%}
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
+                                  {%- endif -%}
+                                  <span>{{ perk_text }}</span>
+                                </li>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      </div>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+
+              {%- if otp_block != blank -%}
+                {%- assign otp_variant_id = otp_block.settings.variant_id | strip -%}
+                {%- assign otp_variant = nil -%}
+                {%- if otp_variant_id != blank -%}
+                  {%- assign otp_vid_num = otp_variant_id | plus: 0 -%}
+                  {%- for v in selected_product.variants -%}
+                    {%- if v.id == otp_vid_num -%}
+                      {%- assign otp_variant = v -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+
+                {%- assign otp_price = otp_block.settings.price_override -%}
+                {%- if otp_price == blank and otp_variant -%}
+                  {%- assign otp_price = otp_variant.price | money -%}
+                {%- endif -%}
+
+                {%- assign otp_compare = otp_block.settings.compare_price_override -%}
+                {%- if otp_compare == blank and otp_variant and otp_variant.compare_at_price != blank and otp_variant.compare_at_price > otp_variant.price -%}
+                  {%- assign otp_compare = otp_variant.compare_at_price | money -%}
+                {%- endif -%}
+
+                <button
+                  type="button"
+                  class="c-product-featured-offer__otp"
+                  data-offer-otp-btn
+                  data-variant-id="{{ otp_variant_id }}"
+                  {{ otp_block.shopify_attributes }}
+                >
+                  {{ otp_block.settings.button_text }}
+                  {%- if otp_compare != blank -%}
+                    <s>{{ otp_compare }}</s> -
+                  {%- endif -%}
+                  {{ otp_price }}
+                </button>
+              {%- endif -%}
+
+              <button
+                type="submit"
+                class="c-product-featured-offer__cta"
+                data-offer-cta-btn
+              >
+                {{ section.settings.subscribe_button_text }}
+              </button>
+            {%- endform -%}
+          </product-form>
+
+          {%- if section.settings.disclaimer_text != blank -%}
+            <div class="c-product-featured-offer__disclaimer">
+              {{ section.settings.disclaimer_text }}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- else -%}
+      <p>Please select a product in section settings.</p>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function() {
+    var sectionEl = document.querySelector('[data-section-id="{{ section.id }}"]');
+    if (!sectionEl) return;
+
+    var planRadios = sectionEl.querySelectorAll('[data-offer-plan-radio]');
+    var planLabels = sectionEl.querySelectorAll('[data-offer-plan-label]');
+    var variantInput = sectionEl.querySelector('#offer-variant-{{ section.id }}');
+    var sellingPlanInput = sectionEl.querySelector('#offer-selling-plan-{{ section.id }}');
+    var otpBtn = sectionEl.querySelector('[data-offer-otp-btn]');
+    var ctaBtn = sectionEl.querySelector('[data-offer-cta-btn]');
+    var form = sectionEl.querySelector('form[data-type="add-to-cart-form"]');
+    var defaultCtaText = {{ section.settings.subscribe_button_text | strip | json }};
+
+    function getSelectedRadio() {
+      return sectionEl.querySelector('[data-offer-plan-radio]:checked');
+    }
+
+    function updateSelection() {
+      var selected = getSelectedRadio();
+      if (!selected) return;
+
+      var selectedVariantId = selected.dataset.variantId || '';
+      var selectedSellingPlanId = selected.dataset.sellingPlanId || '';
+
+      planLabels.forEach(function(label) {
+        var radio = label.querySelector('[data-offer-plan-radio]');
+        label.classList.toggle('c-product-featured-offer__plan--selected', !!(radio && radio.checked));
+      });
+
+      if (variantInput && selectedVariantId) {
+        variantInput.value = selectedVariantId;
+      }
+
+      if (sellingPlanInput) {
+        sellingPlanInput.value = selectedSellingPlanId;
+      }
+
+      if (ctaBtn) {
+        var perPlanText = selected.dataset.subscribeText || '';
+        ctaBtn.textContent = perPlanText || defaultCtaText || 'Subscribe & Save';
+      }
+    }
+
+    function toggleButtonLoading(btn, isLoading) {
+      if (!btn) return;
+      btn.classList.toggle('loading', isLoading);
+      btn.disabled = isLoading;
+    }
+
+    function openSideCart() {
+      var cartDrawer = document.querySelector('cart-drawer');
+      if (cartDrawer) {
+        if (typeof cartDrawer.render === 'function') cartDrawer.render();
+        if (typeof cartDrawer.open === 'function') cartDrawer.open();
+      }
+    }
+
+    function addToCart(variantId, sellingPlanId, triggerBtn) {
+      if (!variantId) return;
+      if (triggerBtn && (triggerBtn.disabled || triggerBtn.classList.contains('loading'))) return;
+      if (!form) return;
+
+      toggleButtonLoading(triggerBtn, true);
+
+      if (variantInput) variantInput.value = variantId;
+      if (sellingPlanInput) sellingPlanInput.value = sellingPlanId || '';
+
+      var formData = new FormData(form);
+      formData.set('id', variantId);
+      if (sellingPlanId) {
+        formData.set('selling_plan', sellingPlanId);
+      } else {
+        formData.delete('selling_plan');
+      }
+      if (!formData.get('quantity')) {
+        formData.set('quantity', '1');
+      }
+
+      fetch((window.routes && window.routes.cart_add_url) || '/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+      })
+      .then(function(response) { return response.json(); })
+      .then(function(data) {
+        if (data && data.status) {
+          console.error('Add to cart failed:', data.description || data.message);
+          return;
+        }
+        openSideCart();
+      })
+      .catch(function(error) {
+        console.error('Add to cart request failed:', error);
+      })
+      .finally(function() {
+        toggleButtonLoading(triggerBtn, false);
+      });
+    }
+
+    planRadios.forEach(function(radio) {
+      radio.addEventListener('change', updateSelection);
+    });
+
+    if (ctaBtn) {
+      ctaBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        var variantId = variantInput ? variantInput.value : '';
+        var sellingPlanId = sellingPlanInput ? sellingPlanInput.value : '';
+        addToCart(variantId, sellingPlanId, ctaBtn);
+      });
+    }
+
+    if (otpBtn) {
+      otpBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        var variantId = otpBtn.dataset.variantId || (variantInput ? variantInput.value : '');
+        addToCart(variantId, '', otpBtn);
+      });
+    }
+
+    if (form) {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+      });
+    }
+
+    if (planRadios.length > 0) {
+      if (!getSelectedRadio()) {
+        planRadios[0].checked = true;
+      }
+      updateSelection();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "C Product Featured Offer",
+  "tag": "section",
+  "class": "c-product-featured-offer-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation. Defaults to section ID if blank."
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "Required for the cart form. Variants are not auto-filtered — define each plan as a block."
+    },
+    {
+      "type": "header",
+      "content": "Top Content"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get Your First Month of {accent}Nitric Oxide Support Free.{/accent}",
+      "info": "Use {accent}text{/accent} for orange italic text."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Real support, measurable results - starting with zero risk."
+    },
+    {
+      "type": "header",
+      "content": "Product Card"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_override",
+      "label": "Product Image Override"
+    },
+    {
+      "type": "text",
+      "id": "product_title",
+      "label": "Product Title Override",
+      "info": "Leave blank to use product title."
+    },
+    {
+      "type": "textarea",
+      "id": "product_description",
+      "label": "Product Description Override",
+      "info": "Leave blank to use product description."
+    },
+    {
+      "type": "text",
+      "id": "subscribe_button_text",
+      "label": "Default Subscribe CTA Text",
+      "default": "Subscribe & Save - Claim My Free Month",
+      "info": "Used as fallback when the selected plan block does not set its own CTA text override."
+    },
+    {
+      "type": "textarea",
+      "id": "disclaimer_text",
+      "label": "Disclaimer Text",
+      "default": "By claiming this offer, you agree to a monthly subscription billed after your first month. Free shipping on all renewals. One offer per customer. Cancel before your renewal - no charge."
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Top Padding",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Bottom Padding",
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "okendo_reviews",
+      "name": "Reviews",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "url",
+          "id": "reviews_link",
+          "label": "Reviews Link"
+        },
+        {
+          "type": "text",
+          "id": "reviews_text",
+          "label": "Reviews Text",
+          "default": "182 Verified Reviews"
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Feature",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Clinically Backed"
+        }
+      ]
+    },
+    {
+      "type": "supplement_facts",
+      "name": "Supplement Facts",
+      "settings": [
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link Label",
+          "default": "SUPPLEMENT FACTS"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Supplement Facts Image",
+          "info": "Upload a supplement facts panel image. Displayed in the modal."
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Content Page",
+          "info": "Used as fallback if no image is selected. Also used as no-JS link target."
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Rich Text Content",
+          "info": "Used if neither an image nor a page is selected."
+        }
+      ]
+    },
+    {
+      "type": "plan",
+      "name": "Plan",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Order the plan blocks to control display order (top = 1, next = 2, etc.). Everything is explicit — no metafields, no fallback logic."
+        },
+        {
+          "type": "text",
+          "id": "variant_id",
+          "label": "Variant ID",
+          "info": "Shopify variant ID for this plan. Required."
+        },
+        {
+          "type": "text",
+          "id": "selling_plan_id",
+          "label": "Selling Plan ID",
+          "info": "Recharge or Shopify selling plan ID. Leave empty for a one-time purchase row."
+        },
+        {
+          "type": "checkbox",
+          "id": "auto_selling_plan",
+          "label": "Auto-detect Selling Plan ID from variant",
+          "default": false,
+          "info": "When enabled, uses the first selling plan found on the variant above. Leave Selling Plan ID blank."
+        },
+        {
+          "type": "checkbox",
+          "id": "default_selected",
+          "label": "Default Selected",
+          "default": false,
+          "info": "Only one plan should be default. If none are, the first plan block is used."
+        },
+        {
+          "type": "header",
+          "content": "Display"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Optional. Hidden if blank."
+        },
+        {
+          "type": "text",
+          "id": "pill_label",
+          "label": "Pill Label",
+          "info": "Optional. Example: BEST VALUE"
+        },
+        {
+          "type": "text",
+          "id": "frequency_text",
+          "label": "Frequency Text",
+          "info": "Optional. Hidden if blank."
+        },
+        {
+          "type": "header",
+          "content": "Price"
+        },
+        {
+          "type": "text",
+          "id": "price_override",
+          "label": "Price Override",
+          "info": "Optional. Falls back to the variant/selling plan price. Example: $59.00 or FREE"
+        },
+        {
+          "type": "text",
+          "id": "compare_price_override",
+          "label": "Compare-at Price Override",
+          "info": "Optional. Falls back to the variant/selling plan compare-at price. Rendered with strike-through."
+        },
+        {
+          "type": "text",
+          "id": "compare_price_suffix",
+          "label": "Compare Price Suffix",
+          "default": "/mo",
+          "info": "Optional. Appended after compare price (e.g. /mo)."
+        },
+        {
+          "type": "text",
+          "id": "message_below_price",
+          "label": "Message Below Price",
+          "info": "Optional. Example: Just pay shipping & handling ($7.99)"
+        },
+        {
+          "type": "header",
+          "content": "CTA Override"
+        },
+        {
+          "type": "text",
+          "id": "subscribe_cta_text",
+          "label": "Subscribe CTA Text",
+          "info": "Optional. When this plan is selected, the main CTA button uses this text instead of the section default."
+        },
+        {
+          "type": "header",
+          "content": "Perks"
+        },
+        {
+          "type": "text",
+          "id": "perk_1",
+          "label": "Perk 1"
+        },
+        {
+          "type": "html",
+          "id": "perk_1_icon",
+          "label": "Perk 1 Icon SVG"
+        },
+        {
+          "type": "text",
+          "id": "perk_2",
+          "label": "Perk 2"
+        },
+        {
+          "type": "html",
+          "id": "perk_2_icon",
+          "label": "Perk 2 Icon SVG"
+        },
+        {
+          "type": "text",
+          "id": "perk_3",
+          "label": "Perk 3"
+        },
+        {
+          "type": "html",
+          "id": "perk_3_icon",
+          "label": "Perk 3 Icon SVG"
+        },
+        {
+          "type": "text",
+          "id": "perk_4",
+          "label": "Perk 4"
+        },
+        {
+          "type": "html",
+          "id": "perk_4_icon",
+          "label": "Perk 4 Icon SVG"
+        },
+        {
+          "type": "text",
+          "id": "perk_5",
+          "label": "Perk 5"
+        },
+        {
+          "type": "html",
+          "id": "perk_5_icon",
+          "label": "Perk 5 Icon SVG"
+        }
+      ]
+    },
+    {
+      "type": "otp_button",
+      "name": "OTP Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "One-time purchase button rendered below the plans. Always explicit — no metafield fallbacks."
+        },
+        {
+          "type": "text",
+          "id": "variant_id",
+          "label": "Variant ID",
+          "info": "Required. Variant added to cart when this button is clicked."
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "One-time Purchase "
+        },
+        {
+          "type": "text",
+          "id": "price_override",
+          "label": "Price Override",
+          "info": "Optional. Falls back to the variant price."
+        },
+        {
+          "type": "text",
+          "id": "compare_price_override",
+          "label": "Compare-at Price Override",
+          "info": "Optional. Falls back to the variant compare-at price. Rendered with strike-through."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Product Featured Offer",
+      "blocks": [
+        { "type": "okendo_reviews" },
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "plan" },
+        { "type": "plan" },
+        { "type": "plan" },
+        { "type": "otp_button" }
+      ]
+    }
+  ]
+}
+{% endschema %}

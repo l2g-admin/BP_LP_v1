@@ -1,0 +1,408 @@
+<style>
+  
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    position: relative;
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    overflow: hidden;
+
+    {% if section.settings.bg_image != blank %}
+      background-image: url('{{ section.settings.bg_image | image_url: width: 2000 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    {% endif %}
+
+    & .c-clinical__container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* --- HEADER --- */
+    & .c-clinical__header {
+      text-align: center;
+      max-width: 800px;
+      margin-bottom: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    & .c-clinical__eyebrow {
+      font-size: clamp(11px, 1vw, 13px);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: {{ section.settings.accent_color }};
+      margin-bottom: 1rem;
+    }
+
+    & .c-clinical__title {
+      font-size: clamp(28px, 5vw + 1rem, 48px);
+      color: {{ section.settings.title_color }};
+      margin: 0 0 1.5rem 0;
+      line-height: 1.2;
+
+      & span {
+        font-family: "Cormorant Garamond", serif;
+        color: {{ section.settings.accent_color }};
+        font-style: italic;
+        font-size: clamp(36px, 4.5vw, 52px);
+      }
+    }
+
+    & .c-clinical__subtitle {
+      font-size: clamp(16px, 1.5vw, 20px);
+      line-height: 150%;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+      max-width: 650px;
+    }
+
+    /* --- GRID --- */
+    & .c-clinical__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      width: 100%;
+      margin-bottom: 4rem;
+    }
+
+    /* --- CARDS --- */
+    & .c-clinical__card {
+      background-color: {{ section.settings.card_bg_color }};
+      border-radius: 16px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      backdrop-filter: blur(15px);
+    }
+
+    & .c-clinical__card-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 1.5rem;
+      color: {{ section.settings.accent_color }};
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      & svg {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        fill: currentColor;
+      stroke: currentColor;
+      }
+
+      & svg path, & svg circle, & svg rect, & svg line, & svg polyline {
+        stroke: {{ section.settings.accent_color }};
+        fill: none;
+      }
+    }
+
+    & .c-clinical__card-title {
+      font-size: clamp(18px, 1.5vw, 24px);
+      color: {{ section.settings.accent_color }};
+      margin: 0 0 1rem 0;
+      font-style: normal;
+        font-weight: 500;
+        line-height: 120%;
+    }
+
+    & .c-clinical__card-text {
+      font-size: clamp(14px, 1vw, 16px);
+      font-style: normal;
+        font-weight: 400;
+        line-height: 150%; /* 24px */
+      color: {{ section.settings.text_color }};
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    /* --- CTA BUTTON --- */
+    & .c-clinical__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: {{ section.settings.accent_color }};
+      color: #ffffff;
+      padding: 16px 36px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        background-color: #b84627;
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (max 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+      & .c-clinical__header {
+        margin-bottom: 2.5rem;
+      }
+
+      & .c-clinical__grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+        margin-bottom: 2.5rem;
+      }
+
+      & .c-clinical__card {
+        padding: 2rem 1.5rem;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="c-clinical__container">
+      <div class="c-clinical__header">
+        {% if section.settings.eyebrow != blank %}
+          <span class="c-clinical__eyebrow">{{ section.settings.eyebrow }}</span>
+        {% endif %}
+
+        {% if section.settings.title != blank %}
+          <h2 class="c-clinical__title">{{ section.settings.title }}</h2>
+        {% endif %}
+
+        {% if section.settings.subtitle != blank %}
+          <p class="c-clinical__subtitle">{{ section.settings.subtitle }}</p>
+        {% endif %}
+      </div>
+
+      <div class="c-clinical__grid">
+        {% for block in section.blocks %}
+          <div class="c-clinical__card" {{ block.shopify_attributes }}>
+            <div class="c-clinical__card-icon">
+              {% if block.settings.icon_image != blank %}
+                {{ block.settings.icon_image | image_url: width: 80 | image_tag: loading: 'lazy', alt: block.settings.title }}
+              {% elsif block.settings.svg_icon != blank %}
+                {{ block.settings.svg_icon }}
+              {% else %}
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+              {% endif %}
+            </div>
+
+            <h3 class="c-clinical__card-title">{{ block.settings.title }}</h3>
+            <p class="c-clinical__card-text">{{ block.settings.text }}</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if section.settings.btn_text != blank %}
+        <a href="{{ section.settings.btn_link }}" class="c-clinical__btn">
+          {{ section.settings.btn_text }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Three Columns",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Fallback Background Color",
+      "default": "#f0f1f1"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Texture Image (Optional)"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#f6f4f2"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Main Title Color",
+      "default": "#1a1f4c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "General Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d25435"
+    },
+    {
+      "type": "header",
+      "content": "Header Settings"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "CLINICAL APPLICATIONS"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Conditions Your Patients <span>Are Already Coming to You With</span>",
+      "info": "Wrap text in <span></span> to apply the special italic serif font and accent color."
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Berkeley Life's Nitric Oxide solutions are designed to complement your existing protocols across a broad range of patient needs."
+    },
+    {
+      "type": "header",
+      "content": "Button Settings"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "Set Up Account"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Application Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon Image",
+          "info": "Takes priority over SVG. Use a PNG or SVG file uploaded to Shopify."
+        },
+        {
+          "type": "html",
+          "id": "svg_icon",
+          "label": "SVG Icon (Raw HTML)",
+          "info": "Used only if no image is selected above. Paste the raw SVG code."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card Title",
+          "default": "Cardiovascular Health & Hypertension"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Card Text",
+          "default": "Nitric Oxide is the primary endogenous regulator of vascular tone. Restoring Nitric Oxide levels supports blood pressure management..."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Three Columns",
+      "blocks": [
+        { "type": "card", "settings": { "title": "Cardiovascular Health & Hypertension" } },
+        { "type": "card", "settings": { "title": "Menopause & Women's Hormonal Health" } },
+        { "type": "card", "settings": { "title": "Sexual Dysfunction (Men & Women)" } },
+        { "type": "card", "settings": { "title": "Fatigue, Energy & Performance" } },
+        { "type": "card", "settings": { "title": "Metabolic Syndrome & Insulin Sensitivity" } },
+        { "type": "card", "settings": { "title": "Cognitive Health & Brain Circulation" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

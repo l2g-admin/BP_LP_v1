@@ -1,0 +1,474 @@
+<style>
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    
+    {% if section.settings.bg_image != blank %}
+      background-image: 
+        linear-gradient(
+          {{ section.settings.overlay_color | color_modify: 'alpha', section.settings.overlay_opacity }},
+          {{ section.settings.overlay_color | color_modify: 'alpha', section.settings.overlay_opacity }}
+        ),
+        url('{{ section.settings.bg_image | image_url: width: 2000 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    {% else %}
+      background-color: {{ section.settings.bg_color }};
+    {% endif %}
+    
+    color: {{ section.settings.text_color }};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* --- HEADER --- */
+  #{{ section.id }} .promo__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    width: 100%;
+  }
+
+  #{{ section.id }} .promo__badge {
+    display: inline-block;
+    border-radius: var(--Radius---radius-4, 4px);
+    border: 2px solid var(--Main-Navy, #1B1C29);
+    background: rgba(27, 28, 41, 0.50);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 16.8px */
+    letter-spacing: 2.1px;
+    text-transform: uppercase;
+    color: {{section.settings.text_color }};
+  }
+
+  #{{ section.id }} .promo__title {
+          font-size: clamp(32px, 4vw, 48px);
+      font-style: normal;
+ 
+        line-height: 100%;
+      margin: 0 0 1.5rem 0;
+      color: {{ section.settings.title_color }};
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .promo__title em {
+            font-family: "Cormorant Garamond", serif;
+        font-size: clamp(36px, 4.5vw, 54px);
+        color: {{ section.settings.accent_color }};
+        font-style: italic;
+  }
+
+  #{{ section.id }} .promo__subtitle {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.95;
+  }
+
+  #{{ section.id }} .promo__content-wrapper {
+    width: 100%;
+    padding-inline: clamp(0rem, 15vw, 20rem);
+    box-sizing: border-box;
+  }
+
+  #{{ section.id }} .promo__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 2rem;
+  }
+
+  #{{ section.id }} .promo__form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  #{{ section.id }} .input__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+  }
+
+  #{{ section.id }} .input__label {
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  #{{ section.id }} .input__field,
+  #{{ section.id }} .input__select {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #FFFFFF;
+    color: #333333;
+    font-size: 1rem;
+    box-sizing: border-box;
+    font-family: inherit;
+    outline: none;
+  }
+
+  #{{ section.id }} .input__field::placeholder {
+    color: #888888;
+  }
+
+  #{{ section.id }} .input__select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    cursor: pointer;
+    color: #888888;
+  }
+
+  #{{ section.id }} .input__select:focus {
+    color: #333333;
+  }
+
+  #{{ section.id }} .promo__submit {
+    background-color: {{ section.settings.btn_bg }};
+    color: {{ section.settings.btn_color }};
+    border: none;
+    padding: 1rem 4rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    margin-top: 1rem;
+  }
+
+  #{{ section.id }} .promo__submit:hover {
+    opacity: 0.85;
+  }
+
+  #{{ section.id }} .promo__privacy {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.8;
+    text-align: center;
+  }
+
+  #{{ section.id }} .form__message {
+    padding: 1rem;
+    background-color: rgba(255,255,255,0.1);
+    border: 1px solid white;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* --- EMBED CODE --- */
+  #{{ section.id }} .promo__embed-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* --------------------------------------
+     MEDIA QUERIES
+  --------------------------------------- */
+  @media (width >= 768px) {
+    #{{ section.id }} .promo__form-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem 2rem;
+    }
+  }
+</style>
+
+<section class="section__promo-form" id="{{ section.id }}">
+  <div class="container-sl">
+    
+    <div class="promo__header">
+      {% if section.settings.badge_text != blank %}
+        <span class="promo__badge">{{ section.settings.badge_text }}</span>
+      {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h2 class="promo__title">{{ section.settings.title }}</h2>
+      {% endif %}
+
+      {% if section.settings.subtitle != blank %}
+        <p class="promo__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <div class="promo__content-wrapper">
+      
+      {% if section.settings.form_type == 'embed' %}
+        <div class="promo__embed-wrapper">
+          {{ section.settings.embed_code }}
+        </div>
+
+      {% else %}
+        {% form 'customer', class: 'promo__form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter, promo-page">
+
+          {%- if form.posted_successfully? -%}
+            <div class="form__message">Thank you for subscribing! Check your email for your 20% OFF code.</div>
+          {%- elsif form.errors -%}
+            <div class="form__message">Please check the errors and try again.</div>
+          {%- endif -%}
+
+          <div class="promo__form-grid">
+            
+            <div class="input__group">
+              <label class="input__label" for="ContactForm-name">Full Name</label>
+              <input type="text" 
+                name="contact[first_name]" 
+                id="ContactForm-name" 
+                class="input__field" 
+                placeholder="John" 
+                required>
+            </div>
+
+            <div class="input__group">
+              <label class="input__label" for="ContactForm-email">E-mail address</label>
+              <input type="email" 
+                name="contact[email]" 
+                id="ContactForm-email" 
+                class="input__field" 
+                placeholder="email@email.com" 
+                required>
+            </div>
+
+            <div class="input__group">
+              <label class="input__label" for="ContactForm-practice">Practice Type</label>
+              <select name="contact[note][Practice Type]" id="ContactForm-practice" class="input__select">
+                <option value="" disabled selected>Practice Name</option>
+                <option value="Dermatology">Dermatology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="General Practice">General Practice</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="input__group">
+              <label class="input__label" for="ContactForm-state">State</label>
+              <select name="contact[note][State]" id="ContactForm-state" class="input__select">
+                <option value="" disabled selected>Select State</option>
+                <option value="CA">California</option>
+                <option value="NY">New York</option>
+                <option value="TX">Texas</option>
+                <option value="FL">Florida</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+          </div>
+
+          <button type="submit" class="promo__submit">
+            {{ section.settings.btn_text }}
+          </button>
+
+          {% if section.settings.privacy_text != blank %}
+            <p class="promo__privacy">{{ section.settings.privacy_text }}</p>
+          {% endif %}
+
+        {% endform %}
+      {% endif %}
+
+      {% for block in section.blocks %}
+        {% if block.type == 'privacy_note' %}
+          <p class="promo__privacy" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+        {% endif %}
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C HCP Promo Form",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Display Options"
+    },
+    {
+      "type": "radio",
+      "id": "form_type",
+      "label": "Form Source",
+      "options": [
+        { "value": "native", "label": "Shopify Native Form" },
+        { "value": "embed", "label": "Third-Party Embed Code" }
+      ],
+      "default": "native"
+    },
+    {
+      "type": "textarea",
+      "id": "embed_code",
+      "label": "Embed Code (HTML/JS)",
+      "info": "Paste your Klaviyo, Mailchimp, or custom form code here if 'Third-Party Embed Code' is selected."
+    },
+    {
+      "type": "header",
+      "content": "Design & Colors"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image (Optional)"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#B85434"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.6
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#B85434"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Header Content"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "LIMITED EVENT OFFER"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Badge Background Color",
+      "default": "#4A3B36"
+    },
+    {
+      "type": "color",
+      "id": "badge_color",
+      "label": "Badge Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Take <em>20% OFF</em><br>your first order",
+      "info": "Wrap text in <em> tags to make it italic and serif."
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Enter your information below and get 20% OFF your first order."
+    },
+    {
+      "type": "header",
+      "content": "Native Form Details"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Submit Button Text",
+      "default": "Submit"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg",
+      "label": "Button Background Color",
+      "default": "#1A202C"
+    },
+    {
+      "type": "color",
+      "id": "btn_color",
+      "label": "Button Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "text",
+      "id": "privacy_text",
+      "label": "Privacy Notice",
+      "default": "We respect your privacy. Unsubscribe at any time."
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 6,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 6,
+      "unit": "rem"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C HCP Promo Form"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "privacy_note",
+      "name": "Privacy Note",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "We respect your privacy. Unsubscribe at any time."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

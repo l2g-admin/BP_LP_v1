@@ -1,0 +1,389 @@
+<style>
+  #{{section.id}} {
+    {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+    {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+    padding-top: {{ half_padding_top }}em;
+    padding-bottom: {{ half_padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+
+    & .section__quote__container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: {{ section.settings.content_alignment }};
+    }
+
+    & .quote__wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: {{ section.settings.content_alignment }};
+       
+    }
+
+    & .quote__text {
+      font-size: clamp(28px, 5vw + 1rem, 64px);
+      line-height: 130%;
+      font-weight: 400;
+      margin: 0;
+      text-align: {{ section.settings.text_alignment }};
+      color: {{ section.settings.text_color }};
+    }
+
+    & .quote__text--span {
+      color: {{ section.settings.accent_color }};
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    & .quote__cta__wrapper {
+      display: flex;
+      width: 100%;
+      justify-content: {{ section.settings.button_alignment }};
+    }
+
+    & .quote__cta {
+      display: inline-block;
+      width: max-content;
+      padding: 1rem 2rem;
+      background-color: {{ section.settings.button_bg }};
+      border-radius: 9999px;
+      color: {{ section.settings.button_text_color }};
+      font-size: clamp(12px, 2vw, 14px);
+      text-decoration: none;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      font-weight: 500;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+
+  @media screen and (width >= 48rem) {
+    #{{section.id}} {
+      padding-top: {{ section.settings.padding_top }}em;
+      padding-bottom: {{ section.settings.padding_bottom }}em;
+
+      & .section__quote__container {
+        gap: 2.5rem;
+      }
+
+      & .quote__cta {
+        padding: 1.125rem 2.5rem;
+      }
+    }
+  }
+</style>
+
+<section id="{{section.id}}">
+  <div class="section__quote__container container-sl">
+    <div class="quote__wrapper">
+      {% if section.settings.quote != blank %}
+        <p class="quote__text">
+          {% assign quote_with_accent = section.settings.quote | replace: '{accent}', '<span class="quote__text--span">' | replace: '{/accent}', '</span>' %}
+          {{ quote_with_accent }}
+        </p>
+      {% endif %}
+
+      {% if section.settings.button_text != blank %}
+        <div class="quote__cta__wrapper">
+          <a href="{{ section.settings.button_link }}" class="quote__cta">
+            {{ section.settings.button_text }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% if section.settings.enable_scroll_animation %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.getElementById('{{ section.id }}');
+    const quoteText = section.querySelector('.quote__text');
+    
+    if (!quoteText) return;
+    
+    const initialOpacity = 0.35;
+    const transitionDuration = 300;
+    let words = [];
+    let ticking = false;
+
+    function splitTextIntoWords() {
+      const text = quoteText.innerHTML;
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = text;
+      
+      function processNode(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const content = node.textContent;
+          const fragment = document.createDocumentFragment();
+          const parts = content.split(/(\s+)/);
+          
+          parts.forEach(function(part) {
+            if (part.match(/^\s+$/)) {
+              fragment.appendChild(document.createTextNode(part));
+            } else if (part.length > 0) {
+              const span = document.createElement('span');
+              span.textContent = part;
+              span.className = 'quote__word';
+              span.style.opacity = initialOpacity;
+              span.style.transition = 'opacity ' + (transitionDuration / 1000) + 's ease-out';
+              span.style.display = 'inline';
+              fragment.appendChild(span);
+            }
+          });
+          
+          return fragment;
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          const newNode = node.cloneNode(false);
+          Array.from(node.childNodes).forEach(function(child) {
+            newNode.appendChild(processNode(child));
+          });
+          return newNode;
+        }
+        return node.cloneNode(true);
+      }
+      
+      const newContent = document.createDocumentFragment();
+      Array.from(tempDiv.childNodes).forEach(function(node) {
+        newContent.appendChild(processNode(node));
+      });
+      
+      quoteText.innerHTML = '';
+      quoteText.appendChild(newContent);
+      words = quoteText.querySelectorAll('.quote__word');
+    }
+
+    function animateWords() {
+      if (!words || words.length === 0) return;
+      
+      const sectionRect = section.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const sectionTop = sectionRect.top;
+      const sectionHeight = sectionRect.height;
+      const viewportCenter = windowHeight * 0.5;
+      const startTrigger = windowHeight;
+      const endTrigger = viewportCenter - (sectionHeight * 0.3);
+      
+      const scrollProgress = Math.max(0, Math.min(1, 
+        (startTrigger - sectionTop) / (startTrigger - endTrigger)
+      ));
+      
+      const totalWords = words.length;
+      
+      words.forEach(function(word, index) {
+        const wordStart = index / totalWords;
+        const wordEnd = (index + 1) / totalWords;
+        
+        let wordProgress = 0;
+        if (scrollProgress >= wordEnd) {
+          wordProgress = 1;
+        } else if (scrollProgress > wordStart) {
+          wordProgress = (scrollProgress - wordStart) / (wordEnd - wordStart);
+        }
+        
+        wordProgress = wordProgress * wordProgress * (3 - 2 * wordProgress);
+        const opacity = initialOpacity + (1 - initialOpacity) * wordProgress;
+        word.style.opacity = opacity;
+      });
+    }
+
+    function handleScroll() {
+      if (!ticking) {
+        requestAnimationFrame(function() {
+          animateWords();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    splitTextIntoWords();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    animateWords();
+  });
+</script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "C Quote CTA",
+  "tag": "section",
+  "class": "section section-quote-cta",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Quote Text",
+      "default": "If you're feeling more fatigue than usual, having trouble concentrating, or notice changes impacting multiple areas of life — it's not just you. These shifts are common in peri- and post-menopause. The key is {accent}understanding what your body needs{/accent} to stay strong, energized, and vibrant through every stage.",
+      "info": "Use {accent}text{/accent} to highlight text in accent color"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Sign Up for First Look"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content Alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "flex-start",
+      "info": "Alignment of the content block within the container"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "info": "Text alignment within the quote"
+    },
+    {
+      "type": "select",
+      "id": "button_alignment",
+      "label": "Button Alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "flex-start",
+      "info": "Alignment of the button"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_scroll_animation",
+      "label": "Enable Scroll Animation",
+      "default": false,
+      "info": "Words will gradually fill with color as you scroll down"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#080B2B"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D44F2F"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button Background",
+      "default": "#D44F2F"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Quote CTA"
+    }
+  ]
+}
+{% endschema %}

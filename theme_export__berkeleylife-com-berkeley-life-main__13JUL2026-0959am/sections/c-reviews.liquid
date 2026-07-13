@@ -1,0 +1,783 @@
+{%- comment -%}
+  Section: Reviews — Real People. Real Results.
+  Description: Horizontally scrollable review cards with background image, optional product upsell overlay.
+  sl-id: sl-section-reviews-v1
+  Figma Desktop: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5270-13386
+  Figma Mobile:  https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5347-7463
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-reviews-v1'
+-%}
+
+<style>
+  #{{ section.id }} {
+    & .c-reviews {
+      background-color: {{ section.settings.bg_color }};
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    & .c-reviews__heading {
+      margin: 0;
+      padding: 0 20px;
+      text-align: center;
+      font-family: "TT Commons Pro Medium", sans-serif;
+      font-size: clamp(32px, 8vw, 48px);
+      font-weight: 500;
+      line-height: 1.2;
+      color: {{ section.settings.title_color }};
+      width: 100%;
+    }
+
+    & .c-reviews__heading em {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(34px, 8.7vw, 52px);
+      color: {{ section.settings.title_accent_color }};
+      line-height: 1.2;
+    }
+
+    & .c-reviews__track-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    & .c-reviews__track-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    & .c-reviews__track {
+      display: flex;
+      gap: 16px;
+      padding: 0 20px;
+      width: max-content;
+    }
+
+    & .c-reviews__card {
+      flex-shrink: 0;
+      width: 270px;
+      height: 450px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px 20px;
+      box-sizing: border-box;
+    }
+
+    & .c-reviews__card-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      z-index: 0;
+    }
+
+    & .c-reviews__video-wrap {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    & .c-reviews__video {
+      border: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    & .c-reviews__video-controls {
+      align-items: center;
+      bottom: 14px;
+      display: flex;
+      gap: 8px;
+      left: 14px;
+      position: absolute;
+      z-index: 3;
+    }
+
+    & .c-reviews__video-control {
+      align-items: center;
+      background: rgba(8, 11, 43, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      min-height: 34px;
+      min-width: 40px;
+      padding: 8px;
+      transition: opacity 0.2s ease;
+    }
+
+    & .c-reviews__video-control:hover {
+      opacity: 0.85;
+    }
+
+    & .c-reviews__video-control:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    & .c-reviews__video-control-icon {
+      display: flex;
+      width: 20px;
+      height: 20px;
+    }
+
+    & .c-reviews__video-control-icon svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    & .c-reviews__video-control-icon--unmuted,
+    & .c-reviews__video-control-icon--play,
+    & .c-reviews__video-control.is-active .c-reviews__video-control-icon--muted,
+    & .c-reviews__video-control.is-active .c-reviews__video-control-icon--pause {
+      display: none;
+    }
+
+    & .c-reviews__video-control.is-active .c-reviews__video-control-icon--unmuted,
+    & .c-reviews__video-control.is-active .c-reviews__video-control-icon--play {
+      display: flex;
+    }
+
+    & .c-reviews__card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(27, 28, 41, 0.5) 100%);
+      z-index: 1;
+    }
+
+    & .c-reviews__product {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    & .c-reviews__product-img-wrap {
+      flex-shrink: 0;
+      width: 50px;
+      height: 74px;
+      position: relative;
+      box-shadow: 4px 4px 0px 0px #000;
+    }
+
+    & .c-reviews__product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom;
+    }
+
+    & .c-reviews__product-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      color: #fff;
+    }
+
+    & .c-reviews__product-title {
+      margin: 0;
+      font-family: "TT Commons", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    & .c-reviews__product-price {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(32px, 4vw, 40px);
+      line-height: 1.2;
+    }
+
+    @media screen and (min-width: 768px) {
+      & .c-reviews {
+        padding-top: {{ section.settings.padding_top_desktop }}px;
+        padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+        gap: 41px;
+      }
+
+      & .c-reviews__heading {
+        padding: 0;
+      }
+
+      & .c-reviews__track {
+        padding: 0;
+        justify-content: center;
+        flex-wrap: nowrap;
+      }
+
+      & .c-reviews__card {
+        width: 292px;
+        height: 487px;
+        padding: 30px 17px 30px 26px;
+      }
+
+      & .c-reviews__video-controls {
+        bottom: 18px;
+        left: 18px;
+      }
+
+      & .c-reviews__video-control {
+        min-height: 36px;
+        min-width: 42px;
+      }
+    }
+
+    @media screen and (min-width: 978px) {
+      & .c-reviews__track-wrapper {
+        overflow-x: auto;
+        width: 95%;
+        max-width: 1480px;
+        margin-inline: auto;
+        cursor: grab;
+      }
+
+      & .c-reviews__track-wrapper.is-dragging {
+        cursor: grabbing;
+        user-select: none;
+      }
+
+      & .c-reviews__track {
+        width: 100%;
+        padding: 0;
+        gap: 22px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    @media screen and (min-width: 1200px) {
+      & .c-reviews__track {
+        width: max-content;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+      }
+    }
+  }
+</style>
+
+<section
+  id="{{ section.id }}"
+  class="c-reviews-wrapper"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-reviews"
+>
+  <div class="c-reviews">
+
+    {%- if section.settings.heading_plain != blank or section.settings.heading_italic != blank -%}
+      <h2 class="c-reviews__heading">
+        {%- if section.settings.heading_plain != blank -%}{{ section.settings.heading_plain }} {%- endif -%}
+        {%- if section.settings.heading_italic != blank -%}<em>{{ section.settings.heading_italic }}</em>.{%- endif -%}
+      </h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="c-reviews__track-wrapper">
+        <div class="c-reviews__track">
+          {%- for block in section.blocks -%}
+            <div
+              class="c-reviews__card"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.video != blank -%}
+                <div class="c-reviews__video-wrap">
+                  {{
+                    block.settings.video
+                    | video_tag:
+                      class: 'c-reviews__video',
+                      autoplay: true,
+                      loop: true,
+                      muted: true,
+                      controls: false,
+                      playsinline: true,
+                      image_size: '760x1290'
+                  }}
+
+                  <div class="c-reviews__video-controls" aria-label="Video controls">
+                    <button
+                      type="button"
+                      class="c-reviews__video-control js-c-reviews-video-control"
+                      data-action="mute"
+                      aria-label="Unmute video"
+                      aria-pressed="false"
+                    >
+                      <span class="c-reviews__video-control-icon c-reviews__video-control-icon--muted" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                          <path d="M4 9.5V14.5H8.2L13 19V5L8.2 9.5H4Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M16 9L21 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                          <path d="M21 9L16 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        </svg>
+                      </span>
+                      <span class="c-reviews__video-control-icon c-reviews__video-control-icon--unmuted" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                          <path d="M4 9.5V14.5H8.2L13 19V5L8.2 9.5H4Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M16.5 9C17.5 9.9 18.1 11.1 18.1 12.4C18.1 13.7 17.5 14.9 16.5 15.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                          <path d="M19 6.8C20.7 8.2 21.8 10.2 21.8 12.4C21.8 14.6 20.7 16.6 19 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        </svg>
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="c-reviews__video-control js-c-reviews-video-control"
+                      data-action="play"
+                      aria-label="Pause video"
+                      aria-pressed="false"
+                    >
+                      <span class="c-reviews__video-control-icon c-reviews__video-control-icon--pause" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                          <path d="M9 6.5V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                          <path d="M15 6.5V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                      </span>
+                      <span class="c-reviews__video-control-icon c-reviews__video-control-icon--play" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                          <path d="M8.5 6.8L17 12L8.5 17.2V6.8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              {%- elsif block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  alt="{{ block.settings.image_alt | escape }}"
+                  class="c-reviews__card-bg"
+                  loading="lazy"
+                  width="600"
+                  height="1067"
+                >
+              {%- endif -%}
+
+              <div class="c-reviews__card-overlay"></div>
+
+              {%- if block.settings.product != blank -%}
+                {%- assign review_product = block.settings.product -%}
+                <div class="c-reviews__product">
+                  {%- if review_product.featured_image != blank -%}
+                    <div class="c-reviews__product-img-wrap">
+                      <img
+                        src="{{ review_product.featured_image | image_url: width: 160 }}"
+                        alt="{{ review_product.featured_image.alt | escape }}"
+                        width="160"
+                        height="213"
+                        loading="lazy"
+                      >
+                    </div>
+                  {%- endif -%}
+                  <div class="c-reviews__product-info">
+                    <p class="c-reviews__product-title">{{ review_product.title }}</p>
+                    <p class="c-reviews__product-price">{{ review_product.price | money }}</p>
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+  (function() {
+    var sectionId = '{{ section.id }}';
+    var sectionRoot = document.getElementById(sectionId);
+
+    function syncVideoButtonLabels(button, video) {
+      if (!button || !video) {
+        return;
+      }
+
+      var action = button.dataset.action;
+
+      if (action === 'mute') {
+        var shouldUnmute = video.muted;
+        button.classList.toggle('is-active', !shouldUnmute);
+        button.setAttribute('aria-label', shouldUnmute ? 'Unmute video' : 'Mute video');
+        button.setAttribute('aria-pressed', shouldUnmute ? 'false' : 'true');
+      }
+
+      if (action === 'play') {
+        var isPaused = video.paused;
+        button.classList.toggle('is-active', isPaused);
+        button.setAttribute('aria-label', isPaused ? 'Play video' : 'Pause video');
+        button.setAttribute('aria-pressed', isPaused ? 'false' : 'true');
+      }
+    }
+
+    function syncVideoControlGroup(videoWrap) {
+      if (!videoWrap) {
+        return;
+      }
+
+      var video = videoWrap.querySelector('video');
+      if (!video) {
+        return;
+      }
+
+      var buttons = videoWrap.querySelectorAll('.js-c-reviews-video-control');
+      buttons.forEach(function(button) {
+        syncVideoButtonLabels(button, video);
+      });
+    }
+
+    function muteOtherVideos(activeVideo) {
+      if (!activeVideo || !sectionRoot) {
+        return;
+      }
+
+      var allVideos = sectionRoot.querySelectorAll('.c-reviews__video-wrap video');
+      allVideos.forEach(function(video) {
+        if (video !== activeVideo && !video.muted) {
+          video.muted = true;
+          syncVideoControlGroup(video.closest('.c-reviews__video-wrap'));
+        }
+      });
+    }
+
+    function initVideoControls() {
+      if (!sectionRoot) {
+        return;
+      }
+
+      if (sectionRoot.dataset.videoControlsBound === 'true') {
+        return;
+      }
+      sectionRoot.dataset.videoControlsBound = 'true';
+
+      var videoWraps = sectionRoot.querySelectorAll('.c-reviews__video-wrap');
+      videoWraps.forEach(function(videoWrap) {
+        syncVideoControlGroup(videoWrap);
+      });
+
+      sectionRoot.addEventListener('click', function(event) {
+        var button = event.target.closest('.js-c-reviews-video-control');
+        if (!button) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        var videoWrap = button.closest('.c-reviews__video-wrap');
+        if (!videoWrap) {
+          return;
+        }
+
+        var video = videoWrap.querySelector('video');
+        if (!video) {
+          return;
+        }
+
+        if (button.dataset.action === 'mute') {
+          var nextMutedState = !video.muted;
+          video.muted = nextMutedState;
+
+          if (!nextMutedState) {
+            muteOtherVideos(video);
+          }
+        }
+
+        if (button.dataset.action === 'play') {
+          if (video.paused) {
+            video.play().catch(function() {});
+          } else {
+            video.pause();
+          }
+        }
+
+        syncVideoControlGroup(videoWrap);
+      });
+
+      sectionRoot.addEventListener('play', function(event) {
+        var video = event.target;
+        if (video && video.tagName === 'VIDEO') {
+          syncVideoControlGroup(video.closest('.c-reviews__video-wrap'));
+        }
+      }, true);
+
+      sectionRoot.addEventListener('pause', function(event) {
+        var video = event.target;
+        if (video && video.tagName === 'VIDEO') {
+          syncVideoControlGroup(video.closest('.c-reviews__video-wrap'));
+        }
+      }, true);
+
+      sectionRoot.addEventListener('volumechange', function(event) {
+        var video = event.target;
+        if (video && video.tagName === 'VIDEO') {
+          if (!video.muted) {
+            muteOtherVideos(video);
+          }
+          syncVideoControlGroup(video.closest('.c-reviews__video-wrap'));
+        }
+      }, true);
+    }
+
+    function initDesktopDragScroll() {
+      if (!sectionRoot) {
+        return;
+      }
+
+      if (sectionRoot.dataset.dragScrollBound === 'true') {
+        return;
+      }
+
+      var trackWrapper = sectionRoot.querySelector('.c-reviews__track-wrapper');
+      if (!trackWrapper) {
+        return;
+      }
+
+      sectionRoot.dataset.dragScrollBound = 'true';
+
+      var isDragging = false;
+      var startX = 0;
+      var startScrollLeft = 0;
+
+      function canDrag() {
+        return window.matchMedia('(min-width: 978px)').matches && trackWrapper.scrollWidth > trackWrapper.clientWidth + 1;
+      }
+
+      function stopDragging(event) {
+        isDragging = false;
+        trackWrapper.classList.remove('is-dragging');
+        if (event && trackWrapper.releasePointerCapture) {
+          try {
+            trackWrapper.releasePointerCapture(event.pointerId);
+          } catch (e) {}
+        }
+      }
+
+      trackWrapper.addEventListener('pointerdown', function(event) {
+        if (event.button !== 0 || !canDrag()) {
+          return;
+        }
+
+        if (event.target.closest('button, a, input, select, textarea')) {
+          return;
+        }
+
+        isDragging = true;
+        startX = event.clientX;
+        startScrollLeft = trackWrapper.scrollLeft;
+        trackWrapper.classList.add('is-dragging');
+        if (trackWrapper.setPointerCapture) {
+          try {
+            trackWrapper.setPointerCapture(event.pointerId);
+          } catch (e) {}
+        }
+      });
+
+      trackWrapper.addEventListener('pointermove', function(event) {
+        if (!isDragging) {
+          return;
+        }
+
+        var deltaX = event.clientX - startX;
+        trackWrapper.scrollLeft = startScrollLeft - deltaX;
+        event.preventDefault();
+      });
+
+      trackWrapper.addEventListener('pointerup', stopDragging);
+      trackWrapper.addEventListener('pointercancel', stopDragging);
+      trackWrapper.addEventListener('pointerleave', stopDragging);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        initVideoControls();
+        initDesktopDragScroll();
+      });
+    } else {
+      initVideoControls();
+      initDesktopDragScroll();
+    }
+
+    document.addEventListener('shopify:section:load', function(event) {
+      if (event.detail && event.detail.sectionId === sectionId) {
+        sectionRoot = document.getElementById(sectionId);
+        initVideoControls();
+        initDesktopDragScroll();
+      }
+    });
+
+    document.addEventListener('shopify:section:unload', function(event) {
+      if (event.detail && event.detail.sectionId === sectionId && sectionRoot) {
+        delete sectionRoot.dataset.videoControlsBound;
+        delete sectionRoot.dataset.dragScrollBound;
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Reviews — Real People",
+  "tag": "section",
+  "class": "c-reviews-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading_plain",
+      "label": "Heading — plain part",
+      "default": "Real People."
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading — italic accent",
+      "default": "Real Results",
+      "info": "Displayed in italic Cormorant Garamond with accent color, followed by a period."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_accent_color",
+      "label": "Heading accent color (italic)",
+      "default": "#fcd5cc"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top — mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom — mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Padding top — desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Padding bottom — desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review_card",
+      "name": "Review card",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify-hosted video",
+          "info": "Optional - when set, video is shown instead of background photo"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background photo"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Featured product",
+          "info": "Optional — leave empty to hide the product overlay"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews — Real People",
+      "blocks": [
+        { "type": "review_card" },
+        { "type": "review_card" },
+        { "type": "review_card" },
+        { "type": "review_card" },
+        { "type": "review_card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

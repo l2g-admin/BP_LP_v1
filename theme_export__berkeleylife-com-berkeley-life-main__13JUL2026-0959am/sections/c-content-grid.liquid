@@ -1,0 +1,605 @@
+{% comment %}
+  ** Custom Content Grid - Section (CORRECTED) **
+  - Uses an explicit CSS Grid for precise, stable layout.
+  - Blog posts are dynamically pulled using the Shopify Article object.
+{% endcomment %}
+
+<style>
+  .custom-content-grid-section-{{ section.id }} {
+    padding: 50px 0;
+    background-color: {{ section.settings.background_color }};
+  }
+
+  .custom-content-grid__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .crs-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .content-grid-heading {
+    font-size: 54px;
+    text-align: center;
+ 
+    line-height: 120%;
+    color: #333;
+    margin: 0 0 10px 0;
+  }
+
+  .content-grid-heading span {
+    font-size: 64px;
+    line-height: 100%;
+    color: #c95d43; /* Accent color for 'You Can Feel.' */
+  }
+
+  .content-grid-subheading {
+    font-size: 20px;
+    text-align: center;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .custom-content-grid__grid {
+    display: grid;
+    padding: 80px 0;
+    place-self: center;
+    /* Define 3 equal columns */
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    /* Let rows size themselves based on content for flexibility */
+    grid-template-rows: auto auto auto auto 1.4fr auto;
+    
+    gap: 20px;
+  }
+
+  .custom-content-grid__item {
+    border-radius: 16px;
+    overflow: hidden;
+    color: #1a1a1a;
+  }
+
+  /* --- CORRECTED Grid Item Placement --- */
+  /* This version uses explicit grid lines for a stable layout. */
+  .custom-content-grid__item--1 { grid-column: 1 / 3; grid-row: 1 / 3; }
+  .custom-content-grid__item--2 { grid-column: 3 / 5; grid-row: 1 / 2; }
+  .custom-content-grid__item--3 { grid-column: 3 / 5; grid-row: 2 / 3; }
+  .custom-content-grid__item--4 { grid-column: 1 / 3; grid-row: 3 / 4; }
+  .custom-content-grid__item--5 { grid-column: 3 / 5; grid-row: 3 / 5; }
+  .custom-content-grid__item--6 { grid-column: 1 / 2; grid-row: 4 / 6; }
+  .custom-content-grid__item--7 { grid-column: 2 / 3; grid-row: 4 / 6; }
+  .custom-content-grid__item--8 { grid-column: 3 / 5; grid-row: 5 / 6; }
+
+  /* --- Blog Card Styles --- */
+  .custom-content-grid__blog-card {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    background-color: #333;
+    min-height: 250px;
+    height: 100%;
+  }
+
+  .custom-content-grid__blog-card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    transition: transform 0.4s ease;
+  }
+
+  .custom-content-grid__blog-card:hover .custom-content-grid__blog-card-image {
+    transform: scale(1.05);
+  }
+
+  .custom-content-grid__blog-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1));
+    z-index: 2;
+  }
+
+  .custom-content-grid__blog-card-content {
+    position: relative;
+    z-index: 3;
+    padding: 24px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+  }
+  
+  .custom-content-grid__blog-card-title {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 100%;
+    margin: 0 0 8px 0;
+  }
+
+  .custom-content-grid__blog-card-source {
+    font-size: 0.9em;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  .custom-content-grid__blog-card-icon {
+    position: absolute;
+    bottom: 24px;
+    right: 26px;
+    background-color: #f26522; /* Example color */
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    transition: background-color 0.3s ease;
+  }
+
+  .custom-content-grid__blog-card-icon svg{
+    width: 18px;
+    height: 18px;
+    transform: translateX(-2px);
+  }
+
+  .custom-content-grid__blog-card:hover .custom-content-grid__blog-card-icon {
+    background-color: #d85112;
+  }
+
+  /* --- Testimonial Card Styles --- */
+  .custom-content-grid__testimonial-card {
+    background-color: #f5f5f5;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .custom-content-grid__testimonial-stars {
+    color: #f26522; /* Example color */
+    margin-bottom: 16px;
+    font-size: 1.2em;
+    line-height: 1;
+  }
+
+  .custom-content-grid__testimonial-text {
+    font-size: 0.95em;
+    line-height: 1.6;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .custom-content-grid__testimonial-author {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .custom-content-grid__testimonial-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+  }
+
+  .custom-content-grid__testimonial-name {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  /* --- Responsive Styles --- */
+  @media (max-width: 768px) {
+    .custom-content-grid__grid {
+      grid-template-columns: 1fr;
+      padding: 48px 0;
+    }
+
+    .content-grid-heading {
+      font-size: 32px;
+    }
+
+    .content-grid-heading span {
+      font-size: 40px;
+    }
+
+    .content-grid-subheading {
+      font-size: 18px;
+    }
+
+    .custom-content-grid__item--1,
+    .custom-content-grid__item--2,
+    .custom-content-grid__item--3,
+    .custom-content-grid__item--4,
+    .custom-content-grid__item--5,
+    .custom-content-grid__item--6,
+    .custom-content-grid__item--7,
+    .custom-content-grid__item--8 {
+      grid-column: auto;
+      grid-row: auto;
+    }
+  }
+</style>
+
+<div class="custom-content-grid-section-{{ section.id }}">
+  <div class="container-sl">
+    <div class="content-grid-header">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'heading' -%}
+            <h2 class="content-grid-heading" {{ block.shopify_attributes }}>
+              {%- assign processed_heading = block.settings.heading -%}
+              {%- assign parts = processed_heading | split: '**' -%}
+              {%- for part in parts -%}
+                {%- assign remainder = forloop.index0 | modulo: 2 -%}
+                {%- if forloop.index == 1 -%}
+                  {{ part }}
+                {%- elsif remainder == 0 -%}
+                  {{ part }}
+                {%- else -%}
+                  <span class='text-orange font-secondaryHeader'>{{ part }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+            </h2>
+          {%- when 'paragraph' -%}
+            <div class="content-grid-subheading" {{ block.shopify_attributes }}>
+              {{ block.settings.text }}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+    <div class="custom-content-grid__grid">
+      
+      {%- assign item1_article = section.settings.item1_article -%}
+      <a href="{{ item1_article.url | default: '#' }}" class="custom-content-grid__item custom-content-grid__item--1 custom-content-grid__blog-card">
+        {% if item1_article.image %}
+          <img src="{{ item1_article.image | image_url: width: 800 }}" alt="{{ item1_article.image.alt | escape }}" loading="lazy" class="custom-content-grid__blog-card-image" width="{{ item1_article.image.width }}" height="{{ item1_article.image.height }}">
+        {% else %}
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg', 'custom-content-grid__blog-card-image' }}
+        {% endif %}
+        <div class="custom-content-grid__blog-card-content">
+          <div>
+            <h3 class="custom-content-grid__blog-card-title font-secondaryHeader">{{ item1_article.title | default: "Blog Post Title" }}</h3>
+            {% comment %} <p class="custom-content-grid__blog-card-source">{{ section.settings.item1_source }}</p> {% endcomment %}
+          </div>
+        </div>
+        <div class="custom-content-grid__blog-card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="#FFFFFF"><path d="M6.53 1.47a.75.75 0 0 0-1.06 1.06L8.94 6l-3.47 3.47a.75.75 0 0 0 1.06 1.06l4-4a.75.75 0 0 0 0-1.06l-4-4Z"></path></svg>
+        </div>
+      </a>
+      
+      {%- assign item2_article = section.settings.item2_article -%}
+      <a href="{{ item2_article.url | default: '#' }}" class="custom-content-grid__item custom-content-grid__item--2 custom-content-grid__blog-card">
+        {% if item2_article.image %}
+          <img src="{{ item2_article.image | image_url: width: 800 }}" alt="{{ item2_article.image.alt | escape }}" loading="lazy" class="custom-content-grid__blog-card-image">
+        {% else %}
+           {{ 'image' | placeholder_svg_tag: 'placeholder-svg', 'custom-content-grid__blog-card-image' }}
+        {% endif %}
+        <div class="custom-content-grid__blog-card-content">
+          <div>
+            <h3 class="custom-content-grid__blog-card-title font-secondaryHeader">{{ item2_article.title | default: "Blog Post Title" }}</h3>
+            {% comment %} <p class="custom-content-grid__blog-card-source">{{ section.settings.item2_source }}</p> {% endcomment %}
+          </div>
+        </div>
+        <div class="custom-content-grid__blog-card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="#FFFFFF"><path d="M6.53 1.47a.75.75 0 0 0-1.06 1.06L8.94 6l-3.47 3.47a.75.75 0 0 0 1.06 1.06l4-4a.75.75 0 0 0 0-1.06l-4-4Z"></path></svg>
+        </div>
+      </a>
+      
+      <div class="custom-content-grid__item custom-content-grid__item--3 custom-content-grid__testimonial-card">
+        <div>
+          <div class="custom-content-grid__testimonial-stars">{% for i in (1..section.settings.item3_rating) %}★{% endfor %}</div>
+          <div class="custom-content-grid__testimonial-text">{{ section.settings.item3_text }}</div>
+        </div>
+        <div class="custom-content-grid__testimonial-author">
+          {% if section.settings.item3_avatar != blank %}<img src="{{ section.settings.item3_avatar | image_url: width: 90 }}" alt="{{ section.settings.item3_avatar.alt | escape }}" loading="lazy" class="custom-content-grid__testimonial-avatar">{% endif %}
+          <p class="custom-content-grid__testimonial-name font-secondaryHeader">{{ section.settings.item3_name }}</p>
+        </div>
+      </div>
+      
+      <div class="custom-content-grid__item custom-content-grid__item--4 custom-content-grid__testimonial-card">
+        <div>
+          <div class="custom-content-grid__testimonial-stars">{% for i in (1..section.settings.item4_rating) %}★{% endfor %}</div>
+          <div class="custom-content-grid__testimonial-text">{{ section.settings.item4_text }}</div>
+        </div>
+        <div class="custom-content-grid__testimonial-author">
+          {% if section.settings.item4_avatar != blank %}<img src="{{ section.settings.item4_avatar | image_url: width: 90 }}" alt="{{ section.settings.item4_avatar.alt | escape }}" loading="lazy" class="custom-content-grid__testimonial-avatar">{% endif %}
+          <p class="custom-content-grid__testimonial-name font-secondaryHeader">{{ section.settings.item4_name }}</p>
+        </div>
+      </div>
+      
+      {%- assign item5_article = section.settings.item5_article -%}
+      <a href="{{ item5_article.url | default: '#' }}" class="custom-content-grid__item custom-content-grid__item--5 custom-content-grid__blog-card">
+        {% if item5_article.image %}
+          <img src="{{ item5_article.image | image_url: width: 800 }}" alt="{{ item5_article.image.alt | escape }}" loading="lazy" class="custom-content-grid__blog-card-image">
+        {% else %}
+           {{ 'image' | placeholder_svg_tag: 'placeholder-svg', 'custom-content-grid__blog-card-image' }}
+        {% endif %}
+        <div class="custom-content-grid__blog-card-content">
+          <div>
+            <h3 class="custom-content-grid__blog-card-title font-secondaryHeader">{{ item5_article.title | default: "Blog Post Title" }}</h3>
+            {% comment %} <p class="custom-content-grid__blog-card-source">{{ section.settings.item5_source }}</p> {% endcomment %}
+          </div>
+        </div>
+        <div class="custom-content-grid__blog-card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="#FFFFFF"><path d="M6.53 1.47a.75.75 0 0 0-1.06 1.06L8.94 6l-3.47 3.47a.75.75 0 0 0 1.06 1.06l4-4a.75.75 0 0 0 0-1.06l-4-4Z"></path></svg>
+        </div>
+      </a>
+      
+      {%- assign item6_article = section.settings.item6_article -%}
+      <a href="{{ item6_article.url | default: '#' }}" class="custom-content-grid__item custom-content-grid__item--6 custom-content-grid__blog-card">
+        {% if item6_article.image %}
+          <img src="{{ item6_article.image | image_url: width: 800 }}" alt="{{ item6_article.image.alt | escape }}" loading="lazy" class="custom-content-grid__blog-card-image">
+        {% else %}
+           {{ 'image' | placeholder_svg_tag: 'placeholder-svg', 'custom-content-grid__blog-card-image' }}
+        {% endif %}
+        <div class="custom-content-grid__blog-card-content">
+          <div>
+            <h3 class="custom-content-grid__blog-card-title font-secondaryHeader">{{ item6_article.title | default: "Blog Post Title" }}</h3>
+            {% comment %} <p class="custom-content-grid__blog-card-source">{{ section.settings.item6_source }}</p> {% endcomment %}
+          </div>
+        </div>
+        <div class="custom-content-grid__blog-card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="#FFFFFF"><path d="M6.53 1.47a.75.75 0 0 0-1.06 1.06L8.94 6l-3.47 3.47a.75.75 0 0 0 1.06 1.06l4-4a.75.75 0 0 0 0-1.06l-4-4Z"></path></svg>
+        </div>
+      </a>
+
+      {%- assign item7_article = section.settings.item7_article -%}
+      <a href="{{ item7_article.url | default: '#' }}" class="custom-content-grid__item custom-content-grid__item--7 custom-content-grid__blog-card">
+        {% if item7_article.image %}
+          <img src="{{ item7_article.image | image_url: width: 800 }}" alt="{{ item7_article.image.alt | escape }}" loading="lazy" class="custom-content-grid__blog-card-image">
+        {% else %}
+           {{ 'image' | placeholder_svg_tag: 'placeholder-svg', 'custom-content-grid__blog-card-image' }}
+        {% endif %}
+        <div class="custom-content-grid__blog-card-content">
+          <div>
+            <h3 class="custom-content-grid__blog-card-title font-secondaryHeader">{{ item7_article.title | default: "Blog Post Title" }}</h3>
+            {% comment %} <p class="custom-content-grid__blog-card-source">{{ section.settings.item7_source }}</p> {% endcomment %}
+          </div>
+        </div>
+        <div class="custom-content-grid__blog-card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="#FFFFFF"><path d="M6.53 1.47a.75.75 0 0 0-1.06 1.06L8.94 6l-3.47 3.47a.75.75 0 0 0 1.06 1.06l4-4a.75.75 0 0 0 0-1.06l-4-4Z"></path></svg>
+        </div>
+      </a>
+      
+      <div class="custom-content-grid__item custom-content-grid__item--8 custom-content-grid__testimonial-card">
+        <div>
+          <div class="custom-content-grid__testimonial-stars">{% for i in (1..section.settings.item8_rating) %}★{% endfor %}</div>
+          <div class="custom-content-grid__testimonial-text">{{ section.settings.item8_text }}</div>
+        </div>
+        <div class="custom-content-grid__testimonial-author">
+          {% if section.settings.item8_avatar != blank %}<img src="{{ section.settings.item8_avatar | image_url: width: 90 }}" alt="{{ section.settings.item8_avatar.alt | escape }}" loading="lazy" class="custom-content-grid__testimonial-avatar">{% endif %}
+          <p class="custom-content-grid__testimonial-name font-secondaryHeader">{{ section.settings.item8_name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "C Content Grid",
+  "class": "custom-content-grid-section",
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Science You Can Trust. Results You Can Feel."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Decades of nitric oxide research confirm its role in circulation, energy, and vitality. Berkeley Life builds on this foundation with clinically studied results.</p>"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Grid Item 1 (Large Blog)"
+    },
+    {
+      "type": "article",
+      "id": "item1_article",
+      "label": "Select Blog Post"
+    },
+    {
+      "type": "text",
+      "id": "item1_source",
+      "label": "Source Text (Podcast Name, etc.)",
+      "default": "How to Boost Energy... on Energized Podcast"
+    },
+    {
+      "type": "header",
+      "content": "Grid Item 2 (Blog)"
+    },
+    {
+      "type": "article",
+      "id": "item2_article",
+      "label": "Select Blog Post"
+    },
+    {
+      "type": "text",
+      "id": "item2_source",
+      "label": "Source Text",
+      "default": "Maurice Daher on The Modern Man Podcast"
+    },
+    {
+      "type": "header",
+      "content": "Grid Item 3 (Testimonial)"
+    },
+    {
+      "type": "range",
+      "id": "item3_rating",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Star Rating",
+      "default": 5
+    },
+    {
+      "type": "richtext",
+      "id": "item3_text",
+      "label": "Testimonial Text",
+      "default": "<p>Nitric Oxide support is critical... I recommend adding Berkeley Life’s Nitric Oxide to your health journey.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "item3_avatar",
+      "label": "Author Avatar"
+    },
+    {
+      "type": "text",
+      "id": "item3_name",
+      "label": "Author Name",
+      "default": "Dr. Terry Wahls"
+    },
+    {
+      "type": "header",
+      "content": "Grid Item 4 (Testimonial)"
+    },
+    {
+      "type": "range",
+      "id": "item4_rating",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Star Rating",
+      "default": 5
+    },
+    {
+      "type": "richtext",
+      "id": "item4_text",
+      "label": "Testimonial Text",
+      "default": "<p>We saw a noticeable benefit when adding the Berkeley Life capsules into our procedures. Blood flow and healing are crucial...</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "item4_avatar",
+      "label": "Author Avatar"
+    },
+    {
+      "type": "text",
+      "id": "item4_name",
+      "label": "Author Name",
+      "default": "Dr. Richard Moore"
+    },
+    {
+      "type": "header",
+      "content": "Grid Item 5 (Large Blog)"
+    },
+    {
+      "type": "article",
+      "id": "item5_article",
+      "label": "Select Blog Post"
+    },
+    {
+      "type": "text",
+      "id": "item5_source",
+      "label": "Source Text",
+      "default": "Cathy Eason on Age Like a Badass Mother Podcast"
+    },
+    {
+      "type": "header",
+      "content": "Grid Item 6 (Blog)"
+    },
+    {
+      "type": "article",
+      "id": "item6_article",
+      "label": "Select Blog Post"
+    },
+    {
+      "type": "text",
+      "id": "item6_source",
+      "label": "Source Text",
+      "default": "Why Circulation is the New Marker of Wellness"
+    },
+    {
+      "type": "header",
+      "content": "Grid Item 7 (Blog)"
+    },
+    {
+      "type": "article",
+      "id": "item7_article",
+      "label": "Select Blog Post"
+    },
+    {
+      "type": "text",
+      "id": "item7_source",
+      "label": "Source Text",
+      "default": "Cathy Eason on the Aging Well Podcast"
+    },
+    {
+      "type": "header",
+      "content": "Grid Item 8 (Testimonial)"
+    },
+    {
+      "type": "range",
+      "id": "item8_rating",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Star Rating",
+      "default": 5
+    },
+    {
+      "type": "richtext",
+      "id": "item8_text",
+      "label": "Testimonial Text",
+      "default": "<p>Berkeley Life is a company that has gained my respect for their commitment to the development of science-based products...</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "item8_avatar",
+      "label": "Author Avatar"
+    },
+    {
+      "type": "text",
+      "id": "item8_name",
+      "label": "Author Name",
+      "default": "Dr. Jeffrey Bland"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Content Grid"
+    }
+  ]
+}
+{% endschema %}

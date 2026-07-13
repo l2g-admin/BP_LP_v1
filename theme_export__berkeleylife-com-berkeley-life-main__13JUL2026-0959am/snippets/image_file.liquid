@@ -1,0 +1,35 @@
+{% comment %}
+  Renders an image from file name
+  Accepts:
+  - handle: {String} Handle of the object you are targeting (e.g. 'ingredients' or 'our-story')
+  - type: {String} Type of object you are targeting (e.g. 'blog' or 'page')
+
+  Usage:
+  {% render 'image_file', handle: childlink.object.handle, type: 'page' %}
+
+  Requires: A file to to added in Admin > Files with the same name as the output.
+{% endcomment %}
+
+{%- assign image = handle | prepend: '-' | prepend: type | append: '.jpg' -%}
+
+<img
+  srcset="
+  {{- image | file_img_url: '165x' }} 165w,
+  {{ image | file_img_url: '330x' }} 330w,
+  {{ image | file_img_url: '535x' }} 535w,
+  {{ image | file_img_url: '750x' }} 750w,
+  {{ image | file_img_url: '1000x' }} 1000w,
+  {{ image | file_img_url: '1500x' }} 1500w"
+  src="{{ image | file_img_url: '1500x' }}"
+  sizes="{{ img_size | default: '(min-width: 750px) 50vw, 100vw' }}"
+  alt="{{ image.alt | escape }}"
+  height="{{ image.height }}"
+  width="{{ image.width }}"
+  {% if eager == true -%} loading="eager" {%- else -%} loading="lazy" {%- endif %}
+  {% if fade_in != false -%}
+    class="{{ classes }} {{ fit | default: 'object-cover' }} opacity-0 transition-opacity duration-700"
+    onload="imgLoaded(this, 'opacity-0', 'opacity-100')"
+  {%- else -%}
+    class="{{ classes }}"
+  {%- endif %}
+>

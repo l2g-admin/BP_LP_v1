@@ -1,0 +1,70 @@
+{% comment %}
+  FrontRow Banner Section
+  Displays a sticky banner widget from FrontRow Health
+{% endcomment %}
+
+{% if section.settings.product_type == 'menopause' %}
+  {% assign product_id = '3784' %}
+{% elsif section.settings.product_type == 'nitric-oxide' %}
+  {% assign product_id = '3783' %}
+{% else %}
+  {% assign product_id = '' %}
+{% endif %}
+
+{% if product_id != '' %}
+  <script async type="text/javascript" src="https://app.thefrontrowhealth.com/api/widgets/script?presentation_type=sticker&product_id={{ product_id }}"></script>
+  <iframe data-state="max" class="iframe-frontrow-sticker" id="frontrow-sticker-{{ product_id }}" frameborder="0" src="https://app.thefrontrowhealth.com/api/widgets?presentation_type=sticker&product_id={{ product_id }}"></iframe>
+
+  <style>
+    #frontrow-sticker-{{ product_id }} {
+      position: absolute;
+      z-index: 3;
+      border-radius: 0 !important;
+    }
+    
+    .iframe.frontrow {
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 99999997;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  </style>
+{% endif %}
+
+{% schema %}
+{
+  "name": "FrontRow Banner",
+  "tag": "section",
+  "class": "frontrow-banner-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "product_type",
+      "label": "Product Type",
+      "options": [
+        {
+          "value": "menopause",
+          "label": "Menopause & Heart Health Support"
+        },
+        {
+          "value": "nitric-oxide",
+          "label": "Nitric Oxide Support"
+        }
+      ],
+      "default": "menopause",
+      "info": "Select which FrontRow banner widget to display"
+    }
+  ],
+  "presets": [
+    {
+      "name": "FrontRow Banner"
+    }
+  ]
+}
+{% endschema %}

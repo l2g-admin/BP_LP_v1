@@ -1,0 +1,451 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: {{ section.settings.section_min_height }}vh;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+    {% if section.settings.background_image %}
+      background: url("{{ section.settings.background_image | image_url }}") no-repeat center center;
+      background-size: cover;
+    {% endif %}
+
+
+
+    & .c-section-top {
+      display: flex;
+      flex-direction: column;
+      align-items: {{ section.settings.section_top_alignment }};
+      text-align: {{ section.settings.text_alignment }};
+      margin-bottom: 30px;
+
+      & .c-section-top-subheading {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: {{ section.settings.text_color }};
+      }
+      & .c-section-top-heading {
+        font-size: clamp(30px, 4vw, 40px);
+        margin-bottom: 1rem;
+        font-weight: 500;
+        color: {{ section.settings.text_color }};
+          & span {
+          &.red__span {
+            color: #E10017 !important;
+          }
+        }
+      }
+      & .c-section-top-para * {
+        font-size: clamp(14px, 2.5vw, 24px);
+        margin-bottom: 1.5rem;
+        color: {{ section.settings.text_color }};
+      }
+    }
+
+    & .c-uv-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      & .c-uv-video {
+        width: {{ section.settings.width }}%;
+        object-fit: {{ section.settings.video_fit }};
+        min-height: {{ section.settings.min_height }}vh;
+        background-color: {{ section.settings.video_bg_color }};
+      }
+      & .c-uv-image {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        border-radius: 20px;
+      }
+    }
+
+    & .btn__div {
+      display: flex;
+      place-content: center;
+      width: 100%;
+      margin-top: 1.5rem;
+
+      & .btn {
+         width: 33% !important;
+         text-transform: capitalize !important;
+         letter-spacing: normal !important;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    #{{ section.id }} {
+
+      & .btn__div {
+
+        & .btn {
+          width: 100% !important;
+        }
+    }
+
+     & .c-uv-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      & .c-uv-video {
+          min-height: {{ section.settings.min_height_mobile }}vh;
+      }
+    }
+
+   }
+  }
+</style>
+
+{% liquid
+  assign vAutoplay = section.settings.autoplay
+  assign vLoop = section.settings.loop
+  assign vMuted = section.settings.muted
+  assign vControls = section.settings.controls
+  assign vPoster = section.settings.poster_image | image_url
+%}
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="container-sl">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}
+        <p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>
+      {%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}
+        <h2 class="c-section-top-heading">{{ section.settings.section_top_heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}
+        <div class="c-section-top-para">{{ section.settings.section_top_paragraph }}</div>
+      {%- endif -%}
+    </div>
+    <div class="c-uv-wrapper">
+      {% if section.settings.video != blank %}
+        {{
+          section.settings.video
+          | media_tag:
+            autoplay: vAutoplay,
+            loop: vLoop,
+            muted: vMuted,
+            controls: vControls,
+            class: 'c-uv-video',
+            poster: vPoster
+        }}
+      {% elsif section.settings.image != blank or section.settings.image_mobile != blank %}
+        {% assign desktop_img = section.settings.image | default: section.settings.image_mobile %}
+        <picture>
+          {% if section.settings.image_mobile != blank %}
+            <source media="(max-width: 768px)" srcset="{{ section.settings.image_mobile | image_url: width: 1200 }}">
+          {% endif %}
+          {{
+            desktop_img
+            | image_url: width: 5000
+            | image_tag: loading: 'lazy', height: 'auto', class: 'c-uv-image', alt: section.settings.image_alt
+          }}
+        </picture>
+      {% endif %}
+    </div>
+    {%- if section.settings.button_url -%}
+      <div class="btn__div">
+        <a class="btn {{ section.settings.button_style }}" href="{{ section.settings.button_url }}">
+          {{- section.settings.button_text -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Image Video",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video Upload"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_image",
+      "label": "Poster Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Upload Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Upload Image (mobile ≤768px)"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image Alt Text",
+      "default": "Image description"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "video_bg_color",
+      "label": "Video Background color",
+      "info": "Color for the empty space around the video. Type 'transparent' to leave blank."
+    },
+    {
+      "type": "header",
+      "content": "Video Size"
+    },
+    {
+      "type": "select",
+      "id": "video_fit",
+      "label": "Video Fit",
+      "default": "cover",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        },
+        {
+          "value": "fill",
+          "label": "Fill"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Video Width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 100,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Video Min height",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0,
+      "unit": "vh"
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Video Min height mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0,
+      "unit": "vh"
+    },
+    {
+      "type": "header",
+      "content": "Video Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "Muted",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "Controls",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "button_style",
+      "label": "Button style"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "range",
+      "id": "section_min_height",
+      "label": "Section Min height",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0,
+      "unit": "vh"
+    },
+    {
+      "type": "select",
+      "id": "section_container",
+      "label": "Section container",
+      "default": "page-width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Normal"
+        },
+        {
+          "value": "",
+          "label": "None"
+        },
+        {
+          "value": "page-width2",
+          "label": "Smaller"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000"
+    },
+    {
+      "type": "header",
+      "content": "Section Top"
+    },
+    {
+      "type": "text",
+      "id": "section_top_subheading",
+      "label": "Subheading",
+      "default": "subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "section_top_heading",
+      "label": "Heading",
+      "default": "Section Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "section_top_paragraph",
+      "label": "Paragraph",
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+    },
+    {
+      "type": "select",
+      "id": "section_top_alignment",
+      "label": "Section Top Alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Image Video"
+    }
+  ]
+}
+{% endschema %}

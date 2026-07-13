@@ -1,0 +1,253 @@
+
+<div style="--color-text: {{ section.settings.text_color | default: '#090909' }}; --color-bg: {{ section.settings.bg_color | default: '#F6F3F0' }}" class="bg-bg text-text">
+  <div class=" max-w-screen-xl mx-auto px-6 md:px-16 {{ section.settings.mobile_spacing_top | prepend: 'pt-' }} {{ section.settings.mobile_spacing_bottom | prepend: 'pb-' }} {{ section.settings.spacing_top | prepend: 'md:pt-' }} {{ section.settings.spacing_bottom | prepend: 'md:pb-' }}">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-center">
+
+      <div class="flex flex-col justify-center space-y-6">
+        {%- if section.settings.heading != blank -%}
+          <{{ section.settings.heading_level | default: 'h2' }} class="{{ section.settings.heading_style | default: 'h2' }}">
+            {{ section.settings.heading }}
+          </{{ section.settings.heading_level | default: 'h2' }}>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="prose text-text">{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+          <div>
+            <a href="{{ section.settings.button_link }}" class="{{ section.settings.button_style | default: 'button button--primary' }}">
+              {{ section.settings.button_label }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="flex justify-center items-center">
+        {%- if section.settings.image != blank -%}
+          <div class="{{ section.settings.image_ratio | default: 'aspect-square' }} w-full">
+            {%- render 'image', image: section.settings.image, fit: 'object-contain', eager: section.settings.eager, classes: 'w-full h-full' -%}
+          </div>
+        {%- else -%}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg w-full' }}
+        {%- endif -%}
+      </div>
+
+      <div class="flex flex-col gap-4">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'relief' -%}
+            <div
+              class="rounded-2xl p-6 space-y-2 text-center"
+              style="background-color: {{ block.settings.card_bg | default: section.settings.card_bg | default: '#F3ECEC' }};"
+              {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <p class="subhead text-brand">{{ block.settings.heading }}</p>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="prose text-sm text-center text-text">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "3 Col Reliefs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Column 1 — Heading & Text"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Headline Can Go Right Here"
+    },
+    {
+      "type": "select",
+      "id": "heading_level",
+      "label": "Heading Hierarchy",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "Heading 1" },
+        { "value": "h2", "label": "Heading 2" },
+        { "value": "h3", "label": "Heading 3" },
+        { "value": "p", "label": "Paragraph" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_style",
+      "label": "Heading Style",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "subhead", "label": "Small Caps" }
+      ]
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Body Text",
+      "default": "<p>Add your description here.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button Style",
+      "default": "button button--primary",
+      "options": [
+        { "value": "button button--primary", "label": "Primary" },
+        { "value": "button button--secondary", "label": "Secondary" },
+        { "value": "button button--outline", "label": "Outline" },
+        { "value": "button--text", "label": "Text Link" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Column 2 — Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "eager",
+      "label": "Eager load image?",
+      "default": false,
+      "info": "Enable when this is the first image on the page."
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image Ratio",
+      "default": "aspect-square",
+      "options": [
+        { "value": "aspect-square", "label": "Square" },
+        { "value": "aspect-[4/3]", "label": "Wide" },
+        { "value": "aspect-[3/4]", "label": "Portrait" },
+        { "value": "aspect-video", "label": "Wider" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Column 3 — Relief Cards"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Default Card Background",
+      "default": "#F3ECEC"
+    },
+    {
+      "type": "header",
+      "content": "Colors & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "range",
+      "id": "spacing_top",
+      "label": "Spacing Top (desktop)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom",
+      "label": "Spacing Bottom (desktop)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_top",
+      "label": "Spacing Top (mobile)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_bottom",
+      "label": "Spacing Bottom (mobile)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 8
+    }
+  ],
+  "blocks": [
+    {
+      "type": "relief",
+      "name": "Relief Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Menopause Symptom Relief"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>Add a short description of this relief benefit here.</p>"
+        },
+        {
+          "type": "color",
+          "id": "card_bg",
+          "label": "Card Background Color",
+          "info": "Overrides the section default if set."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "3 Col Reliefs",
+      "blocks": [
+        { "type": "relief" },
+        { "type": "relief" }
+      ]
+    }
+  ]
+}
+{% endschema %}

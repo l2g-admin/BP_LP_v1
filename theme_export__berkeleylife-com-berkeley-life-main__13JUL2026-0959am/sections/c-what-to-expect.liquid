@@ -1,0 +1,494 @@
+{%- comment -%}
+  Section: C What to Expect
+  Description: Horizontal 3-column milestone timeline with a full-bleed decorative divider and image cards with color overlays. Mobile: stacks with horizontal scroll.
+  sl-id: sl-section-what-to-expect-v1
+  Figma Desktop: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5279-13758
+  Figma Mobile:  https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5358-25985
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-what-to-expect-v1'
+-%}
+
+<style>
+  /* =========================================
+     C WHAT TO EXPECT — BASE (MOBILE FIRST)
+     ========================================= */
+  #{{ section.id }} {
+    --c-wte-bg:         {{ section.settings.bg_color }};
+    --c-wte-text:       {{ section.settings.text_color }};
+    --c-wte-accent:     {{ section.settings.accent_color }};
+    --c-wte-pt:         {{ section.settings.padding_top_mobile }}px;
+    --c-wte-pb:         {{ section.settings.padding_bottom_mobile }}px;
+    --c-wte-cols:       {{ section.blocks.size }};
+
+    background-color: var(--c-wte-bg);
+    padding-top: var(--c-wte-pt);
+    padding-bottom: var(--c-wte-pb);
+    overflow: hidden;
+
+    & .c-what-to-expect__inner {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ---- Header ---- */
+    & .c-what-to-expect__header {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    & .c-what-to-expect__tagline {
+      font-family: "TT Commons", sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 2.1px;
+      text-transform: uppercase;
+      color: var(--c-wte-text);
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    & .c-what-to-expect__title {
+      font-family: "TT Commons Pro", sans-serif;
+      font-weight: 500;
+      font-size: 40px;
+      line-height: 1.2;
+      letter-spacing: -1.38px;
+      color: var(--c-wte-text);
+      margin: 0;
+
+      & em {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 48px;
+      }
+    }
+
+    /* ---- Unified scroll wrapper — CSS Grid drives all 3 rows with shared columns ---- */
+    & .c-what-to-expect__scroll-wrap {
+      display: grid;
+      grid-template-columns: repeat(var(--c-wte-cols), minmax(240px, 1fr));
+      column-gap: 32px;
+      row-gap: 13px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    /* ---- Timeline row — spans all grid columns, uses subgrid for alignment ---- */
+    & .c-what-to-expect__timeline {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+    }
+
+    & .c-what-to-expect__milestone {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    & .c-what-to-expect__label {
+      font-family: "TT Commons", sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 2.1px;
+      text-transform: uppercase;
+      color: var(--c-wte-text);
+      line-height: 1.2;
+      display: block;
+    }
+
+    & .c-what-to-expect__desc {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 1.2;
+      color: var(--c-wte-accent);
+      margin: 0;
+    }
+
+    /* ---- Decorative divider row — subgrid keeps dots under their milestone ---- */
+    & .c-what-to-expect__divider {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+      align-items: center;
+      position: relative;
+      height: 27px;
+    }
+
+    & .c-what-to-expect__divider::before {
+      content: '';
+      position: absolute;
+      left: 0; /* no bleed on mobile — wrapper clips overflow */
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 1px;
+      background-color: var(--c-wte-accent);
+      opacity: 0.35;
+    }
+
+    & .c-what-to-expect__dot-col {
+      display: flex;
+      align-items: center;
+    }
+
+    & .c-what-to-expect__dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: var(--c-wte-text);
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+
+    /* ---- Gallery row — subgrid keeps cards under their milestone ---- */
+    & .c-what-to-expect__gallery {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+    }
+
+    & .c-what-to-expect__card {
+      height: 196px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    & .c-what-to-expect__card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    & .c-what-to-expect__card-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    & .c-what-to-expect__card-overlay--red {
+      background-color: #d54f2f;
+      mix-blend-mode: color;
+    }
+
+    & .c-what-to-expect__card-overlay--desaturate {
+      background-color: #000;
+      mix-blend-mode: saturation;
+    }
+  }
+
+  /* =========================================
+     TABLET (768px+)
+     ========================================= */
+  @media (min-width: 768px) {
+    #{{ section.id }} {
+      --c-wte-pt: {{ section.settings.padding_top_desktop }}px;
+      --c-wte-pb: {{ section.settings.padding_bottom_desktop }}px;
+
+      & .c-what-to-expect__inner {
+        gap: 48px;
+      }
+
+      & .c-what-to-expect__title {
+        font-size: 48px;
+
+        & em {
+          font-size: 48px;
+        }
+      }
+
+      & .c-what-to-expect__scroll-wrap {
+        overflow-x: visible;
+        column-gap: 88px;
+        grid-template-columns: repeat(var(--c-wte-cols), minmax(0, 1fr));
+      }
+
+      & .c-what-to-expect__divider::before {
+        left: -150px; /* bleed on desktop */
+        right: -150px;
+      }
+    }
+  }
+</style>
+
+<section
+  id="{{ section.id }}"
+  class="c-what-to-expect"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-what-to-expect"
+  {%- if section.settings.sl_anchor_id != blank -%}
+    data-anchor="{{ section.settings.sl_anchor_id | handle }}"
+  {%- endif -%}
+>
+  <div class="container-sl">
+    <div class="c-what-to-expect__inner">
+
+      {%- comment -%} ========== HEADER ========== {%- endcomment -%}
+      <div class="c-what-to-expect__header">
+        {%- if section.settings.tagline != blank -%}
+          <p class="c-what-to-expect__tagline">{{ section.settings.tagline }}</p>
+        {%- endif -%}
+        {%- if section.settings.title_plain != blank or section.settings.title_italic != blank -%}
+          <h2 class="c-what-to-expect__title">
+            {%- if section.settings.title_plain != blank -%}
+              {{- section.settings.title_plain -}}
+            {%- endif -%}
+            {%- if section.settings.title_italic != blank -%}
+              <em>{{ section.settings.title_italic }}</em>
+            {%- endif -%}
+          </h2>
+        {%- endif -%}
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+
+        {%- comment -%} ========== SCROLL WRAP (timeline + divider + gallery scroll as one on mobile) ========== {%- endcomment -%}
+        <div class="c-what-to-expect__scroll-wrap">
+
+          {%- comment -%} ========== MILESTONE TIMELINE ========== {%- endcomment -%}
+          <div class="c-what-to-expect__timeline">
+            {%- for block in section.blocks -%}
+              <div class="c-what-to-expect__milestone" {{ block.shopify_attributes }}>
+                {%- if block.settings.label != blank -%}
+                  <span class="c-what-to-expect__label">{{ block.settings.label }}</span>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <p class="c-what-to-expect__desc">{{ block.settings.description }}</p>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} ========== DECORATIVE DIVIDER ========== {%- endcomment -%}
+          <div class="c-what-to-expect__divider" aria-hidden="true">
+            {%- for block in section.blocks -%}
+              <div class="c-what-to-expect__dot-col">
+                <span class="c-what-to-expect__dot"></span>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} ========== IMAGE GALLERY ========== {%- endcomment -%}
+          <div class="c-what-to-expect__gallery">
+            {%- for block in section.blocks -%}
+              {%- if block.settings.image != blank -%}
+                <div class="c-what-to-expect__card">
+                  {{
+                    block.settings.image
+                    | image_url: width: 800
+                    | image_tag:
+                      class: 'c-what-to-expect__card-img',
+                      loading: 'lazy',
+                      alt: block.settings.image.alt | default: block.settings.label
+                  }}
+                  {%- if block.settings.overlay_type == 'red' -%}
+                    <div class="c-what-to-expect__card-overlay c-what-to-expect__card-overlay--red"></div>
+                  {%- elsif block.settings.overlay_type == 'desaturate' -%}
+                    <div class="c-what-to-expect__card-overlay c-what-to-expect__card-overlay--desaturate"></div>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+        </div>
+
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C What to Expect",
+  "tag": "section",
+  "class": "c-what-to-expect-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "Optional HTML anchor for in-page navigation links"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "WHAT TO EXPECT"
+    },
+    {
+      "type": "text",
+      "id": "title_plain",
+      "label": "Title — Plain Text",
+      "default": "Built for Daily Use,"
+    },
+    {
+      "type": "text",
+      "id": "title_italic",
+      "label": "Title — Italic Part",
+      "info": "Rendered in Cormorant Garamond italic",
+      "default": "Designed for Long-Term Impact"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#080b2b"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent (milestone desc + divider line)",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "header",
+      "content": "Spacing — Desktop"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Spacing — Mobile"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Milestone Column",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Week Label",
+          "default": "WEEKS 1-2"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Early improvements in circulation and energy"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "overlay_type",
+          "label": "Image Overlay",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "red", "label": "Red Tint (mix-blend-mode: color)" },
+            { "value": "desaturate", "label": "Desaturate (mix-blend-mode: saturation)" }
+          ],
+          "default": "none"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C What to Expect",
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "label": "WEEKS 1-2",
+            "description": "Early improvements in circulation and energy",
+            "overlay_type": "red"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "label": "WEEKS 3-4",
+            "description": "More consistent energy and performance",
+            "overlay_type": "desaturate"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "label": "WEEK 12",
+            "description": "Clinically validated improvements in blood pressure and circulation",
+            "overlay_type": "none"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

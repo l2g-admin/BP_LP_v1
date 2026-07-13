@@ -1,0 +1,76 @@
+{% comment %}theme-check-disable UndefinedObject{% endcomment %}
+{%- assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+
+{%- if pick_up_availabilities.size > 0 -%}
+  <pickup-availability-preview class="flex items-start gap-2">
+    {%- liquid
+      assign closest_location = pick_up_availabilities.first
+
+      if closest_location.available
+        render 'icon-tick', classes: 'w-6'
+      endif
+    -%}
+
+    <div>
+      {%- if closest_location.available -%}
+        <p>{{ 'products.product.pickup_availability.pick_up_available_at_html' | t: location_name: closest_location.location.name }}</p>
+        <p>{{ closest_location.pick_up_time }}</p>
+        <button id="ShowPickupAvailabilityDrawer" class="button--text" aria-haspopup="dialog">
+          {%- if pick_up_availabilities.size == 1 -%}
+            {{ 'products.product.pickup_availability.view_store_info' | t }}
+          {%- else -%}
+            {{ 'products.product.pickup_availability.check_other_stores' | t }}
+          {%- endif -%}
+        </button>
+      {%- else -%}
+        <p>{{ 'products.product.pickup_availability.pick_up_unavailable_at_html' | t: location_name: closest_location.location.name }}</p>
+        {%- if pick_up_availabilities.size > 1 -%}
+          <button id="ShowPickupAvailabilityDrawer" class="button--text" aria-haspopup="dialog">{{ 'products.product.pickup_availability.check_other_stores' | t }}</button>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </pickup-availability-preview>
+
+  <pickup-availability-drawer tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="PickupAvailabilityHeading" class="max-h-80 p-8 overflow-auto">
+    <div>
+      <h2 class="text-lg font-bold" id="PickupAvailabilityHeading">{{ product_variant.product.title | escape }}</h2>
+      <button class="button--text" type="button" aria-label="{{ 'accessibility.close' | t }}">{%- render 'icon-close' -%}</button>
+    </div>
+
+    {%- unless product_variant.product.has_only_default_variant -%}
+      <p class="">
+        {%- for product_option in product_variant.product.options_with_values -%}
+          {{ product_option.name | escape }}:&nbsp;
+          {%- for value in product_option.values -%}
+            {%- if product_option.selected_value == value -%}
+              <span>{{ value | escape }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- unless forloop.last -%},&nbsp;{%- endunless forloop.last -%}
+        {%- endfor -%}
+      </p>
+    {%- endunless -%}
+
+    <ul class="" role="list" data-store-availability-drawer-content>
+      {%- for availability in pick_up_availabilities -%}
+        <li class="">
+          <h3 class="text-base font-bold">{{ availability.location.name | escape }}</h3>
+          <p class="flex">
+            {%- if availability.available -%}
+              <span class="w-6">{% render 'icon-tick' %}</span> {{ 'products.product.pickup_availability.pick_up_available' | t }}, {{ availability.pick_up_time | downcase }}
+            {%- endif -%}
+          </p>
+
+          {%- assign address = availability.location.address -%}
+          <address class="">
+            {{ address | format_address }}
+
+            {%- if address.phone.size > 0 -%}
+              <p>{{ address.phone }}</p>
+            {%- endif -%}
+          </address>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </pickup-availability-drawer>
+{%- endif -%}

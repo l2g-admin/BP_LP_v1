@@ -1,0 +1,9 @@
+{% assign target_product = all_products[short_code_value] %}
+{%- if target_product.available == true -%}
+  <div class="not-prose bg-slate-50 p-4 {{ base_classes }}">
+    <div class="max-w-xs mx-auto">
+      <h3 class="h5 text-slate-500 mb-4 text-center">Shortcode Product</h3>
+      {% render 'product-card', product_card_product: target_product, quick_shop: true %}
+    </div>
+  </div>
+{%- endif -%}

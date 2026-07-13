@@ -1,0 +1,510 @@
+<style>
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    
+    {% if section.settings.bg_image != blank %}
+      background-image: 
+        linear-gradient(
+          {{ section.settings.overlay_color | color_modify: 'alpha', section.settings.overlay_opacity }}, 
+          {{ section.settings.overlay_color | color_modify: 'alpha', section.settings.overlay_opacity }}
+        ),
+        url('{{ section.settings.bg_image | image_url: width: 2000 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    {% else %}
+      background-color: {{ section.settings.bg_color }};
+    {% endif %}
+
+    color: {{ section.settings.text_color }};
+    display: flex;
+    align-items: center;
+    min-height: 80vh;
+  }
+
+  #{{ section.id }} .hero-sale__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    width: 100%;
+  }
+
+  #{{ section.id }} .hero-sale__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  #{{ section.id }} .hero__brand-image {
+ 
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  #{{ section.id }} .hero__brand {
+    margin: 0;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 600;
+  }
+
+  #{{ section.id }} .hero__eyebrow {
+    margin: 0;
+    font-size: 0.9rem;
+    font-style: italic;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+  }
+
+  #{{ section.id }} .hero__title {
+    margin: 0;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: clamp(52px, 6vw + 1rem, 72px);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 60px; /* 111.111% */
+    letter-spacing: -1.62px;
+  }
+
+  #{{ section.id }} .hero__discount-box {
+    width: 100%;
+    border-top: 1px solid {{ section.settings.text_color }};
+    border-bottom: 1px solid {{ section.settings.text_color }};
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #{{ section.id }} .hero__discount-value {
+    margin: 0;
+    font-size: clamp(30px, 6vw + 1rem, 46px);
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  #{{ section.id }} .hero__discount-subtitle {
+    margin: 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+
+  #{{ section.id }} .hero__links {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  #{{ section.id }} .hero__links p {
+    margin: 0;
+  }
+
+  #{{ section.id }} .hero__links a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  #{{ section.id }} .hero__links strong {
+    font-weight: 700;
+  }
+
+  #{{ section.id }} .hero__footer-text {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  #{{ section.id }} .hero__button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: {{ section.settings.btn_color }};
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: opacity 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #{{ section.id }} .hero__button:hover {
+    opacity: 0.9;
+  }
+
+  #{{ section.id }} .hero__ends-soon {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  #{{ section.id }} .hero-sale__card-col {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    width: 100%;
+  }
+
+  #{{ section.id }} .hero__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 360px;
+    border-radius: 10.251px;
+    background: rgba(0, 0, 0, 0.00);  
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 3rem 2rem 2rem;
+    margin-top: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #{{ section.id }} .card__badge {
+    background-color: {{ section.settings.btn_color }};
+    color: #FFFFFF;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    margin-top: -4rem;
+    margin-bottom: 2rem; 
+  }
+
+  #{{ section.id }} .card__image-wrapper {
+    width: 100%;
+    padding: 0 2rem;
+    margin-bottom: 2rem;
+    box-sizing: border-box;
+  }
+
+  #{{ section.id }} .card__image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+  }
+
+  #{{ section.id }} .card__title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+
+  #{{ section.id }} .card__subtitle {
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    opacity: 0.9;
+    color: #FFFFFF;
+  }
+
+  #{{ section.id }} .card__value {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    color: #FFFFFF;
+  }
+
+  /* --------------------------------------
+     MEDIA QUERIES
+  --------------------------------------- */
+  @media (width >= 978px) {
+    #{{ section.id }} .hero-sale__layout {
+      flex-direction: row;
+      align-items: stretch;
+      gap: 4rem;
+    }
+
+    #{{ section.id }} .hero-sale__content {
+      flex: 1 1 60%;
+    }
+
+    #{{ section.id }} .hero-sale__card-col {
+      flex: 0 0 35%;
+      align-items: flex-end;
+      padding: 0 2rem;
+    }
+
+    
+  }
+</style>
+
+<section class="section__hero-sale" id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="hero-sale__layout">
+      
+      <div class="hero-sale__content">
+        {% if section.settings.brand_image != blank %}
+          {{ section.settings.brand_image | image_url: width: 400 | image_tag: class: 'hero__brand-image', loading: 'eager', alt: section.settings.brand }}
+        {% else %}
+          {% if section.settings.brand != blank %}
+            <p class="hero__brand">{{ section.settings.brand }}</p>
+          {% endif %}
+          
+          {% if section.settings.eyebrow != blank %}
+            <p class="hero__eyebrow">{{ section.settings.eyebrow }}</p>
+          {% endif %}
+        {% endif %}
+
+        {% if section.settings.title != blank %}
+          <h2 class="hero__title">{{ section.settings.title }}</h2>
+        {% endif %}
+
+        <div class="hero__discount-box">
+          {% if section.settings.discount_value != blank %}
+            <p class="hero__discount-value">{{ section.settings.discount_value }}</p>
+          {% endif %}
+          
+          {% if section.settings.discount_subtitle != blank %}
+            <p class="hero__discount-subtitle">{{ section.settings.discount_subtitle }}</p>
+          {% endif %}
+          
+          {% if section.settings.links_text != blank %}
+            <div class="hero__links">{{ section.settings.links_text }}</div>
+          {% endif %}
+        </div>
+
+        {% if section.settings.footer_text != blank %}
+          <p class="hero__footer-text">{{ section.settings.footer_text }}</p>
+        {% endif %}
+
+        {% if section.settings.btn_text != blank %}
+          <a href="{{ section.settings.btn_link }}" class="hero__button">
+            {{ section.settings.btn_text }}
+          </a>
+        {% endif %}
+
+        {% if section.settings.ends_soon != blank %}
+          <p class="hero__ends-soon">{{ section.settings.ends_soon }}</p>
+        {% endif %}
+      </div>
+
+      <div class="hero-sale__card-col">
+        {% assign selected_product = section.settings.product %}
+        <a class="hero__card" {% if selected_product != blank %}href="{{ selected_product.url }}"{% endif %}>
+          {% if section.settings.card_badge != blank %}
+            <span class="card__badge">{{ section.settings.card_badge }}</span>
+          {% endif %}
+
+          <div class="card__image-wrapper">
+            {% if selected_product != blank and selected_product.featured_image %}
+              {{ selected_product.featured_image | image_url: width: 600 | image_tag: class: 'card__image', loading: 'eager', alt: selected_product.title }}
+            {% else %}
+              {{ 'product-1' | placeholder_svg_tag: 'card__image placeholder-svg' }}
+            {% endif %}
+          </div>
+
+          {% if section.settings.card_title != blank %}
+            <h3 class="card__title">{{ section.settings.card_title }}</h3>
+          {% endif %}
+
+          {% if section.settings.card_subtitle != blank %}
+            <p class="card__subtitle">{{ section.settings.card_subtitle }}</p>
+          {% endif %}
+
+          {% if section.settings.card_value != blank %}
+            <p class="card__value">{{ section.settings.card_value }}</p>
+          {% endif %}
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Mothers Hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Fallback Background Color",
+      "default": "#3A2B24"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#2C1B12"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.6
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Global Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Left Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "brand_image",
+      "label": "Brand Logo Image",
+      "info": "If uploaded, this image will replace the Brand Name and Eyebrow Text fields below."
+    },
+    {
+      "type": "text",
+      "id": "brand",
+      "label": "Brand Name",
+      "default": "Berkeley Life"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "recommended by over 3,000 HEALTHCARE PROVIDERS"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Title",
+      "default": "Mother's Day Sale"
+    },
+    {
+      "type": "textarea",
+      "id": "discount_value",
+      "label": "Discount Value",
+      "default": "30% OFF"
+    },
+    {
+      "type": "text",
+      "id": "discount_subtitle",
+      "label": "Discount Subtitle",
+      "default": "3-month subscriptions on select products:"
+    },
+    {
+      "type": "richtext",
+      "id": "links_text",
+      "label": "Links Text",
+      "default": "<p>Nitric Oxide Support · Menopause &amp; Heart Health Support</p>"
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer Text",
+      "default": "Health is the most personal gift you can give"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_color",
+      "label": "Button & Badge Color",
+      "default": "#D15534"
+    },
+    {
+      "type": "text",
+      "id": "ends_soon",
+      "label": "Ends Soon Text",
+      "default": "Ends Soon"
+    },
+    {
+      "type": "header",
+      "content": "Right Content (Product Card)"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select Product",
+      "info": "The product image will be pulled automatically."
+    },
+    {
+      "type": "text",
+      "id": "card_badge",
+      "label": "Card Badge Text",
+      "default": "FREE GIFT WITH PURCHASE"
+    },
+    {
+      "type": "text",
+      "id": "card_title",
+      "label": "Custom Title",
+      "default": "Free Balance Gum Included"
+    },
+    {
+      "type": "text",
+      "id": "card_subtitle",
+      "label": "Custom Subtitle",
+      "default": "One bottle with every qualifying order"
+    },
+    {
+      "type": "text",
+      "id": "card_value",
+      "label": "Custom Value Text",
+      "default": "Valued at $29.99"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Mothers Hero"
+    }
+  ]
+}
+{% endschema %}

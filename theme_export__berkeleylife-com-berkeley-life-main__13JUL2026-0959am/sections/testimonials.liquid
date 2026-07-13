@@ -1,0 +1,249 @@
+{%- comment -%}This section is a slideshow of testimonials{%- endcomment -%}
+<div class="bg-cream md:bg-bg" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#f7f7f7' }}" data-id="{{ section.id }}">
+  <div class="grid items-center grid-cols-1 px-4 pt-8 mx-auto max-w-screen-2xl split-md:grid-cols-3 md:px-8 md:py-8 md:pb-0 text-text">
+  <div class="md:w-10/12">
+  {%- if section.settings.subhead != blank -%}
+    <div class="max-w-[400px] px-4 py-2 mx-auto md:mx-0 mb-4 text-sm tracking-widest text-center uppercase rounded-full md:w-full bg-navy text-cream">{{ section.settings.subhead }}</div>
+  {%- endif -%}
+  {%- if section.settings.title != blank -%}
+    <h2 class="mt-8 text-4xl text-center font-header tracking-[-1.2px] md:tracking-[-1.414px] md:text-6xl text-brand md:text-left">{{ section.settings.title }}</h2>
+  {%- else -%}
+    <h2 class="sr-only">Testimonials</h2>
+  {%- endif -%}
+  </div>
+
+  <div class="relative items-center max-w-full mx-auto overflow-hidden text-center md:grid md:grid-cols-2 md:col-span-2 testimonial-swiper-container md:text-left">
+    <svg aria-hidden="true" focusable="false" role="presentation" style="width: 0; height: 0;" viewBox="0 0 16 16">
+      <defs>
+         <mask id="none">
+            <rect x="0" y="0" width="16" height="16" fill="#fff" />
+            <rect x="1%" y="0" width="16" height="16" fill="#222" />
+         </mask>
+         <mask id="half">
+            <rect x="0" y="0" width="16" height="16" fill="#fff" />
+            <rect x="50%" y="0" width="16" height="16" fill="#222" />
+         </mask>
+         <mask id="whole">
+          <rect x="0" y="0" width="16" height="16" fill="#fff" />
+          <rect x="100%" y="0" width="16" height="16" fill="#222" />
+         </mask>
+         <symbol viewBox="0 0 16 16" id="star">
+          <path d="M8 0L9.88854 6.11146H16L11.0557 9.88854L12.9443 16L8 12.2229L3.05573 16L4.94427 9.88854L0 6.11146H6.11146L8 0Z" fill="#EC5A36"/>
+         </symbol>
+      </defs>
+    </svg>
+    {%- if section.blocks.size > 0 -%}
+      <ul class="swiper-wrapper md:col-span-2"
+      role="list"
+      >
+      {%- for block in section.blocks -%}
+        {%- comment -%}Slide wrapper{%- endcomment -%}
+        <li class="text-center swiper-slide md:text-left">
+          <div class="flex flex-col w-full md:grid md:grid-cols-2">
+            {%- comment -%}Image/Quote Icon with Stars and Name{%- endcomment -%}
+            <div class="flex flex-col items-center justify-center p-8 pb-0 space-y-4 mb:pb-12 md:p-12 bg-opacity-10 shrink-0">
+              <div class="w-80 h-80">
+                {%- if block.settings.image -%}
+                  {%- render 'image', image: block.settings.image, classes: 'object-cover' -%}
+                {%- else -%}
+                  {% render 'icon-quote' %}
+                {%- endif -%}
+              </div>
+
+              
+            </div>
+
+            {%- comment -%}Main quote content{%- endcomment -%}
+            <div class="flex flex-col justify-center p-8 space-y-4 md:pb-0 ">
+              {%- if block.settings.title != blank -%}
+                <h3 class="pb-4 h3">{{ block.settings.title }}</h3>
+              {%- endif -%}
+              {%- if block.settings.quote != blank -%}
+                <div class="pt-4 text-xl ">{{ block.settings.quote }}</div>
+              {%- endif -%}
+              {%- if block.settings.stars > 3 -%}
+                <div class="mx-auto text-sm md:text-base w-fit md:w-full">
+                  <p class="flex space-x-1">
+                    <span class="sr-only">Rating is {{ block.settings.stars }} out of 5</span>
+                    <svg aria-hidden="true" focusable="false" role="presentation" width="16" height="16" viewBox="0 0 16 16">
+                      <use xlink:href="#star"/>
+                    </svg>
+                    <svg aria-hidden="true" focusable="false" role="presentation" width="16" height="16" viewBox="0 0 16 16">
+                      <use xlink:href="#star"/>
+                    </svg>
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <use xlink:href="#star"/>
+                    </svg>
+                    <svg aria-hidden="true" focusable="false" role="presentation" width="16" height="16" viewBox="0 0 16 16">
+                      <use xlink:href="#star"
+                      {% if block.settings.stars >= 4 %}
+                        mask="url(#whole)"
+                      {% elsif block.settings.stars == 3.5 %}
+                        mask="url(#half)"
+                      {% elsif block.settings.stars <= 3.0 %}
+                        mask="url(#none)"
+                      {% else %}
+                        mask="url(#none)"
+                      {% endif %}
+                      ></use>
+                    </svg>
+                    <svg aria-hidden="true" focusable="false" role="presentation" width="16" height="16" viewBox="0 0 16 16">
+                      <use xlink:href="#star"
+                      {% if block.settings.stars == 5 %}
+                        mask="url(#whole)"
+                      {% elsif block.settings.stars == 4.5 %}
+                        mask="url(#half)"
+                      {% elsif block.settings.stars <= 4.0 %}
+                        mask="url(#none)"
+                      {% else %}
+                        mask="url(#none)"
+                      {% endif %}
+                      />
+                    </svg>
+                  </p>
+                </div>
+              {%- endif -%}
+              {%- if block.settings.name != blank -%}
+                <p class="text-base font-bold tracking-widest uppercase text-brand">{{ block.settings.name }}</p>
+              {%- endif -%}
+            </div>
+
+          </div>
+        </li>
+      {%- endfor -%}
+      </ul>
+    {%- endif -%}
+    <div class="swiper-button-next"> </div>
+    <div class="swiper-button-prev "> </div> 
+    <div class="swiper-pagination md:ml-0 mx-auto col-start-2 col-span-1 !w-fit md:px-8 !relative mb-8 "></div>
+
+  </div>
+
+</div>
+</div>
+
+{%- if section.blocks.size > 0 -%}
+  <script type="module">
+    const selector = `[data-id="{{ section.id }}"] .testimonial-swiper-container`
+    const rootElement = document.querySelector(selector)
+    async function initTestimonial() {
+      const { Swiper } = await import('https://unpkg.com/swiper@8/swiper-bundle.esm.browser.min.js')
+      const testimonialSwiper = new Swiper(selector,  {
+        direction: 'horizontal',
+        mousewheel: {
+          forceToAxis: true
+        },
+        spaceBetween: 50,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        a11y: {
+          enabled: true,
+          slideRole: 'listitem'
+        }
+      })
+    }
+    function reveal() {
+      const handleIntersection = (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(rootElement);
+        initTestimonial()
+      }
+      new IntersectionObserver(handleIntersection.bind(rootElement), {rootMargin: '0px 0px 200px 0px'}).observe(rootElement);
+    }
+    reveal();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Testimonials",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subhead",
+      "default": "recommended by over 2500 HCPS",
+      "label": "Subhead"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonials",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name"
+        },
+        {
+          "type": "range",
+          "id": "stars",
+          "label": "Stars",
+          "unit": "str",
+          "min": 1,
+          "max": 5,
+          "step": 0.5,
+          "default": 5,
+          "info": "This won't show if set below 3."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Lorem Title",
+          "label": "Testionial title"
+        },
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Main Quote"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

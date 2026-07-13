@@ -1,0 +1,197 @@
+{%- comment -%}
+  Copy Code Box Snippet
+  
+  Variables:
+  - box_title: Title text (default: "YOUR EXCLUSIVE OFFER")
+  - coupon_code: The code to copy (default: "MENO20")
+  - button_text: CTA button text (default: "Shop Menopause Support")
+  - button_url: CTA button URL
+  - discount_text: Text below button (default: "Paste at checkout to save <strong>20%</strong>")
+  - discount_note: Note text (default: "*first-purchase discount")
+  - box_bg_color: Background color of the box
+  - border_color: Border color
+  - title_color: Title text color
+  - code_bg_color: Code input background color
+  - code_text_color: Code text color
+  - copy_btn_bg: Copy button background color
+  - copy_btn_text: Copy button text color
+  - cta_btn_bg: CTA button background color
+  - cta_btn_text: CTA button text color
+  - discount_text_color: Discount text color
+{%- endcomment -%}
+
+<style>
+  .copy-code-box {
+    background-color: {{ box_bg_color | default: '#ffffff' }};
+    border: 2px solid {{ border_color | default: '#D44F2F' }};
+    border-radius: 16px;
+    padding: 1.5rem;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .copy-code-box__title {
+    font-size: clamp(14px, 3vw, 16px);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: {{ title_color | default: '#080B2B' }};
+    margin: 0;
+  }
+
+  .copy-code-box__code-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: {{ code_bg_color | default: '#ffffff' }};
+    border: 2px solid {{ border_color | default: '#D44F2F' }};
+    border-radius: 8px;
+    padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+    gap: 0.5rem;
+  }
+
+  .copy-code-box__code {
+    font-size: clamp(18px, 4vw, 22px);
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: {{ code_text_color | default: '#080B2B' }};
+    flex: 1;
+    text-align: left;
+  }
+
+  .copy-code-box__copy-btn {
+    background-color: {{ copy_btn_bg | default: '#5C4B51' }};
+    color: {{ copy_btn_text | default: '#ffffff' }};
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .copy-code-box__copy-btn:hover {
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
+
+  .copy-code-box__copy-btn.copied {
+    background-color: #28a745;
+  }
+
+  .copy-code-box__cta-btn {
+    display: inline-block;
+    background-color: {{ cta_btn_bg | default: '#D44F2F' }};
+    color: {{ cta_btn_text | default: '#ffffff' }};
+    border: none;
+    border-radius: 9999px;
+    padding: 1rem 2rem;
+    font-size: clamp(16px, 3vw, 18px);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    text-align: center;
+  }
+
+  .copy-code-box__cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .copy-code-box__discount-text {
+    font-size: clamp(14px, 3vw, 16px);
+    color: {{ discount_text_color | default: '#080B2B' }};
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .copy-code-box__discount-text strong {
+    font-weight: 700;
+  }
+
+  .copy-code-box__discount-note {
+    font-size: clamp(12px, 2.5vw, 14px);
+    color: {{ discount_text_color | default: '#080B2B' }};
+    font-style: italic;
+    margin: 0;
+  }
+</style>
+
+<div class="copy-code-box">
+  {% if box_title != blank %}
+    <h3 class="copy-code-box__title">{{ box_title }}</h3>
+  {% endif %}
+
+  <div class="copy-code-box__code-wrapper">
+    <span class="copy-code-box__code" id="coupon-code-{{ unique_id | default: 'default' }}">{{ coupon_code | default: 'MENO20' }}</span>
+    <button 
+      type="button" 
+      class="copy-code-box__copy-btn" 
+      data-copy-code="{{ coupon_code | default: 'MENO20' }}"
+      aria-label="Copy coupon code"
+    >
+      {{ copy_btn_label | default: 'Copy' }}
+    </button>
+  </div>
+
+  {% if button_text != blank and button_url != blank %}
+    <a href="{{ button_url }}" class="copy-code-box__cta-btn">
+      {{ button_text }}
+    </a>
+  {% endif %}
+
+  {% if discount_text != blank %}
+    <p class="copy-code-box__discount-text">{{ discount_text }}</p>
+  {% endif %}
+
+  {% if discount_note != blank %}
+    <p class="copy-code-box__discount-note">{{ discount_note }}</p>
+  {% endif %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const copyButtons = document.querySelectorAll('[data-copy-code]');
+    
+    copyButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        const code = this.getAttribute('data-copy-code');
+        const originalText = this.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+          this.textContent = '{{ copy_success_text | default: "Copied!" }}';
+          this.classList.add('copied');
+          
+          setTimeout(() => {
+            this.textContent = originalText;
+            this.classList.remove('copied');
+          }, 2000);
+        }).catch(err => {
+          // Fallback for older browsers
+          const textarea = document.createElement('textarea');
+          textarea.value = code;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          
+          this.textContent = '{{ copy_success_text | default: "Copied!" }}';
+          this.classList.add('copied');
+          
+          setTimeout(() => {
+            this.textContent = originalText;
+            this.classList.remove('copied');
+          }, 2000);
+        });
+      });
+    });
+  });
+</script>

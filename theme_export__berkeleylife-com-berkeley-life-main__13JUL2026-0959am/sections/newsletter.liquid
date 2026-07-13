@@ -1,0 +1,211 @@
+<div class="px-4 py-4 md:px-12 md:py-20 bg-bg text-text" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+  <div class="grid max-w-screen-lg gap-8 mx-auto md:grid-cols-3">
+    <div class="relative hidden md:block">
+      {% render 'image', image:section.settings.image, classes: "absolute -top-10 -right-20" %}
+    </div>
+    <div class="col-span-2 p-8 text-center md:text-left md:px-12 md:pl-28 bg-cream rounded-3xl">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when '@app' -%}
+          {% render block %}
+        {%- when 'heading' -%}
+          <h2 class=" w-3/4 md:w-full mx-auto md:mx-0 {{ block.settings.heading_style }}" {{ block.shopify_attributes }}>{{ block.settings.heading | replace_first: "**", "<span class='font-secondaryHeader text-[50px] tracking-[-1.5px;] md:text-[73px]'>" | replace: "**", "</span>"  }}</h2>
+        {%- when 'paragraph' -%}
+          <div class="rte text-xs hidden md:block tracking-[2.28px] text-navy font-bold" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+        {%- when 'email_form' -%}
+          <div {{ block.shopify_attributes }}>
+            {% form 'customer', class: '' %}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div class="w-full">
+                <div class="items-center pb-px mx-auto my-6 md:flex gap-x-8 focus-within:text-brand group focus-within:pb-0 ">
+                  <div>
+                    <input aria-required="true" class="w-full focus:!ring-transparent focus:!border-transparent focus-visible:!outline-dashed bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0" autocomplete="name" type="text" id="ContactForm-name" name="contact[{{ 'templates.contact.form.name' | t }}]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+                    <label class="block  text-xs tracking-[2.28px] text-gray-500 uppercase cursor-pointer" for="ContactForm-name">First Name</label>
+                  </div>
+                  <div>
+                  <input
+                    id="NewsletterForm--{{ section.id }}"
+                    type="email"
+                    name="contact[email]"
+                    class="focus:!ring-transparent focus:!border-transparent focus-visible:!outline-dashed w-full px-0 placeholder-black placeholder-opacity-30 bg-transparent border border-solid !border-b-2 border-black border-t-0 border-r-0 border-l-0"
+                    value="{{ form.email }}"
+                    aria-required="true"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    autocomplete="email"
+                    {% if form.errors %}
+                      aria-invalid="true"
+                      aria-describedby="Newsletter-error--{{ section.id }}"
+                    {% elsif form.posted_successfully? %}
+                      aria-describedby="Newsletter-success--{{ section.id }}"
+                    {% endif %}
+                    required
+                  >
+                  <label class="block text-xs tracking-[2.28px] text-gray-500 uppercase cursor-pointer" for="NewsletterForm--{{ section.id }}">
+                    {{ 'newsletter.label' | t }}
+                  </label>
+                 </div>
+         
+                </div>
+                {%- if form.errors -%}
+                  <small class="text-warm-red" id="Newsletter-error--{{ section.id }}">{% render 'icon-error' %}{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</small>
+                {%- endif -%}
+              </div>
+              {%- if form.posted_successfully? -%}
+                <h3 class="" id="Newsletter-success--{{ section.id }}">{{ 'newsletter.success' | t }}</h3>
+              {%- endif -%}
+              <div>
+                <button type="submit" class="{{ block.settings.button_style }} md:px-12" name="commit" id="Subscribe" aria-label="{{ 'newsletter.button_label' | t }}">
+                  Sign Up
+                </button>
+              </div>
+            {% endform %}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.newsletter.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.newsletter.settings.paragraph.content"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },{
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "t:sections.newsletter.blocks.heading.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Subscribe to our emails",
+          "label": "t:sections.newsletter.blocks.heading.settings.heading.label"
+        },
+        {
+          "type": "select",
+          "id": "heading_style",
+          "label": "Heading Style",
+          "options": [
+            {
+              "value": "h1",
+              "label": "Heading 1"
+            },
+            {
+              "value": "h2",
+              "label": "Heading 2"
+            },
+            {
+              "value": "h3",
+              "label": "Heading 3"
+            },
+            {
+              "value": "h4",
+              "label": "Heading 4"
+            },
+            {
+              "value": "h5",
+              "label": "Heading 5"
+            },
+            {
+              "value": "subhead",
+              "label": "Small Caps"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "t:sections.newsletter.blocks.paragraph.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Be the first to know about new collections and exclusive offers.</p>",
+          "label": "t:sections.newsletter.blocks.paragraph.settings.paragraph.label"
+        }
+      ]
+    },
+    {
+      "type": "email_form",
+      "name": "t:sections.newsletter.blocks.email_form.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button Style",
+          "default": "button button--primary",
+          "options": [
+            {
+              "value": "button button--primary",
+              "label": "Primary Button"
+            },
+            {
+              "value": "button button--secondary",
+              "label": "Secondary Button"
+            },
+            {
+              "value": "button button--tertiary",
+              "label": "Tertiary Button"
+            },
+            {
+              "value": "button--text",
+              "label": "Text Link"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.newsletter.presets.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "Lorem stay up to date."
+          },
+          
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Join our email list for lorem ipsum.</p>"
+          }
+        },
+        {
+          "type": "email_form"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

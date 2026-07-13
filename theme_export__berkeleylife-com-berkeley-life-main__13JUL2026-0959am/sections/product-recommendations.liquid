@@ -1,0 +1,112 @@
+<div class="bg-cream">
+<product-recommendations class="block px-2 py-8 mx-auto max-w-screen-2xl md:px-8 md:py-20" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4">
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <h2 class="mb-8 ml-8 text-4xl text-left md:text-6xl ">{{ section.settings.heading | escape }}</h2>
+    <ul class="flex gap-4 px-4 py-1 pb-2 overflow-x-auto md:gap-8 md:grid-cols-3 overscroll-x-contain snap-x snap-mandatory scroll-p-8 md:grid " role="list">
+      {%- for recommendation in recommendations.products, limit: 3 -%}
+        <li class="min-w-[15rem] {% cycle 'button-orange', 'button-navy', 'button-aqua' %}">
+          {% render 'product-card',
+            product_card_product: recommendation,
+            image_ratio: section.settings.image_ratio,
+            show_secondary_image: section.settings.show_secondary_image,
+            show_vendor: section.settings.show_vendor,
+            quick_shop: section.settings.quick_shop
+          %}
+        </li>
+      {%- endfor -%}
+  </ul>
+  {%- endif -%}
+</product-recommendations>
+</div>
+
+{% javascript %}
+  class ProductRecommendations extends HTMLElement {
+    constructor() {
+      super();
+
+      const handleIntersection = (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(this);
+
+        fetch(this.dataset.url)
+          .then(response => response.text())
+          .then(text => {
+            const html = document.createElement('div');
+            html.innerHTML = text;
+            const recommendations = html.querySelector('product-recommendations');
+            if (recommendations && recommendations.innerHTML.trim().length) {
+              this.innerHTML = recommendations.innerHTML;
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+
+      new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 200px 0px'}).observe(this);
+    }
+  }
+
+  customElements.define('product-recommendations', ProductRecommendations);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.product-recommendations.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.product-recommendations.settings.paragraph__1.content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "You may also like",
+      "label": "t:sections.product-recommendations.settings.heading.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.product-recommendations.settings.header__2.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "aspect-[4/3]",
+          "label": "Wide"
+        },
+        {
+          "value": "aspect-[3/4]",
+          "label": "Portrait"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        }
+      ],
+      "default": "aspect-square",
+      "label": "Image Ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "t:sections.product-recommendations.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.product-recommendations.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "quick_shop",
+      "default": false,
+      "label": "Enable quick shop?"
+    }
+  ]
+}
+{% endschema %}

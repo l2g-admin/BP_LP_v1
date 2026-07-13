@@ -1,0 +1,21 @@
+{% comment %}
+    Renders a little swatch of an image
+
+    Accepts:
+    - handle: {String} The handle-ized string for getting the swatch
+
+    Usage:
+    {% render 'swatch',
+      handle: '',
+    %}
+
+{% endcomment %}
+{% assign img_handle = handle | handleize %}
+{% assign img_handle_first = img_handle | split: '-' %}
+{% assign img_link = img_handle | prepend: 'swatch-' | append: '.jpg' %}
+{% assign img_url = images[img_link] | image_url: width: 80 %}
+<div class="relative w-8 h-8 max-w-full max-h-full overflow-hidden border rounded-full" style="background-color: {{ img_handle_first | first }};">
+{%- if handle -%}
+    <img class="absolute inset-0 w-full transition-opacity opacity-0" data-handle="{{ img_handle }}" aria-hidden="true" alt="" src="{{ img_url }}" width="24" height="24" onerror="style.opacity = 0;" loading="lazy" onload="imgLoaded(this, 'opacity-0', 'opacity-100')">
+{%- endif -%}
+</div>

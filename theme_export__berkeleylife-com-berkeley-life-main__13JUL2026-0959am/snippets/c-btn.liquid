@@ -1,0 +1,100 @@
+{%- doc -%}
+  C BTN — Call to Action Button (multi-variant)
+
+  Variants:
+  - pill (default): solid pill-shaped button with background
+  - underline: uppercase text with bottom border (link style)
+
+  Parameters:
+  - text: Button text (required)
+  - link: Button link URL (default: '#')
+  - variant: 'pill' | 'underline' (default: 'pill')
+  - bg_color: Background color — pill only (default: #D54F2F)
+  - text_color: Text color (default: pill=#ffffff, underline=#D54F2F)
+  - target: Link target (default: _self)
+  - classes: Additional CSS classes (optional)
+  - aria_label: Accessibility label (defaults to text)
+
+  Usage:
+    {% render 'c-btn', text: 'Shop the Collection', link: '/collections/all' %}
+    {% render 'c-btn', variant: 'underline', text: 'How do they work?', link: '#how' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign btn_text    = text | default: 'Click Here'
+  assign btn_link    = link | default: '#'
+  assign btn_variant = variant | default: 'pill'
+  assign btn_bg      = bg_color | default: '#D54F2F'
+
+  if btn_variant == 'underline'
+    assign default_text_color = '#D54F2F'
+  else
+    assign default_text_color = '#ffffff'
+  endif
+  assign btn_text_color = text_color | default: default_text_color
+
+  assign btn_target     = target | default: '_self'
+  assign btn_classes    = classes | default: ''
+  assign btn_aria_label = aria_label | default: btn_text
+  assign btn_show_arrow = show_arrow | default: false
+-%}
+
+<a
+  href="{{ btn_link }}"
+  class="c-btn c-btn--{{ btn_variant }}{% if btn_classes != '' %} {{ btn_classes }}{% endif %}"
+  style="--c-btn-bg: {{ btn_bg }}; --c-btn-color: {{ btn_text_color }};"
+  {% if btn_target != '_self' %}target="{{ btn_target }}"{% endif %}
+  aria-label="{{ btn_aria_label }}"
+>
+  <span class="c-btn__text">{{ btn_text }}{% if btn_show_arrow %} →{% endif %}</span>
+</a>
+
+{% stylesheet %}
+  .c-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-family: 'TT Commons', sans-serif;
+    transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+    cursor: pointer;
+    color: var(--c-btn-color, #ffffff);
+  }
+
+  .c-btn__text {
+    color: inherit;
+  }
+
+  /* ---- Variant: pill ---- */
+  .c-btn--pill {
+    padding: 16px 32px;
+    border-radius: 42px;
+    background: var(--c-btn-bg, #D54F2F);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.2;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+  }
+
+  .c-btn--pill:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  /* ---- Variant: underline ---- */
+  .c-btn--underline {
+    padding: 0 0 6px;
+    background: transparent;
+    border-bottom: 2px solid currentColor;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+  }
+
+  .c-btn--underline:hover {
+    opacity: 0.75;
+  }
+{% endstylesheet %}

@@ -1,0 +1,526 @@
+<style>
+  #{{section.id}} {
+      {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+      {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+    padding-top: {{ half_padding_top }}em;
+    padding-bottom: {{ half_padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+    {% if section.settings.background_image %}
+    background-image: url('{{ section.settings.background_image | image_url: width: 1920 }}');
+    background-size: {{ section.settings.bg_image_size | default: 'cover' }};
+    background-position: {{ section.settings.bg_image_position | default: 'center center' }};
+    background-repeat: no-repeat;
+    {% endif %}
+    border-radius: {{ section.settings.border_radius }}px {{ section.settings.border_radius }}px 0 0;
+    position: relative;
+    overflow: hidden;
+
+    {% if section.settings.background_image and section.settings.show_overlay %}
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, {{ section.settings.overlay_opacity | default: 50 | divided_by: 100.0 }});
+      z-index: 1;
+    }
+    {% endif %}
+
+    & * {
+        color: {{ section.settings.text_color }};
+        position: relative;
+        z-index: 2;
+    }
+
+    & .clinical__container {
+      padding-block: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    & .clinical__header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    & .clinical__title {
+      margin: 0;
+      font-size: clamp(28px, 5vw + 1rem, 48px);
+ 
+      line-height: 1.2;
+      text-wrap: balance;
+    }
+
+    & .clinical__title--accent {
+      color: {{ section.settings.accent_color }};
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    & .clinical__grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    & .clinical__item {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    & .clinical__content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    & .clinical__icon__container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.75rem;
+    }
+
+    & .clinical__icon {
+      width: 3rem;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      & svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        fill: currentColor;
+      }
+    }
+
+    & .clinical__header__content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    & .clinical__item__title {
+      margin: 0;
+      font-size: clamp(18px, 3vw, 22px);
+  
+      line-height: 1.3;
+      text-align: left;
+    }
+
+    & .clinical__dots {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      opacity: 0.6;
+
+      & .dot {
+        width: 3px;
+        height: 3px;
+        background-color: currentColor;
+        border-radius: 50%;
+      }
+    }
+
+    & .clinical__description {
+      margin: 0;
+      font-size: clamp(14px, 2.5vw, 16px);
+      line-height: 1.5;
+      text-align: left;
+      opacity: 0.9;
+    }
+
+    & .clinical__image__container {
+      width: 100%;
+      border-radius: 1rem;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    #{{section.id}} {
+      & .clinical__grid {
+        gap: 3rem;
+      }
+
+      & .clinical__item {
+        text-align: left;
+      }
+
+      & .clinical__image__container {
+        aspect-ratio: 16/10;
+      }
+    }
+  }
+
+  @media (min-width: 1024px) {
+    #{{section.id}} {
+      padding-top: {{ section.settings.padding_top }}em;
+      padding-bottom: {{ section.settings.padding_bottom }}em;
+      border-radius: {{ section.settings.border_radius_desktop }}px {{ section.settings.border_radius_desktop }}px 0 0;
+
+      & .clinical__container {
+        gap: 4rem;
+      }
+
+      & .clinical__grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: flex-start;
+      }
+
+      & .clinical__item {
+        gap: 2rem;
+      }
+
+      & .clinical__content {
+        gap: 1.5rem;
+      }
+
+      & .clinical__icon {
+        width: 64px;
+        height: 64px;
+
+        & svg {
+          width: 100%;
+          height: auto;
+          object-fit: contain;
+        }
+      }
+        & .clinical__header__content {
+          flex-direction: row;
+          align-items: center;
+          gap: 1rem;
+        }
+
+      & .clinical__item__title {
+        font-size: 24px;
+      }
+
+      & .clinical__description {
+        font-size: 16px;
+      }
+    }
+  }
+
+  @media (min-width: 1280px) {
+    #{{section.id}} {
+      & .clinical__container {
+        gap: 5rem;
+      }
+
+      & .clinical__grid {
+        gap: 5rem;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="clinical__container container-sl">
+    {% if section.settings.title %}
+      <div class="clinical__header">
+        <h2 class="clinical__title">
+          {% assign title_with_accent = section.settings.title
+            | replace: '{accent}', '<span class="clinical__title--accent">'
+            | replace: '{/accent}', '</span>'
+          %}
+          {{ title_with_accent }}
+        </h2>
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="clinical__grid">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'clinical_item' %}
+              <div class="clinical__item" {{ block.shopify_attributes }}>
+                <div class="clinical__content">
+                  <div class="clinical__icon__container">
+                    {% if block.settings.icon %}
+                      <div class="clinical__icon">
+                        {{ block.settings.icon }}
+                      </div>
+                    {% endif %}
+
+                    <div class="container__text__caer">
+                      <div class="clinical__header__content">
+                        {% if block.settings.title %}
+                          <h3 class="clinical__item__title">{{ block.settings.title }}</h3>
+                        {% endif %}
+
+                        {% if block.settings.show_dots %}
+                          <div class="clinical__dots">
+                            {% for i in (1..30) %}
+                              <span class="dot"></span>
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                      {% if block.settings.description %}
+                        <p class="clinical__description">{{ block.settings.description }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+                {% if block.settings.image %}
+                  <div class="clinical__image__container">
+                    {{
+                      block.settings.image
+                      | image_url: width: 600
+                      | image_tag: alt: block.settings.image.alt
+                      | default: block.settings.title, width: 600, height: 'auto'
+                    }}
+                  </div>
+                {% endif %}
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Clinical Evidence",
+  "tag": "section",
+  "class": "section section-clinical-evidence",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Section Title",
+      "default": "{accent}Clinical{/accent} Evidence & Research"
+    },
+    {
+      "type": "header",
+      "content": "Design Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#D2461E"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (for italics)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Background Image Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image",
+      "info": "Optional background image for the section"
+    },
+    {
+      "type": "select",
+      "id": "bg_image_size",
+      "label": "Background Image Size",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover (Fill section)"
+        },
+        {
+          "value": "contain",
+          "label": "Contain (Fit in section)"
+        },
+        {
+          "value": "auto",
+          "label": "Auto (Original size)"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "select",
+      "id": "bg_image_position",
+      "label": "Background Image Position",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "top center",
+          "label": "Top Center"
+        },
+        {
+          "value": "bottom center",
+          "label": "Bottom Center"
+        },
+        {
+          "value": "left center",
+          "label": "Left Center"
+        },
+        {
+          "value": "right center",
+          "label": "Right Center"
+        }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show overlay",
+      "default": true,
+      "info": "Adds a dark overlay to improve text readability over background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 50,
+      "unit": "%",
+      "info": "Controls the darkness of the overlay (only when overlay is enabled)"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border Radius (Mobile)",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "border_radius_desktop",
+      "label": "Border Radius (Desktop)",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 6,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 6,
+      "unit": "rem"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "clinical_item",
+      "name": "Clinical Item",
+      "settings": [
+        {
+          "type": "html",
+          "id": "icon",
+          "label": "Icon (SVG)",
+          "info": "Paste SVG code here"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Quality of Life Measures"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Preliminary findings show promise in improving key quality-of-life measures; full clinical data expected in early 2026."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_dots",
+          "label": "Show decorative dots",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Clinical Evidence",
+      "blocks": [
+        {
+          "type": "clinical_item",
+          "settings": {
+            "title": "Quality of Life Measures",
+            "description": "Preliminary findings show promise in improving key quality-of-life measures; full clinical data expected in early 2026."
+          }
+        },
+        {
+          "type": "clinical_item",
+          "settings": {
+            "title": "24-Hour Nitrate Support",
+            "description": "A single-capsule Nitric Oxide blend maintained optimal nitrate levels for 24 hours in a pharmacokinetic study."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

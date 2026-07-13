@@ -1,0 +1,569 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+
+    & input {
+      border-bottom: 1px solid rgb(27, 28, 41) !important;
+    }
+
+
+    & .c-ct-grid {
+      display: grid;
+      grid-template-columns: {{ section.settings.grid_proportion }};
+      gap: 0em;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+
+        & .c-ct-grid1  {
+          display: flex;
+          align-items: {{ section.settings.alignment }};
+          text-align: {{ section.settings.text_alignment }};
+          flex-direction: column;
+          gap: 1rem;
+          background-color: {{ section.settings.card_bg_color }};
+          padding: {{ section.settings.padding_desktop }};
+          {% if section.settings.flip == true %}
+            order: 1;
+          {% endif %}
+
+            & .container-footer-text {
+                margin-top: 1rem;
+
+                & * {
+                  color: {{ section.settings.text_color }};
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: 150%; /* 24px */
+                  opacity: 0.7;
+                }
+              }
+
+          & .container__top {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+          }
+
+          & .c-ct-small-image {
+              /* height: 3em; */
+              width: 10em;
+            }
+
+          & .c-ct-image {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+
+          & .c-ct-subheading {
+             color: {{ section.settings.text_color }};
+             font-weight: bolder;
+             font-size: 14px;
+            }
+          & .c-ct-heading {
+            color: {{ section.settings.accent_color }};
+            font-style: italic;
+            font-weight: 300;
+            font-size: clamp(28px, 5vw, 48px);
+            font-family: "Cormorant Garamond";
+            font-weight: 500;
+            line-height: 100%; /* 48px */
+          }
+          & .c-ct-para *{
+            color: {{ section.settings.text_color }};
+            font-size: clamp(16px, 2.5dvw, 18px);
+            margin: 0;
+          }
+
+          & .c-ct-benefits {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: {{ section.settings.section_top_alignment }};
+            gap: 0.75em;
+
+            & .c-ct-benefit {
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              gap: 0.6em;
+              font-size: 1.125em;
+
+              &  svg {
+                  width: 1.5em;
+                  min-width: 1.5em;
+                }
+            }
+          }
+
+          & .c-ct-benefits-new {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75em;
+
+            & .c-ct-benefits-title {
+              color: {{ section.settings.text_color }};
+            
+              font-size: 1em;
+              margin: 0;
+            }
+
+            & .c-ct-benefit-item {
+              display: flex;
+              align-items: flex-start;
+              gap: 0.6em;
+
+              & svg {
+                min-width: 24px;
+                margin-top: 2px;
+                flex-shrink: 0;
+              }
+
+              & .c-ct-benefit-content * {
+                color: {{ section.settings.text_color }};
+                font-size: 1em;
+                line-height: 150%;
+                margin: 0;
+              }
+            }
+          }
+
+          & .c-buttons-div {
+            display: flex;
+            justify-content: center;
+            align-items: {{ section.settings.alignment }};
+            text-align: {{ section.settings.text_alignment }};
+            flex-direction: column;
+          }
+        }
+        & .c-ct-grid2 {
+          display: flex;
+ 
+          flex-direction: column;
+          gap: 1.5em;
+
+            & .c-ct-image {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+        }
+    }
+  }
+
+  @media (max-width: 768px) {
+    {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+    {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+
+    #{{ section.id }} {
+      padding-top: {{ half_padding_top }}em;
+       padding-bottom: {{ half_padding_bottom }}em;
+      & .c-ct-grid {
+        display: flex;
+        flex-direction: {{ section.settings.flex_direction_mobile }};
+        width: 100%;
+        gap: 1.5rem;
+
+        & .c-ct-grid1 {
+          padding: {{ section.settings.padding_mobile }};
+          border-radius: 40px;
+        }
+      }
+    }
+  }
+
+</style>
+
+{% assign myBlocks = section.blocks | where: 'type', 'Item' %}
+{% assign benefitBlocks = section.blocks | where: 'type', 'benefits' %}
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="{% if section.settings.full_width == false %}container-sl{% endif %}">
+    <div class="c-ct-grid">
+      <div class="c-ct-grid1">
+        <div class="container__top">
+          {% if section.settings.small_image %}
+            {{
+              section.settings.small_image
+              | image_url: width: 750
+              | image_tag: loading: 'lazy', height: 'auto', class: 'c-ct-small-image'
+            }}
+          {% endif %}
+          {% if section.settings.subheading != empty %}
+            <p class="c-ct-subheading">{{ section.settings.subheading }}</p>
+          {% endif %}
+          {% if section.settings.heading != empty %}
+            <h2 class="c-ct-heading">{{ section.settings.heading }}</h2>
+          {% endif %}
+          {% if section.settings.paragraph != empty %}
+            <div class="c-ct-para">{{ section.settings.paragraph }}</div>
+          {% endif %}
+          {% if myBlocks != blank %}
+            <div class="c-ct-benefits">
+              {% for block in section.blocks %}
+                {% case block.type %}
+                  {% when 'Item' %}
+                    <div class="c-ct-benefit" {{ block.shopify_attributes }}>
+                      {% render 'c-icon-check' %}
+                      <div>{{ block.settings.block_heading }}</div>
+                    </div>
+                {% endcase %}
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% if benefitBlocks != blank %}
+            <div class="c-ct-benefits-new">
+              {% if benefitBlocks.size > 1 %}
+                <p class="c-ct-benefits-title">{{ section.settings.benefits_title }}</p>
+              {% endif %}
+              {% for block in section.blocks %}
+                {% case block.type %}
+                  {% when 'benefits' %}
+                    <div class="c-ct-benefit-item" {{ block.shopify_attributes }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M19.0625 6.79785C19.1617 6.79788 19.2379 6.82834 19.3164 6.90723C19.395 6.98627 19.4258 7.06364 19.4258 7.16504C19.4258 7.26621 19.3955 7.34439 19.3174 7.42383L9.69922 17.0352C9.61702 17.1167 9.54103 17.1455 9.44824 17.1455C9.35561 17.1455 9.2805 17.1173 9.2002 17.0371L4.66504 12.502C4.58806 12.4238 4.56 12.3493 4.5625 12.252C4.56534 12.1459 4.60008 12.0636 4.68164 11.9824C4.76071 11.9038 4.83805 11.8731 4.93945 11.873C5.01587 11.873 5.07905 11.8905 5.13965 11.9326L5.2002 11.9834L9.09473 15.8965L9.44824 16.252L9.80273 15.8975L18.7949 6.91113C18.8799 6.82853 18.9617 6.79785 19.0625 6.79785Z" fill="#D54F2F" stroke="#D54F2F"/>
+                      </svg>
+                      <div class="c-ct-benefit-content">{{ block.settings.benefit_content }}</div>
+                    </div>
+                {% endcase %}
+              {% endfor %}
+            </div>
+          {% endif %}
+          {%- if section.settings.button_text != empty -%}
+            <div class="c-buttons-div">
+              <a class="c-button {{ section.settings.button_style }}" href="{{ section.settings.button_url }}">
+                {{- section.settings.button_text -}}
+                {%- if section.settings.show_arrow_icon -%}
+                  {%- render 'c-new-arrow-brand-gradient' -%}
+                {%- endif -%}
+              </a>
+            </div>
+          {%- endif -%}
+        </div>
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'footer-text' %}
+              <div class="container-footer-text">
+                {{ block.settings.footer_text }}
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+      <div class="c-ct-grid2">
+        {% if section.settings.klaviyo_embed != blank %}
+          {{ section.settings.klaviyo_embed }}
+        {% elsif section.settings.image %}
+          {{
+            section.settings.image
+            | image_url: width: 1500
+            | image_tag: loading: 'lazy', height: 'auto', class: 'c-ct-image'
+          }}
+        {% endif %}
+        {% if section.settings.video %}
+          {{
+            section.settings.video
+            | media_tag: autoplay: true, loop: true, muted: true, controls: true, class: 'c-ct-image'
+          }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Content Original Text",
+  "blocks": [
+    {
+      "name": "Footer Text",
+      "type": "footer-text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "footer_text",
+          "label": "Footer Text"
+        }
+      ]
+    },
+    {
+      "name": "Item",
+      "type": "Item",
+      "limit": 50,
+      "settings": [
+        {
+          "type": "text",
+          "id": "block_heading",
+          "label": "Block heading",
+          "default": "Text here"
+        }
+      ]
+    },
+    {
+      "name": "Benefit",
+      "type": "benefits",
+      "limit": 10,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "benefit_content",
+          "label": "Benefit content",
+          "default": "<p>Benefit text here</p>"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "small_image",
+      "label": "Small image"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "My heading"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+    },
+    {
+      "type": "text",
+      "id": "benefits_title",
+      "label": "Benefits title (shown when 2+ benefits)",
+      "default": "Inside this 2026 Clinical Review:"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "html",
+      "id": "klaviyo_embed",
+      "label": "Klaviyo Embed (replaces the image)"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video Upload"
+    },
+    {
+      "type": "checkbox",
+      "id": "flip",
+      "label": "Flip",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width?",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "grid_proportion",
+      "label": "Grid proportion",
+      "default": "1fr 1fr",
+      "options": [
+        {
+          "value": "1fr 1fr",
+          "label": "1 | 1"
+        },
+        {
+          "value": "1fr 0.75fr",
+          "label": "1 | 0.75"
+        },
+        {
+          "value": "0.75fr 1fr",
+          "label": "0.75 | 1"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Content alignment",
+      "default": "flex-start",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "flex_direction_mobile",
+      "label": "Flex Direction on Mobile",
+      "default": "column",
+      "options": [
+        {
+          "value": "row",
+          "label": "Row"
+        },
+        {
+          "value": "row-reverse",
+          "label": "Row Reverse"
+        },
+        {
+          "value": "column",
+          "label": "Column"
+        },
+        {
+          "value": "column-reverse",
+          "label": "Column Reverse"
+        }
+      ]
+    },
+
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow_icon",
+      "label": "Show arrow icon",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Buy Now"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "button_style",
+      "label": "Button style",
+      "default": "c-b1"
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background color",
+      "default": "transparent"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000"
+    },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent color (for heading)",
+        "default": "#000"
+      },
+    {
+      "type": "header",
+      "content": "Content Padding"
+    },
+    {
+      "type": "paragraph",
+      "content": "2 values (with units) seprated by a space. The first value is for the y-direction padding and the second for the x-direction padding"
+    },
+    {
+      "type": "text",
+      "id": "padding_desktop",
+      "label": "Content padding",
+      "default": "10% 10%"
+    },
+    {
+      "type": "text",
+      "id": "padding_mobile",
+      "label": "Content padding mobile",
+      "default": "2em 1em 1em 1em"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Content Original Text"
+    }
+  ]
+}
+{% endschema %}

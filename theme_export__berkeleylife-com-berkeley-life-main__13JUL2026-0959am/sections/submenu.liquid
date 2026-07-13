@@ -1,0 +1,65 @@
+{%- unless section.blocks.size == 0 -%}
+  <script src="{{ 'submenu.js' | asset_url }}" defer="defer"></script>
+
+  <sub-menu class="text-text" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+    <nav class="w-full mt-4 overflow-auto text-center bg-bg">
+      <ul class="flex items-center justify-center px-4 py-4 mx-auto space-x-2 text-sm font-bold tracking-widest uppercase bg-bg w-max">
+        {%- for block in section.blocks -%}
+        <li class="pr-3 sm:pr-0 shrink-0">
+          <a class="p-2 relative after:absolute after:left-0 after:bottom-0 after:w-full after:content-[''] after:bg-black after:h-px after:scale-x-0 hover:after:scale-x-50 after:transition-transform" href="{{ block.settings.link | default: "#" }}">{{ block.settings.label }}</a>
+        </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  </sub-menu>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Submenu",
+  "class": "sticky top-0 z-10",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "submenu",
+      "name": "Submenu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Submenu",
+      "blocks": [
+        {
+          "type": "submenu"
+        },
+        {
+          "type": "submenu"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

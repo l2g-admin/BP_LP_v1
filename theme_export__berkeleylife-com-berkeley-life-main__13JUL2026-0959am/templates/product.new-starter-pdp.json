@@ -1,0 +1,756 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "c_pdp_hero_main": {
+      "type": "c-pdp-hero-v2",
+      "blocks": {
+        "frontrow_banner_8njnrC": {
+          "type": "frontrow_banner",
+          "disabled": true,
+          "settings": {
+            "product_type": "nitric-oxide"
+          }
+        },
+        "okendo_star_rating_JYf4KJ": {
+          "type": "shopify://apps/okendo/blocks/star-rating/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "product": "nitric-oxide-test-strips"
+          }
+        },
+        "reviews_fallback_DUFhhW": {
+          "type": "reviews_fallback",
+          "disabled": true,
+          "settings": {
+            "stars_count": 5,
+            "rating_text": "4.8 (147 REVIEWS)",
+            "trust_text": "TRUSTED BY 3,000+ HEALTHCARE PROVIDERS."
+          }
+        },
+        "title_pRinCk": {
+          "type": "title",
+          "settings": {}
+        },
+        "description_rmFepg": {
+          "type": "description",
+          "settings": {
+            "custom_description": "Clinically proven daily Nitric Oxide Support plus easy-to-use test strips to help improve blood flow, enhance energy, support heart health, and track your progress anytime."
+          }
+        },
+        "supplement_facts_74DRiN": {
+          "type": "supplement_facts",
+          "settings": {
+            "link_label": "SUPPLEMENT FACTS",
+            "image": "shopify://shop_images/IMG_69fa8e0a-89fb-48e6-928e-d3c10f135ffc.png",
+            "page": "",
+            "content": ""
+          }
+        },
+        "product_price_FXHLh6": {
+          "type": "product_price",
+          "settings": {}
+        },
+        "included_products_DahChg": {
+          "type": "included_products",
+          "settings": {
+            "heading": "WHAT'S INCLUDED",
+            "product_1": "nitric-oxide-support",
+            "product_1_title": "",
+            "product_1_subtitle": "60 capsules · 1 month supply",
+            "product_2": "nitric-oxide-test-strips",
+            "product_2_title": "",
+            "product_2_subtitle": "50 count · results in 10 sec"
+          }
+        },
+        "buy_buttons_A7GN49": {
+          "type": "buy_buttons",
+          "settings": {
+            "cta_text": "SUBSCRIBE & SAVE",
+            "open_side_cart": true,
+            "show_dynamic_checkout": false,
+            "require_login": false,
+            "login_button_text": "Login to Purchase",
+            "login_redirect_url": "",
+            "show_shoppay_widget": true,
+            "show_truemed_widget": true,
+            "shop_pay_text": "",
+            "shop_pay_learn_more_url": "",
+            "hsa_text": "",
+            "hsa_learn_more_url": ""
+          }
+        },
+        "accordion_pdp_jik8RV": {
+          "type": "accordion_pdp",
+          "settings": {
+            "title": "Who Is This For?",
+            "content": "<p>For adults looking for clinically supported daily Nitric Oxide support with measurable results.</p><p>Suitable for men and women over 18 who want simple, trackable support for blood flow, energy, sexual wellness and healthy aging.</p>",
+            "open_by_default": true
+          }
+        },
+        "ingredient_accordion_giM6aU": {
+          "type": "ingredient_accordion",
+          "settings": {
+            "title": "Key Ingredients",
+            "open_by_default": false,
+            "ingredient_1_image": "shopify://shop_images/IMG_3.png",
+            "ingredient_1_title": "Beet Root extract & Nitrate Blend",
+            "ingredient_1_description": "A potent source of dietary nitrates that is broken down in the body to form nitric oxide. Two of our capsules has the dietary nitrate equivalent of 7oz of beetroot.",
+            "ingredient_2_image": "shopify://shop_images/IMG_2.png",
+            "ingredient_2_title": "VITAMIN C",
+            "ingredient_2_description": "An essential vitamin and potent antioxidant, Vitamin C helps convert nitrite to nitric oxide.",
+            "ingredient_3_image": "shopify://shop_images/IMG_1_c8eb0ee7-0fbf-435b-9334-00bf48e5f232.png",
+            "ingredient_3_title": "MAGNESIUM",
+            "ingredient_3_description": "A crucial mineral respected for its ability to relax blood vessels; sufficient magnesium intake is important for cardiovascular health."
+          }
+        },
+        "accordion_pdp_DjkrVM": {
+          "type": "accordion_pdp",
+          "settings": {
+            "title": "how to use?",
+            "content": "<p><strong>Nitric Oxide Support </strong></p><p><br/>Take two capsules once a day with water after food. This dosage boosts Nitric Oxide levels throughout for up to 24 hours. Do not exceed the recommended daily intake unless under the direction of your physician.</p><p><br/></p><p><strong>Nitric Oxide Test Strips</strong></p><ol><li>Place the test strip on your tongue with the \"saliva here\" side facing down. Hold for 5 seconds. </li><li>Fold the strip in half, pressing the sides together gently for 10 seconds.</li><li>Unfold and compare your results with the Nitric Oxide Scale on the package.<br/></li></ol>",
+            "open_by_default": false
+          }
+        },
+        "clinical_drawer_button_XnaE6p": {
+          "type": "clinical_drawer_button",
+          "settings": {
+            "button_text": "SEE CLINICAL TRIALS",
+            "button_style": "link",
+            "clinical_drawer_title": "Nitric Oxide Support",
+            "clinical_drawer_body": "",
+            "clinical_drawer_bg_color": "#ffffff",
+            "clinical_drawer_text_color": "#080b2b"
+          }
+        },
+        "govx_id_exclusive_discounts_govx_id_button_6AxyYW": {
+          "type": "shopify://apps/govx-id-exclusive-discounts/blocks/govx-id-button/2b41cbab-a2d3-48ab-85b4-09f16dcc4bf0",
+          "disabled": true,
+          "settings": {
+            "cta_layout": "slim",
+            "cta_prompt": "Discount available for Military, First Responders, Medical Workers and Teachers"
+          }
+        }
+      },
+      "block_order": [
+        "frontrow_banner_8njnrC",
+        "okendo_star_rating_JYf4KJ",
+        "reviews_fallback_DUFhhW",
+        "title_pRinCk",
+        "description_rmFepg",
+        "supplement_facts_74DRiN",
+        "product_price_FXHLh6",
+        "included_products_DahChg",
+        "buy_buttons_A7GN49",
+        "accordion_pdp_jik8RV",
+        "ingredient_accordion_giM6aU",
+        "accordion_pdp_DjkrVM",
+        "clinical_drawer_button_XnaE6p",
+        "govx_id_exclusive_discounts_govx_id_button_6AxyYW"
+      ],
+      "custom_css": [
+        "{background-color: #f6f3f0;}"
+      ],
+      "settings": {
+        "sl_anchor_id": "product-section-pdp",
+        "show_breadcrumbs": false,
+        "bestseller_badge_text": "BESTSELLER"
+      }
+    },
+    "c_pdp_marquee_nb3RRt": {
+      "type": "c-pdp-marquee",
+      "blocks": {
+        "phrase_FRafb4": {
+          "type": "phrase",
+          "settings": {
+            "text": "Blood Flow"
+          }
+        },
+        "phrase_FFFpPL": {
+          "type": "phrase",
+          "settings": {
+            "text": "Hormonal Balance"
+          }
+        },
+        "phrase_kwNzWJ": {
+          "type": "phrase",
+          "settings": {
+            "text": "Blood Pressure"
+          }
+        },
+        "phrase_VEDdPQ": {
+          "type": "phrase",
+          "settings": {
+            "text": "Circulation"
+          }
+        },
+        "phrase_TBxmeD": {
+          "type": "phrase",
+          "settings": {
+            "text": "Gut Health"
+          }
+        },
+        "phrase_EdKWCU": {
+          "type": "phrase",
+          "settings": {
+            "text": "Energy"
+          }
+        },
+        "phrase_Y4AfzL": {
+          "type": "phrase",
+          "settings": {
+            "text": "Sexual Health"
+          }
+        },
+        "phrase_GbzcKm": {
+          "type": "phrase",
+          "settings": {
+            "text": "Menopause"
+          }
+        }
+      },
+      "block_order": [
+        "phrase_FRafb4",
+        "phrase_FFFpPL",
+        "phrase_kwNzWJ",
+        "phrase_VEDdPQ",
+        "phrase_TBxmeD",
+        "phrase_EdKWCU",
+        "phrase_Y4AfzL",
+        "phrase_GbzcKm"
+      ],
+      "name": "C PDP Marquee",
+      "settings": {
+        "sl_anchor_id": "",
+        "eyebrow": "",
+        "background_color": "#1b1c29",
+        "text_color": "#ffffff",
+        "divider_html": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\"><path d=\"M17.6453 8.03281C17.3508 7.725 17.0461 7.40781 16.9312 7.12891C16.825 6.87344 16.8187 6.45 16.8125 6.03984C16.8008 5.27734 16.7883 4.41328 16.1875 3.8125C15.5867 3.21172 14.7227 3.19922 13.9602 3.1875C13.55 3.18125 13.1266 3.175 12.8711 3.06875C12.593 2.95391 12.275 2.64922 11.9672 2.35469C11.4281 1.83672 10.8156 1.25 10 1.25C9.18437 1.25 8.57266 1.83672 8.03281 2.35469C7.725 2.64922 7.40781 2.95391 7.12891 3.06875C6.875 3.175 6.45 3.18125 6.03984 3.1875C5.27734 3.19922 4.41328 3.21172 3.8125 3.8125C3.21172 4.41328 3.20312 5.27734 3.1875 6.03984C3.18125 6.45 3.175 6.87344 3.06875 7.12891C2.95391 7.40703 2.64922 7.725 2.35469 8.03281C1.83672 8.57188 1.25 9.18437 1.25 10C1.25 10.8156 1.83672 11.4273 2.35469 11.9672C2.64922 12.275 2.95391 12.5922 3.06875 12.8711C3.175 13.1266 3.18125 13.55 3.1875 13.9602C3.19922 14.7227 3.21172 15.5867 3.8125 16.1875C4.41328 16.7883 5.27734 16.8008 6.03984 16.8125C6.45 16.8187 6.87344 16.825 7.12891 16.9312C7.40703 17.0461 7.725 17.3508 8.03281 17.6453C8.57188 18.1633 9.18437 18.75 10 18.75C10.8156 18.75 11.4273 18.1633 11.9672 17.6453C12.275 17.3508 12.5922 17.0461 12.8711 16.9312C13.1266 16.825 13.55 16.8187 13.9602 16.8125C14.7227 16.8008 15.5867 16.7883 16.1875 16.1875C16.7883 15.5867 16.8008 14.7227 16.8125 13.9602C16.8187 13.55 16.825 13.1266 16.9312 12.8711C17.0461 12.593 17.3508 12.275 17.6453 11.9672C18.1633 11.4281 18.75 10.8156 18.75 10C18.75 9.18437 18.1633 8.57266 17.6453 8.03281ZM13.5672 8.56719L9.19219 12.9422C9.13414 13.0003 9.06521 13.0464 8.98934 13.0779C8.91346 13.1093 8.83213 13.1255 8.75 13.1255C8.66787 13.1255 8.58654 13.1093 8.51066 13.0779C8.43479 13.0464 8.36586 13.0003 8.30781 12.9422L6.43281 11.0672C6.31554 10.9499 6.24965 10.7909 6.24965 10.625C6.24965 10.4591 6.31554 10.3001 6.43281 10.1828C6.55009 10.0655 6.70915 9.99965 6.875 9.99965C7.04085 9.99965 7.19991 10.0655 7.31719 10.1828L8.75 11.6164L12.6828 7.68281C12.7409 7.62474 12.8098 7.57868 12.8857 7.54725C12.9616 7.51583 13.0429 7.49965 13.125 7.49965C13.2071 7.49965 13.2884 7.51583 13.3643 7.54725C13.4402 7.57868 13.5091 7.62474 13.5672 7.68281C13.6253 7.74088 13.6713 7.80982 13.7027 7.88569C13.7342 7.96156 13.7503 8.04288 13.7503 8.125C13.7503 8.20712 13.7342 8.28844 13.7027 8.36431C13.6713 8.44018 13.6253 8.50912 13.5672 8.56719Z\" fill=\"#D54F2F\"/></svg>",
+        "marquee_duration": 40
+      }
+    },
+    "c_whats_included_system_6pa7VP": {
+      "type": "c-whats-included-system",
+      "blocks": {
+        "cta_button_PyJU3V": {
+          "type": "cta_button",
+          "settings": {
+            "cta_label": "Shop Starter Kit",
+            "cta_link": "#product-section-pdp"
+          }
+        },
+        "product_box_block_BWJTQ8": {
+          "type": "product_box_block",
+          "settings": {
+            "product": "nitric-oxide-support",
+            "show_badge": true,
+            "badge_text": "BEST SELLER",
+            "custom_image": "shopify://shop_images/IMG_a471f7c0-3f8d-412f-a642-da39700e15c9.png",
+            "custom_title": "Nitric Oxide Support",
+            "custom_description": "A clinically proven daily formula designed to restore your body's natural Nitric Oxide levels - supporting circulation, heart health, energy, and healthy aging.",
+            "benefits": "60 capsules - 1 month supply\nTwo capsules, once daily\nSupports energy, focus and heart health\nWorks via dietary nitrate. NO pathway"
+          }
+        },
+        "product_box_block_4VwycP": {
+          "type": "product_box_block",
+          "settings": {
+            "product": "nitric-oxide-test-strips",
+            "show_badge": false,
+            "badge_text": "BEST SELLER",
+            "custom_title": "Nitric Oxide Test Strips",
+            "custom_description": "Simple at-home saliva test strips that let you see your Nitric Oxide levels in seconds so you can track how your body responds and know it's working.",
+            "benefits": "50 count - results in 10 seconds\nCorrelates with lab measurements\nTest anytime, morning, before meals, after dosing\nColor-coded scale for easy reading"
+          }
+        }
+      },
+      "block_order": [
+        "cta_button_PyJU3V",
+        "product_box_block_BWJTQ8",
+        "product_box_block_4VwycP"
+      ],
+      "name": "C What's Included System",
+      "settings": {
+        "sl_anchor_id": "",
+        "eyebrow": "WHAT'S INCLUDED",
+        "title": "Two products.",
+        "title_accent": "One complete system.",
+        "bg_color": "#f6f3f0",
+        "card_bg_color": "#ebe8e6",
+        "heading_color": "#1b1c29",
+        "text_color": "#1b1c29",
+        "accent_color": "#d54f2f",
+        "padding_top": 80,
+        "padding_bottom": 120,
+        "padding_top_mobile": 56,
+        "padding_bottom_mobile": 72
+      }
+    },
+    "c_results_glass_card_a4QwPg": {
+      "type": "c-results-glass-card",
+      "blocks": {
+        "box_content_NcrRjr": {
+          "type": "box_content",
+          "settings": {
+            "icon_html": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"64\" height=\"64\" viewbox=\"0 0 64 64\" fill=\"none\">\n  <path d=\"M21 38H26V43C26 43.553 26.448 44 27 44H37C37.552 44 38 43.553 38 43V38H43C43.552 38 44 37.553 44 37V27C44 26.447 43.552 26 43 26H38V21C38 20.447 37.552 20 37 20H27C26.448 20 26 20.447 26 21V26H21C20.448 26 20 26.447 20 27V37C20 37.553 20.448 38 21 38ZM22 28H27C27.552 28 28 27.553 28 27V22H36V27C36 27.553 36.448 28 37 28H42V36H37C36.448 36 36 36.447 36 37V42H28V37C28 36.447 27.552 36 27 36H22V28Z\" fill=\"white\"></path>\n  <path d=\"M13 32C13 42.477 21.523 51 32 51C42.477 51 51 42.477 51 32C51 21.523 42.477 13 32 13C21.523 13 13 21.523 13 32ZM32 15C41.374 15 49 22.626 49 32C49 41.374 41.374 49 32 49C22.626 49 15 41.374 15 32C15 22.626 22.626 15 32 15Z\" fill=\"white\"></path>\n  <path d=\"M35.1138 5.17798L34.8848 7.16398C40.6318 7.82498 46.0138 10.498 50.0388 14.692L51.4818 13.307C47.1358 8.77798 41.3228 5.89098 35.1138 5.17798Z\" fill=\"white\"></path>\n  <path d=\"M32.9629 7.01801L33.0389 5.02001C32.3509 4.99301 31.6509 4.99301 30.9629 5.02001L31.0389 7.01801C31.6769 6.99401 32.3249 6.99401 32.9629 7.01801Z\" fill=\"white\"></path>\n  <path d=\"M7 32C7 19.29 16.507 8.61198 29.114 7.16398L28.885 5.17798C15.269 6.74198 5 18.273 5 32C5 45.727 15.269 57.258 28.886 58.822L29.115 56.836C16.507 55.388 7 44.71 7 32Z\" fill=\"white\"></path>\n  <path d=\"M31.0389 56.9819L30.9629 58.9799C31.3069 58.9939 31.6529 58.9999 32.0009 58.9999C32.3489 58.9999 32.6949 58.9939 33.0389 58.9799L32.9629 56.9819C32.3249 57.0059 31.6769 57.0059 31.0389 56.9819Z\" fill=\"white\"></path>\n  <path d=\"M58.8568 26.4849C58.4958 25.8829 57.5028 25.8829 57.1418 26.4849L54.1418 31.4849C53.9558 31.7939 53.9518 32.1779 54.1288 32.4929C54.3068 32.8069 54.6398 32.9999 54.9998 32.9999H56.9528C56.4668 45.2629 47.1588 55.4259 34.8848 56.8359L35.1138 58.8219C48.3988 57.2959 58.4918 46.2819 58.9768 32.9999H60.9998C61.3598 32.9999 61.6928 32.8069 61.8698 32.4929C62.0478 32.1789 62.0428 31.7939 61.8568 31.4849L58.8568 26.4849ZM56.7658 30.9999L57.9998 28.9429L59.2338 30.9999H56.7658Z\" fill=\"white\"></path>\n  <path d=\"M11.266 56.036C8.944 55.394 8.605 55.056 7.964 52.733C7.844 52.301 7.45 52 7 52C6.55 52 6.156 52.301 6.036 52.733C5.395 55.055 5.056 55.394 2.734 56.036C2.3 56.156 2 56.55 2 57C2 57.45 2.3 57.844 2.734 57.964C5.056 58.606 5.395 58.944 6.036 61.267C6.156 61.699 6.55 62 7 62C7.45 62 7.844 61.699 7.964 61.267C8.605 58.945 8.944 58.606 11.266 57.964C11.7 57.844 12 57.45 12 57C12 56.55 11.7 56.156 11.266 56.036ZM7 58.298C6.66 57.753 6.247 57.341 5.702 57C6.247 56.659 6.66 56.247 7 55.702C7.34 56.247 7.753 56.659 8.298 57C7.753 57.341 7.34 57.753 7 58.298Z\" fill=\"white\"></path>\n  <path d=\"M61.266 6.036C58.944 5.394 58.605 5.056 57.964 2.733C57.844 2.301 57.45 2 57 2C56.55 2 56.156 2.301 56.036 2.733C55.395 5.055 55.056 5.394 52.734 6.036C52.3 6.156 52 6.55 52 7C52 7.45 52.3 7.844 52.734 7.964C55.056 8.606 55.395 8.944 56.036 11.267C56.156 11.699 56.55 12 57 12C57.45 12 57.844 11.699 57.964 11.267C58.605 8.945 58.944 8.606 61.266 7.964C61.7 7.844 62 7.45 62 7C62 6.55 61.7 6.156 61.266 6.036ZM57 8.298C56.66 7.753 56.247 7.341 55.702 7C56.247 6.659 56.66 6.247 57 5.702C57.34 6.247 57.753 6.659 58.298 7C57.753 7.341 57.34 7.753 57 8.298Z\" fill=\"white\"></path>\n</svg>",
+            "heading": "Simple Daily Habit",
+            "description": "<p>An easy-to-take daily formula designed to fit seamlessly into your routine and support healthy blood flow and long-term health.</p>"
+          }
+        },
+        "box_content_TQbqM3": {
+          "type": "box_content",
+          "settings": {
+            "icon_html": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"64\" height=\"64\" viewbox=\"0 0 64 64\" fill=\"none\">\n  <path d=\"M10.4693 52.8037C9.06053 52.8037 7.91303 53.95 7.91303 55.36C7.91303 56.77 9.05928 57.9162 10.4693 57.9162C11.8793 57.9162 13.0255 56.77 13.0255 55.36C13.0255 53.95 11.878 52.8037 10.4693 52.8037ZM10.4693 56.415C9.88678 56.415 9.41303 55.9412 9.41303 55.3587C9.41303 54.7762 9.88678 54.3025 10.4693 54.3025C11.0518 54.3025 11.5255 54.7762 11.5255 55.3587C11.5255 55.9412 11.0518 56.415 10.4693 56.415ZM24.0643 54.91C22.8593 54.91 21.878 55.89 21.878 57.0962C21.878 58.3025 22.858 59.2825 24.0643 59.2825C25.2705 59.2825 26.2505 58.3025 26.2505 57.0962C26.2505 55.89 25.2693 54.91 24.0643 54.91ZM24.0643 57.7812C23.6855 57.7812 23.378 57.4738 23.378 57.095C23.378 56.7163 23.6855 56.4087 24.0643 56.4087C24.443 56.4087 24.7505 56.7163 24.7505 57.095C24.7505 57.4738 24.443 57.7812 24.0643 57.7812ZM16.9793 44.2475C16.9793 43.1188 16.0605 42.2 14.9318 42.2C13.803 42.2 12.8843 43.1188 12.8843 44.2475C12.8843 45.3763 13.803 46.295 14.9318 46.295C16.0605 46.295 16.9793 45.3763 16.9793 44.2475ZM14.3843 44.2475C14.3843 43.945 14.6305 43.7 14.9318 43.7C15.233 43.7 15.4793 43.9463 15.4793 44.2475C15.4793 44.5488 15.233 44.795 14.9318 44.795C14.6305 44.795 14.3843 44.55 14.3843 44.2475ZM24.4993 48.3913C24.4993 46.9825 23.353 45.835 21.943 45.835C20.533 45.835 19.3868 46.9813 19.3868 48.3913C19.3868 49.8 20.533 50.9475 21.943 50.9475C23.353 50.9475 24.4993 49.8013 24.4993 48.3913ZM20.888 48.3913C20.888 47.8088 21.3618 47.335 21.9443 47.335C22.5268 47.335 23.0005 47.8088 23.0005 48.3913C23.0005 48.9738 22.5268 49.4475 21.9443 49.4475C21.3618 49.4475 20.888 48.9738 20.888 48.3913ZM17.0955 49.8488C15.8905 49.8488 14.9093 50.8288 14.9093 52.035C14.9093 53.24 15.8893 54.2212 17.0955 54.2212C18.3005 54.2212 19.2818 53.2412 19.2818 52.035C19.2818 50.8288 18.3018 49.8488 17.0955 49.8488ZM17.0955 52.72C16.7168 52.72 16.4093 52.4125 16.4093 52.0337C16.4093 51.655 16.7168 51.3475 17.0955 51.3475C17.4743 51.3475 17.7818 51.655 17.7818 52.0337C17.7818 52.4125 17.4743 52.72 17.0955 52.72ZM58.133 8.465H50.2605V7.14375C50.2605 6.73 49.9243 6.39375 49.5105 6.39375H43.7518C43.3868 3.8425 41.188 1.875 38.5368 1.875C35.8868 1.875 33.6868 3.8425 33.3218 6.39375H27.563C27.1493 6.39375 26.813 6.73 26.813 7.14375V8.46625H18.9418C17.4943 8.46625 16.3168 9.64375 16.3168 11.0913V27.9525H9.84803C9.43428 27.9525 9.09803 28.2887 9.09803 28.7025V32.7912C9.09803 33.205 9.43428 33.5412 9.84803 33.5412H11.1593V40.5088L3.14803 55.305C2.35428 56.7725 2.38803 58.4362 3.24178 59.87C4.09553 61.3025 5.54178 62.125 7.21053 62.125H26.923H58.1318C59.5793 62.125 60.7568 60.9475 60.7568 59.5V11.09C60.758 9.6425 59.5793 8.465 58.133 8.465ZM28.3143 7.89375H34.0193C34.433 7.89375 34.7693 7.5575 34.7693 7.14375C34.7693 5.06625 36.4593 3.375 38.538 3.375C40.6168 3.375 42.3068 5.065 42.3068 7.14375C42.3068 7.5575 42.643 7.89375 43.0568 7.89375H48.7618V13.2612H28.3143V7.89375ZM49.5105 14.7612C49.9243 14.7612 50.2605 14.425 50.2605 14.0112V12.7075H56.5155V57.8838H31.5418C31.6155 57.0125 31.4318 56.1275 30.9855 55.305L22.9743 40.5075V33.54H24.2855C24.6993 33.54 25.0355 33.2038 25.0355 32.79V28.7013C25.0355 28.2875 24.6993 27.9513 24.2855 27.9513H20.558V12.7063H26.813V14.01C26.813 14.4237 27.1493 14.76 27.563 14.76H49.5105V14.7612ZM17.8168 11.09C17.8168 10.47 18.3218 9.965 18.9418 9.965H26.8143V11.2063H19.8093C19.3955 11.2063 19.0593 11.5425 19.0593 11.9563V27.9513H17.818V11.09H17.8168ZM10.598 29.4513H23.5368V32.04H10.598V29.4513ZM7.21053 60.625C6.06678 60.625 5.11553 60.0837 4.53053 59.1012C3.94553 58.1188 3.92303 57.0238 4.46678 56.0187L12.568 41.0537C12.628 40.9437 12.658 40.8213 12.658 40.6963V33.5387H21.4743V40.6963C21.4743 40.8213 21.5055 40.9437 21.5643 41.0537L29.6668 56.0187C30.2105 57.0238 30.188 58.1188 29.603 59.1012C29.018 60.0837 28.0655 60.625 26.923 60.625H7.21053ZM59.258 59.5C59.258 60.12 58.753 60.625 58.133 60.625H30.338C30.543 60.3963 30.7293 60.145 30.893 59.87C30.988 59.7113 31.0705 59.5488 31.1455 59.3838H57.2668C57.6805 59.3838 58.0168 59.0475 58.0168 58.6338V11.9563C58.0168 11.5425 57.6805 11.2063 57.2668 11.2063H50.2618V9.965H58.1343C58.7543 9.965 59.2593 10.47 59.2593 11.09V59.5H59.258ZM27.7293 36.7275H52.6755C53.0893 36.7275 53.4255 37.0638 53.4255 37.4775C53.4255 37.8913 53.0893 38.2275 52.6755 38.2275H27.7293C27.3155 38.2275 26.9793 37.8913 26.9793 37.4775C26.9793 37.0638 27.3143 36.7275 27.7293 36.7275ZM53.4255 42.6912C53.4255 43.105 53.0893 43.4412 52.6755 43.4412H27.7293C27.3155 43.4412 26.9793 43.105 26.9793 42.6912C26.9793 42.2775 27.3155 41.9412 27.7293 41.9412H52.6755C53.0893 41.9412 53.4255 42.2775 53.4255 42.6912ZM53.4255 47.905C53.4255 48.3187 53.0893 48.655 52.6755 48.655H31.0593C30.6455 48.655 30.3093 48.3187 30.3093 47.905C30.3093 47.4912 30.6455 47.155 31.0593 47.155H52.6755C53.0893 47.155 53.4255 47.4912 53.4255 47.905ZM53.4255 53.12C53.4255 53.5337 53.0893 53.87 52.6755 53.87H34.3893C33.9755 53.87 33.6393 53.5337 33.6393 53.12C33.6393 52.7062 33.9755 52.37 34.3893 52.37H52.6755C53.0893 52.37 53.4255 52.705 53.4255 53.12ZM33.083 28.9513H35.3305V31.1987C35.3305 31.6125 35.6668 31.9487 36.0805 31.9487H40.9943C41.408 31.9487 41.7443 31.6125 41.7443 31.1987V28.9513H43.9918C44.4055 28.9513 44.7418 28.615 44.7418 28.2013V23.2875C44.7418 22.8738 44.4055 22.5375 43.9918 22.5375H41.7443V20.29C41.7443 19.8763 41.408 19.54 40.9943 19.54H36.0805C35.6668 19.54 35.3305 19.8763 35.3305 20.29V22.5375H33.083C32.6693 22.5375 32.333 22.8738 32.333 23.2875V28.2013C32.333 28.615 32.668 28.9513 33.083 28.9513ZM33.833 24.0375H36.0805C36.4943 24.0375 36.8305 23.7013 36.8305 23.2875V21.04H40.2443V23.2875C40.2443 23.7013 40.5805 24.0375 40.9943 24.0375H43.2418V27.4513H40.9943C40.5805 27.4513 40.2443 27.7875 40.2443 28.2013V30.4487H36.8305V28.2013C36.8305 27.7875 36.4943 27.4513 36.0805 27.4513H33.833V24.0375Z\" fill=\"white\"></path>\n</svg>",
+            "heading": "Clinically Proven Support",
+            "description": "<p>Backed by clinical studies and shown to significantly increase Nitric Oxide levels, supporting heart health, energy, sexual wellness, cognitive function, and healthy aging.</p>"
+          }
+        },
+        "box_content_7rjwNa": {
+          "type": "box_content",
+          "settings": {
+            "icon_html": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"64\" height=\"64\" viewbox=\"0 0 64 64\" fill=\"none\">\n  <path d=\"M31.2487 19.8239C28.7588 19.8239 26.3248 20.5622 24.2545 21.9456C22.1842 23.3289 20.5706 25.2951 19.6178 27.5955C18.665 29.8959 18.4157 32.4271 18.9015 34.8692C19.3873 37.3113 20.5863 39.5544 22.347 41.315C24.1077 43.0756 26.3509 44.2746 28.793 44.7603C31.2351 45.246 33.7663 44.9966 36.0667 44.0437C38.367 43.0908 40.3332 41.4771 41.7164 39.4068C43.0997 37.3364 43.8379 34.9024 43.8378 32.4125C43.834 29.0749 42.5064 25.8751 40.1463 23.5151C37.7862 21.1551 34.5863 19.8276 31.2487 19.8239ZM31.2487 43.252C29.1049 43.252 27.0093 42.6163 25.2268 41.4253C23.4444 40.2343 22.0551 38.5415 21.2347 36.5609C20.4143 34.5803 20.1996 32.401 20.6178 30.2984C21.036 28.1958 22.0683 26.2645 23.5841 24.7486C25.1 23.2327 27.0313 22.2003 29.1338 21.7821C31.2364 21.3638 33.4158 21.5784 35.3964 22.3987C37.377 23.2191 39.0698 24.6083 40.2609 26.3907C41.452 28.1731 42.0877 30.2687 42.0878 32.4125C42.0847 35.2863 40.9417 38.0415 38.9097 40.0736C36.8776 42.1057 34.1225 43.2488 31.2487 43.252ZM60.8792 55.6973L50.2141 45.0322C49.855 44.6739 49.4067 44.418 48.9156 44.291C48.4245 44.164 47.9083 44.1705 47.4206 44.3099L44.6674 41.5568C46.7533 38.4997 47.7323 34.8219 47.4421 31.1324C47.1519 27.443 45.6101 23.9634 43.072 21.27C40.5339 18.5767 37.1518 16.8312 33.4861 16.3228C29.8203 15.8143 26.0909 16.5735 22.9156 18.4744V10.6772C23.7605 10.5755 24.5391 10.168 25.1042 9.53168C25.6694 8.89531 25.982 8.07409 25.9832 7.223V4.60388C25.982 3.68148 25.615 2.79721 24.9627 2.14503C24.3104 1.49286 23.4261 1.12603 22.5037 1.125H5.76844C4.84605 1.12603 3.96173 1.49286 3.30946 2.14504C2.65718 2.79722 2.29022 3.68149 2.28906 4.60388V7.223C2.29018 8.0741 2.60282 8.89535 3.16797 9.53173C3.73312 10.1681 4.51168 10.5756 5.35669 10.6772V54.0951C5.36545 56.4178 6.29429 58.6424 7.9398 60.2817C9.58532 61.9211 11.8134 62.8415 14.1361 62.8415C16.4589 62.8415 18.6869 61.9211 20.3324 60.2817C21.978 58.6424 22.9068 56.4178 22.9156 54.0951V46.3512C25.5737 47.9442 28.6327 48.7418 31.7302 48.6497C34.8278 48.5576 37.834 47.5796 40.3928 45.8316L43.1462 48.585C43.0741 48.8389 43.0373 49.1016 43.0369 49.3656C43.0356 49.7394 43.1083 50.1097 43.251 50.4551C43.3937 50.8006 43.6035 51.1143 43.8682 51.3781L54.5333 62.0434C55.0676 62.5762 55.7913 62.8754 56.5458 62.8754C57.3003 62.8754 58.0241 62.5762 58.5583 62.0434L60.8792 59.7225C61.4114 59.188 61.7103 58.4643 61.7103 57.71C61.7103 56.9557 61.4114 56.232 60.8792 55.6975V55.6973ZM15.0047 32.4125C15.0038 33.7847 15.1771 35.1514 15.5204 36.48H7.10669V30.6653H9.47469C9.70675 30.6653 9.92931 30.5731 10.0934 30.409C10.2575 30.2449 10.3497 30.0223 10.3497 29.7903C10.3497 29.5582 10.2575 29.3356 10.0934 29.1715C9.92931 29.0074 9.70675 28.9153 9.47469 28.9153H7.10669V24.525H12.5791C12.8111 24.525 13.0337 24.4328 13.1978 24.2687C13.3619 24.1046 13.4541 23.8821 13.4541 23.65C13.4541 23.4179 13.3619 23.1954 13.1978 23.0313C13.0337 22.8672 12.8111 22.775 12.5791 22.775H7.10669V18.3843H9.47469C9.70675 18.3843 9.92931 18.2921 10.0934 18.128C10.2575 17.9639 10.3497 17.7413 10.3497 17.5093C10.3497 17.2772 10.2575 17.0546 10.0934 16.8905C9.92931 16.7264 9.70675 16.6343 9.47469 16.6343H7.10669V10.7025H21.1656V19.6865C19.2448 21.2052 17.6928 23.1391 16.6258 25.343C15.5588 27.547 15.0046 29.9639 15.0047 32.4125ZM4.03906 7.223V4.60388C4.03969 4.14546 4.22211 3.706 4.54631 3.38189C4.87051 3.05779 5.31002 2.8755 5.76844 2.875H22.5037C22.9622 2.8755 23.4018 3.05785 23.726 3.38206C24.0503 3.70627 24.2327 4.14586 24.2332 4.60437V7.223C24.2327 7.68153 24.0503 8.12113 23.726 8.44536C23.4018 8.76959 22.9622 8.95197 22.5037 8.9525H5.76844C5.30992 8.95197 4.87033 8.76958 4.54613 8.44535C4.22192 8.12112 4.03956 7.68152 4.03906 7.223ZM21.1656 54.0951C21.1577 55.9543 20.4137 57.7347 19.0962 59.0466C17.7788 60.3584 15.9953 61.095 14.1361 61.095C12.2769 61.095 10.4934 60.3584 9.17601 59.0466C7.85858 57.7347 7.11453 55.9543 7.10669 54.0951V38.2304H16.0827C17.1307 40.9453 18.8856 43.3306 21.1656 45.1391V54.0951ZM16.7547 32.4125C16.7548 29.5459 17.6049 26.7436 19.1975 24.3602C20.7902 21.9767 23.0539 20.119 25.7023 19.0221C28.3508 17.9251 31.265 17.6381 34.0766 18.1974C36.8881 18.7567 39.4706 20.1372 41.4976 22.1642C43.5246 24.1912 44.905 26.7738 45.4642 29.5854C46.0234 32.3969 45.7364 35.3112 44.6394 37.9596C43.5423 40.608 41.6846 42.8716 39.3011 44.4642C36.9176 46.0568 34.1153 46.9069 31.2487 46.9069C27.4059 46.9025 23.7218 45.3741 21.0045 42.6568C18.2873 39.9395 16.7589 36.2553 16.7547 32.4125ZM43.5938 42.9577L45.9284 45.2924L44.1284 47.0924L41.7938 44.7578C42.4396 44.2055 43.0414 43.6038 43.5938 42.9581V42.9577ZM59.6416 58.485L57.3209 60.8058C57.1152 61.0109 56.8365 61.1261 56.5459 61.1261C56.2554 61.1261 55.9767 61.0109 55.7709 60.8058L45.1059 50.1406C44.9018 49.9344 44.7872 49.6559 44.7872 49.3656C44.7872 49.0754 44.9018 48.7969 45.1059 48.5906L47.4269 46.2697C47.6326 46.0645 47.9114 45.9492 48.2019 45.9492C48.4925 45.9492 48.7712 46.0645 48.9769 46.2697L59.6419 56.9349C59.8461 57.1411 59.9606 57.4196 59.9606 57.7099C59.9606 58.0001 59.8461 58.2786 59.6419 58.4849L59.6416 58.485ZM31.9946 26.4813C31.9163 26.3537 31.8067 26.2484 31.6761 26.1753C31.5455 26.1022 31.3984 26.0638 31.2487 26.0638C31.0991 26.0638 30.952 26.1022 30.8214 26.1753C30.6908 26.2484 30.5812 26.3537 30.5029 26.4813L27.9904 30.5767C26.7529 32.5934 26.4503 35.8018 28.1177 37.4694C28.9493 38.2976 30.0752 38.7626 31.2489 38.7626C32.4226 38.7626 33.5485 38.2976 34.3802 37.4694C36.0476 35.802 35.7446 32.5934 34.5074 30.5767L31.9946 26.4813ZM33.1424 36.232C32.6388 36.7317 31.9581 37.0121 31.2487 37.0121C30.5392 37.0121 29.8585 36.7317 29.3549 36.232C28.3393 35.2162 28.6068 32.9187 29.4822 31.4919L31.2488 28.6125L33.0152 31.4924C33.8906 32.9187 34.1581 35.2162 33.1424 36.232Z\" fill=\"white\"></path>\n</svg>",
+            "heading": "Measurable Results at Home",
+            "description": "<p>Includes Nitric Oxide Test Strips so you can track your NO levels and see your progress in real time.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "box_content_NcrRjr",
+        "box_content_TQbqM3",
+        "box_content_7rjwNa"
+      ],
+      "name": "C Results Glass Card",
+      "settings": {
+        "sl_anchor_id": "",
+        "heading": "<p>Daily Support. <em>Clinically Proven</em>. Measurable Results.</p>",
+        "description": "<p>Everything about this kit is designed to make blood flow support effortless and measurable.</p>",
+        "background_image": "shopify://shop_images/background_image.png",
+        "text_color": "#ffffff",
+        "card_bg_color": "#0f1532",
+        "overlay_color": "#0c0e21",
+        "overlay_opacity": 65,
+        "row_bg_color": "#ffffff",
+        "row_bg_opacity": 10,
+        "row_border_color": "#ffffff",
+        "row_border_opacity": 14,
+        "card_radius": 32,
+        "inner_radius": 24,
+        "icon_size": 64,
+        "block_gap": 48,
+        "mobile_block_width": 280,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "padding_top_desktop": 64,
+        "padding_bottom_desktop": 64
+      }
+    },
+    "c_new_benefits_9nKjgg": {
+      "type": "c-new-benefits-var-a",
+      "blocks": {
+        "benefit_WDd7C9": {
+          "type": "benefit",
+          "settings": {
+            "title": "Dietary Nitrates Enter the Body",
+            "description": "<p>From two daily capsules of NO Support</p>",
+            "marked_block": false
+          }
+        },
+        "benefit_P9xMNx": {
+          "type": "benefit",
+          "settings": {
+            "title": "Converted to Nitrite",
+            "description": "<p>Via the salivary pathway — active at any age</p>",
+            "marked_block": false
+          }
+        },
+        "benefit_673xGd": {
+          "type": "benefit",
+          "settings": {
+            "title": "Nitric Oxide Released",
+            "description": "<p>Blood vessels relax, circulation improves</p>",
+            "marked_block": false
+          }
+        },
+        "benefit_rNVKeQ": {
+          "type": "benefit",
+          "settings": {
+            "title": "You Feel the Difference",
+            "description": "<p>More energy, better focus, stronger health</p>",
+            "marked_block": true
+          }
+        }
+      },
+      "block_order": [
+        "benefit_WDd7C9",
+        "benefit_P9xMNx",
+        "benefit_673xGd",
+        "benefit_rNVKeQ"
+      ],
+      "name": "C New Benefits Var A",
+      "settings": {
+        "heading": "<p>Better <em>Blood Flow</em>. Better Health.</p>",
+        "eyebrow": "THE SCIENCE",
+        "subtext": "<p>Think of Nitric Oxide like WiFi for your body. It’s the signal that tells your blood vessels to relax and expand allowing oxygen and nutrients to flow where they’re needed. As we age, that signal naturally weakens, which can impact blood flow, heart health, energy, and overall vitality. Supporting Nitric Oxide production helps keep your “connection” strong, building a foundation for healthy aging.</p>",
+        "button_text": "Shop Starter Kit",
+        "button_link": "#product-section-pdp",
+        "media_type": "image",
+        "image": "shopify://shop_images/Product_1_879a241c-a286-41c5-b5c6-86aa28b0f8d1.png",
+        "video_autoplay": true,
+        "video_loop": true,
+        "video_controls": false,
+        "background_color": "#f6f3f0",
+        "text_color": "#1b1c29",
+        "accent_color": "#d54f2f",
+        "button_bg_color": "#d54f2f",
+        "button_text_color": "#ffffff",
+        "padding_top_desktop": 60,
+        "padding_bottom_desktop": 120,
+        "padding_top_mobile": 60,
+        "padding_bottom_mobile": 60
+      }
+    },
+    "c_grid_slider_C9HyJt": {
+      "type": "c-grid-slider",
+      "blocks": {
+        "video_card_fyAKFt": {
+          "type": "video_card",
+          "settings": {
+            "video": "shopify://files/videos/Untitled design (1) (1).mp4",
+            "author": "Cecily D.",
+            "job": "Verified Customer"
+          }
+        },
+        "text_card_VwzFmG": {
+          "type": "text_card",
+          "settings": {
+            "quote": "\"Helps sleeping at night due to blood vessels tightening up in these cold temperatures.\"",
+            "author": "Carmen M.",
+            "demographics": "FEMALE"
+          }
+        },
+        "text_card_J6GWrf": {
+          "type": "text_card",
+          "settings": {
+            "quote": "\"I’ve been taking the medication for several weeks and have noticed a significant improvement. Things have been much more active and productive lately. I will keep taking it.\"",
+            "author": "Robert H.",
+            "demographics": "MALE"
+          }
+        },
+        "video_card_zei7aN": {
+          "type": "video_card",
+          "settings": {
+            "video": "shopify://files/videos/How Nitric Oxide Supercharged My Stamina & Recovery _ Berkeley Life-varA.mp4",
+            "author": "Quincy G.",
+            "job": "Verified Customer"
+          }
+        },
+        "video_card_wHFWEP": {
+          "type": "video_card",
+          "settings": {
+            "video": "shopify://files/videos/NO daily support.mov",
+            "author": "David J.",
+            "job": "Verified Customer"
+          }
+        },
+        "text_card_qwfniF": {
+          "type": "text_card",
+          "settings": {
+            "quote": "\"Berkeley Life has changed my family's life for the better. Our Holistic Doctor 1st told us about nitric oxide support. He gave us Berkeley Life NOS to take home. We both noticed a positive change within just a few days. This was a few years ago. We buy directly from Berkeley Life now with a subscription so we never have to worry about running out. Thank you Berkeley Life for a great product line and to your customer support team!”",
+            "author": "Linda and Larry M.",
+            "demographics": ""
+          }
+        }
+      },
+      "block_order": [
+        "video_card_fyAKFt",
+        "text_card_VwzFmG",
+        "text_card_J6GWrf",
+        "video_card_zei7aN",
+        "video_card_wHFWEP",
+        "text_card_qwfniF"
+      ],
+      "name": "C Grid Slider",
+      "settings": {
+        "bg_color": "#1c1e26",
+        "title_color": "#ffffff",
+        "text_color": "#e0e0e0",
+        "accent_color": "#d25435",
+        "card_bg": "#34363f",
+        "title": "Real Experiences.\nReal <span>Results.</span>",
+        "subtitle": "Real feedback from people who've experienced improved performance, confidence, and vitality.",
+        "btn_text": "Shop Starter Kit",
+        "btn_link": "#product-section-pdp",
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 80,
+        "padding_top_mobile": 50,
+        "padding_bottom_mobile": 50
+      }
+    },
+    "frontrow_reviews_VaV7Ni": {
+      "type": "frontrow-reviews",
+      "disabled": true,
+      "name": "FrontRow Reviews",
+      "settings": {
+        "product_type": "nitric-oxide"
+      }
+    },
+    "product-reviews": {
+      "type": "product-reviews",
+      "blocks": {
+        "okendo_reviews_widget_fQKrgg": {
+          "type": "shopify://apps/okendo/blocks/reviews-widget/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "product": "{{product}}",
+            "widget_type": "reviews_widget"
+          }
+        }
+      },
+      "block_order": [
+        "okendo_reviews_widget_fQKrgg"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "Reviews"
+      }
+    },
+    "c_backed_by_clinical_research_AN9cmq": {
+      "type": "c-backed-by-clinical-research",
+      "blocks": {
+        "stat_6a3WiX": {
+          "type": "stat",
+          "settings": {
+            "stat_number": "12.5 mmHg",
+            "stat_label": "reduction in systolic blood pressure",
+            "stat_description": "Supporting healthier cardiovascular function"
+          }
+        },
+        "stat_jXDkMx": {
+          "type": "stat",
+          "settings": {
+            "stat_number": "378%",
+            "stat_label": "increase in nitrate levels",
+            "stat_description": "Indicating significantly improved Nitric Oxide production"
+          }
+        },
+        "stat_n7UN89": {
+          "type": "stat",
+          "settings": {
+            "stat_number": "28%",
+            "stat_label": "improvement in circulation (FMD)",
+            "stat_description": "The gold standard measure of blood flow"
+          }
+        },
+        "stat_kxmmGc": {
+          "type": "stat",
+          "settings": {
+            "stat_number": "Reductions",
+            "stat_label": "in key inflammatory markers",
+            "stat_description": "Supporting long-term metabolic and cardiovascular health"
+          }
+        }
+      },
+      "block_order": [
+        "stat_6a3WiX",
+        "stat_jXDkMx",
+        "stat_n7UN89",
+        "stat_kxmmGc"
+      ],
+      "settings": {
+        "sl_anchor_id": "",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "accent_color": "#d54f2f",
+        "pill_bg_color": "#f6f3f0",
+        "heading_plain": "Backed By",
+        "heading_italic": "Clinical Research",
+        "description": "In a randomized, placebo-controlled clinical trial, participants taking Nitric Oxide Support experienced:",
+        "pill_text": "built on 3 clinical trials and over 28,000 published studies on Nitric Oxide biology",
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 80,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 40
+      }
+    },
+    "c_new_product_card_eKhcx4": {
+      "type": "c-new-product-card",
+      "blocks": {
+        "product_card_8exmLD": {
+          "type": "product_card",
+          "settings": {
+            "product": "nitric-oxide-support",
+            "badge_text": "BESTSELLER",
+            "custom_title": "Nitric Oxide Support",
+            "custom_image": "shopify://shop_images/product-card-spring-4.webp",
+            "use_custom_price": false,
+            "custom_price": "$44.99",
+            "custom_compare_price": "$49.99",
+            "variant_index": ""
+          }
+        },
+        "product_card_dpUAjT": {
+          "type": "product_card",
+          "settings": {
+            "product": "menopause-and-heart-health-support",
+            "badge_text": "NEW",
+            "custom_title": "Menopause and Heart Health",
+            "custom_image": "shopify://shop_images/product-card-spring-1.webp",
+            "use_custom_price": false,
+            "custom_price": "$53.99",
+            "custom_compare_price": "$59.99",
+            "variant_index": "1"
+          }
+        },
+        "product_card_ydpG9D": {
+          "type": "product_card",
+          "settings": {
+            "product": "prebiotic-nitrate-gum",
+            "badge_text": "NEW FORMULA",
+            "custom_title": "Nitric Oxide Support Gum",
+            "custom_image": "shopify://shop_images/product-card-spring-2.webp",
+            "use_custom_price": false,
+            "custom_price": "$26.99",
+            "custom_compare_price": "",
+            "variant_index": "1"
+          }
+        },
+        "product_card_PqEbc8": {
+          "type": "product_card",
+          "settings": {
+            "product": "nitric-oxide-test-strips",
+            "badge_text": "PATENTED",
+            "custom_title": "",
+            "custom_image": "shopify://shop_images/product-card-spring-3.webp",
+            "use_custom_price": false,
+            "custom_price": "4.24",
+            "custom_compare_price": "4.99",
+            "variant_index": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_card_8exmLD",
+        "product_card_dpUAjT",
+        "product_card_ydpG9D",
+        "product_card_PqEbc8"
+      ],
+      "name": "C New Product Card",
+      "settings": {
+        "bg_color": "#f6f3f0",
+        "card_bg_color": "#f6f3f0",
+        "accent_color": "#d54f2f",
+        "title_color": "#1b1c29",
+        "desc_color": "#1b1c29",
+        "card_title_color": "#1b1c29",
+        "title": "Shop <span>Bestsellers</span>",
+        "description": "",
+        "shop_all_text": "",
+        "shop_all_link": "",
+        "show_subscription_pricing": true,
+        "add_to_cart_text": "Add to Cart",
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 80,
+        "padding_top_mobile": 50,
+        "padding_bottom_mobile": 50
+      }
+    },
+    "c_faq_tabs_BMtYJg": {
+      "type": "c-faq-tabs",
+      "blocks": {
+        "faq_item_D44yQ6": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "medications",
+            "question": "Can I get the dietary nitrates in Berkeley Life just through my diet?",
+            "answer": "<p>Leafy greens, beetroot, arugula, spinach and celery are all vegetables known to be high in dietary nitrates. However, nutrient density of the soil across the country makes it difficult to predict exactly how much of these greens are required daily to provide a clinically effective dose of nitrates to produce Nitric Oxide. In our experience, it requires more leafy greens than most people over 35 are willing or able to consume every day.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_HamWDY": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "medications",
+            "question": "Can I take Berkeley Life with other medications?",
+            "answer": "<p>Berkeley Life is safe, well-tolerated, and has no counter-indications for medications. As always, if you are uncertain work with your healthcare provider to determine the appropriate combination of medicine and supplementation that's right for you.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_6QgJYU": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "medications",
+            "question": "How long do I need to take Berkeley Life before I see results?",
+            "answer": "<p>As with all supplements, everyone will feel a difference at different speeds. There are some who notice a difference right away, and others see benefits after using the product for about a month. However, unlike most supplements you can validate that our N.O. supplements are working by using our patented Nitric Oxide Test Strip before and 90 minutes after you take the supplement.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_r8Q7Gg": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "medications",
+            "question": "What are Nitric Oxide test strips and how do they work?",
+            "answer": "<p>Our test strips provide a quick, simple way to measure your body’s nitric oxide levels through saliva. Just place the strip on your tongue, press the ends together, and check the color—it takes less than 10 seconds and gives real-time insight into your NO status.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_rc4aqk": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "safety",
+            "question": "How often should I test my Nitric Oxide levels?",
+            "answer": "<p>It's up to you but we recommend using the test strips regularly to begin with to understand your baseline levels and how supplementation influences your levels. Here are some suggestions - First thing in the morning - Before and after eating a nitrate-rich meal - Before and after workouts or activity - Before and after taking Berkeley Life Nitric Oxide Foundation This helps you spot patterns and fine-tune your habits for better nitric oxide production and performance.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_TMm7LW": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "safety",
+            "question": "Why should I care about my Nitric Oxide levels?",
+            "answer": "<p>Nitric oxide is essential for healthy blood flow, energy, brain function, and heart health. Low levels are common, especially after age 40 or with stress, poor diet, or prescription mouthwash use. Testing helps you understand when your body needs support—so you can adjust your nutrition or supplement routine.</p>",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_D44yQ6",
+        "faq_item_HamWDY",
+        "faq_item_6QgJYU",
+        "faq_item_r8Q7Gg",
+        "faq_item_rc4aqk",
+        "faq_item_TMm7LW"
+      ],
+      "custom_css": [],
+      "name": "C FAQ Tabs",
+      "settings": {
+        "default_active_tab": "medications",
+        "faq_subheading": "",
+        "faq_title": "Your Questions<br>**Answered**",
+        "faq_subtitle": "We’ve gathered the most common concerns so you can feel confident starting your Berkeley Life journey.",
+        "bg_color": "#ffffff",
+        "faq_accent": "#d44f2f",
+        "faq_border": "#eaeaea",
+        "faq_text": "#0b0b0b",
+        "padding_top": 4,
+        "padding_bottom": 2
+      }
+    }
+  },
+  "order": [
+    "c_pdp_hero_main",
+    "c_pdp_marquee_nb3RRt",
+    "c_whats_included_system_6pa7VP",
+    "c_results_glass_card_a4QwPg",
+    "c_new_benefits_9nKjgg",
+    "c_grid_slider_C9HyJt",
+    "frontrow_reviews_VaV7Ni",
+    "product-reviews",
+    "c_backed_by_clinical_research_AN9cmq",
+    "c_new_product_card_eKhcx4",
+    "c_faq_tabs_BMtYJg"
+  ]
+}

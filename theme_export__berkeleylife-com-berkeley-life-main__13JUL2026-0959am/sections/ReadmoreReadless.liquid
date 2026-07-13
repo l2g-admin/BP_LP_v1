@@ -1,0 +1,237 @@
+{% liquid
+  assign seo_content = collection.metafields.custom.seo_content
+%}
+
+{% if seo_content != blank %}
+  <section
+    id="SEOCollection-{{ section.id }}"
+    class="seo-collection-section"
+    data-section-id="{{ section.id }}"
+  >
+    <div class="seo-collection-container">
+      <div class="rte seo-collection-content">
+
+        <div class="seo-read-more-wrapper">
+
+          <div class="seo-short-content">
+            <div class="seo-short-content-text">
+              {{ seo_content | metafield_tag | strip_html | truncatewords: 100 }}
+            </div>
+
+            <button
+              type="button"
+              class="seo-toggle-button seo-read-more-button"
+              aria-expanded="false"
+            >
+              Read More
+            </button>
+          </div>
+
+          <div class="seo-full-content" hidden>
+            <div class="seo-full-content-text">
+              {{ seo_content | metafield_tag }}
+            </div>
+
+            <button
+              type="button"
+              class="seo-toggle-button seo-read-less-button"
+              aria-expanded="true"
+            >
+              Read Less
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <style>
+    #SEOCollection-{{ section.id }} {
+      display: block;
+      width: 100%;
+    }
+
+    #SEOCollection-{{ section.id }} .seo-collection-container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      box-sizing: border-box;
+    }
+
+    #SEOCollection-{{ section.id }} .seo-read-more-wrapper {
+      padding-bottom: 80px;
+    }
+
+    #SEOCollection-{{ section.id }} .seo-full-content[hidden] {
+      display: none !important;
+    }
+
+    #SEOCollection-{{ section.id }} .rte h1,
+    #SEOCollection-{{ section.id }} .rte h2 {
+      margin-top: 2.8rem;
+      margin-bottom: 0;
+      font-size: 28px;
+      line-height: var(--font-heading-line-height, 1.3);
+    }
+
+    #SEOCollection-{{ section.id }} .rte h3,
+    #SEOCollection-{{ section.id }} .rte h4 {
+      margin-top: 2.8rem;
+      margin-bottom: 0;
+      font-size: large;
+      line-height: var(--font-heading-line-height, 1.3);
+    }
+
+    #SEOCollection-{{ section.id }} .rte ul,
+    #SEOCollection-{{ section.id }} .rte ol {
+      padding-left: 2rem;
+    }
+
+    #SEOCollection-{{ section.id }} .rte ul li {
+      list-style: disc;
+    }
+
+    #SEOCollection-{{ section.id }} .rte ol li {
+      list-style: decimal;
+    }
+    .seo-collection-container .rte h3, .h4, .rte h4, .h5 {
+    font-family: var(--font-heading-family);
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    letter-spacing: .321px!important;
+
+}
+
+    #SEOCollection-{{ section.id }} .seo-toggle-button {
+      width: 170px;
+      max-width: 100%;
+      min-height: 33px;
+      margin-top: 20px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      box-sizing: border-box;
+      cursor: pointer;
+      background: #6c6a6b;
+      color: #ffffff;
+      font-family: Poppins, sans-serif;
+      font-size: 15px;
+      line-height: 1.2;
+      text-align: center;
+      text-transform: uppercase;
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+    }
+
+    #SEOCollection-{{ section.id }} .seo-toggle-button:hover,
+    #SEOCollection-{{ section.id }} .seo-toggle-button:focus-visible {
+      background: #141414;
+      color: #fcf1f1;
+    }
+
+    #SEOCollection-{{ section.id }} .seo-toggle-button:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 3px;
+    }
+
+    @media screen and (max-width: 749px) {
+      #SEOCollection-{{ section.id }} .seo-collection-container {
+        padding: 3rem 1.5rem;
+      }
+
+      #SEOCollection-{{ section.id }} .seo-read-more-wrapper {
+        padding-bottom: 40px;
+      }
+
+      #SEOCollection-{{ section.id }} .rte h1,
+      #SEOCollection-{{ section.id }} .rte h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+
+  <script>
+    (function() {
+      function initialiseSEOCollectionSection() {
+        const section = document.getElementById('SEOCollection-{{ section.id }}');
+
+        if (!section || section.dataset.initialised === 'true') {
+          return;
+        }
+
+        section.dataset.initialised = 'true';
+
+        const shortContent = section.querySelector('.seo-short-content');
+        const fullContent = section.querySelector('.seo-full-content');
+        const readMoreButton = section.querySelector('.seo-read-more-button');
+        const readLessButton = section.querySelector('.seo-read-less-button');
+
+        if (
+          !shortContent ||
+          !fullContent ||
+          !readMoreButton ||
+          !readLessButton
+        ) {
+          return;
+        }
+
+        readMoreButton.addEventListener('click', function() {
+          shortContent.hidden = true;
+          fullContent.hidden = false;
+          readMoreButton.setAttribute('aria-expanded', 'true');
+
+          readLessButton.focus();
+        });
+
+        readLessButton.addEventListener('click', function() {
+          fullContent.hidden = true;
+          shortContent.hidden = false;
+          readMoreButton.setAttribute('aria-expanded', 'false');
+
+          readMoreButton.focus();
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener(
+          'DOMContentLoaded',
+          initialiseSEOCollectionSection
+        );
+      } else {
+        initialiseSEOCollectionSection();
+      }
+
+      document.addEventListener('shopify:section:load', function(event) {
+        if (
+          event.target &&
+          event.target.querySelector('#SEOCollection-{{ section.id }}')
+        ) {
+          initialiseSEOCollectionSection();
+        }
+      });
+    })();
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "SEO Collection",
+  "tag": "section",
+  "class": "seo-collection-wrapper",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [],
+  "presets": [
+    {
+      "name": "SEO Collection"
+    }
+  ]
+}
+{% endschema %}

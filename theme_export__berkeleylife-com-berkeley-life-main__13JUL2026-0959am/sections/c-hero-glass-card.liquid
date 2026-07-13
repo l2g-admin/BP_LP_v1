@@ -1,0 +1,850 @@
+{% comment %}
+  ** Hero with Glass Card Section **
+  - Desktop Style: Vertical layout with a focused background.
+  - Mobile Style: Horizontal layout with a wider, action-oriented background.
+  - All elements are Shopify blocks for full customization.
+{% endcomment %}
+
+<style>
+  div:empty{
+    display: block;
+  }
+
+  .hero-glass-card-section {
+    --text-color: #ffffff;
+    --primary-btn-bg: {{ section.settings.button_primary_bg }};
+    --primary-btn-text: {{ section.settings.button_primary_text }};
+    --secondary-btn-bg: transparent;
+    --secondary-btn-text: #D44F2F;
+    --secondary-btn-border: #D44F2F;
+
+    position: relative;
+    color: var(--text-color);
+    overflow: hidden;
+  }
+
+  .hero-glass-card-section__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-size: cover;
+    background-position: center;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6)), url('{{ section.settings.mobile_bg_image | image_url: width: 1000 }}');
+  }
+
+  .hero-glass-card-section__content-wrapper {
+    max-width: 1280px;
+    /* place-self: center; */
+    position: relative;
+    z-index: 2;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 600px;
+    padding: 2rem 1.5rem;
+  }
+
+  .hero-block {
+    text-align: start;
+    margin-bottom: 1.25rem;
+    align-self: start;
+  }
+
+  /* Block Specific Styles */
+  .hero-block--stars {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 14px;
+  }
+  .stars-wrapper {
+    color: #D44F2F;
+  }
+
+  .hero-elements-heading{
+    max-width: 800px;
+  }
+
+  .hero-block--heading h1 {
+    font-size: clamp(2.25rem, 8vw, 3rem);
+    line-height: 1.1;
+    margin: 0;
+    color: var(--text-color);
+  }
+
+  .hero-block--paragraph p {
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 500px;
+    margin: 0;
+  }
+
+  .hero-block--buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .hero-button {
+    width: 100%;
+    padding: 0.8rem 2rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    text-align: center;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  /* .hero-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  } */
+
+  .hero-button--primary {
+    background-color: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
+    border: 2px solid #D44F2F;
+  }
+
+  .hero-button--primary:hover{
+     background-color: #c45a41;
+    border-color: #c45a41;
+  }
+
+  .hero-button--secondary {
+    background-color: var(--secondary-btn-bg);
+    color: var(--secondary-btn-text);
+    border: 2px solid var(--secondary-btn-border);
+  }
+
+  .hero-block--guarantees {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .guarantee-item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-style: italic;
+  }
+  .guarantee-item svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  .hero-block--glass-card {
+    margin-top: 2rem;
+    max-width: 320px;
+  }
+  .glass-card-inner {
+    background: rgba(2, 171, 196, 0);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* For Safari */
+    border-radius: 71px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 40px 60px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  }
+  .glass-card-inner img {
+    height: auto;
+    display: block;
+    border-radius: 0.5rem;
+  }
+
+  .desktop-card{
+    display: none;
+  }
+
+  .mobile-card{
+    place-self: center;
+    display: block;
+  }
+
+  .text-brand-header{
+    color:#D44F2F !important;
+    font-size: 48px !important;
+    font-weight: 400;
+  }
+
+  .hero-heading{
+      font-size: 40px !important;
+      font-weight: 400;
+      line-height: 110% !important;
+    }
+
+    .divider-line-guarantees{
+      height: 40px;
+      width: 1px;
+      background-color: #fff;
+      display: none !important;
+    }
+
+  /* Desktop Styles (min-width: 768px) */
+  @media (min-width: 768px) {
+    .hero-heading{
+      font-size: 64px !important;
+      font-weight: 400;
+      line-height: 110% !important;
+    }
+
+    .desktop-card{
+      display: block;
+      position: relative;
+      bottom:60px;
+    }
+
+    .mobile-card{
+      display: none;
+    }
+
+    .hero-paragraph{
+      font-size: 18px !important;
+      line-height: 150% !important;
+      font-weight: 300;
+    }
+
+    .text-brand-header{
+      color:#D44F2F !important;
+      font-size: 72px !important;
+      font-weight: 400;
+    }
+
+    .hero-flex{
+      display: flex;
+      width: 100%;
+      gap:150px;
+      flex-direction: row;
+      justify-content: space-between;
+      align-self: flex-start;
+    }
+
+    .hero-glass-card-section__background {
+      background-image: linear-gradient({{ section.settings.gradient_direction }}deg, {{ section.settings.gradient_color_1 }}, {{ section.settings.gradient_color_2 }}), url('{{ section.settings.desktop_bg_image | image_url: width: 1800 }}');
+      background-blend-mode: multiply;
+    }
+
+    .hero-button{
+      width: auto;
+    }
+
+    .guarantee-item{
+      width: auto;
+    }
+
+    .divider-line-guarantees{
+      height: 28px;
+      width: 1px;
+      background-color: #fff;
+      display: block !important;
+    }
+
+    .hero-glass-card-section__content-wrapper {
+      min-height: 80vh;
+      max-height: 900px;
+      /* align-items: center; */
+      /* text-align: center; */
+      padding: 4rem 0;
+    }
+
+    .hero-block--stars {
+        font-size: 24px;
+        font-weight: 100;
+    }
+
+    .trusted-text-span{
+      font-size: 20px;
+    }
+
+    .hero-block--paragraph p {
+      /* margin-left: auto;
+      margin-right: auto; */
+    }
+
+    .hero-block--buttons {
+      /* justify-content: center; */
+    }
+
+    .hero-block--guarantees {
+      /* justify-content: center; */
+      flex-direction: row;
+    }
+
+    .hero-elements-card{
+      align-content: center;
+    }
+
+    .glass-card-inner {
+      /* position: absolute;
+      bottom: 13rem;
+      left: 50%;
+      transform: translateX(120%); */
+    }
+
+    .bf-timer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: #ffffff;
+      padding: 12px 0;
+      text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .bf-timer__content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bf-timer__title {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+      color: #ffffff;
+    }
+
+    .bf-timer__countdown {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .bf-timer__unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 40px;
+    }
+
+    .bf-timer__number {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .bf-timer__label {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 2px;
+    }
+
+    .bf-timer__separator {
+      font-size: 24px;
+      font-weight: 700;
+      color: #D44F2F;
+      margin: 0 4px;
+      line-height: 1;
+    }
+
+    @media (min-width: 768px) {
+      .bf-timer {
+        padding: 16px 0;
+      }
+
+      .bf-timer__content {
+        flex-direction: row;
+        justify-content: center;
+        gap: 24px;
+      }
+
+      .bf-timer__title {
+        font-size: 16px;
+      }
+
+      .bf-timer__countdown {
+        gap: 12px;
+      }
+
+      .bf-timer__unit {
+        min-width: 50px;
+      }
+
+      .bf-timer__number {
+        font-size: 32px;
+      }
+
+      .bf-timer__label {
+        font-size: 12px;
+        margin-top: 4px;
+      }
+
+      .bf-timer__separator {
+        font-size: 32px;
+        margin: 0 8px;
+      }
+    }
+
+  }
+</style>
+
+<section class="hero-glass-card-section">
+  <div class="hero-glass-card-section__background"></div>
+  <div class="hero-glass-card-section__content-wrapper">
+    <div class="hero-flex">
+      <div class="hero-elements-heading">
+        {% for block in section.blocks %}
+          <div class="hero-block hero-block--{{ block.type }}" {{ block.shopify_attributes }}>
+            {% case block.type %}
+              {% when 'stars' %}
+                <div class="stars-wrapper" role="img" aria-label="{{ block.settings.star_rating }} out of 5 stars">
+                  {%- for i in (1..5) -%}
+                    {%- if i <= block.settings.star_rating -%}
+                      <span>&#9733;</span>
+                    {%- else -%}
+                      <span>&#9734;</span>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+                <span class="trusted-text-span">{{ block.settings.trusted_text }}</span>
+
+              {% when 'heading' %}
+                <h1 class="hero-heading">
+                  {{
+                    block.settings.heading
+                    | replace_first: '**', "<span class='text-brand-header font-secondaryHeader'>"
+                    | replace_first: '**', '</span>'
+                  }}
+                </h1>
+
+              {% when 'paragraph' %}
+                <p class="hero-paragraph">{{ block.settings.subheading }}</p>
+
+              {% when 'buttons' %}
+                {% if block.settings.button_1_label != blank %}
+                  <a href="{{ block.settings.button_1_link }}" class="hero-button hero-button--primary">
+                    {{ block.settings.button_1_label }}
+                  </a>
+                {% endif %}
+                {% if block.settings.button_2_label != blank %}
+                  <a href="{{ block.settings.button_2_link }}" class="hero-button hero-button--secondary">
+                    {{ block.settings.button_2_label }}
+                  </a>
+                {% endif %}
+
+              {% when 'guarantees' %}
+                {%- for i in (1..3) -%}
+                  {%- assign guarantee_text_setting = 'guarantee_' | append: i -%}
+                  {%- assign guarantee_icon_setting = 'guarantee_icon_' | append: i -%}
+                  {%- assign guarantee_text = block.settings[guarantee_text_setting] -%}
+                  {%- assign guarantee_icon = block.settings[guarantee_icon_setting] -%}
+                  {% if guarantee_text != blank %}
+                    <div class="guarantee-item">
+                      {{ guarantee_icon }}
+                      <span>{{ guarantee_text }}</span>
+                    </div>
+                    {% if i < 3 %}
+                      <div class="mx-1 divider-line-guarantees" style="font-weight: 100;"></div>
+                    {% endif %}
+                  {% endif %}
+                {%- endfor -%}
+
+              {% when 'bf_timer' %}
+                <div
+                  class="bf-timer"
+                  id="bf-timer-{{ block.id }}"
+                  data-target-date="{{ block.settings.target_date }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <div class="bf-timer__content">
+                    <h3 class="bf-timer__title">{{ block.settings.timer_title }}</h3>
+                    <div class="bf-timer__countdown">
+                      <div class="bf-timer__unit">
+                        <div class="bf-timer__number" id="days-{{ block.id }}">00</div>
+                        <div class="bf-timer__label">Days</div>
+                      </div>
+                      <div class="bf-timer__separator">:</div>
+                      <div class="bf-timer__unit">
+                        <div class="bf-timer__number" id="hours-{{ block.id }}">00</div>
+                        <div class="bf-timer__label">Hrs</div>
+                      </div>
+                      <div class="bf-timer__separator">:</div>
+                      <div class="bf-timer__unit">
+                        <div class="bf-timer__number" id="minutes-{{ block.id }}">00</div>
+                        <div class="bf-timer__label">Min</div>
+                      </div>
+                      <div class="bf-timer__separator">:</div>
+                      <div class="bf-timer__unit">
+                        <div class="bf-timer__number" id="seconds-{{ block.id }}">00</div>
+                        <div class="bf-timer__label">Sec</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            {% endcase %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="hero-elements-card">
+        {% if section.settings.card_image != blank %}
+          <img
+            class="desktop-card"
+            src="{{ section.settings.card_image | image_url: width: 600 }}"
+            loading="lazy"
+            width="500"
+            height="{{ 500 | round }}"
+          >
+          <img
+            class="mobile-card"
+            src="{{ section.settings.mobile_card_image | image_url: width: 600 }}"
+            loading="lazy"
+            width="320"
+            height="{{ 320 | round }}"
+          >
+        {% else %}
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'glass_card' %}
+                <div class="hero-block hero-block--{{ block.type }}" {{ block.shopify_attributes }}>
+                  <div class="glass-card-inner" {% if block.settings.card_image_link != blank %}onclick="window.location.href='{{ block.settings.card_image_link }}'" style="cursor: pointer;"{% endif %}>
+                    {% if block.settings.card_image %}
+                      <img
+                        src="{{ block.settings.card_image | image_url: width: 600 }}"
+                        alt="{{ block.settings.card_image.alt | escape }}"
+                        loading="lazy"
+                        width="320"
+                        height="{{ 320 | divided_by: block.settings.card_image.aspect_ratio | round }}"
+                      >
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                    {% endif %}
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Find all bf-timer elements
+    const timers = document.querySelectorAll('.bf-timer[data-target-date]');
+
+    timers.forEach((timer) => {
+      const timerId = timer.id.replace('bf-timer-', '');
+      const targetDate = new Date(timer.dataset.targetDate).getTime();
+
+      if (!targetDate || isNaN(targetDate)) {
+        console.error('Invalid target date for timer', timer.dataset.targetDate);
+        return;
+      }
+
+      function updateTimer() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        const daysEl = document.getElementById(`days-${timerId}`);
+        const hoursEl = document.getElementById(`hours-${timerId}`);
+        const minutesEl = document.getElementById(`minutes-${timerId}`);
+        const secondsEl = document.getElementById(`seconds-${timerId}`);
+
+        if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+          console.error('Timer elements not found for ID:', timerId);
+          return;
+        }
+
+        if (distance < 0) {
+          // Timer expired
+          daysEl.textContent = '00';
+          hoursEl.textContent = '00';
+          minutesEl.textContent = '00';
+          secondsEl.textContent = '00';
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        daysEl.textContent = days.toString().padStart(2, '0');
+        hoursEl.textContent = hours.toString().padStart(2, '0');
+        minutesEl.textContent = minutes.toString().padStart(2, '0');
+        secondsEl.textContent = seconds.toString().padStart(2, '0');
+      }
+
+      // Update immediately
+      updateTimer();
+
+      // Update every second
+      const timerInterval = setInterval(updateTimer, 1000);
+
+      // Clean up interval when page is unloaded
+      window.addEventListener('beforeunload', function () {
+        clearInterval(timerInterval);
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Hero with Glass Card",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_bg_image",
+      "label": "Desktop Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_bg_image",
+      "label": "Mobile Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_image",
+      "label": "Fallback Card Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_card_image",
+      "label": "Mobile Fallback Card Image"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Gradient Overlay"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_1",
+      "label": "Gradient Color 1",
+      "default": "#0a2a43"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_2",
+      "label": "Gradient Color 2",
+      "default": "#2b0a1e"
+    },
+    {
+      "type": "range",
+      "id": "gradient_direction",
+      "min": 0,
+      "max": 360,
+      "step": 5,
+      "unit": "deg",
+      "label": "Gradient Direction",
+      "default": 145
+    },
+    {
+      "type": "header",
+      "content": "Button Colors"
+    },
+    {
+      "type": "color",
+      "id": "button_primary_bg",
+      "label": "Primary Button Background",
+      "default": "#D95D39"
+    },
+    {
+      "type": "color",
+      "id": "button_primary_text",
+      "label": "Primary Button Text",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stars",
+      "name": "Stars / Trusted by",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "star_rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Star Rating",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "trusted_text",
+          "label": "Trusted by Text",
+          "default": "Trusted by 3,000+ healthcare providers"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "The Clinically Proven Nitric Oxide Supplement"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "label": "Paragraph",
+          "default": "Clinically validated and provider-trusted. Berkeley Life delivers proven support for circulation, healthy blood pressure, and lasting energy."
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_1_label",
+          "label": "Button 1 Label",
+          "default": "SHOP NO FOUNDATION"
+        },
+        {
+          "type": "url",
+          "id": "button_1_link",
+          "label": "Button 1 Link"
+        },
+        {
+          "type": "text",
+          "id": "button_2_label",
+          "label": "Button 2 Label",
+          "default": "LEARN HOW IT WORKS"
+        },
+        {
+          "type": "url",
+          "id": "button_2_link",
+          "label": "Button 2 Link"
+        }
+      ]
+    },
+    {
+      "type": "guarantees",
+      "name": "Guarantees",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "html",
+          "id": "guarantee_icon_1",
+          "label": "Guarantee Icon 1"
+        },
+        {
+          "type": "text",
+          "id": "guarantee_1",
+          "label": "Guarantee 1",
+          "default": "Clinically Backed"
+        },
+        {
+          "type": "html",
+          "id": "guarantee_icon_2",
+          "label": "Guarantee Icon 2"
+        },
+        {
+          "type": "text",
+          "id": "guarantee_2",
+          "label": "Guarantee 2",
+          "default": "15% Subscribe & Save"
+        },
+        {
+          "type": "html",
+          "id": "guarantee_icon_3",
+          "label": "Guarantee Icon 3"
+        },
+        {
+          "type": "text",
+          "id": "guarantee_3",
+          "label": "Guarantee 3",
+          "default": "Money Back Guarantee"
+        }
+      ]
+    },
+    {
+      "type": "glass_card",
+      "name": "Glass Card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Card Image"
+        },
+        {
+          "type": "url",
+          "id": "card_image_link",
+          "label": "Card Image Link",
+          "info": "Optional link for the card image. Leave empty if no link is needed."
+        }
+      ]
+    },
+    {
+      "type": "bf_timer",
+      "name": "Black Friday Timer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "timer_title",
+          "label": "Timer Title",
+          "default": "BLACK FRIDAY OFFER ENDS IN:"
+        },
+        {
+          "type": "text",
+          "id": "target_date",
+          "label": "Target Date & Time",
+          "default": "2024-11-29T23:59:59",
+          "info": "Format: YYYY-MM-DDTHH:MM:SS (e.g., 2024-11-29T23:59:59 for Nov 29, 2024 at 11:59 PM)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Hero with Glass Card",
+      "blocks": [
+        { "type": "stars" },
+        { "type": "heading" },
+        { "type": "paragraph" },
+        { "type": "buttons" },
+        { "type": "guarantees" },
+        { "type": "glass_card" },
+        { "type": "bf_timer" }
+      ]
+    }
+  ]
+}
+{% endschema %}

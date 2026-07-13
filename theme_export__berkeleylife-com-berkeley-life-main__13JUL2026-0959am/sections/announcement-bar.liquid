@@ -1,0 +1,142 @@
+{% unless customer.b2b? %}
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+<script
+  src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+
+<div
+  id="{{section.id}}"
+  class="uppercase swiper bg-bg text-text"
+  style="--color-text: {{ section.settings.text_color | default: '#ffffff' }}; --color-bg: {{ section.settings.bg_color | default: '#000000' }}; --swiper-navigation-size: 1.5rem">
+  <div
+    class="swiper-wrapper bg-bg">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'announcement' -%}
+        {%-liquid
+          assign show = true
+          assign now = 'now' | date: '%s' | times: 1
+          assign start_date = block.settings.start_date | default: 'now' | date: '%s' | times: 1
+          assign end_date = block.settings.end_date | date: '%s' | times: 1
+          if start_date > now
+            assign show = false
+          endif
+          if end_date > 0 and end_date < now
+            assign show = false
+          endif
+        -%}
+        {%- if show -%}
+          <div
+            class="text-center swiper-slide"
+            role="region"
+            aria-label="{{ 'sections.header.announcement' | t }}"
+            {{ block.shopify_attributes }}>
+            {%- if block.settings.text != blank -%}
+              {%- if block.settings.link != blank -%}
+                <a
+                  href="{{ block.settings.link }}"
+                  class="relative flex justify-center p-3 transition-colors hover:bg-black/5 focus:bg-black/5 group hover:underline focus:underline underline-offset-4">
+                {%- else -%}
+                  <div
+                    class="block p-3">
+                  {%- endif -%}
+                  <div
+                    class="flex items-center justify-center text-xs md:text-sm md:tracking-widest">
+                    {{ block.settings.text }}
+                  </div>
+                  {%- if block.settings.link != blank -%}
+                  </a>
+              {%- else -%}
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+        {% endif %}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+
+</div>
+
+{%- if section.blocks.size > 0 and section.settings.announcement -%}
+  <script
+    type="module">
+    const swiper = new Swiper('#{{section.id}}.swiper', {
+    speed: 400,
+            autoplay: {
+              delay: 3000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            },
+            loop: true,
+            spaceBetween: 0,
+            slidesPerView: 1,
+            });</script>
+{%- endif -%}
+{% endunless %}
+
+{% schema %}
+  {
+    "name": "Announcement Bar",
+    "max_blocks": 12,
+    "settings": [
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background Color"
+      }, {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color"
+      },
+      {
+        "type": "checkbox",
+        "id": "announcement",
+        "label": "Announcement Carousel",
+        "default": false
+      }
+    ],
+    "blocks": [
+      {
+        "type": "announcement",
+        "name": "t:sections.announcement-bar.blocks.announcement.name",
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "text",
+            "default": "<p>Welcome to our store</p>",
+            "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "t:sections.announcement-bar.blocks.announcement.settings.link.label"
+          },
+          {
+            "type": "text",
+            "id": "start_date",
+            "label": "Start Date",
+            "info": "Defaults to now"
+          }, {
+            "type": "text",
+            "id": "end_date",
+            "label": "End Date",
+            "info": "Defaults to never",
+            "placeholder": "2021-12-31 23:59 EST"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Announcement",
+        "blocks": [
+          {
+            "type": "announcement"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

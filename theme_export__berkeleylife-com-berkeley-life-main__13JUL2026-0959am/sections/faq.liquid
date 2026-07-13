@@ -1,0 +1,281 @@
+<div id="FAQ-{{ section.id }}" class=" bg-white">
+  <div class="max-w-screen-lg px-8 py-8 md:py-12 mx-auto" {% if section.settings.enable_page_schema %}itemscopeitemtype="https://schema.org/FAQPage"{% endif %}>
+    {% if section.settings.title != blank %}
+              <h2 class="pb-8 text-center h3 text-text" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; ">
+              {{ section.settings.title | replace_first: "**", "<br><span class='text-brand text-[34px] md:text-[50px] font-secondaryHeader'>" | replace: "**", "</span>" }}
+          </h2>
+    {% endif %}
+    <div>
+      {%- assign first_header = true -%}
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'separator' -%}
+          <h2
+            style="--color-text: {{ section.settings.header_color | default: '#000000' }}; "
+            id="{{- block.settings.title | escape | handleize -}}"
+            class="text-text subhead scroll-mt-40 {% unless first_header %}mt-12{% endunless %}"
+            {{ block.shopify_attributes }}>
+            <span id="block-{{ block.id }}">
+              {{- block.settings.title | escape -}}
+            </span>
+          </h2>
+          {%- assign first_header = false -%}
+          {%- when 'collapsible_tab' -%}
+          <div
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+            {{ block.shopify_attributes }}>
+            <details class="group">
+              <summary style="--color-text: {{ section.settings.text_color | default: '#000000' }}; "
+                class="border-b-2 border-text text-text">
+                <div class="flex items-center justify-between gap-2 py-4">
+                  {% render 'icon-accordion', icon: block.settings.icon %}
+                  <h2 class="text-base tracking-widest font-bold uppercase group-open:text-brand" itemprop="name">
+                    {{ block.settings.heading | default: block.settings.page.title }}
+                  </h2>
+                  <span class="transition-transform duration-150 origin-center text-text shrink-0 ">
+                    {% render 'icon-plus', classes: 'w-4' %}
+                  </span>
+                </div>
+              </summary>
+              <div
+                style="--color-text: {{ section.settings.text_color | default: '#000000' }};"
+                class="py-8 text-lg rte text-text"
+                itemscope
+                itemprop="acceptedAnswer"
+                itemtype="https://schema.org/Answer">
+                <div
+                  itemprop="text"
+                  class="faqParagraph"
+                  {% if block.settings.faq_id != blank %}id="{{ block.settings.faq_id }}"{% endif %}>
+                  {{ block.settings.content }}
+                </div>
+              </div>
+            </details>
+          </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [
+    {
+      "type": "color",
+      "id": "header_color",
+      "label": "Header Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },{
+      "type": "checkbox",
+      "id": "enable_page_schema",
+      "label": "Enable page schema",
+      "default": false,
+      "info": "Only enable this once per page."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "separator",
+      "name": "Section separator",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Default"
+        }
+      ]
+    },
+    {
+      "type": "collapsible_tab",
+      "name": "t:sections.main-product.blocks.collapsible_tab.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Collapsible tab",
+          "info": "t:sections.main-product.blocks.collapsible_tab.settings.heading.info",
+          "label": "t:sections.main-product.blocks.collapsible_tab.settings.heading.label"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.main-product.blocks.collapsible_tab.settings.content.label"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__1.label"
+            },
+            {
+              "value": "box",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__2.label"
+            },
+            {
+              "value": "chat_bubble",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__3.label"
+            },
+            {
+              "value": "check_mark",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__4.label"
+            },
+            {
+              "value": "dryer",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__5.label"
+            },
+            {
+              "value": "eye",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__6.label"
+            },
+            {
+              "value": "heart",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__7.label"
+            },
+            {
+              "value": "iron",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__8.label"
+            },
+            {
+              "value": "leaf",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__9.label"
+            },
+            {
+              "value": "leather",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__10.label"
+            },
+            {
+              "value": "lock",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__11.label"
+            },
+            {
+              "value": "map_pin",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__12.label"
+            },
+            {
+              "value": "pants",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__13.label"
+            },
+            {
+              "value": "plane",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__14.label"
+            },
+            {
+              "value": "price_tag",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__15.label"
+            },
+            {
+              "value": "question_mark",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__16.label"
+            },
+            {
+              "value": "return",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__17.label"
+            },
+            {
+              "value": "ruler",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__18.label"
+            },
+            {
+              "value": "shirt",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__19.label"
+            },
+            {
+              "value": "shoe",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__20.label"
+            },
+            {
+              "value": "silhouette",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__21.label"
+            },
+            {
+              "value": "star",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__22.label"
+            },
+            {
+              "value": "truck",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__23.label"
+            },
+            {
+              "value": "washing",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__24.label"
+            }
+          ],
+          "default": "none",
+          "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.label"
+        },
+        {
+          "type": "text",
+          "id": "faq_id",
+          "label": "ID"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Text",
+      "name": "FAQ",
+      "settings": {
+      },
+      "blocks": [
+        {
+          "type": "separator",
+          "settings": {
+            "title": "Shipping"
+          }
+        },
+        {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Do you ship overseas?",
+            "content": "<p>Yes, we ship all over the world. Shipping costs will apply, and will be added at checkout. We run discounts and promotions all year, so stay tuned for exclusive deals.</p>"
+          }
+        },
+        {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "How long will it take to get my order?",
+            "content": "<p>It depends on where you are. Orders processed here will take 5-7 business days to arrive. Overseas deliveries can take anywhere from 7-16 days. Delivery details will be provided in your confirmation email.</p>"
+          }
+        },
+        {
+          "type": "separator",
+          "settings": {
+            "title": "Product"
+          }
+        },
+        {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Can I return my product?",
+            "content": "<p>We always aim for make sure our customers love our products, but if you do need to return an order, we’re happy to help. Just email us directly and we’ll take you through the process.</p>"
+          }
+        },
+        {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Can I get my product personalized?",
+            "content": "<p>It depends on the creator and the product. All options are outlined on the product page, so look out for customization options there.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

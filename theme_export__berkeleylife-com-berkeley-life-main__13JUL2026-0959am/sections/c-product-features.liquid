@@ -1,0 +1,530 @@
+{% comment %}
+  Shopify Section: C Product Features 
+  - Conditionally renders blocks based on content.
+  - Mobile: Single-column stacked layout.
+  - Desktop: Grid layout with a central image.
+{% endcomment %}
+
+<style>
+  .features-grid-section {
+    background-color: {{ section.settings.background_color }};
+    padding: 50px 20px;
+    text-align: center;
+  }
+
+  .features-grid__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .features-grid__heading {
+    font-size: 32px;
+ 
+    line-height: 120%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .features-grid__heading em{
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 100%;
+    color: #D44F2F;
+    letter-spacing: -1.5px;
+    font-family: "cormorant-garamond", serif;
+    font-style: italic;
+  }
+
+  .special-heading {
+    font-size: 40px;
+ 
+    line-height: 100%;
+  }
+
+  .features-grid__subheading {
+    font-size: 20px;
+    color: #080B2B;
+    margin: 0;
+    font-weight: 400;
+    line-height: 150%;
+  }
+
+  .features-grid__subheading em{
+    font-size: 24px;
+    font-family: serif;
+    font-style: italic;
+    color: #080B2B;
+    font-weight: 500;
+    line-height: 100%;
+  }
+  
+  .features-grid__main-content {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  
+  .features-grid__central-image {
+    order: -1;
+    justify-items: center;
+  }
+
+  .features-grid__central-image img {
+    max-width: 80%;
+    height: auto;
+    margin: 10px 0;
+  }
+
+  .features-grid__feature-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #D44F2F;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    text-align: left;
+  }
+
+  .features-grid__feature-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .box-heading{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+  
+  .features-grid__feature-title {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 120%;
+    color: #D44F2F;
+    margin: 0 0 5px 0;
+  }
+  
+  .features-grid__feature-desc {
+    font-size: 20px;
+    line-height: 1.5;
+    margin: 0;
+    color: #333;
+  }
+
+  .features-grid__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .features-grid__buttons .button {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 120%;
+    font-size: 18px;
+    border-radius: 42px;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+  }
+
+  .features-grid__buttons .button-primary {
+    background-color: #D44F2F;
+    color: #fff;
+    border: 2px solid #D44F2F;
+  }
+  .features-grid__buttons .button-primary:hover {
+    background-color: #c45a41;
+    border-color: #c45a41;
+  }
+
+  .features-grid__buttons .button-secondary {
+    background-color: transparent;
+    color: #D44F2F;
+    border: 2px solid #D44F2F;
+  }
+  .features-grid__buttons .button-secondary:hover {
+    background-color: #fceee9;
+  }
+
+
+  /* Desktop Styles using CSS Grid */
+  @media screen and (min-width: 990px) {
+    .features-grid-section {
+      padding: 80px 40px;
+    }
+    
+    .features-grid__heading {
+      font-size: 54px;
+      max-width: 800px;
+    }
+
+    .features-grid__heading em{
+      font-size: 64px;
+    }
+
+    .special-heading {
+      font-size: 64px;
+    }
+
+    .features-grid__main-content {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        "feature1 image feature3"
+        "feature2 image feature4";
+      gap: 25px 50px;
+      align-items: center;
+      margin-top: 40px;
+    }
+
+    .features-grid__central-image { grid-area: image; }
+    .features-grid__central-image img { max-width: 100%; }
+
+    .feature-box--1 { grid-area: feature1; }
+    .feature-box--2 { grid-area: feature2; }
+    .feature-box--3 { grid-area: feature3; }
+    .feature-box--4 { grid-area: feature4; }
+    
+    .feature-box--1, .feature-box--2 { justify-self: end; }
+    .feature-box--3, .feature-box--4 { justify-self: start; }
+    
+    .features-grid__feature-box {
+      width: 100%;
+      max-width: none;
+    }
+    
+    .features-grid__buttons {
+      flex-direction: row;
+      justify-content: center;
+      gap: 20px;
+      width: auto;
+      max-width: none;
+    }
+  }
+</style>
+
+<section class="features-grid-section">
+  <div class="features-grid__container">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        
+        {%- when 'heading' -%}
+          {%- if block.settings.heading != blank -%}
+            <div class="features-grid__heading" {{ block.shopify_attributes }}>
+              {{ block.settings.heading | replace_first: "**", "<span class='text-orange text-[46px] md:text-[60px] special-heading font-secondaryHeader'>" | replace_first: "**", "</span>" }}
+            </div>
+          {%- endif -%}
+
+        {%- when 'subheading' -%}
+          {%- if block.settings.subheading != blank -%}
+            <div class="features-grid__subheading" {{ block.shopify_attributes }}>
+              {{ block.settings.subheading }}
+            </div>
+          {%- endif -%}
+
+        {%- when 'main_content' -%}
+          {%- comment -%} Check if there's an image OR at least one feature box title {%- endcomment -%}
+          {%- if block.settings.central_image != blank or block.settings.title_1 != blank or block.settings.title_2 != blank or block.settings.title_3 != blank or block.settings.title_4 != blank -%}
+            <div class="features-grid__main-content" {{ block.shopify_attributes }}>
+              
+              {%- comment -%} Feature Box 1 {%- endcomment -%}
+              {%- if block.settings.title_1 != blank -%}
+                <div class="features-grid__feature-box feature-box--1">
+                    <div class="box-heading">
+                        {%- if block.settings.icon_1 != blank -%}
+                            {{ block.settings.icon_1 }}
+                        {% comment %} {{ block.settings.icon_1 | image_url: width: 48 | image_tag: class: 'features-grid__feature-icon' }} {% endcomment %}
+                        {%- endif -%}
+                        <h3 class="features-grid__feature-title">{{ block.settings.title_1 | escape }}</h3>
+                    </div>
+                    <div>
+                        <p class="features-grid__feature-desc">{{ block.settings.desc_1 | escape }}</p>
+                    </div>
+                </div>
+              {%- endif -%}
+
+              {%- comment -%} Feature Box 2 {%- endcomment -%}
+              {%- if block.settings.title_2 != blank -%}
+                <div class="features-grid__feature-box feature-box--2">
+                    <div class="box-heading">
+                        {%- if block.settings.icon_2 != blank -%}
+                            {{ block.settings.icon_2 }}
+                            {% comment %} {{ block.settings.icon_2 | image_url: width: 48 | image_tag: class: 'features-grid__feature-icon' }} {% endcomment %}
+                        {%- endif -%}
+                        <h3 class="features-grid__feature-title">{{ block.settings.title_2 | escape }}</h3>
+                    </div> 
+                    <div>
+                        <p class="features-grid__feature-desc">{{ block.settings.desc_2 | escape }}</p>
+                    </div>
+                </div>
+              {%- endif -%}
+              
+              {%- comment -%} Central Image {%- endcomment -%}
+              {%- if block.settings.central_image != blank -%}
+                <div class="features-grid__central-image">
+                  {{ block.settings.central_image | image_url: width: 1000 | image_tag: loading: 'lazy' }}
+                </div>
+              {%- endif -%}
+              
+              {%- comment -%} Feature Box 3 {%- endcomment -%}
+              {%- if block.settings.title_3 != blank -%}
+                <div class="features-grid__feature-box feature-box--3">
+                  <div class="box-heading">
+                        {%- if block.settings.icon_3 != blank -%}
+                            {{ block.settings.icon_3 }}
+                            {% comment %} {{ block.settings.icon_2 | image_url: width: 48 | image_tag: class: 'features-grid__feature-icon' }} {% endcomment %}
+                        {%- endif -%}
+                        <h3 class="features-grid__feature-title">{{ block.settings.title_3 | escape }}</h3>
+                    </div> 
+                    <div>
+                        <p class="features-grid__feature-desc">{{ block.settings.desc_3 | escape }}</p>
+                    </div>
+                </div>
+              {%- endif -%}
+              
+              {%- comment -%} Feature Box 4 {%- endcomment -%}
+              {%- if block.settings.title_4 != blank -%}
+                <div class="features-grid__feature-box feature-box--4">
+                  <div class="box-heading">
+                        {%- if block.settings.icon_4 != blank -%}
+                            {{ block.settings.icon_4 }}
+                            {% comment %} {{ block.settings.icon_2 | image_url: width: 48 | image_tag: class: 'features-grid__feature-icon' }} {% endcomment %}
+                        {%- endif -%}
+                        <h3 class="features-grid__feature-title">{{ block.settings.title_4 | escape }}</h3>
+                    </div> 
+                    <div>
+                        <p class="features-grid__feature-desc">{{ block.settings.desc_4 | escape }}</p>
+                    </div>
+                </div>
+              {%- endif -%}
+              
+            </div>
+          {%- endif -%}
+
+        {%- when 'buttons' -%}
+          {%- if block.settings.btn_1_text != blank or block.settings.btn_2_text != blank -%}
+            <div class="features-grid__buttons" {{ block.shopify_attributes }}>
+              {%- if block.settings.btn_1_text != blank -%}
+                <a href="{{ block.settings.btn_1_link }}" class="button button-primary">
+                  {{ block.settings.btn_1_text | escape }}
+                </a>
+              {%- endif -%}
+              {%- if block.settings.btn_2_text != blank -%}
+                <a href="{{ block.settings.btn_2_link }}" class="button button-secondary">
+                  {{ block.settings.btn_2_text | escape }}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Product Features",
+  "tag": "section",
+  "class": "product-features-grid",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#fff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<p>Struggling with <strong>energy, blood pressure, or performance?</strong></p>"
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "<p>It starts with Nitric Oxide decline. NO Foundation restores it.</p>"
+        }
+      ]
+    },
+    {
+      "type": "main_content",
+      "name": "Image & Features",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "central_image",
+          "label": "Central Product Image"
+        },
+        {
+          "type": "header",
+          "content": "Feature Box 1 (Top Left)"
+        },
+        {
+          "type": "html",
+          "id": "icon_1",
+          "label": "Icon 1"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Title 1",
+          "default": "Heart Health"
+        },
+        {
+          "type": "text",
+          "id": "desc_1",
+          "label": "Description 1",
+          "default": "Helps maintain healthy blood pressure and promotes optimal circulation."
+        },
+        {
+          "type": "header",
+          "content": "Feature Box 2 (Bottom Left)"
+        },
+        {
+          "type": "html",
+          "id": "icon_2",
+          "label": "Icon 2"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Title 2",
+          "default": "Hormonal Balance"
+        },
+        {
+          "type": "text",
+          "id": "desc_2",
+          "label": "Description 2",
+          "default": "Supports healthy hormone communication and overall regulation."
+        },
+        {
+          "type": "header",
+          "content": "Feature Box 3 (Top Right)"
+        },
+        {
+          "type": "html",
+          "id": "icon_3",
+          "label": "Icon 3"
+        },
+        {
+          "type": "text",
+          "id": "title_3",
+          "label": "Title 3",
+          "default": "Energy & Stamina"
+        },
+        {
+          "type": "text",
+          "id": "desc_3",
+          "label": "Description 3",
+          "default": "Boosts endurance, reduces fatigue, and accelerates recovery."
+        },
+        {
+          "type": "header",
+          "content": "Feature Box 4 (Bottom Right)"
+        },
+        {
+          "type": "html",
+          "id": "icon_4",
+          "label": "Icon 4"
+        },
+        {
+          "type": "text",
+          "id": "title_4",
+          "label": "Title 4",
+          "default": "Sexual Wellness"
+        },
+        {
+          "type": "text",
+          "id": "desc_4",
+          "label": "Description 4",
+          "default": "Enhances desire and performance for both men and women."
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "btn_1_text",
+          "label": "Button 1 Text",
+          "default": "SHOP NO FOUNDATION"
+        },
+        {
+          "type": "url",
+          "id": "btn_1_link",
+          "label": "Button 1 Link"
+        },
+        {
+          "type": "text",
+          "id": "btn_2_text",
+          "label": "Button 2 Text",
+          "default": "LEARN HOW IT WORKS"
+        },
+        {
+          "type": "url",
+          "id": "btn_2_link",
+          "label": "Button 2 Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Product Features",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "subheading"
+        },
+        {
+          "type": "main_content"
+        },
+        {
+          "type": "buttons"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

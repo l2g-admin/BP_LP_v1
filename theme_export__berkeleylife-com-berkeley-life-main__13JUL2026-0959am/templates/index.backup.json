@@ -1,0 +1,574 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero_image_text_4LnNMd": {
+      "type": "hero-image-text",
+      "settings": {
+        "image": "shopify://shop_images/RotatingGIF.gif",
+        "eager": false,
+        "video_file": "",
+        "image_cover": "object-cover",
+        "layout": "image_first",
+        "bg_color": "#d54f2f",
+        "text_color": "#f6f3f0",
+        "text_align": "text-center md:text-left",
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "full_width": true,
+        "start_date": "",
+        "end_date": "",
+        "heading": "**Healthy Aging** Starts with N.O.",
+        "mobile_heading": "Healthy Aging",
+        "mobile_heading_2": "Starts with N.O.",
+        "text": "<p>Nitric Oxide (N.O.) is key to better blood flow, heart health, energy & intimacy. Boost yours with Berkeley Life Nitric Oxide Foundation.</p>",
+        "product_image": "shopify://shop_images/HomepageThumbnail.png",
+        "button_label": "SHOP",
+        "button_link": "shopify://collections/shop-all"
+      }
+    },
+    "collapsible_tabs_Ad3GbV": {
+      "type": "collapsible-tabs",
+      "blocks": {
+        "tab_Ghg6aM": {
+          "type": "tab",
+          "settings": {
+            "heading": "Heart Health",
+            "text": "<p>Nitric Oxide reduces the workload on the heart, helping to regulate blood pressure and improve circulation for optimal heart health.</p>",
+            "image": "shopify://shop_images/Group_20599.png",
+            "image_heading": "Where Blood Flows, **Energy Goes**",
+            "button_label": "Learn More",
+            "button_link": "shopify://pages/heart-health"
+          }
+        },
+        "tab_xhWVNB": {
+          "type": "tab",
+          "settings": {
+            "heading": "Sexual Performance",
+            "text": "<p>Nitric Oxide allows for a fuller and more sustained blood flow, which is necessary for proper erectile function and overall sexual health.</p>",
+            "image": "shopify://shop_images/Group_1685.png",
+            "image_heading": "Where Blood Flows, **Energy Goes**",
+            "button_label": "Learn More",
+            "button_link": "shopify://pages/mens-sexual-health"
+          }
+        },
+        "tab_6FkXJT": {
+          "type": "tab",
+          "settings": {
+            "heading": "Energy & Endurance",
+            "text": "<p>Nitric Oxide supports endurance, reduces muscle fatigue, and speeds up recovery after physical activity.</p>",
+            "image": "shopify://shop_images/Group_1687.png",
+            "image_heading": "Where Blood Flows, **Energy Goes**",
+            "button_label": "Learn More",
+            "button_link": "shopify://pages/energy-and-performance"
+          }
+        },
+        "tab_VXFwVd": {
+          "type": "tab",
+          "settings": {
+            "heading": "Women’s Health",
+            "text": "<p>Nitric Oxide supports hormone balance by optimizing the delivery of nutrients and oxygen essential for hormone production and regulation.</p>",
+            "image": "shopify://shop_images/Group_1686.png",
+            "image_heading": "Where Blood Flows, **Energy Goes**",
+            "button_label": "Learn More",
+            "button_link": "shopify://pages/womens-health"
+          }
+        }
+      },
+      "block_order": [
+        "tab_Ghg6aM",
+        "tab_xhWVNB",
+        "tab_6FkXJT",
+        "tab_VXFwVd"
+      ],
+      "settings": {}
+    },
+    "image_with_text_H3wPhA": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_HtbgdW": {
+          "type": "heading",
+          "settings": {
+            "heading": "By The Age of 40, Your N.O. Levels **Decrease By 50%**",
+            "cursive_color": "text-brand",
+            "heading_level": "h1",
+            "heading_style": "h2"
+          }
+        },
+        "text_EDVpcb": {
+          "type": "text",
+          "settings": {
+            "text": "<p>And continues to decline as you age. This leads to decreased blood flow, impairing the delivery of oxygen and nutrients to cells, and contributing to common age-related issues, including poor heart health, hormone imbalance, low energy and decreased sexual function. </p>",
+            "columns": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_HtbgdW",
+        "text_EDVpcb"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Group_1674_copy.png",
+        "eager": false,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-contain",
+        "layout": "image_first",
+        "split": "md:grid-cols-2",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "text_align": "text-center md:text-left",
+        "justify_top": false,
+        "spacing_top": 8,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 8,
+        "mobile_spacing_bottom": 0,
+        "full_width": false,
+        "border": false,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "interactive_graph_VNTQgz": {
+      "type": "interactive-graph",
+      "settings": {
+        "title": "Do You **Know** Your N.O.?",
+        "paragraph": "",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b"
+      }
+    },
+    "image_text": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "N.O. Is The **Miracle Molecule** For Long-Term Health",
+            "cursive_color": "text-brand",
+            "heading_level": "h1",
+            "heading_style": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Often referred to as a “miracle molecule,” Nitric Oxide (N.O.) plays a critical role in the body to raise your baseline health. N.O. allows blood, nutrients, and oxygen to travel to every part of your body effectively and efficiently, with a beneficial impact on the health of every organ and system in the body.</p>",
+            "columns": false
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/DTS_Micro_Mouthwash_Studios_Photos_ID4054_1.png",
+        "eager": true,
+        "mobile_hidden": true,
+        "video_file": "",
+        "image_ratio": "aspect-[4/3]",
+        "image_cover": "object-contain",
+        "layout": "text_first",
+        "split": "md:grid-cols-2",
+        "bg_color": "#ffffff",
+        "text_color": "#080b2b",
+        "text_align": "text-center md:text-left",
+        "justify_top": false,
+        "spacing_top": 16,
+        "mobile_spacing_top": 4,
+        "spacing_bottom": 8,
+        "mobile_spacing_bottom": 0,
+        "full_width": false,
+        "border": false,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "review_carousel_hVFqNw": {
+      "type": "review-carousel",
+      "blocks": {
+        "okendo_reviews_carousel_MkCX6r": {
+          "type": "shopify://apps/okendo/blocks/reviews-carousel/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "show_heading": false,
+            "heading": "",
+            "badge_link": "",
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "okendo_reviews_carousel_MkCX6r"
+      ],
+      "settings": {
+        "title": "Choose Your **Health Goal**"
+      }
+    },
+    "featured_collection_TwGwip": {
+      "type": "featured-collection",
+      "settings": {
+        "text_color": "#080b2b",
+        "title": "Shop Our Products",
+        "subheading": "",
+        "text_align": "text-left",
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "collection": "shop-all",
+        "products_to_show": 3,
+        "show_view_all": true,
+        "button_text": "Shop All",
+        "non_b2b_button_text": "Login to see wholesale pricing",
+        "non_b2b_button_link": "",
+        "button_style": "button--text",
+        "swipe_on_mobile": true,
+        "image_ratio": "aspect-square",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "quick_shop": false,
+        "gated_b2b": false
+      }
+    },
+    "testimonials_eTGaqE": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_YAcaUU": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/RichardMoore.png",
+            "name": "Dr. Richard Moore",
+            "stars": 5,
+            "title": "",
+            "quote": "<p>We saw a noticeable benefit when adding the Berkeley Life capsules into our procedures. Blood flow and healing are critical to the success of our treatments, and the integration of Nitric Oxide has really helped. We continue to promote Berkeley’s N.O. for all of our body procedures as well as men presenting to our men's clinic – our patients are loving the results. </p>"
+          }
+        },
+        "testimonial_ygQPpq": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/doctor2-upscaled.png",
+            "name": "Dr. Terry Wahls",
+            "stars": 5,
+            "title": "",
+            "quote": "<p>Nitric Oxide support is a critical addition to the daily wellness protocol of the autoimmune patient. Diet and lifestyle changes are maximized through optimal circulation – and supporting Nitric Oxide is the best way to ensure blood is flowing.I suggest adding Berkeley Life’s Nitric Oxide support for your health journey. It's fundamental to improving circulation and supports and improves the effectiveness of everything else in my protocol.</p>"
+          }
+        },
+        "testimonial_e7aLgj": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/doctor1-upscaled.png",
+            "name": "Dr. Jeffrey Bland",
+            "stars": 5,
+            "title": "",
+            "quote": "<p> Berkeley Life is a company that has gained my respect for their commitment to the development of science-based products that modulate Nitric Oxide status and function. Their commitment to scientific rigor and innovative solutions makes them a powerful ally in the pursuit of functional health.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_YAcaUU",
+        "testimonial_ygQPpq",
+        "testimonial_e7aLgj"
+      ],
+      "settings": {
+        "title": "Trusted By Top Experts Everywhere",
+        "subhead": "recommended by over 3000 Healthcare Providers",
+        "bg_color": "#fdfeff",
+        "text_color": "#080b2b"
+      }
+    },
+    "faq_an4RPR": {
+      "type": "faq",
+      "blocks": {
+        "separator_DiJJg8": {
+          "type": "separator",
+          "settings": {
+            "title": "FAQs"
+          }
+        },
+        "collapsible_tab_E7BiDw": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "What does Nitric Oxide do for my body?",
+            "content": "<p>Nitric oxide helps relax and widen blood vessels, improving circulation. This supports energy, endurance, cardiovascular health, and even sexual function — especially as we age and natural NO production declines.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "collapsible_tab_9kGwAH": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "How long do I need to take Berkeley Life before I see results?",
+            "content": "<p>As with all supplements, everyone will feel a difference at different speeds. There are some who notice a difference right away, and others see benefits after using the product for about a month. However, unlike most supplements you can <strong>validate</strong> that our N.O. supplements are working by using our patented Nitric Oxide Test Strip before and 90 minutes after you take the supplement.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "collapsible_tab_C7d9Qc": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Can't I get the dietary nitrates in Berkeley Life just through my diet?",
+            "content": "<p>Leafy greens, beetroot, arugula, spinach and celery are all vegetables known to be high in dietary nitrates. However, nutrient density of the soil across the country makes it difficult to predict exactly how much of these greens are required daily to provide a clinically effective dose of nitrates to produce nitric oxide. In our experience, it requires more leafy greens than most people over 35 are willing or able to consume every day.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "collapsible_tab_B974jh": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Can I take Berkeley Life with other medications?",
+            "content": "<p>Berkeley Life is safe, well-tolerated, and has no contra-indications for medications. As always, if you are uncertain work with your healthcare provider to determine the appropriate combination of medicine and supplementation that's right for you. </p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "collapsible_tab_QVB7Rq": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "How long will it take to get my order?",
+            "content": "<p>It depends on where you are. Orders processed before 2pm EST are shipped same day and generally will take 3-7 business days to arrive. Canadian deliveries can take anywhere from 7-16 days. Delivery details will be provided in your confirmation email.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        }
+      },
+      "block_order": [
+        "separator_DiJJg8",
+        "collapsible_tab_E7BiDw",
+        "collapsible_tab_9kGwAH",
+        "collapsible_tab_C7d9Qc",
+        "collapsible_tab_B974jh",
+        "collapsible_tab_QVB7Rq"
+      ],
+      "name": "FAQ",
+      "settings": {
+        "header_color": "",
+        "text_color": "",
+        "enable_page_schema": false,
+        "title": ""
+      }
+    },
+    "image_with_text_4eEL3h": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_4GVepW": {
+          "type": "heading",
+          "settings": {
+            "heading": "Maximize Your **Wellness Efforts**",
+            "cursive_color": "text-brand",
+            "heading_level": "h1",
+            "heading_style": "h2"
+          }
+        },
+        "text_hr77ny": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Even if you’re eating right, exercising, and taking supplements, low N.O. levels can hold you back from feeling the full benefits. Healthy blood flow sets the foundation for everything else to work at its best, so you truly feel the results.</p>",
+            "columns": false
+          }
+        },
+        "button_fzWUEk": {
+          "type": "button",
+          "settings": {
+            "button_label": "Discover Our Science",
+            "b2b_button_label": "",
+            "button_link": "shopify://pages/the-science",
+            "b2b_button_link": "",
+            "button_style": "button button--tertiary",
+            "mobile_hide": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_4GVepW",
+        "text_hr77ny",
+        "button_fzWUEk"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/image_74.png",
+        "eager": false,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-contain",
+        "layout": "image_first",
+        "split": "md:grid-cols-2",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "text_align": "text-center md:text-left",
+        "justify_top": false,
+        "spacing_top": 8,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 8,
+        "mobile_spacing_bottom": 4,
+        "full_width": false,
+        "border": false,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "featured_blog_rpFXPn": {
+      "type": "featured-blog",
+      "settings": {
+        "bg_color": "#ffffff",
+        "text_color": "#080b2b",
+        "heading": "Be In The N.O.",
+        "description": "",
+        "blog": "news",
+        "desktop_post_limit": 5,
+        "post_limit": 10,
+        "show_image": true,
+        "show_date": false,
+        "show_author": false,
+        "show_view_all": false,
+        "mobile_scroll": true
+      }
+    },
+    "rich_text_DmT9CC": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_b6Cyqh": {
+          "type": "heading",
+          "settings": {
+            "heading": "READY TO SAY YES TO N.O.?",
+            "heading_level": "p",
+            "heading_style": "subhead"
+          }
+        },
+        "text_eieHN8": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Take **full-body health** to the next level. Boost your body’s **Nitric Oxide levels** with our ((supplement system)).</p>",
+            "columns": false,
+            "text_style": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_b6Cyqh",
+        "text_eieHN8"
+      ],
+      "settings": {
+        "bg_color": "#1b1c29",
+        "text_color": "#f6f3f0",
+        "full_width": true,
+        "spacing_top": 40,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 56,
+        "mobile_spacing_bottom": 4,
+        "hover_state": false,
+        "show_hover_product": true,
+        "product": "daily-foundations-kit",
+        "hover_image": "shopify://shop_images/HoverProduct.png"
+      }
+    },
+    "simple_instragram_CP7QbQ": {
+      "type": "simple-instragram",
+      "settings": {
+        "title": "",
+        "handle": "BERKELEYLIFENO",
+        "embed": "",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "alternate_transform": true
+      }
+    },
+    "17338501488bd3521f": {
+      "type": "apps",
+      "blocks": {
+        "instafeed_app_block_7h3gCb": {
+          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
+          "settings": {
+            "title": "",
+            "title_color": "",
+            "title_size_v2": 0,
+            "alignment": "center",
+            "instafeed_margin_top": 0,
+            "instafeed_margin_bottom": 0,
+            "instafeed_margin_sides": 0,
+            "show_instagram_link": false,
+            "link_alignment": "left",
+            "link_color": "#000000",
+            "background_color": "#f6f3f0",
+            "feed_id": "",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "instafeed_app_block_7h3gCb"
+      ],
+      "settings": {}
+    },
+    "newsletter_6WBtfW": {
+      "type": "newsletter",
+      "blocks": {
+        "paragraph_BrBCRB": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>STAY UPDATED</p>"
+          }
+        },
+        "heading_gNfjga": {
+          "type": "heading",
+          "settings": {
+            "heading": "**Sign up** to get 10% off your first order",
+            "heading_style": "h2"
+          }
+        },
+        "email_form_APjHfY": {
+          "type": "email_form",
+          "settings": {
+            "button_style": "button button--secondary"
+          }
+        }
+      },
+      "block_order": [
+        "paragraph_BrBCRB",
+        "heading_gNfjga",
+        "email_form_APjHfY"
+      ],
+      "settings": {
+        "bg_color": "#d54f2f",
+        "text_color": "#080b2b",
+        "image": "shopify://shop_images/Group_20600.png"
+      }
+    },
+    "sticky_button_z4xXd9": {
+      "type": "sticky-button",
+      "disabled": true,
+      "settings": {
+        "button_label": "GET A FREE N.O. TEST STRIP",
+        "button_link": "#"
+      }
+    }
+  },
+  "order": [
+    "hero_image_text_4LnNMd",
+    "collapsible_tabs_Ad3GbV",
+    "image_with_text_H3wPhA",
+    "interactive_graph_VNTQgz",
+    "image_text",
+    "review_carousel_hVFqNw",
+    "featured_collection_TwGwip",
+    "testimonials_eTGaqE",
+    "faq_an4RPR",
+    "image_with_text_4eEL3h",
+    "featured_blog_rpFXPn",
+    "rich_text_DmT9CC",
+    "simple_instragram_CP7QbQ",
+    "17338501488bd3521f",
+    "newsletter_6WBtfW",
+    "sticky_button_z4xXd9"
+  ]
+}

@@ -1,0 +1,238 @@
+{%- comment -%}
+  This snippet is global, and allows for dynamic Schema
+{%- endcomment -%}
+
+
+{%- comment -%}
+### Article
+{%- endcomment -%}
+
+
+{% comment %} {%- if template == 'article' -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ article.title | json }},
+    "articleBody": {{ article.content | strip_html | json }},
+    {% if article.excerpt != blank %}
+      "description": {{ article.excerpt | strip_html | json }},
+    {% endif %}
+    {% if article.image -%}
+    "image": "{{ article.image | image_url: width: 1200 | prepend: 'https:' }}",
+    {%- endif %}
+    "datePublished": {{ article.published_at | date : '%Y-%m-%dT%H:%M:%S%z' | json }},
+    "dateModified": {{ article.updated_at | date : '%Y-%m-%dT%H:%M:%S%z' | json }},
+    "author": {
+      "@type": "Person",
+      "name": "{{ article.author }}"
+      {% if article.user.homepage -%}
+      ,"url": "{{ article.user.homepage }}"
+      {%- endif -%}
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }}
+    }
+  }
+  </script>
+{%- endif -%} {% endcomment %}
+
+{% comment %} <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | append: page.url | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      {%- if shop.brand.logo -%}
+        "logo": {{ shop.brand.logo | image_url: width: shop.brand.logo.width | prepend: "https:" | json }},
+      {%- endif -%}
+      {%- if shop.brand.short_description -%}
+        "description": {{ shop.brand.short_description | json }},
+      {%- endif -%}
+      {%- if shop.brand.slogan -%}
+        "slogan": {{ shop.brand.slogan | json }},
+      {%- endif -%}
+      {%- if shop.brand.metafields.social_links.size > 0 -%}
+        "sameAs": [
+          {%- for social_link in shop.brand.metafields.social_links -%}
+            {{- social_link.last.value | json -}}{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ],
+      {%- endif -%}
+      "url": {{ shop.url | append: page.url | json }}
+    }
+  ]
+  </script> {% endcomment %}
+  
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {% if section.settings.logo %}
+      "logo": {{ section.settings.logo | image_url: width: section.settings.logo.width | prepend: "https:" | json }},
+    {% endif %}
+    "sameAs": [
+      {{ settings.social_twitter_link | json }},
+      {{ settings.social_facebook_link | json }},
+      {{ settings.social_pinterest_link | json }},
+      {{ settings.social_instagram_link | json }},
+      {{ settings.social_tumblr_link | json }},
+      {{ settings.social_snapchat_link | json }},
+      {{ settings.social_youtube_link | json }},
+      {{ settings.social_vimeo_link | json }}
+    ],
+    "url": {{ shop.url | append: page.url | json }}
+  }
+</script>
+
+{%- if request.page_type == 'index' -%}
+  {% assign potential_action_target = shop.url | append: routes.search_url | append: "?q={search_term_string}" %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ shop.url | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+
+{% if template contains 'collection' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "{{ shop.url }}{{ collection.url }}#collection",
+  "name": {{ collection.title | json }},
+  "url": "{{ shop.url }}{{ collection.url }}",
+  "description": {{ collection.description | strip_html | json }},
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ shop.url }}{{ collection.url }}"
+  }
+  {% if collection.image %},
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:{{ collection.image | image_url: width: 1200 }}",
+    "width": {{ collection.image.width }},
+    "height": {{ collection.image.height }}
+  }
+  {% endif %},
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": {{ collection.products_count }},
+    "itemListElement": [
+      {% for product in collection.products limit: 50 %}
+      {
+        "@type": "ListItem",
+        "position": {{ forloop.index }},
+        "item": {
+          "@type": "Product",
+          "@id": "{{ shop.url }}{{ product.url }}#product",
+          "name": {{ product.title | json }},
+          "url": "{{ shop.url }}{{ product.url }}"
+          {% if product.featured_image %},
+          "image": [
+            "https:{{ product.featured_image | image_url: width: 1200 }}"
+          ]
+          {% endif %},
+          "description": {{ product.description | strip_html | truncate: 300 | json }},
+          "sku": {{ product.selected_or_first_available_variant.sku | json }},
+          "brand": {
+            "@type": "Brand",
+            "name": {{ product.vendor | json }}
+          },
+          "offers": {
+            "@type": "Offer",
+            "url": "{{ shop.url }}{{ product.url }}",
+            "priceCurrency": "{{ cart.currency.iso_code }}",
+            "price": "{{ product.selected_or_first_available_variant.price | money_without_currency | remove: ',' }}",
+            "availability": "https://schema.org/{% if product.selected_or_first_available_variant.available %}InStock{% else %}OutOfStock{% endif %}",
+            "itemCondition": "https://schema.org/NewCondition"
+          }
+        }
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+{% endif %}
+
+{% if request.page_type == 'product' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": {{ shop.url | append: product.url | append: "#product" | json }},
+  "name": {{ product.title | strip_html | json }},
+  "url": {{ shop.url | append: product.url | json }},
+
+  {% if product.featured_image %}
+  "image": [
+    {{ product.featured_image | image_url: width: 1200 | prepend: "https:" | json }}
+  ],
+  {% endif %}
+
+  "description": {{ product.description | strip_html | strip_newlines | json }},
+
+  {% if product.selected_or_first_available_variant.sku != blank %}
+  "sku": {{ product.selected_or_first_available_variant.sku | json }},
+  {% endif %}
+
+  {% if product.vendor != blank %}
+  "brand": {
+    "@type": "Brand",
+    "name": {{ product.vendor | json }}
+  },
+  {% endif %}
+
+  "offers": {
+    "@type": "Offer",
+    "url": {{ shop.url | append: product.url | json }},
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": "{{ product.selected_or_first_available_variant.price | divided_by: 100.0 }}",
+    "availability": "https://schema.org/{% if product.selected_or_first_available_variant.available %}InStock{% else %}OutOfStock{% endif %}",
+    "itemCondition": "https://schema.org/NewCondition",
+    "seller": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }}
+    }
+  }
+
+  {% if product.metafields.reviews.rating.value %}
+  ,
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ product.metafields.reviews.rating.value.rating }}",
+    "reviewCount": "{{ product.metafields.reviews.rating_count }}"
+  }
+  {% endif %}
+
+  {% if product.selected_or_first_available_variant.barcode != blank %}
+  ,
+  "gtin": {{ product.selected_or_first_available_variant.barcode | json }}
+  {% endif %}
+}
+</script>
+{% endif %}
+
+

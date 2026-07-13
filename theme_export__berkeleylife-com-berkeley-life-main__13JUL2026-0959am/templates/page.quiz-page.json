@@ -1,0 +1,38 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {}
+    },
+    "1751464854b7b0641e": {
+      "type": "apps",
+      "blocks": {
+        "okendo_quizzes_widget_Vb7PUK": {
+          "type": "shopify://apps/okendo/blocks/quizzes-widget/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "channel_quiz_id": "49aadbed-7e91-42c9-be9c-e333e4fa428d",
+            "full_screen": true,
+            "header_offset": 0
+          }
+        }
+      },
+      "block_order": [
+        "okendo_quizzes_widget_Vb7PUK"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "1751464854b7b0641e"
+  ]
+}

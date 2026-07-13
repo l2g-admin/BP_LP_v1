@@ -1,0 +1,398 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&display=swap');
+
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    color: {{ section.settings.text_color }};
+    overflow: hidden;
+
+    & .c-itl__container {
+
+      display: flex;
+      align-items: center;
+      gap: 5rem;
+    }
+
+    & .c-itl__container.is-flipped {
+      flex-direction: row-reverse;
+    }
+
+    /* --- CONTENT (Left Col) --- */
+    & .c-itl__content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    & .c-itl__eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: {{ section.settings.accent_color }};
+      margin: 0 0 1.25rem 0;
+    }
+
+    & .c-itl__title {
+      font-size: clamp(36px, 4vw, 48px);
+      line-height: 1.15;
+      color: {{ section.settings.title_color }};
+      margin: 0 0 1.5rem 0;
+
+      & span {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        color: {{ section.settings.accent_color }};
+        font-size: clamp(40px, 4.5vw, 54px);
+      }
+    }
+
+    & .c-itl__desc {
+      font-size: clamp(14px, 1.5vw, 16px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%;
+      color: {{ section.settings.text_color }};
+      margin: 0 0 2rem 0;
+    }
+
+    /* --- LIST --- */
+    & .c-itl__list {
+      width: 100%;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem 0;
+    }
+
+    & .c-itl__item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid {{ section.settings.border_color }};
+    }
+
+    & .c-itl__item-icon {
+      color: {{ section.settings.accent_color }};
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    & .c-itl__item-text {
+      font-size: 18px;
+      color: {{ section.settings.title_color }};
+      margin: 0;
+
+      & p { margin: 0; }
+    }
+
+    /* --- LINK --- */
+    & .c-itl__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: {{ section.settings.accent_color }};
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 2px;
+      transition: opacity 0.3s ease;
+      font-weight: 700;
+
+      &:hover {
+        opacity: 0.7;
+      }
+
+      & svg {
+        width: 16px;
+        height: 16px;
+        fill: none;
+        stroke: currentColor;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover svg {
+        transform: translateX(4px);
+      }
+    }
+
+    /* --- MEDIA (Right Col) --- */
+    & .c-itl__media {
+      flex: 1;
+      width: 100%;
+    }
+
+    & .c-itl__img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 16px;
+      display: block;
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (max 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+      & .c-itl__container,
+      & .c-itl__container.is-flipped {
+        flex-direction: column;
+
+        gap: 3rem;
+      }
+
+      & .c-itl__title {
+        font-size: 36px;
+      }
+
+      & .c-itl__desc {
+        font-size: 14px;
+      }
+
+      & .c-itl__item {
+        padding: 1rem 0;
+      }
+
+      & .c-itl__item-text {
+        font-size: 16px;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="c-itl__container {% if section.settings.layout == 'image_left' %}is-flipped{% endif %}">
+      <div class="c-itl__content">
+        {% if section.settings.eyebrow != blank %}
+          <p class="c-itl__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+
+        {% if section.settings.title != blank %}
+          <h2 class="c-itl__title">{{ section.settings.title | newline_to_br }}</h2>
+        {% endif %}
+
+        {% if section.settings.description != blank %}
+          <p class="c-itl__desc">{{ section.settings.description }}</p>
+        {% endif %}
+
+        <ul class="c-itl__list">
+          {% for block in section.blocks %}
+            <li class="c-itl__item" {{ block.shopify_attributes }}>
+              <span class="c-itl__item-icon">+</span>
+              <div class="c-itl__item-text">{{ block.settings.text }}</div>
+            </li>
+          {% endfor %}
+        </ul>
+
+        {% if section.settings.btn_text != blank %}
+          <a href="{{ section.settings.btn_link }}" class="c-itl__link">
+            {{ section.settings.btn_text }}
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="c-itl__media">
+        {% if section.settings.image != blank %}
+          <img
+            src="{{ section.settings.image | image_url: width: 1000 }}"
+            alt="{{ section.settings.title | strip_html | escape }}"
+            class="c-itl__img"
+            loading="lazy"
+          >
+        {% else %}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'c-itl__img' }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Image Text",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f8f6f4"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title & List Color",
+      "default": "#1a1f4c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Description Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d25435"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "List Border Color",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Desktop Image Position",
+      "options": [
+        {
+          "value": "image_right",
+          "label": "Image on Right"
+        },
+        {
+          "value": "image_left",
+          "label": "Image on Left"
+        }
+      ],
+      "default": "image_right"
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "SEXUAL HEALTH"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Performance That\n<span>Doesn't Quit.</span>",
+      "info": "Wrap text in <span></span> to apply the italic serif font and accent color."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Nitric Oxide is the biological trigger behind healthy erections and sexual stamina. As NO declines, blood flow is restricted — Berkeley Life restores it, naturally."
+    },
+    {
+      "type": "header",
+      "content": "Link"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Link Text",
+      "default": "LEARN MORE"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Link URL"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Main Image"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "list_item",
+      "name": "List Item",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Promotes healthy sexual function</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Image Text",
+      "blocks": [
+        { "type": "list_item", "settings": { "text": "<p>Promotes healthy sexual function</p>" } },
+        { "type": "list_item", "settings": { "text": "<p>Supports heart health</p>" } },
+        { "type": "list_item", "settings": { "text": "<p>Improves energy and endurance</p>" } },
+        { "type": "list_item", "settings": { "text": "<p>Boosts blood flow & oxygen delivery</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

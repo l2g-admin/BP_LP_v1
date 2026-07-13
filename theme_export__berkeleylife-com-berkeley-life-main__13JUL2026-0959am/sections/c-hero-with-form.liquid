@@ -1,0 +1,476 @@
+{% comment %}
+  This section creates a hero component with a background image, a gradient overlay,
+  text content on the left, and a sign-up form on the right. It is fully responsive.
+{% endcomment %}
+
+<style>
+  .hero-form-section-{{ section.id }} {
+    --color-gradient-start: {{ section.settings.gradient_start_color }};
+    --color-gradient-end: {{ section.settings.gradient_end_color }};
+    --gradient-opacity: {{ section.settings.gradient_opacity | divided_by: 100.0 }};
+    --gradient-opacity-mobile: {{ section.settings.gradient_opacity_mobile | divided_by: 100.0 }};
+    --text-color: {{ section.settings.text_color }};
+    --button-bg-color: {{ section.settings.button_bg_color }};
+    --button-text-color: {{ section.settings.button_text_color }};
+
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: var(--text-color);
+    padding: 6rem 2rem;
+  }
+
+  .hero-form-section-{{ section.id }}::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(75deg, var(--color-gradient-start), var(--color-gradient-end));
+    opacity: var(--gradient-opacity);
+    @media (max-width: 768px) {
+      opacity: var(--gradient-opacity-mobile);
+    }
+    z-index: 1;
+  }
+
+  .hero-form-section-{{ section.id }}__container {
+    position: relative;
+    z-index: 2;
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    /* gap: 3rem; */
+  }
+
+  .hero-form-section-{{ section.id }}__content {
+    flex: 1 1 55%;
+  }
+
+  .hero-form-section-{{ section.id }}__form-wrapper {
+    flex: 1 1 45%;
+    max-width: 480px;
+  }
+
+  /* --- Block Specific Styles --- */
+  .hero-block--trusted {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 400;
+    font-size: 14px;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .hero-block--trusted .stars {
+    font-size: 20px;
+    color: #D44F2F; /* yellow-400 */
+  }
+
+  .hero-block--heading {
+    font-size: 64px;
+    font-weight: 500;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-block--heading p {
+    margin: 0;
+  }
+  
+  .hero-block--heading strong {
+    color: {{ section.settings.heading_highlight_color }};
+    font-weight: 500;
+    font-size: 72px;
+    font-family: "cormorant-garamond", serif;
+    font-style: italic;
+  }
+
+  .hero-block--paragraph {
+    font-size: 20px;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  
+  .hero-block--paragraph p {
+    margin: 0;
+  }
+
+  /* --- Form Styles --- */
+  .hero-block--form {
+    border: 1px solid rgba(255, 255, 255);
+    padding: 2.5rem;
+    border-radius: 1rem;
+  }
+
+  .hero-block--form__title {
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-block--form__subtitle {
+    font-size: 18px;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .hero-block--form .form__field {
+    margin-bottom: 1rem;
+  }
+
+  .hero-block--form .form__input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    background-color: #ffffff;
+    color: #1f2937;
+    font-size: 1rem;
+  }
+
+  .hero-block--form .form__input:focus {
+    outline: none;
+    border-color: var(--button-bg-color);
+    box-shadow: 0 0 0 2px var(--button-bg-color);
+  }
+  
+  .hero-block--form .form__input::placeholder {
+    color: #9ca3af;
+  }
+
+  .hero-block--form .form__button {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 42px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    margin-top: 1rem;
+  }
+
+  .hero-block--form .form__button:hover {
+    opacity: 0.9;
+  }
+
+  .hero-block--form .form__privacy-text {
+    font-size: 0.75rem;
+    text-align: center;
+    margin-top: 1rem;
+    opacity: 0.8;
+  }
+
+  /* --- Responsive Styles --- */
+  @media (max-width: 990px) {
+    .hero-form-section-{{ section.id }}__container {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .hero-form-section-{{ section.id }}__content {
+      margin-bottom: 2rem;
+    }
+    
+    .hero-block--paragraph {
+      font-size: 16px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: start;
+    }
+
+    .hero-block--heading {
+      text-align: start;
+      font-size: 40px;
+    }
+
+    .hero-block--heading strong{
+      font-size: 48px;
+    }
+    
+    .hero-block--trusted {
+      justify-content: start;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .hero-form-section-{{ section.id }} {
+      padding: 4rem 1rem;
+    }
+    
+    .hero-block--form {
+      padding: 2rem;
+    }
+  }
+</style>
+
+<div
+  class="hero-form-section-{{ section.id }}"
+  {% if section.settings.background_image %}
+    style="background-image: url('{{ section.settings.background_image | image_url }}');"
+  {% endif %}
+>
+  <div class="hero-form-section-{{ section.id }}__container">
+    <div class="hero-form-section-{{ section.id }}__content">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'trusted_text' %}
+            <div class="hero-block--trusted" {{ block.shopify_attributes }}>
+              <span class="stars">★★★★★</span>
+              <span>{{ block.settings.text }}</span>
+            </div>
+          {% when 'heading' %}
+            <div class="hero-block--heading" {{ block.shopify_attributes }}>
+              {{ block.settings.heading }}
+            </div>
+          {% when 'paragraph' %}
+            <div class="hero-block--paragraph" {{ block.shopify_attributes }}>
+              {{ block.settings.paragraph }}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+
+    <div class="hero-form-section-{{ section.id }}__form-wrapper">
+      {% for block in section.blocks %}
+        {%- case block.type -%}
+          {%- when 'custom_code' -%}
+            {{ block.settings.custom_liquid }}
+          {%- when '@app' -%}
+             {% render block %}
+        {%- endcase -%}
+        {% if block.type == 'email_form' %}
+          <div class="klaviyo-form-YnsLpz"></div>
+          {% comment %} <div class="hero-block--form" {{ block.shopify_attributes }}>
+            <p class="hero-block--form__title">{{ block.settings.form_title }}</p>
+            <p class="hero-block--form__subtitle">{{ block.settings.form_subtitle }}</p>
+
+            {% form 'customer', id: 'ContactForm' %}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+
+              <div class="form__field">
+                <input
+                  type="text"
+                  name="contact[first_name]"
+                  class="form__input"
+                  placeholder="Enter your first name"
+                  required
+                >
+              </div>
+
+              <div class="form__field">
+                <input
+                  type="email"
+                  name="contact[email]"
+                  class="form__input"
+                  placeholder="Enter your email address"
+                  required
+                >
+              </div>
+
+              <button type="submit" class="form__button">
+                {{ block.settings.button_text }}
+              </button>
+            {% endform %}
+            
+            <p class="form__privacy-text">{{ block.settings.privacy_text }}</p>
+          </div> {% endcomment %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "C Hero with Form",
+  "tag": "section",
+  "class": "hero-form-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "gradient_start_color",
+      "label": "Gradient Start Color",
+      "default": "#0f172a"
+    },
+    {
+      "type": "color",
+      "id": "gradient_end_color",
+      "label": "Gradient End Color",
+      "default": "#334155"
+    },
+    {
+      "type": "range",
+      "id": "gradient_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Gradient Opacity",
+      "default": 85
+    },
+    {
+      "type": "range",
+      "id": "gradient_opacity_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Gradient Opacity Mobile",
+      "default": 85
+    },
+    {
+      "type": "header",
+      "content": "Content Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_highlight_color",
+      "label": "Heading Highlight Color",
+      "default": "#f87171"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background",
+      "default": "#ea580c"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trusted_text",
+      "name": "Trusted By Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Trusted by 3,000+ healthcare providers"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<p>Coming Soon:<br> A First of Its Kind <strong>Innovation for Women</strong></p>"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "paragraph",
+          "label": "Paragraph",
+          "default": "<p>Be the first to know about our breakthrough product.</p>"
+        }
+      ]
+    },
+    {
+      "type": "email_form",
+      "name": "Sign-up Form",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "form_title",
+          "label": "Form Title",
+          "default": "Get early access to our breakthrough product"
+        },
+        {
+          "type": "text",
+          "id": "form_subtitle",
+          "label": "Form Subtitle",
+          "default": "Sign up now to receive exclusive first-look details and special offers."
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "BE THE FIRST TO KNOW"
+        },
+        {
+          "type": "text",
+          "id": "privacy_text",
+          "label": "Privacy Text",
+          "default": "We respect your privacy. Unsubscribe at any time."
+        }
+      ]
+    },
+    {
+        "type": "@app"
+    },
+    {
+    "type": "custom_code",
+    "name": "Custom Liquid",
+    "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "Custom Liquid Code"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Hero with Form",
+      "blocks": [
+        {
+          "type": "trusted_text"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "paragraph"
+        },
+        {
+          "type": "email_form"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,196 @@
+<div class="bg-bg text-text"  style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+ {% if section.settings.wholesale %}
+      {% comment %} Wholesale Blog {% endcomment %}
+      {% if customer.b2b? %}
+        {%- if blog.all_tags.size > 0 and section.settings.show_tags -%}
+        <script src="{{ 'blog-tags.js' | asset_url }}" type="module"></script>
+        <!-- Desktop Tags Menu -->
+        <ul id="blogNav" class="items-center justify-center hidden p-6 text-white md:flex bg-tan">
+          {%- for tag in blog.all_tags -%}
+            <li class="font-bold mx-3 uppercase {% if current_tags contains tag %} underline-offset-2 underline {% endif %}">{{ tag | link_to_tag: tag | replace: '" title', '#blogNav" title' }}</li>
+          {%- endfor -%}
+        </ul>
+        <!-- Mobile Tags Menu -->
+        <div id="mobileBlogNav" class="px-8 text-center border-b-2 border-black lg:hidden md:py-4 bg-tan">
+          <div aria-hidden="false" class="py-4 group" id="mobile-submenu">
+          <nav class="inline-flex justify-start w-full px-4 mx-auto text-left text-black" role="navigation">
+              <ol class="w-full cursor-pointer">
+                  <li class="flex items-center justify-between font-bold mobile-menu">Category {% render "icon-chevron" %}</li>
+                  {% for tag in blog.all_tags %}
+                      <li class="mobile-tags {% if current_tags contains tag %} underline {% endif %} hidden mb-3 mt-3 py-2 flex-shrink-0 text-sm tracking-wide uppercase text-white">
+                        {{ tag | link_to_tag: tag | replace: '" title', '#mobileBlogNav" title' }}
+                      </li>
+                  {% endfor %}
+              </ol>
+          </nav>
+          </div>
+      </div>
+      {%- endif -%}
+
+      {%- paginate blog.articles by 10 -%}
+
+        <div class="p-4 mx-auto max-w-screen-2xl md:p-8">
+          <div class="grid grid-cols-1 {% if section.settings.layout == "feature" or section.settings.layout == "collage" %} gap-4 md:grid-cols-9 md:grid-rows-7 {% else %} md:grid-cols-4 {% endif %} gap-4 ">
+            {%- for article in blog.articles -%}
+              <div data-pre="opacity-0 translate-y-1" data-post="opacity-100 translate-y-0" class="motion-safe:transition-all rounded-2xl motion-safe:duration-700 {% if section.settings.layout == "feature" %}{% cycle 'md:col-span-4', 'md:col-span-2 ', 'md:col-span-2' %}{%- endif -%}
+              {% if section.settings.layout == "collage" %}
+              {% cycle 'md:col-span-3 md:row-span-4', 'md:col-span-6 md:row-span-3 md:col-start-4', 'md:col-span-3 md:row-span-3 md:col-start-1 md:row-start-5', 'md:col-span-3 md:row-span-4 md:col-start-4 md:row-start-4', 'md:col-span-3 md:row-span-4 md:col-start-7 md:row-start-4' %}
+                {%- endif -%}">
+                {%- render 'article-card', article: article, show_image: section.settings.show_image, show_date: section.settings.show_date, show_author: section.settings.show_author, wholesale:section.settings.wholesale -%}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            {%- render 'pagination', paginate: paginate -%}
+          {%- endif -%}
+        </div>
+      {%- endpaginate -%}
+
+    {% else %}
+      <div class="flex items-center justify-center gap-8 py-8 mx-auto">
+            <div
+                data-text="Sign Up">
+                <a
+                  href="/pages/wholesale-signup"
+                  class="button--tertiary button ">
+                  Sign Up
+                </a>
+              </div>
+            <div
+                data-text="Log In">
+                <a 
+                  href="https://account.berkeleylife.com"
+                  class="button--text text-brand ">
+                  Log In
+                </a>
+              </div>
+      </div>
+    {% endif %}
+
+{% else %}
+  {% comment %} D2C Blog {% endcomment %}
+  {%- if blog.all_tags.size > 0 and section.settings.show_tags -%}
+    <script src="{{ 'blog-tags.js' | asset_url }}" type="module"></script>
+    <!-- Desktop Tags Menu -->
+    <ul id="blogNav" class="items-center justify-center hidden p-6 border-b border-black md:flex bg-tan">
+      {%- for tag in blog.all_tags -%}
+         <li class="font-bold mx-3 uppercase {% if current_tags contains tag %} underline-offset-2 underline {% endif %}">{{ tag | link_to_tag: tag | replace: '" title', '#blogNav" title' }}</li>
+      {%- endfor -%}
+    </ul>
+     <!-- Mobile Tags Menu -->
+    <div id="mobileBlogNav" class="px-8 text-center border-b-2 border-black lg:hidden md:py-4 bg-tan">
+      <div aria-hidden="false" class="py-4 group" id="mobile-submenu">
+      <nav class="inline-flex justify-start w-full px-4 mx-auto text-left text-black" role="navigation">
+          <ol class="w-full cursor-pointer">
+              <li class="flex items-center justify-between font-bold mobile-menu">Category {% render "icon-chevron" %}</li>
+              {% for tag in blog.all_tags %}
+                  <li class="mobile-tags {% if current_tags contains tag %} underline {% endif %} hidden mb-3 mt-3 py-2 flex-shrink-0 text-sm tracking-wide capitalize">
+                    {{ tag | link_to_tag: tag | replace: '" title', '#mobileBlogNav" title' }}
+                  </li>
+              {% endfor %}
+          </ol>
+      </nav>
+      </div>
+   </div>
+  {%- endif -%}
+
+  {%- paginate blog.articles by 10 -%}
+
+    <div class="p-4 mx-auto max-w-screen-2xl md:p-8">
+      <div class="grid grid-cols-1 {% if section.settings.layout == "feature" or section.settings.layout == "collage" %} gap-4 md:grid-cols-9 md:grid-rows-7 {% else %} md:grid-cols-4 {% endif %} gap-4 ">
+        {%- for article in blog.articles -%}
+          <div data-pre="opacity-0 translate-y-1" data-post="opacity-100 translate-y-0" class="motion-safe:transition-all rounded-2xl motion-safe:duration-700 {% if section.settings.layout == "feature" %}{% cycle 'md:col-span-4', 'md:col-span-2 ', 'md:col-span-2' %}{%- endif -%}
+          {% if section.settings.layout == "collage" %}
+           {% cycle 'md:col-span-3 md:row-span-4', 'md:col-span-6 md:row-span-3 md:col-start-4', 'md:col-span-3 md:row-span-3 md:col-start-1 md:row-start-5', 'md:col-span-3 md:row-span-4 md:col-start-4 md:row-start-4', 'md:col-span-3 md:row-span-4 md:col-start-7 md:row-start-4' %}
+            {%- endif -%}">
+            {%- render 'article-card', article: article, show_image: section.settings.show_image, show_date: section.settings.show_date, show_author: section.settings.show_author, wholesale:section.settings.wholesale -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        {%- render 'pagination', paginate: paginate -%}
+      {%- endif -%}
+    </div>
+  {%- endpaginate -%}
+
+{% endif %}
+
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-blog.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-blog.settings.header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": true,
+      "label": "t:sections.main-blog.settings.show_image.label",
+      "info": "t:sections.main-blog.settings.show_image.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "default": true,
+      "label": "Show tags"
+    },
+    {
+      "type": "checkbox",
+      "id": "wholesale",
+      "default": false,
+      "label": "Wholesale Blog Files"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Desktop Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "feature",
+          "label": "Feature"
+        },
+        {
+          "value": "collage",
+          "label": "Collage"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": false,
+      "label": "t:sections.main-blog.settings.show_date.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": false,
+      "label": "t:sections.main-blog.settings.show_author.label"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.main-blog.settings.paragraph.content"
+    }
+  ]
+}
+{% endschema %}

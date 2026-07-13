@@ -47,7 +47,7 @@ const splitWords = (root) => {
 const moleculeFold = document.getElementById('the-molecule');
 if (moleculeFold) {
   const headlineWords = splitWords(moleculeFold.querySelector('.hero__headline'));
-  const HEADLINE_WORD_MS = 90;
+  const HEADLINE_WORD_MS = 60;
 
   let wordTimers = [];
   const clearWordTimers = () => {
@@ -107,7 +107,7 @@ if (vesselFold) {
 
   // Headline word-rise, like slides 1 and 2.
   const vesselHeadlineWords = splitWords(vesselFold.querySelector('.vessel-scene__headline'));
-  const HEADLINE_WORD_MS = 90;
+  const HEADLINE_WORD_MS = 60;
   let headlineTimers = [];
   const clearHeadlineTimers = () => {
     headlineTimers.forEach(clearTimeout);
@@ -187,13 +187,9 @@ if (vesselFold) {
 
   let openness = 0;
 
-  // The breath. After the first release settles, the vessel slowly
-  // begins to contract again — this is what it does when the signal
-  // fades — and a fresh NO pair drifts in just in time, docks at the
-  // bottom of the contraction, and rides the wall back out as it
-  // stretches open. One reusable pair in the scene's flat 2D style;
-  // entry side and point vary deterministically per cycle, so the
-  // loop is seamless but never reads as a repeating GIF.
+  // The breath's rescuer: one reusable pair in the scene's flat 2D
+  // style, flown by drawFlight below exactly like the intro pairs —
+  // one motion language for every molecule in the scene.
   const ambientPair = document.createElementNS(SVG_NS, 'g');
   [['-9', '11', 'no-mol__n'], ['11', '12', 'no-mol__o']].forEach(([cx, r, cls]) => {
     const c = document.createElementNS(SVG_NS, 'circle');
@@ -214,10 +210,117 @@ if (vesselFold) {
   ambientPair.setAttribute('opacity', '0');
   cellLayer.parentNode.appendChild(ambientPair);
 
+  // The flight: the one motion language every NO pair draws with.
+  // Carried in with the flow — near-linear, because flow doesn't
+  // decelerate — mid-stream among the cells with a slight bob, easing
+  // onto the inner wall only over the last stretch; a quiet ring marks
+  // the signal on arrival; a dwell riding the LIVE wall (y re-reads
+  // the wall each frame, so the pair is seen pushing it wide as it
+  // opens); then carried out downstream with the flow, fading.
+  const easeOutCubic = (t) => 1 - (1 - t) ** 3;
+  const smooth01 = (t) => {
+    const c = Math.min(Math.max(t, 0), 1);
+    return c * c * (3 - 2 * c);
+  };
+
+  // Just inside the top/bottom wall at x, for the live openness.
+  const innerWallY = (x, fromTop) => fromTop
+    ? MID - halfGap(x, openness) + 12
+    : MID + halfGap(x, openness) - 12;
+
+  // The intro's two pairs (the markup elements), scheduled from the
+  // moment the scene settles: a lands just before the release beat,
+  // b right behind it — signal first, then the walls answer. Their
+  // dwell spans the release, so both are seen riding the walls open
+  // before the flow carries them off. Lanes and bob phases differ so
+  // the two never read as a synchronized train.
+  const introFlights = [
+    { el: vesselFold.querySelector('.no-pair--a'), fromTop: true,
+      startX: 200, dockX: 360, lane: -10, bob: 0, rideStart: 650,
+      rideMs: 1000, dwellMs: 700, exitMs: 900, exitDist: 270, pulsed: false },
+    { el: vesselFold.querySelector('.no-pair--b'), fromTop: false,
+      startX: 280, dockX: 440, lane: 10, bob: 2.1, rideStart: 830,
+      rideMs: 950, dwellMs: 680, exitMs: 900, exitDist: 300, pulsed: false },
+  ];
+  let sceneEpoch = null;
+
+  // Signal pulses: one ring per delivery, expanding from the pair
+  // into the wall it has just told to relax, fading as it grows.
+  const PULSE_MS = 700;
+  const pulses = [];
+  const spawnPulse = (x, y) => {
+    const ring = document.createElementNS(SVG_NS, 'circle');
+    ring.setAttribute('class', 'vessel__pulse');
+    ring.setAttribute('cx', x.toFixed(1));
+    ring.setAttribute('cy', y.toFixed(1));
+    // Under the molecules, over the blood.
+    cellLayer.parentNode.insertBefore(ring, introFlights[0].el);
+    pulses.push({ el: ring, born: performance.now() });
+  };
+  const drawPulses = (now) => {
+    for (let i = pulses.length - 1; i >= 0; i -= 1) {
+      const t = (now - pulses[i].born) / PULSE_MS;
+      if (t >= 1) {
+        pulses[i].el.remove();
+        pulses.splice(i, 1);
+        continue;
+      }
+      pulses[i].el.setAttribute('r', (7 + 22 * easeOutCubic(t)).toFixed(1));
+      pulses[i].el.setAttribute('opacity', (0.55 * (1 - t)).toFixed(3));
+    }
+  };
+
+  // e is ms since the flight began; negative means not yet departed.
+  // Inline styles so the base .no-pair { opacity: 0 } (the no-JS and
+  // reduced-motion state) never fights the clock.
+  const drawFlight = (f, e) => {
+    if (e < 0 || e >= f.rideMs + f.dwellMs + f.exitMs) {
+      f.el.style.opacity = '0';
+      return;
+    }
+    let x;
+    let y;
+    let alpha;
+    if (e < f.rideMs) {
+      // Carried in among the cells: linear x, mid-stream with its own
+      // bob phase, settling onto the inner wall over the last stretch.
+      const p = e / f.rideMs;
+      x = f.startX + (f.dockX - f.startX) * p;
+      const stream = MID + f.lane + 2.5 * Math.sin(e / 260 + f.bob);
+      const settle = smooth01((p - 0.62) / 0.38);
+      y = stream + (innerWallY(x, f.fromTop) - stream) * settle;
+      alpha = Math.min(1, p / 0.15);
+    } else if (e < f.rideMs + f.dwellMs) {
+      // Arrived: signal the wall once, then hold against it — y tracks
+      // the live wall, so the pair rides it as it widens.
+      if (!f.pulsed) {
+        f.pulsed = true;
+        spawnPulse(f.dockX, innerWallY(f.dockX, f.fromTop));
+      }
+      x = f.dockX;
+      y = innerWallY(x, f.fromTop);
+      alpha = 1;
+    } else {
+      // Work done: carried out downstream with the flow, no brakes.
+      const q = (e - f.rideMs - f.dwellMs) / f.exitMs;
+      x = f.dockX + f.exitDist * q;
+      y = innerWallY(x, f.fromTop);
+      alpha = q < 0.6 ? 1 : 1 - (q - 0.6) / 0.4;
+    }
+    f.el.style.opacity = alpha.toFixed(3);
+    f.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+  };
+
+  // The rescuer's flight is rebuilt once per breath cycle: entry
+  // wall, pinch point, lane and bob phase vary deterministically, so
+  // the loop is seamless but never reads as a repeating GIF.
+  let ambientFlight = null;
+  let ambientCycle = -1;
+
   const BREATHE = { contract: 2600, dwell: 350, restore: 1100, rest: 1800 };
   const BREATHE_CYCLE = BREATHE.contract + BREATHE.dwell + BREATHE.restore + BREATHE.rest;
   const BREATHE_DEPTH = 0.5;  // narrows visibly, never back to the full pinch
-  const FIRST_BREATH = 2600;  // let the payoff land before the first contraction
+  const FIRST_BREATH = 2000;  // let the payoff land before the first contraction
   let breatheEpoch = null;
 
   const easeInOutQuad = (t) => (t < 0.5 ? 2 * t * t : 1 - (2 - 2 * t) ** 2 / 2);
@@ -240,38 +343,25 @@ if (vesselFold) {
     }
     renderWalls(openness);
 
-    // The rescuer, synced to the cycle: drifts in while the vessel
-    // narrows, lands at the bottom of the contraction, rides the
-    // wall back out (docked y tracks the live wall), then dissolves.
-    const fromTop = cycle % 2 === 0;
-    // Entry band starts right of the callout's leader and label
-    // (they occupy ~300-450 below the lower wall), so the rescuer
-    // never docks on top of them.
-    const x = fromTop
-      ? 330 + ((cycle * 149) % 220)
-      : 460 + ((cycle * 67) % 100);
-    const dockY = fromTop
-      ? MID - halfGap(x, openness) - 15
-      : MID + halfGap(x, openness) + 15;
-    const appearAt = contract - 1500;
-    const dockAt = contract + dwell;
-    const fadeAt = dockAt + restore;
-    const FADE_MS = 500;
-
-    let y = dockY;
-    let alpha = 0;
-    if (e >= appearAt && e < dockAt) {
-      const p = easeOutCubic((e - appearAt) / (dockAt - appearAt));
-      const yFrom = fromTop ? 16 : 244;
-      y = yFrom + (dockY - yFrom) * p;
-      alpha = Math.min(1, p * 2.5);
-    } else if (e >= dockAt && e < fadeAt) {
-      alpha = 1;
-    } else if (e >= fadeAt && e < fadeAt + FADE_MS) {
-      alpha = 1 - (e - fadeAt) / FADE_MS;
+    // The rescuer, one flight per cycle: rides in with the flow among
+    // the cells, lands right as the contraction peaks — as though its
+    // arrival is what halts the narrowing — signals the wall, rides it
+    // back open, and is carried off downstream.
+    if (cycle !== ambientCycle) {
+      ambientCycle = cycle;
+      const fromTop = cycle % 2 === 0;
+      const pinchX = 380 + ((cycle * 53) % 70);  // near the constriction, varied
+      ambientFlight = {
+        el: ambientPair, fromTop,
+        startX: pinchX - 285, dockX: pinchX,
+        lane: fromTop ? -8 : 8, bob: (cycle % 5) * 1.3,
+        rideMs: 1500, dwellMs: dwell, exitMs: restore + 250, exitDist: 280,
+        pulsed: false,
+      };
     }
-    ambientPair.setAttribute('opacity', alpha.toFixed(3));
-    ambientPair.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+    // Departs at contract-1500, so it docks exactly at the peak; the
+    // dwell then spans the pause before restore begins.
+    drawFlight(ambientFlight, e - (contract - 1500));
   };
 
   const drawCells = () => {
@@ -283,8 +373,7 @@ if (vesselFold) {
     }
   };
 
-  const RELEASE_MS = 1400;
-  const easeOutCubic = (t) => 1 - (1 - t) ** 3;
+  const RELEASE_MS = 1100;
   let releaseStart = null;
 
   let vesselRaf = null;
@@ -317,6 +406,13 @@ if (vesselFold) {
       breathe(now);
     }
 
+    // The intro pairs and any live signal rings, on the same clock as
+    // the walls they touch.
+    if (sceneEpoch !== null) {
+      for (const f of introFlights) drawFlight(f, now - sceneEpoch - f.rideStart);
+    }
+    drawPulses(now);
+
     // The light drifts: the sheen slides slowly along the blood,
     // slower than the cells riding it.
     flowShift = (flowShift + 38 * dt) % 260;
@@ -345,12 +441,12 @@ if (vesselFold) {
     vesselRaf = null;
   };
 
-  // Beat classes accumulate; CSS keys the copy and molecule motion
-  // off them (times from .is-visible, see styles.css). Two beats:
-  // the copy lines ride them as transition delays.
+  // One beat class: the lede rides it as a transition delay (see
+  // styles.css) and the clock starts the wall morph when it fires.
+  // The molecules themselves fly on the rAF clock (drawFlight above),
+  // scheduled from sceneEpoch, so they and the walls never disagree.
   const BEATS = [
-    ['is-docking', 1200],
-    ['is-releasing', 2700],
+    ['is-releasing', 1800],
   ];
   const SCENE_CLASSES = ['is-visible', ...BEATS.map(([cls]) => cls)];
   let beatTimers = [];
@@ -365,8 +461,17 @@ if (vesselFold) {
     vesselHeadlineWords.forEach((w) => w.classList.remove('is-on'));
     releaseStart = null;
     breatheEpoch = null;
+    sceneEpoch = null;
+    ambientCycle = -1;
+    ambientFlight = null;
+    ambientPair.style.opacity = '0';
+    introFlights.forEach((f) => {
+      f.pulsed = false;
+      f.el.style.opacity = '0';
+    });
+    pulses.forEach((p) => p.el.remove());
+    pulses.length = 0;
     openness = 0;
-    ambientPair.setAttribute('opacity', '0');
     renderWalls(0);
     seedTrickle();
     drawCells();
@@ -387,6 +492,7 @@ if (vesselFold) {
         if (entry.intersectionRatio >= 0.6) {
           resetScene();
           vesselFold.classList.add('is-visible');
+          sceneEpoch = performance.now();
           riseHeadline();
           BEATS.forEach(([cls, at]) =>
             beatTimers.push(setTimeout(() => {
@@ -435,7 +541,7 @@ if (supplyFold) {
 
   // Headline word-rise, like slides 1-3.
   const supplyHeadlineWords = splitWords(supplyFold.querySelector('.hero__headline'));
-  const HEADLINE_WORD_MS = 90;
+  const HEADLINE_WORD_MS = 60;
   let headlineTimers = [];
   const clearHeadlineTimers = () => {
     headlineTimers.forEach(clearTimeout);
@@ -551,8 +657,8 @@ if (supplyFold) {
     marker.style.fill = lineColorAt(cur);
   };
 
-  const DRAW_MS = 6000;    // the sweep, age 20 -> 70
-  const DRAW_DELAY = 800;  // after .is-visible, once the chart is up
+  const DRAW_MS = 4200;    // the sweep, age 20 -> 70
+  const DRAW_DELAY = 400;  // after .is-visible, once the chart is up
   const PILL_T = ((PILL_AGE - A0) / (A1 - A0)) * DRAW_MS;
 
   let raf = null;
@@ -638,11 +744,11 @@ const sourceFold = document.getElementById('the-source');
 if (sourceFold && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
   const label = sourceFold.querySelector('.conv__label');
   const headlineWords = splitWords(sourceFold.querySelector('.hero__headline'));
-  const HEADLINE_WORD_MS = 90;
-  const NITRITE_AT = 1200;
-  const NO_AT = 2500;
-  const HOLD_MS = 2400;  // rest on the finished pair before it drifts off
-  const EXIT_MS = 800;   // covers the 0.7s step-exit fade
+  const HEADLINE_WORD_MS = 60;
+  const NITRITE_AT = 800;
+  const NO_AT = 1700;
+  const HOLD_MS = 2000;  // rest on the finished pair before it drifts off
+  const EXIT_MS = 650;   // covers the 0.55s step-exit fade
 
   let wordTimers = [];
   let beatTimers = [];
@@ -752,7 +858,7 @@ if (capsuleFold) {
   document.fonts.ready.then(fitRing);
 
   const headlineWords = splitWords(capsuleFold.querySelector('.hero__headline'));
-  const HEADLINE_WORD_MS = 90;
+  const HEADLINE_WORD_MS = 60;
 
   let wordTimers = [];
   const clearWordTimers = () => {
@@ -934,10 +1040,10 @@ if (dotrail && folds.length > 1) {
 // again.
 // --------------------------------------------------------------------------
 const KEEP_CUE_DELAY = {
-  'the-molecule': 3600, // lede + Nobel line have landed
-  'the-vessel': 4800,   // release + payoff line done (breath is ambient)
-  'the-supply': 7000,   // the chart has finished drawing to age 70
-  'the-source': 3800,   // the NO pair has formed and the lede has landed
+  'the-molecule': 2600, // lede + Nobel line have landed
+  'the-vessel': 3400,   // release + payoff line done (breath is ambient)
+  'the-supply': 5200,   // the chart has finished drawing to age 70
+  'the-source': 2900,   // the NO pair has formed and the lede has landed
 };
 folds.slice(1, -1).forEach((fold) => {
   const cue = document.createElement('div');
@@ -954,7 +1060,7 @@ folds.slice(1, -1).forEach((fold) => {
         clearTimeout(cueTimer);
         cueTimer = setTimeout(
           () => fold.classList.add('is-cue'),
-          KEEP_CUE_DELAY[fold.id] ?? 3800
+          KEEP_CUE_DELAY[fold.id] ?? 2900
         );
       } else if (!entry.isIntersecting) {
         clearTimeout(cueTimer);
@@ -969,8 +1075,8 @@ folds.slice(1, -1).forEach((fold) => {
 // on screen; its own opening ~1.5s of near-stillness is the quiet the
 // hook rises over, so motion never "suddenly starts". Text events ride
 // the video clock, so nothing drifts even on a stalling connection:
-//   ~0-1.3s  hook words rise in over the idling pill;
-//   ~1.7s    scroll cue follows the hook;
+//   ~0-0.9s  hook words rise in over the idling pill;
+//   ~1.2s    scroll cue follows the hook;
 //   ~2.2s    pill deforms  -> hook dissolves with it;
 //   ~3.3s    capsules form -> claim rises in, lede words follow.
 // Plays once: scrolling away and back leaves the scene as it was, no
@@ -984,13 +1090,13 @@ if (morph) {
   const lede = hero.querySelector('.hero__lede');
   const cue = hero.querySelector('.scrollcue');
 
-  const WORD_MS = 110;      // stagger between hook words
-  const LEDE_WORD_MS = 80;  // stagger between lede words (a touch quicker)
-  const START_DELAY = 250;  // before the hook begins
-  const CUE_LAG = 450;      // cue after the hook's last word
+  const WORD_MS = 75;       // stagger between hook words
+  const LEDE_WORD_MS = 55;  // stagger between lede words (a touch quicker)
+  const START_DELAY = 150;  // before the hook begins
+  const CUE_LAG = 300;      // cue after the hook's last word
   const HOOK_OUT_AT = 0.44; // video fraction: pill visibly deforming
   const CLAIM_IN_AT = 0.66; // video fraction: capsules taking shape
-  const LEDE_LAG = 500;     // after the claim
+  const LEDE_LAG = 300;     // after the claim
 
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     // No motion: the settled end state, immediately. Final frame,

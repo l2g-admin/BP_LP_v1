@@ -1,0 +1,427 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    {% if section.settings.hide_from == true %}
+      {% if page.url contains '/pages/x-page' %}display: none;{% endif %}
+    {% endif %}
+
+    & * {
+       font-family: 'Inter', sans-serif;
+    }
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.text_alignment }};
+  }
+
+  #{{ section.id }} .c-a-wrapper {
+    display: flex;
+  }
+
+  #{{ section.id }} .c-a-bar .page-width {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 0.5em;
+  }
+
+  #{{ section.id }} .c-a-bar {
+    display: none;
+    width: 100%;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    font-size: {{ section.settings.font_size }};
+  }
+
+  #{{ section.id }} .c-a-bar.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  #{{ section.id }} .c-a-bar.active .page-width {
+    animation-name: c-opacity;
+    animation-duration: 1s;
+  }
+
+  @keyframes c-opacity {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  #{{ section.id }} .c-a-bar-button {
+    padding: 5px 20px;
+    margin: 0 0.5rem;
+    border-radius: 42px;
+    border: 2px solid;
+    font-weight: 700;
+    font-size: 0.8em;
+    min-width: fit-content;
+    transition: .2s ease;
+    display: flex;
+    background: transparent;
+  }
+
+  #{{ section.id }} .c-a-bar:hover .c-a-bar-button {
+     filter: brightness(1.1);
+     cursor: pointer;
+  }
+
+  #{{ section.id }} .bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  @media (max-width: 992px) {
+    #{{ section.id }} .c-a-bar .page-width {
+      padding: 0em 0.25em;
+      justify-content: center;
+    }
+    
+    #{{ section.id }} .c-a-bar {
+      font-size: {{ section.settings.font_size_mobile }};
+      line-height: 1.2;
+    }
+
+    #{{ section.id }} .c-a-bar-button {
+      font-size: 0.7em;
+      padding: 5px 20px;
+      margin: 0 0.5rem;
+      border-radius: 100px;
+    }
+
+    #{{ section.id }} .bar-container {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 768px) {
+    #{{ section.id }} .c-a-bar .page-width {
+      display: block;
+      text-align: center;
+    }
+
+    #{{ section.id }} .c-a-bar .page-width p {
+      display: inline-block;
+      margin: 0 0.5rem;
+    }
+
+    #{{ section.id }} .c-a-bar-button {
+      display: inline-block;
+      margin: 0.25rem 0.5rem;
+    }
+
+    #{{ section.id }} .bar-container {
+      display: block;
+      text-align: center;
+    }
+  }
+
+ 
+</style>
+
+
+<section id="{{ section.id }}" class="vara-bar">
+  <div class="c-a-wrapper {% if section.settings.full_width == false %}page-width{% endif %}">
+    {% for block in section.blocks %}
+      <{% if block.settings.block_url %}a href="{{ block.settings.block_url }}"{% else %}div{% endif %}
+      {% if block.settings.new_tab == true %}target="_blank"{% endif %}
+      class="c-a-bar {% if forloop.first %}active{% endif %}" style="
+        {% if block.settings.use_gradient_background %}
+    background: linear-gradient(
+      90deg,
+      #0fb254 -4.6%,
+      #0fb170 1.06%,
+      #0fb092 10.1%,
+      #0fafae 19.15%,
+      #0fafc1 27.06%,
+      #0fafcd 36.1%,
+      #0fafd1 45.15%,
+      #18a1ca 55.32%,
+      #307cb8 73.41%,
+      #57429b 99.41%,
+      #662d91 107.33%
+    );
+  {% else %}
+    background-color: {{ block.settings.block_bg_color }};
+  {% endif %}
+      ">
+        <div class="page-width bar-container">
+          {% if block.settings.block_heading != empty %}
+            <p style="color: {{ block.settings.block_text_color }}; font-weight: bold; font-size: 14px;">{{ block.settings.block_heading }}</p>
+          {% endif %}
+          {% if block.settings.use_timer == true %}
+            {% if block.settings.text_before_counter != empty %}
+              <p style="color: {{ block.settings.block_text_color }}; font-weight: bold; font-size: 14px; margin: 0;">{{ block.settings.text_before_counter }}</p>
+            {% endif %}
+            <p id="c-countdown" style="color: {{ block.settings.block_text_color }}; font-weight: bold; font-size: 14px; margin: 0;"></p>
+          {% endif %}
+          {% if block.settings.button_text != empty %}
+            <div class="c-a-bar-button" style="
+              color: {{ block.settings.button_text_color }};
+              border-color: {{ block.settings.button_text_color }};
+            ">{{ block.settings.button_text }}</div>
+          {% endif %}
+        </div>
+      </{% if block.settings.block_url %}a{% else %}div{% endif %}>
+        {% if block.settings.use_timer == true %}
+          <script>
+            var countDownDate = new Date("{{ block.settings.timer_date}}").getTime();
+                  
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+        
+              var now = new Date().getTime();
+              var distance = countDownDate - now;
+        
+              var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+              var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+              var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+              document.getElementById("c-countdown").innerHTML = days + "D : " + hours + "H : "
+              + minutes + "M : " + seconds + "S";
+        
+              // If the count down is finished, write some text
+              if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("c-countdown").innerHTML = "ENDED!";
+              }
+            }, 1000);
+          </script>
+        {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+
+<script>
+  if (document.querySelectorAll("#{{ section.id }} .c-a-bar").length > 1) {
+    var c_a_slideIndex = 0;
+
+    function c_a_showSlides() {
+      var c_a_slides = document.querySelectorAll("#{{ section.id }} .c-a-bar");
+      for (let i = 0; i < c_a_slides.length; i++) {
+        c_a_slides[i].classList.remove("active");
+      }
+      c_a_slideIndex++;
+      if (c_a_slideIndex > c_a_slides.length) {
+        c_a_slideIndex = 1;
+      }    
+      c_a_slides[c_a_slideIndex - 1].classList.add("active");  
+      setTimeout(c_a_showSlides, {{ section.settings.interval | times: 1000 }});
+    }
+
+    c_a_showSlides();
+  }
+</script>
+
+
+{% schema %}
+  {
+    "name": "C Header Banner O",
+    "class": "c-hb-header-banner",
+    "tag": "header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Header Banner Settings"
+      },
+      {
+        "type": "number",
+        "id": "interval",
+        "label": "Time interval in seconds",
+        "default": 5
+      },
+      {
+        "type": "text",
+        "id": "font_size",
+        "label": "Font size",
+        "default": "1em"
+      },
+      {
+        "type": "text",
+        "id": "font_size_mobile",
+        "label": "Font size mobile",
+        "default": "0.85em"
+      },
+      {
+        "type": "checkbox",
+        "id": "hide_from",
+        "label": "Hide from X page",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "Full width?",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 4,
+        "step": 0.1,
+        "default": 0.5,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 4,
+        "step": 0.1,
+        "default": 0.5,
+        "unit": "rem"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Bar",
+        "type": "Bar",
+        "limit": 50,
+        "settings": [
+          {
+            "type": "text",
+            "id": "block_heading",
+            "label": "Heading",
+            "default": "My heading"
+          },
+          {
+          "type": "checkbox",
+          "id": "use_gradient_background",
+          "label": "Use gradient background?",
+          "default": true,
+          "info": "If enabled, the block background will show a gradient instead of the selected background color."
+          }, 
+          {
+            "type": "color",
+            "id": "block_bg_color",
+            "label": "Background color",
+            "default": "#5d3be4"
+          },
+          {
+            "type": "color",
+            "id": "block_text_color",
+            "label": "Text color",
+            "default": "#fff"
+          },
+          {
+            "type": "header",
+            "content": "Button"
+          },
+          {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button text",
+            "default": "BUY NOW"
+          },
+          {
+            "type": "url",
+            "id": "block_url",
+            "label": "Block Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "new_tab",
+            "label": "Open in new tab",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "use_timer",
+            "label": "Use timer",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "text_before_counter",
+            "label": "Text before counter",
+            "default": "Ends in:"
+          },
+          {
+            "type": "text",
+            "id": "timer_date",
+            "label": "Timer date",
+            "default": "Jan 5, 2025 05:00:01"
+          },
+          {
+            "type": "color_background",
+            "id": "button_bg_color",
+            "label": "Button background color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "button_text_color",
+            "label": "Text color",
+            "default": "#fff"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Header Banner O",
+        "category": "Header"
+      }
+    ]
+  }
+{% endschema %}

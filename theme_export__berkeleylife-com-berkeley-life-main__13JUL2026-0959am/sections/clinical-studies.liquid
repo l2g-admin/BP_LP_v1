@@ -1,0 +1,177 @@
+<div id="clinicalTrials" class="w-full bg-bg" style="--color-text: {{ section.settings.text_color | default: '#000000' }};  --color-bg: {{ section.settings.bg_color | default: '#F9F8F8' }}">
+    <div class="max-w-screen-xl py-8 mx-auto">
+    {% if section.settings.heading != blank %}
+      <h2  class="pb-12 text-center h2 text-text"> {{ section.settings.heading }} </h2>
+    {% endif %}
+    {% assign heading_classes = "uppercase text-md" %}
+      <div class="grid grid-cols-5 px-4 border-b-2 md:grid-cols-7 md:px-8 md:border-0 border-navy">
+      <div class="col-span-1 {{ heading_classes }}">
+        <h6 class="py-4">
+        Date
+        </h6>
+      </div>
+      <div class="col-span-3 {{ heading_classes }}">
+        <h6 class="py-4">
+        Title
+        </h6>
+      </div>
+      <div class="hidden col-span-3 md:block">
+        <h6 class="py-4 {{ heading_classes }}">
+        Journal
+        </h6>
+      </div>
+    </div>
+    <div class="w-full mx-auto md:px-8 md:pb-4">
+      <div class="">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'collapsible_tab' -%}
+            <div
+              itemscope
+              itemprop="mainEntity"
+              itemtype="https://schema.org/Question"
+              {{ block.shopify_attributes }}>
+              <details {% if block.settings.open_load %} open {% endif %} class="group py-4 {% if forloop.last %} border-b-2 {% endif %} {% if forloop.first %} md:border-t-2 {%else %} border-t-2 {% endif %} border-navy">
+                <summary style="--color-text: {{ section.settings.text_color | default: '#000000' }}; "
+                  class="text-text">
+                  <div class="grid grid-cols-5 gap-4 md:grid-cols-7 md:gap-0">
+                    <h6 class="col-span-1 px-4 text-xs uppercase md:text-sm md:px-0">
+                      {{ block.settings.date | default: block.settings.page.title }}
+                    </h6>
+                    <h6 class="justify-between w-10/12 col-span-3 px-4 text-lg md:flex md:px-0">
+                      {{ block.settings.heading }}
+                      {% render 'image' image:block.settings.image, classes:"w-16 md:hidden block md:w-32 col-span-3", fit:"object-contain" img_size: '20vw' %}
+
+                    </h6>
+                    <div class="hidden md:block">
+                      {% render 'image' image:block.settings.image, classes:"w-16 md:w-24 col-span-3 hidden md:block", fit:"object-contain" img_size: '20vw' %}
+                    </div>
+                    <span class="w-6 transition-transform md:col-start-7 shrink-0 md:ml-12">{% render 'icon-plus', classes: "w-6" %}</span>
+                  </div>
+                </summary>
+                <div
+                  style="--color-text: {{ section.settings.text_color | default: '#000000' }};"
+                  class="grid grid-cols-5 px-4 py-4 md:grid-cols-7 text-text md:px-0"
+                  >
+                  <div
+                    class="col-span-5 md:col-span-3 md:col-start-2 bullet-styles"
+                    >
+                    {{ block.settings.content }}
+                    <div class="mt-4 text-xs md:text-sm ">
+                    <a {% if block.settings.new_tab %} target="_blank" {% endif %} class="text-sm font-bold uppercase !text-brand button--text" href="{{ block.settings.button_link }}"> {{ block.settings.button_label }}</a>
+          
+                  </div>
+                  </div>
+                </div>
+              </details>
+            </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+  </div>
+  
+  {% schema %}
+  {
+    "name": "Clinical Studies",
+    "settings": [
+        {
+        "type": "text",
+        "id": "heading",
+        "default": "Downloadable Headline",
+        "label": "t:sections.main-product.blocks.collapsible_tab.settings.heading.label"
+      }, {
+        "type": "color",
+        "id": "header_color",
+        "label": "Header Color"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background Color"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "collapsible_tab",
+        "name": "t:sections.main-product.blocks.collapsible_tab.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "default": "Nitric Oxide and Healthy Blood Pressure",
+            "label": "t:sections.main-product.blocks.collapsible_tab.settings.heading.label"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": "t:sections.main-product.blocks.collapsible_tab.settings.content.label"
+          },
+          {
+            "type": "text",
+            "id": "date",
+            "label": "date"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Logo"
+          }, {
+            "type": "text",
+            "id": "button_label",
+            "default": "READ FULL REPORT",
+            "label": "Button Label",
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Button Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "new_tab",
+            "label": "Open link in new tab",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "open_load",
+            "label": "Load in open state",
+            "default": false
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "category": "Text",
+        "name": "Clinical Studies",
+        "settings": {
+        },
+        "blocks": [
+          {
+            "type": "collapsible_tab",
+            "settings": {
+              "heading": "Nitric Oxide and Healthy Blood Pressure",
+              "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>"
+            }
+          },
+          {
+            "type": "collapsible_tab",
+            "settings": {
+              "heading": "Nitric Oxide and Healthy Blood Pressure",
+              "content": "<p>Urolithin A (Mitopure®), administered topically, significantly reduces wrinkles, improves skin hydration, and decreases UV-induced erythema. It up-regulates collagen synthesis pathways, inhibits collagen degradation, and enhances mitophagy and autophagy in skin cells. These results support the use of Urolithin A to manage skin health and protect against skin aging and UVB-mediated photodamage.</p>"
+            }
+          }
+  
+        ]
+      }
+    ]
+  }
+  {% endschema %}

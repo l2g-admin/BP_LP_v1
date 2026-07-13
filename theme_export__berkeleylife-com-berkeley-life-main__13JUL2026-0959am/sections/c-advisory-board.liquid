@@ -1,0 +1,274 @@
+{% comment %}
+  Shopify Section: Advisory Board
+  - Displays a heading, paragraph, and a grid of members.
+  - Mobile: Single-column stacked layout.
+  - Desktop: Multi-column grid layout.
+{% endcomment %}
+
+<style>
+  .advisory-board-section {
+    background-color: {{ section.settings.background_color }};
+    padding: 50px 20px;
+  }
+
+  .advisory-board__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .advisory-board__heading {
+    color: {{ section.settings.heading_color }};
+    font-size: 40px;
+ 
+    line-height: 1.2;
+    margin: 0 0 15px 0;
+  }
+  
+  /* Use the richtext editor to make text italic or bold to apply this style */
+  .advisory-board__heading em,
+  .advisory-board__heading strong {
+    color: {{ section.settings.heading_accent_color }};
+    font-family: serif;
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  .advisory-board__paragraph {
+    color: {{ section.settings.text_color }};
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 70ch;
+    margin: 0 auto 40px auto;
+  }
+  
+  .advisory-board__grid {
+    display: flex;
+    flex-direction: column; /* Mobile: Stack members vertically */
+    align-items: center;
+    gap: 40px;
+  }
+
+  .advisory-board__member-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 300px;
+  }
+
+  .advisory-board__member-image {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    margin-bottom: 20px;
+  }
+  
+  .advisory-board__member-name {
+    color: {{ section.settings.heading_color }};
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+  }
+
+  .advisory-board__member-title {
+    color: {{ section.settings.text_color }};
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0 0 10px 0;
+  }
+  
+  .advisory-board__member-description {
+    color: {{ section.settings.text_color }};
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Tablet & Desktop Styles */
+  @media screen and (min-width: 768px) {
+    .advisory-board-section {
+      padding: 80px 40px;
+    }
+
+    .advisory-board__heading {
+      font-size: 2.8rem;
+    }
+    
+    .advisory-board__paragraph {
+      margin-bottom: 60px;
+    }
+
+    .advisory-board__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 2 columns for tablets */
+      gap: 50px 30px;
+      align-items: start;
+    }
+  }
+  
+  /* Large Desktop Styles */
+  @media screen and (min-width: 1024px) {
+    .advisory-board__grid {
+      grid-template-columns: repeat(4, 1fr); /* 4 columns for large screens */
+    }
+  }
+</style>
+
+<section class="advisory-board-section">
+  <div class="advisory-board__container">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'heading' -%}
+          {%- if block.settings.heading != blank -%}
+            <h2 class="advisory-board__heading" {{ block.shopify_attributes }}>
+              {{ block.settings.heading }}
+            </h2>
+          {%- endif -%}
+        {%- when 'paragraph' -%}
+          {%- if block.settings.paragraph != blank -%}
+            <div class="advisory-board__paragraph" {{ block.shopify_attributes }}>
+              {{ block.settings.paragraph }}
+            </div>
+          {%- endif -%}
+      {%- endcase -%}
+    {%- endfor -%}
+
+    {%- liquid
+      assign member_blocks = section.blocks | where: "type", "member"
+    -%}
+    {%- if member_blocks.size > 0 -%}
+      <div class="advisory-board__grid">
+        {%- for block in member_blocks -%}
+          <div class="advisory-board__member-card" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 320 | image_tag: class: 'advisory-board__member-image', loading: 'lazy' }}
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg advisory-board__member-image' }}
+            {%- endif -%}
+            
+            {%- if block.settings.name != blank -%}
+              <h3 class="advisory-board__member-name">{{ block.settings.name | escape }}</h3>
+            {%- endif -%}
+
+            {%- if block.settings.title != blank -%}
+              <p class="advisory-board__member-title">{{ block.settings.title | escape }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.description != blank -%}
+              <div class="advisory-board__member-description">
+                {{ block.settings.description }}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Advisory Board",
+  "tag": "section",
+  "class": "advisory-board",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#2D3B4F"
+    },
+    {
+      "type": "color",
+      "id": "heading_accent_color",
+      "label": "Heading Accent Color",
+      "default": "#CB5A42"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#555555"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<p>Our <em>Scientific & Medical</em> Advisory Board</p>"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "paragraph",
+          "label": "Paragraph",
+          "default": "<p>Our Advisory Board brings together leading experts in nutrition, exercise physiology, men’s health, and oral-gut microbiome research. Their guidance ensures every Berkeley Life product is grounded in science, clinically validated, and trusted by healthcare professionals worldwide.</p>"
+        }
+      ]
+    },
+    {
+      "type": "member",
+      "name": "Board Member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Member Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Dr. Firstname Lastname"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title / Degree",
+          "default": "PhD, Field of Study"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Use this area to write a brief bio or description of the board member's expertise and background.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Advisory Board",
+      "blocks": [
+        { "type": "heading" },
+        { "type": "paragraph" },
+        { "type": "member" },
+        { "type": "member" },
+        { "type": "member" },
+        { "type": "member" }
+      ]
+    }
+  ]
+}
+{% endschema %}

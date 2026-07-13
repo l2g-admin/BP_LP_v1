@@ -1,0 +1,33 @@
+<div class="px-4 py-4 md:px-8 md:py-8 bg-cream text-navy" id="product-reviews">
+  <div class="grid max-w-screen-lg grid-cols-1 mx-auto md:grid-cols-1">
+    <h2 class="my-8 text-left h2">{{ section.settings.title  | replace_first: "**", "<span class='text-brand font-secondaryHeader'>" | replace: "**", "</span>" }}</h2>
+    <div class="">
+      {%- for block in section.blocks -%}
+      {% case block.type %}
+        {% when '@app' %}
+          {% render block %}
+      {% endcase %}
+    {%  endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Reviews",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Reviews",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}

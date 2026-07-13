@@ -1,0 +1,263 @@
+{% comment %}
+  This section creates a two-column layout featuring an image on the left
+  and a text block on the right. It's designed to be fully responsive,
+  stacking vertically on smaller screens.
+{% endcomment %}
+
+<style>
+  .iw-text-section-{{ section.id }} {
+    --section-bg-color: {{ section.settings.section_bg_color }};
+    --text-block-bg-color: {{ section.settings.text_block_bg_color }};
+    --heading-color: {{ section.settings.heading_color }};
+    --text-color: {{ section.settings.text_color }};
+    --highlight-color: {{ section.settings.highlight_color }};
+
+    background-color: var(--section-bg-color);
+    padding: 5rem 2rem;
+  }
+
+  .iw-text-section-{{ section.id }}__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    /* gap: 4rem;  */
+  }
+
+  .iw-text-section-{{ section.id }}__image-wrapper {
+    flex: 1 1 45%; /* Adjust flex-basis for image width */
+    max-width: 550px;
+  }
+
+  .iw-text-section-{{ section.id }}__image {
+    width: 100%;
+    height: auto;
+    border-radius: 1.5rem; /* Rounded corners for the image */
+    display: block;
+  }
+
+  .iw-text-section-{{ section.id }}__content-wrapper {
+    flex: 1 1 55%;
+    background-color: var(--text-block-bg-color);
+    padding: 3rem;
+    border-top-right-radius: 32px;
+    border-bottom-right-radius: 32px;
+  }
+
+  .iw-text-section-{{ section.id }}__heading {
+    color: var(--heading-color);
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 1.5rem;
+  }
+
+  .iw-text-section-{{ section.id }}__heading-mobile {
+    display: none;
+  }
+
+  .iw-text-section-{{ section.id }}__heading em,
+  .iw-text-section-{{ section.id }}__heading strong {
+    color: var(--highlight-color);
+    font-style: italic;
+    font-size: 48px;
+    font-family: "cormorant-garamond", serif;
+    font-weight: 500;
+  }
+
+
+  .iw-text-section-{{ section.id }}__paragraph {
+    color: var(--text-color);
+    font-size: 20px;
+    line-height: 1.5;
+    font-weight: 300;
+    margin: 0;
+  }
+  
+  .iw-text-section-{{ section.id }}__paragraph p {
+    margin: 0 0 1.5em 0;
+  }
+  
+  .iw-text-section-{{ section.id }}__paragraph p:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Style for highlighted text within the richtext editors */
+  .iw-text-section-{{ section.id }}__paragraph em {
+    color: var(--highlight-color);
+    font-style: normal;
+  }
+
+  /* --- Responsive Styles --- */
+  @media (max-width: 990px) {
+    .iw-text-section-{{ section.id }}__container {
+      flex-direction: column;
+      /* gap: 3rem; */
+    }
+
+    .iw-text-section-{{ section.id }}__content-wrapper {
+      border-radius: 32px;
+      margin-top: -34px;
+    }
+
+    .iw-text-section-{{ section.id }}__heading {
+      display: none;
+    }
+
+    .iw-text-section-{{ section.id }}__heading-mobile {
+      display: block;
+      font-size:32px;
+      margin-bottom: 0;
+      color: var(--heading-color);
+      font-weight: 500;
+      line-height: 1.2;
+      margin-top: 0;
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+
+    .iw-text-section-{{ section.id }}__heading em,
+    .iw-text-section-{{ section.id }}__heading strong {
+      font-size:40px;
+    }
+
+    .iw-text-section-{{ section.id }}__heading-mobile em,
+    .iw-text-section-{{ section.id }}__heading-mobile strong {
+      color: var(--highlight-color);
+      font-style: italic;
+      font-size:40px;
+      font-family: "cormorant-garamond", serif;
+      font-weight: 500;
+    }
+
+    .iw-text-section-{{ section.id }}__paragraph {
+      font-size:16px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .iw-text-section-{{ section.id }} {
+      padding: 3rem 1rem;
+    }
+    
+    .iw-text-section-{{ section.id }}__content-wrapper {
+      padding: 2rem;
+      border-radius: 32px;
+    }
+  }
+
+</style>
+
+<div class="iw-text-section-{{ section.id }}">
+  <div class="iw-text-section-{{ section.id }}__container">
+
+    <div class="iw-text-section-{{ section.id }}__image-wrapper">
+      {% if section.settings.image != blank %}
+        <img 
+          src="{{ section.settings.image | image_url: width: 1100 }}" 
+          alt="{{ section.settings.image.alt | escape }}"
+          width="{{ section.settings.image.width }}"
+          height="{{ section.settings.image.height }}"
+          loading="lazy"
+          class="iw-text-section-{{ section.id }}__image">
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+
+    <div class="iw-text-section-{{ section.id }}__content-wrapper">
+      {% if section.settings.heading != blank %}
+        <div class="iw-text-section-{{ section.id }}__heading">
+          {{ section.settings.heading }}
+        </div>
+      {% endif %}
+      {% if section.settings.heading_mobile != blank %}
+        <div class="iw-text-section-{{ section.id }}__heading-mobile">
+          {{ section.settings.heading_mobile }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.paragraph != blank %}
+        <div class="iw-text-section-{{ section.id }}__paragraph">
+          {{ section.settings.paragraph }}
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "C Image with Text Block",
+  "tag": "section",
+  "class": "image-with-text-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Something new is coming — and it will change the way <em>women live, age, and thrive.</em></p>"
+    },
+    {
+      "type": "richtext",
+      "id": "heading_mobile",
+      "label": "Heading Mobile",
+      "default": "<p>Something new is coming — and it will change the way <em>women live, age, and thrive.</em></p>"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "default": "<p>Somewhere between doing it all and feeling it all, <em>women</em> in midlife experience a <em>silent shift</em> in hormones, energy, and vitality — that changes more than they realize.</p><p>Our research uncovered something hidden in plain sight: a powerful molecule that quietly supports heart health, hormonal balance, and long-term longevity — addressing the #1 threat to women’s health today.</p><p>We’ve spent months unlocking its potential.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_block_bg_color",
+      "label": "Text Block Background Color",
+      "default": "#fdfaf7"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#374151"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Paragraph Color",
+      "default": "#4b5563"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlight Color",
+      "default": "#c75f48"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Image with Text Block"
+    }
+  ]
+}
+{% endschema %}

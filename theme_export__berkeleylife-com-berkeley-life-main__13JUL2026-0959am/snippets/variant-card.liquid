@@ -1,0 +1,104 @@
+{% comment %}
+    Renders a variant card
+
+    Accepts:
+    - product_card_product: {Object} Product Liquid object (optional)
+    - variant_card_variant: {Object} Variant Liquid object (optional)
+    - image_ratio: {String} Size of the product image card. Values are "square" and "portrait". Default is "square" (optional)
+    - eager: {Boolean} This is used in the context of a for loop -- whether to make this image eager loaded (optional)
+
+    Usage:
+    {% render 'variant-card', variant: variant %}
+{% endcomment %}
+
+{%- liquid
+  assign featured_media = false
+
+  if variant_card_variant.featured_media
+    assign featured_media = variant_card_variant.featured_media
+  elsif product_card_product.featured_media
+    assign featured_media = product_card_product.featured_media
+  endif
+-%}
+
+<div class="group relative text-center">
+  <div class="block">
+    <div class="relative">
+      <a href="{{ variant_card_variant.url | default: '#' }}" class="hover:shadow-lg block" a>
+      {%- if featured_media -%}
+        <div class="{{ image_ratio }}">
+          {%- liquid
+            render 'image', image: featured_media, eager: eager, img_size: '(min-width: 750px) 33vw, 100vw'
+            assign color_handle = variant_card_variant.option1 | handleize
+            assign relevant_media = product_card_product.media | where: 'alt', color_handle
+            if relevant_media[1] != nil and show_secondary_image
+              render 'image', image: relevant_media[1], classes: 'transition-opacity opacity-0 group-hover:opacity-100', fade_in: false, img_size: '(min-width: 750px) 33vw, 100vw'
+            endif
+          -%}
+        </div>
+      {%- else -%}
+        <div><h3 class="h3 text-center">{{ variant_card_variant.title }}</h3></div>
+      {%- endif -%}
+
+      {% comment %} BF Badges - only show when block is present {% endcomment %}
+      {% if show_bf_badges %}
+        <div class="absolute z-20 flex flex-col gap-1" style="top: 1.5rem; left: 1.5rem;">
+          {% comment %} If product has callout metafield, use special colors and text {% endcomment %}
+          {% if product_card_product.metafields.custom.product_callout_ != blank %}
+            <span class="px-2 py-1 text-xs font-bold text-white uppercase rounded" style="background-color: #D44F2F; width: max-content;">
+              BEST SELLER
+            </span>
+            <span class="px-2 py-1 text-xs font-bold text-white uppercase rounded" style="background-color: {{ bf_badge_2_bg | default: '#000000' }}">
+              BUY 2 GET 1 FREE
+            </span>
+          {% else %}
+            {% comment %} Default BF badges {% endcomment %}
+            {% if bf_badge_1_text != blank %}
+              <span class="px-2 py-1 text-xs font-bold text-white uppercase rounded" style="background-color: {{ bf_badge_1_bg | default: '#000000' }}">
+                {{ bf_badge_1_text }}
+              </span>
+            {% endif %}
+            {% if bf_badge_2_text != blank %}
+              <span class="px-2 py-1 text-xs font-bold text-white uppercase rounded" style="background-color: {{ bf_badge_2_bg | default: '#D44F2F' }}">
+                {{ bf_badge_2_text }}
+              </span>
+            {% endif %}
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <div class="left-2 bottom-2 absolute flex flex-wrap gap-2 mr-12">
+        {%- if variant_card_variant.available == false -%}
+          <span class="px-2 py-1 text-sm text-white bg-gray-500 rounded-full" aria-hidden="true">{{ 'products.product.sold_out' | t }}</span>
+        {%- elsif variant_card_variant.compare_at_price > variant_card_variant.price and variant_card_variant.available -%}
+          <span class="px-2 py-1 text-sm text-white bg-red-600 rounded-full" aria-hidden="true">{{ 'products.product.on_sale' | t }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Prime Badge - only shows when block is added and the product's custom.prime_badge metafield is true (or force-all is on) {%- endcomment -%}
+      {%- render 'c-prime-badge',
+        product: product_card_product,
+        show_prime_badge: show_prime_badge,
+        prime_badge_image: prime_badge_image,
+        prime_badge_alt: prime_badge_alt,
+        prime_badge_position: prime_badge_position,
+        prime_badge_width: prime_badge_width,
+        prime_badge_offset: prime_badge_offset,
+        prime_badge_force_all: prime_badge_force_all
+      -%}
+
+    </a>
+    </div>
+  </div>
+
+  <div class="pt-2">
+    <div>
+      {%- if featured_media -%}
+        <a aria-hidden="true" tabindex="-1" href="{{ variant_card_variant.url | default: '#' }}" class="pr-2 text-sm text-gray-400">
+          {{- variant_card_variant.title | remove: 'Default Title' | replace: '/', '-' -}}
+        </a>
+      {%- endif -%}
+      {% render 'price', product: product_card_product, use_variant: true, price_variant: variant_card_variant, price_class: 'justify-center text-sm text-gray-400' %}
+    </div>
+  </div>
+</div>

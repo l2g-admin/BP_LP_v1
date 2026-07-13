@@ -1,0 +1,382 @@
+{%- comment -%}
+  Section: Designed For
+  Description: Full-bleed image container with headline and 4 horizontally-arranged feature cards. Cards scroll on mobile.
+  sl-id: sl-section-designed-for-v1
+  Figma Desktop: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5274-13569
+  Figma Mobile:  https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5347-11180
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-designed-for-v1'
+-%}
+
+<style>
+  /* ==========================================================================
+     C-DESIGNED-FOR — Desktop (base)
+     ========================================================================== */
+
+  #{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    padding-left: 80px;
+    padding-right: 80px;
+    background-color: {{ section.settings.outer_bg_color }};
+  }
+
+  #{{ section.id }} .c-designed-for__inner {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    padding: 80px 32px 40px;
+    min-height: 670px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  #{{ section.id }} .c-designed-for__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  #{{ section.id }} .c-designed-for__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-designed-for__heading {
+    color: #f6f3f0;
+    letter-spacing: -1.38px;
+    line-height: 1.2;
+    margin: 0;
+    font-size: 48px;
+    font-weight: 500;
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-style: normal;
+  }
+
+  #{{ section.id }} .c-designed-for__heading-italic {
+    font-family: 'Cormorant Garamond', 'cormorant-garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 48px;
+  }
+
+  #{{ section.id }} .c-designed-for__cards {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  #{{ section.id }} .c-designed-for__card {
+    flex: 1 0 0;
+    min-width: 0;
+    background: rgba(27, 28, 41, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  #{{ section.id }} .c-designed-for__card-title {
+    font-family: 'Cormorant Garamond', 'cormorant-garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.2;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  #{{ section.id }} .c-designed-for__card-text {
+    font-family: 'TT Commons', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  #{{ section.id }} .c-designed-for__card-icon {
+    margin-top: auto;
+    padding-top: 8px;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+  }
+
+  #{{ section.id }} .c-designed-for__card-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* ==========================================================================
+     C-DESIGNED-FOR — Mobile (max 767px)
+     ========================================================================== */
+
+  @media screen and (max-width: 767px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    #{{ section.id }} .c-designed-for__inner {
+      border-radius: 15px;
+      padding: 40px 20px;
+      min-height: 503px;
+    }
+
+    #{{ section.id }} .c-designed-for__heading {
+      font-size: 40px;
+    }
+
+    #{{ section.id }} .c-designed-for__heading-italic {
+      display: block;
+      font-size: 48px;
+    }
+
+    #{{ section.id }} .c-designed-for__cards {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-wrap: nowrap;
+      align-items: flex-start;
+      padding-bottom: 4px;
+    }
+
+    #{{ section.id }} .c-designed-for__cards::-webkit-scrollbar {
+      display: none;
+    }
+
+    #{{ section.id }} .c-designed-for__card {
+      flex: 0 0 292px;
+      min-width: 292px;
+    }
+  }
+</style>
+
+<section
+  id="{{ section.id }}"
+  class="c-designed-for"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-designed-for"
+  {% if section.settings.anchor_id != blank %}
+    data-anchor="{{ section.settings.anchor_id }}"
+  {% endif %}
+>
+  <div class="c-designed-for__inner">
+    {%- if section.settings.bg_image != blank -%}
+      {{
+        section.settings.bg_image
+        | image_url: width: 2000
+        | image_tag:
+          class: 'c-designed-for__bg',
+          loading: 'lazy',
+          alt: '',
+          widths: '768, 1200, 1600, 2000'
+      }}
+    {%- endif -%}
+
+    <div class="c-designed-for__content">
+      {%- if section.settings.heading_plain != blank or section.settings.heading_italic != blank -%}
+        <h2 class="c-designed-for__heading">
+          {%- if section.settings.heading_plain != blank -%}
+            <span class="c-designed-for__heading-plain">{{ section.settings.heading_plain }}</span>
+          {%- endif -%}
+          {%- if section.settings.heading_italic != blank -%}
+            <em class="c-designed-for__heading-italic">{{ section.settings.heading_italic }}</em>
+          {%- endif -%}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="c-designed-for__cards">
+          {%- for block in section.blocks -%}
+            <div class="c-designed-for__card" {{ block.shopify_attributes }}>
+              <p class="c-designed-for__card-title">{{ block.settings.title }}</p>
+              {%- if block.settings.text != blank -%}
+                <p class="c-designed-for__card-text">{{ block.settings.text }}</p>
+              {%- endif -%}
+              {%- if block.settings.icon != blank -%}
+                <div class="c-designed-for__card-icon">
+                  {{
+                    block.settings.icon
+                    | image_url: width: 160
+                    | image_tag: loading: 'lazy', alt: block.settings.title
+                  }}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Designed For",
+  "tag": "section",
+  "class": "c-designed-for-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "outer_bg_color",
+      "label": "Outer Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_plain",
+      "label": "Heading — Plain Part",
+      "default": "Designed for "
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading — Italic Part",
+      "default": "Real Biological Impact"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_card",
+      "name": "Feature Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card Title",
+          "default": "Clinically Effective Dose"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Card Description",
+          "default": "Two capsules deliver the dietary nitrate equivalent of ~7 oz of beetroot"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Designed For",
+      "blocks": [
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Clinically Effective Dose",
+            "text": "Two capsules deliver the dietary nitrate equivalent of ~7 oz of beetroot"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Daily Nitric Oxide Support",
+            "text": "Helps maintain nitric oxide levels for up to 24 hours"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Built On Proven Science",
+            "text": "Formulated using clinically studied ingredients and pathways"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Made To Be Measured",
+            "text": "Works with Nitric Oxide Test Strips to track your progress"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,47 @@
+{%- unless section.settings.content_more == blank or section.settings.content_less == blank -%}
+  <div class="max-w-prose mx-auto my-16">
+    <details class="group">
+      <summary class="border-b border-gray-200 border-opacity-50">
+        <div class="flex items-center justify-between gap-2 py-4">
+          <h2 class="h5">
+            {{ section.settings.content_less }}
+          </h2>
+          <span class="shrink-0 group-open:rotate-180 transition-transform duration-150 origin-center">
+            {% render 'icon-caret' %}
+          </span>
+        </div>
+      </summary>
+      <div class="rte py-8 text-lg">
+        <div>
+        {{ section.settings.content_more }}
+        </div>
+      </div>
+    </details>
+  </div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Collection SEO",
+  "settings": [
+    {
+      "type": "text",
+      "id": "content_less",
+      "label": "Short content"
+    },
+    {
+      "type": "text",
+      "id": "content_more",
+      "label": "Full content"
+    }
+  ],
+  "templates": [
+    "collection"
+  ],
+  "presets": [
+    {
+      "name": "Collection SEO"
+    }
+  ]
+}
+{% endschema %}

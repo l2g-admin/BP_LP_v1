@@ -1,0 +1,1598 @@
+<style>
+  :root {
+    --brand-navy: {{ section.settings.color_navy | default: '#161b33' }};
+    --brand-orange: {{ section.settings.color_orange | default: '#d25435' }};
+    --brand-beige: {{ section.settings.color_beige | default: '#f6f4f0' }};
+    --brand-white: {{ section.settings.color_white | default: '#ffffff' }};
+    --border-color: {{ section.settings.color_border | default: '#e2e0d8' }};
+    --cta-border-color: {{ section.settings.cta_border_color | default: '#d25435' }};
+    --cta-text-color: {{ section.settings.cta_text_color | default: '#d25435' }};
+  }
+
+  #shopify-section-{{ section.id }} {
+    position: relative;
+    z-index: 40;
+    {% if section.settings.sticky_header %}
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    {% endif %}
+
+     &  #predictive-search-results { 
+     & *    {
+        letter-spacing: normal !important;
+     }
+    }
+  }
+
+  /* --- MAIN HEADER --- */
+  .c-header__main {
+    background-color: var(--brand-beige);
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+  }
+
+  .c-header__container {
+ 
+    padding: 1.5rem 0rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    
+    @media (max-width: 991px) {
+      padding: 1rem 1.5rem;
+    }
+  }
+
+  /* LEFT NAV (DESKTOP) */
+  .c-header__nav {
+    display: none;
+    flex: 1;
+    
+    @media (min-width: 992px) {
+      display: flex;
+      gap: 2rem;
+    }
+  }
+
+  .c-header__nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .c-header__nav-item {
+    position: static; /* Vital for full-width mega menu */
+  }
+
+  .c-header__nav-link {
+    text-decoration: none;
+    color: var(--brand-navy);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 0;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+
+    & svg { width: 10px; height: 10px; }
+  }
+
+  /* Mega Menu Hover Trigger */
+  .c-header__nav-item:hover .c-header__nav-link {
+    color: var(--brand-orange);
+    border-bottom-color: var(--brand-orange);
+  }
+  .c-header__nav-item:hover .c-megamenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* CENTER LOGO */
+  .c-header__center {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    
+    @media (max-width: 991px) {
+      flex: 0 1 auto;
+    }
+  }
+
+  .c-header__logo-text {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 500;
+    color: var(--brand-navy);
+    margin: 0;
+    line-height: 1;
+  }
+
+  .c-header__logo-svg {
+    max-width: 180px;
+    width: 100%;
+    height: auto;
+
+    @media (min-width: 768px) {
+      max-width: 220px;
+    }
+
+    @media (min-width: 992px) {
+      max-width: 260px;
+    }
+
+    & svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      
+      /* Asegura que el logo use el color de la marca */
+      & path {
+        fill: var(--brand-navy);
+      }
+    }
+  }
+
+  .c-header__logo-mobile {
+    display: block;
+    max-width: 180px;
+    width: 100%;
+    height: auto;
+    
+
+    @media (min-width: 768px) {
+      max-width: 220px;
+    }
+
+    @media (min-width: 992px) {
+      display: none;
+    }
+
+    & img {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 45px;
+    }
+  }
+
+  .c-header__logo-desktop {
+    display: none;
+
+    @media (min-width: 992px) {
+      display: block;
+    }
+  }
+
+  .c-header__logo-subtext {
+    font-size: 11px;
+    color: var(--brand-orange);
+    font-style: italic;
+    letter-spacing: 0.5px;
+    margin: 0;
+    display: none;
+
+    & strong { font-weight: 700; font-style: normal; }
+
+    @media (min-width: 992px) { display: block; }
+  }
+
+  /* RIGHT ICONS & CTA */
+  .c-header__right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1.5rem;
+    
+    @media (max-width: 991px) {
+      flex: 0 0 auto;
+      gap: 1rem;
+    }
+  }
+
+  .c-header__cta {
+    display: none;
+    border: 2px solid var(--cta-border-color);
+    color: var(--cta-text-color);
+    background: transparent;
+    padding: 0.6rem 1.5rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: var(--cta-border-color);
+      color: var(--brand-white);
+    }
+
+    @media (min-width: 992px) { display: block; }
+  }
+
+  .c-header__icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+
+    @media (max-width: 991px) {
+      gap: 10px;
+    }
+
+    & a, & button, & summary {
+      background: none;
+      border: none;
+      color: var(--brand-navy);
+      cursor: pointer;
+      display: flex;
+      padding: 0;
+
+      &:not(#cart-icon-bubble) svg { width: 22px; height: 22px; stroke-width: 1.5px; }
+    }
+  }
+
+  .c-header__mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--brand-navy);
+    cursor: pointer;
+    padding: 0;
+    
+    & svg {
+      width: 24px;
+      height: 24px;
+      stroke-width: 2px;
+    }
+    
+    @media (max-width: 991px) { 
+      display: block; 
+    }
+    
+    @media (min-width: 992px) {
+      display: none !important;
+    }
+  }
+
+  .c-header__close-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .c-header__icons-extended {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+
+    @media (max-width: 991px) {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      
+      &.is-visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+  }
+
+  /* --- SEARCH MODAL --- */
+  details-modal {
+    position: static;
+    display: flex;
+    align-items: center;
+    
+    & summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      
+      &::-webkit-details-marker {
+        display: none;
+      }
+    }
+    
+    & details[open] > summary {
+      position: relative;
+      z-index: 10000;
+    }
+  }
+
+  .c-search-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2rem;
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .c-search-inner {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    gap: 1rem;
+  }
+
+  .c-search-form {
+    width: 100%;
+    
+    & .c-search-input-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    & input[type="search"] {
+      width: 100%;
+      padding: 0.75rem 2.5rem 0.75rem 0;
+      font-size: 16px;
+      border: none;
+      border-bottom: 2px solid #000;
+      background: transparent;
+      outline: none;
+      
+      &:focus {
+        border-color: var(--brand-orange);
+      }
+    }
+
+    & .c-search-submit {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 2rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--brand-navy);
+      
+      & svg { width: 18px; height: 18px; }
+    }
+  }
+
+  .c-search-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--brand-navy);
+    flex-shrink: 0;
+    
+    & svg { width: 18px; height: 18px; }
+  }
+
+  .predictive-search {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--brand-white);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    z-index: 10000;
+    
+    &__loading-state {
+      text-align: center;
+      padding: 2rem;
+      
+      .spinner {
+        animation: spin 1s linear infinite;
+        width: 40px;
+        height: 40px;
+        
+        .path {
+          stroke: var(--brand-orange);
+        }
+      }
+    }
+
+    &__result-group {
+      padding: 1rem;
+    }
+
+    &__heading {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--brand-orange);
+      margin: 0 0 0.75rem 0;
+      padding: 0 0.5rem;
+    }
+
+    & ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    & li a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem;
+      text-decoration: none;
+      color: var(--brand-navy);
+      border-radius: 8px;
+      transition: background 0.2s;
+
+      &:hover { background: var(--brand-beige); }
+    }
+
+    & li[aria-selected="true"] a {
+      background: var(--brand-beige);
+    }
+
+    & img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    &__item-heading {
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* --- DESKTOP MEGAMENU WRAPPER --- */
+  .c-megamenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--brand-beige);
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    padding: 1rem 2rem;
+    padding-bottom: 1.4rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+
+  .c-megamenu__inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 4rem;
+    max-height: 500px;
+    
+    align-items: stretch;
+  }
+
+  /* MEGAMENU: SHOP ALL LAYOUT */
+  .c-mega-shop__left {
+    display: flex;
+    gap: 1.5rem;
+    flex: 0 0 45%;
+  }
+
+  .c-product-card {
+    border-radius: 12px;
+    padding: .5rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+ 
+
+    & .badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #593750;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    & img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: contain; 
+      margin-bottom: 1rem; 
+      background: var(--brand-white);
+      border-radius: 8px;
+      
+    }
+    & h4 { font-size: 14px; margin: 0; color: var(--brand-navy); }
+    & p { font-size: 14px; color: #666; margin: 0; line-height: 1.4; }
+    & .btn {
+      background: var(--brand-orange);
+      color: var(--brand-white);
+      text-align: center;
+      padding: 12px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 13px;
+    }
+  }
+
+  .text_card_container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .image_card_container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .c-mega-shop__right {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .c-mega-shop__column {
+    display: flex;
+    flex-direction: column;
+   /* gap: 2rem; */
+    overflow-y: auto;
+  }
+
+  .c-mega-list__title {
+    font-size: 12px;
+    color: var(--brand-orange);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: .8rem;
+    margin-bottom: .5rem;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: 700;
+  }
+
+  .c-mega-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    & a {
+      text-decoration: none;
+      color: var(--brand-navy);
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding-bottom: 10px;
+      transition: color 0.3s;
+
+      &:hover { 
+        color: var(--brand-orange);
+        
+        & svg path {
+          fill: var(--brand-orange);
+        }
+      }
+      
+      & svg { 
+        width: 10px; 
+        height: 18px;
+        flex-shrink: 0;
+        
+        & path {
+          transition: fill 0.3s;
+        }
+      }
+    }
+  }
+
+  .c-quiz-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 120px;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+    text-decoration: none;
+    margin-top: 1rem;
+
+    & img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); z-index: 2; }
+    & h4 { position: relative; z-index: 3; color: var(--brand-white); margin: 0; font-size: 18px; font-weight: 500; }
+    & .icon-circle { position: absolute; right: 15px; bottom: 15px; z-index: 3; width: 30px; height: 30px; background: var(--brand-orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-white); }
+  }
+
+  /* MEGAMENU: LEARN LAYOUT */
+  .c-mega-learn__left {
+    flex: 0 0 250px;
+  }
+
+  .c-mega-learn__right {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .c-learn-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 180px;
+    text-decoration: none;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+
+    & img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: transform 0.5s ease; }
+    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 60%); z-index: 2; }
+    
+    &:hover img { transform: scale(1.05); }
+
+    & h4 { position: relative; z-index: 3; color: var(--brand-white); margin: 0; font-size: 20px; font-weight: 400; }
+    & .icon-circle { position: absolute; right: 15px; bottom: 15px; z-index: 3; width: 40px; height: 40px; background: var(--brand-orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-white); }
+  }
+
+
+  /* --- MOBILE MENU DRAWER --- */
+  .c-mobile-menu {
+    position: fixed;
+    top: var(--header-height, 0px);
+    left: 0;
+    width: 100%;
+    height: calc(100dvh - var(--header-height, 0px));
+    background: var(--brand-beige);
+    z-index: 40;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    &.is-open { transform: translateX(0); }
+  }
+
+  .c-mobile-menu__body {
+    padding: 1.5rem;
+    padding-top: 2rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Accordions */
+  .c-accordion {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .c-accordion__btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 1.5rem 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brand-navy);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+
+    & svg { width: 14px; height: 14px; transition: transform 0.3s; }
+    &.is-active svg { transform: rotate(180deg); }
+  }
+
+  .c-accordion__content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .c-accordion__content-inner {
+    padding-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .c-mobile-link {
+    display: block;
+    padding: 1.5rem 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brand-navy);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  /* Mobile internal elements styling */
+  .c-mobile-products {
+    display: flex;
+    overflow-x: auto;
+   /* gap: 1rem; */
+  
+    scrollbar-width: none; /* Firefox */
+    
+    &::-webkit-scrollbar { display: none; } /* Chrome */
+    
+    & .c-product-card { min-width: 300px; padding: 1rem; gap: 1rem !important; flex-direction: row !important;}
+    & .c-product-card img { height: auto; width: 100%; }
+    & .c-product-card p { font-size: 12px; }
+  }
+
+  .c-mobile-shop-all {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 2px solid var(--brand-orange);
+    color: var(--brand-orange);
+    text-align: center;
+    padding: 0.875rem 1.5rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+ 
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: var(--brand-orange);
+      color: var(--brand-white);
+    }
+  }
+
+  .c-mobile-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    & .c-learn-card { height: 120px; }
+  }
+
+  .c-mobile-menu__footer {
+    padding: 2rem 1.5rem;
+  }
+
+  .c-mobile-cta {
+    display: block;
+    width: 100%;
+    border: 2px solid var(--cta-border-color);
+    color: var(--cta-text-color);
+    text-align: center;
+    padding: 1rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+</style>
+
+<script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
+
+<svg xmlns="http://www.w3.org/2000/svg" class="hidden" style="display:none">
+  <symbol id="icon-search" viewbox="0 0 18 19" fill="none">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.03 11.68A5.784 5.784 0 112.85 3.5a5.784 5.784 0 018.18 8.18zm.26 1.12a6.78 6.78 0 11.72-.7l5.4 5.4a.5.5 0 11-.71.7l-5.41-5.4z" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-close" fill="none" viewBox="0 0 18 17">
+    <path d="M.865 15.978a.5.5 0 00.707.707l7.433-7.431 7.579 7.282a.501.501 0 00.846-.37.5.5 0 00-.153-.351L9.712 8.546l7.417-7.416a.5.5 0 10-.707-.708L8.991 7.853 1.413.573a.5.5 0 10-.693.72l7.563 7.268-7.418 7.417z" fill="currentColor" />
+  </symbol>
+</svg>
+
+<section id="shopify-section-{{ section.id }}">
+
+  <header class="c-header__main">
+    <div class="c-header__container container-sl">
+      
+      <button class="c-header__close-btn js-menu-close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M12.3175 11.4332C12.3756 11.4912 12.4217 11.5602 12.4531 11.636C12.4845 11.7119 12.5007 11.7932 12.5007 11.8753C12.5007 11.9575 12.4845 12.0388 12.4531 12.1147C12.4217 12.1905 12.3756 12.2595 12.3175 12.3175C12.2595 12.3756 12.1905 12.4217 12.1147 12.4531C12.0388 12.4845 11.9575 12.5007 11.8753 12.5007C11.7932 12.5007 11.7119 12.4845 11.636 12.4531C11.5602 12.4217 11.4912 12.3756 11.4332 12.3175L6.25035 7.13394L1.06753 12.3175C0.95026 12.4348 0.7912 12.5007 0.625347 12.5007C0.459495 12.5007 0.300435 12.4348 0.18316 12.3175C0.0658846 12.2003 3.26935e-09 12.0412 0 11.8753C-3.26935e-09 11.7095 0.0658846 11.5504 0.18316 11.4332L5.36675 6.25035L0.18316 1.06753C0.0658846 0.95026 0 0.7912 0 0.625347C0 0.459495 0.0658846 0.300435 0.18316 0.18316C0.300435 0.0658846 0.459495 0 0.625347 0C0.7912 0 0.95026 0.0658846 1.06753 0.18316L6.25035 5.36675L11.4332 0.18316C11.5504 0.0658846 11.7095 -3.26935e-09 11.8753 0C12.0412 3.26935e-09 12.2003 0.0658846 12.3175 0.18316C12.4348 0.300435 12.5007 0.459495 12.5007 0.625347C12.5007 0.7912 12.4348 0.95026 12.3175 1.06753L7.13394 6.25035L12.3175 11.4332Z" fill="#D54F2F"/>
+        </svg>
+      </button>
+
+      <nav class="c-header__nav">
+        <ul class="c-header__nav-list">
+          <!-- DEBUG: Menu = {{ section.settings.menu }}, Blocks count = {{ section.blocks.size }} -->
+          {% if section.settings.menu != blank and linklists[section.settings.menu] %}
+            {% for link in linklists[section.settings.menu].links %}
+              
+              {% assign is_mega = false %}
+              {% assign target_block = null %}
+
+              {% for block in section.blocks %}
+                {% assign block_trigger = block.settings.menu_trigger | downcase | strip %}
+                {% assign link_title = link.title | downcase | strip %}
+                <!-- DEBUG: Comparing '{{ block_trigger }}' with '{{ link_title }}' -->
+                {% if block_trigger == link_title %}
+                  {% assign is_mega = true %}
+                  {% assign target_block = block %}
+                  <!-- DEBUG: MATCH FOUND! Block type = {{ block.type }} -->
+                {% endif %}
+              {% endfor %}
+
+              <li class="c-header__nav-item">
+                <a href="{{ link.url }}" class="c-header__nav-link">
+                  {{ link.title }}
+                  {% if is_mega %}
+                    +
+                  {% endif %}
+                </a>
+
+                {% if is_mega and target_block %}
+                  <div class="c-megamenu">
+                    <div class="c-megamenu__inner">
+                      
+                      {% if target_block.type == 'shop_menu' %}
+                      <div class="c-mega-shop__left">
+                        {% for i in (1..2) %}
+                          {% capture prod_obj %}product_{{ i }}{% endcapture %}
+                          {% capture prod_badge %}product_{{ i }}_badge{% endcapture %}
+                          {% assign prod = all_products[target_block.settings[prod_obj]] %}
+                          
+                          {% if prod != blank %}
+                            <a href="{{ prod.url }}" class="c-product-card">
+                              {% if target_block.settings[prod_badge] != blank %}
+                                <span class="badge" {% if target_block.settings[prod_badge] == 'NEW' %}style="background: #4a3e4c;"{% endif %}>{{ target_block.settings[prod_badge] }}</span>
+                              {% endif %}
+                              <div class="image_card_container">
+                                <img src="{{ prod.featured_image | image_url: width: 300 }}" alt="{{ prod.title }}">
+                              </div>
+                              {% capture prod_cta %}product_{{ i }}_cta{% endcapture %}
+                              <div class="text_card_container">
+                                <h4>{{ prod.title }}</h4>
+                                <p>{{ prod.description | strip_html | truncate: 80 }}</p>
+                                <span class="btn">{{ target_block.settings[prod_cta] | default: 'Shop All' }}</span>
+                              </div>
+                            </a>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+
+                      <div class="c-mega-shop__right">
+                        <div class="c-mega-shop__column">
+                          <div>
+                            <h5 class="c-mega-list__title">{{ target_block.settings.list_1_title }}</h5>
+                            <ul class="c-mega-list">
+                              {% for child_link in linklists[target_block.settings.list_1].links %}
+                                <li><a href="{{ child_link.url }}">{{ child_link.title }} <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none"><path d="M1.42322 0.239761L9.75562 8.42117C9.83309 8.49715 9.89455 8.58738 9.93649 8.6867C9.97842 8.78602 10 8.89248 10 9C10 9.10752 9.97842 9.21398 9.93649 9.3133C9.89455 9.41262 9.83309 9.50285 9.75562 9.57884L1.42322 17.7602C1.26687 17.9138 1.05482 18 0.833703 18C0.612592 18 0.400535 17.9138 0.244186 17.7602C0.0878359 17.6067 0 17.3985 0 17.1814C0 16.9643 0.0878359 16.7561 0.244186 16.6026L7.98811 9L0.244186 1.39743C0.166769 1.32142 0.105359 1.23118 0.0634615 1.13186C0.021564 1.03254 0 0.926096 0 0.818596C0 0.711096 0.021564 0.60465 0.0634615 0.505333C0.105359 0.406017 0.166769 0.315775 0.244186 0.239761C0.321602 0.163748 0.413509 0.103451 0.514659 0.0623131C0.615808 0.0211754 0.72422 -3.16567e-08 0.833703 -3.64423e-08C0.943187 -4.1228e-08 1.0516 0.0211753 1.15275 0.062313C1.2539 0.103451 1.3458 0.163748 1.42322 0.239761Z" fill="currentColor"/></svg></a></li>
+                              {% endfor %}
+                            </ul>
+                          </div>
+                          <div>
+                            <h5 class="c-mega-list__title">{{ target_block.settings.list_2_title }}</h5>
+                            <ul class="c-mega-list">
+                              {% for child_link in linklists[target_block.settings.list_2].links %}
+                                <li><a href="{{ child_link.url }}">{{ child_link.title }} <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none"><path d="M1.42322 0.239761L9.75562 8.42117C9.83309 8.49715 9.89455 8.58738 9.93649 8.6867C9.97842 8.78602 10 8.89248 10 9C10 9.10752 9.97842 9.21398 9.93649 9.3133C9.89455 9.41262 9.83309 9.50285 9.75562 9.57884L1.42322 17.7602C1.26687 17.9138 1.05482 18 0.833703 18C0.612592 18 0.400535 17.9138 0.244186 17.7602C0.0878359 17.6067 0 17.3985 0 17.1814C0 16.9643 0.0878359 16.7561 0.244186 16.6026L7.98811 9L0.244186 1.39743C0.166769 1.32142 0.105359 1.23118 0.0634615 1.13186C0.021564 1.03254 0 0.926096 0 0.818596C0 0.711096 0.021564 0.60465 0.0634615 0.505333C0.105359 0.406017 0.166769 0.315775 0.244186 0.239761C0.321602 0.163748 0.413509 0.103451 0.514659 0.0623131C0.615808 0.0211754 0.72422 -3.16567e-08 0.833703 -3.64423e-08C0.943187 -4.1228e-08 1.0516 0.0211753 1.15275 0.062313C1.2539 0.103451 1.3458 0.163748 1.42322 0.239761Z" fill="currentColor"/></svg></a></li>
+                              {% endfor %}
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="c-mega-shop__column">
+                          <div>
+                            <h5 class="c-mega-list__title">{{ target_block.settings.list_3_title }}</h5>
+                            <ul class="c-mega-list">
+                              {% for child_link in linklists[target_block.settings.list_3].links %}
+                                <li><a href="{{ child_link.url }}">{{ child_link.title }} <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none"><path d="M1.42322 0.239761L9.75562 8.42117C9.83309 8.49715 9.89455 8.58738 9.93649 8.6867C9.97842 8.78602 10 8.89248 10 9C10 9.10752 9.97842 9.21398 9.93649 9.3133C9.89455 9.41262 9.83309 9.50285 9.75562 9.57884L1.42322 17.7602C1.26687 17.9138 1.05482 18 0.833703 18C0.612592 18 0.400535 17.9138 0.244186 17.7602C0.0878359 17.6067 0 17.3985 0 17.1814C0 16.9643 0.0878359 16.7561 0.244186 16.6026L7.98811 9L0.244186 1.39743C0.166769 1.32142 0.105359 1.23118 0.0634615 1.13186C0.021564 1.03254 0 0.926096 0 0.818596C0 0.711096 0.021564 0.60465 0.0634615 0.505333C0.105359 0.406017 0.166769 0.315775 0.244186 0.239761C0.321602 0.163748 0.413509 0.103451 0.514659 0.0623131C0.615808 0.0211754 0.72422 -3.16567e-08 0.833703 -3.64423e-08C0.943187 -4.1228e-08 1.0516 0.0211753 1.15275 0.062313C1.2539 0.103451 1.3458 0.163748 1.42322 0.239761Z" fill="currentColor"/></svg></a></li>
+                              {% endfor %}
+                            </ul>
+                            
+                            {% if target_block.settings.quiz_image != blank %}
+                              <a href="{{ target_block.settings.quiz_link }}" class="c-quiz-card">
+                                <img src="{{ target_block.settings.quiz_image | image_url: width: 400 }}" alt="Quiz">
+                                <h4>Take The Quiz</h4>
+                                <span class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+                              </a>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+
+                    {% elsif target_block.type == 'learn_menu' %}
+                      <div class="c-mega-learn__left">
+                        <h5 class="c-mega-list__title">{{ target_block.settings.list_1_title }}</h5>
+                        <ul class="c-mega-list">
+                          {% for child_link in linklists[target_block.settings.list_1].links %}
+                            <li><a href="{{ child_link.url }}">{{ child_link.title }} <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none"><path d="M1.42322 0.239761L9.75562 8.42117C9.83309 8.49715 9.89455 8.58738 9.93649 8.6867C9.97842 8.78602 10 8.89248 10 9C10 9.10752 9.97842 9.21398 9.93649 9.3133C9.89455 9.41262 9.83309 9.50285 9.75562 9.57884L1.42322 17.7602C1.26687 17.9138 1.05482 18 0.833703 18C0.612592 18 0.400535 17.9138 0.244186 17.7602C0.0878359 17.6067 0 17.3985 0 17.1814C0 16.9643 0.0878359 16.7561 0.244186 16.6026L7.98811 9L0.244186 1.39743C0.166769 1.32142 0.105359 1.23118 0.0634615 1.13186C0.021564 1.03254 0 0.926096 0 0.818596C0 0.711096 0.021564 0.60465 0.0634615 0.505333C0.105359 0.406017 0.166769 0.315775 0.244186 0.239761C0.321602 0.163748 0.413509 0.103451 0.514659 0.0623131C0.615808 0.0211754 0.72422 -3.16567e-08 0.833703 -3.64423e-08C0.943187 -4.1228e-08 1.0516 0.0211753 1.15275 0.062313C1.2539 0.103451 1.3458 0.163748 1.42322 0.239761Z" fill="currentColor"/></svg></a></li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+
+                      <div class="c-mega-learn__right">
+                        {% for i in (1..4) %}
+                          {% capture img %}image_{{ i }}{% endcapture %}
+                          {% capture tit %}title_{{ i }}{% endcapture %}
+                          {% capture lnk %}link_{{ i }}{% endcapture %}
+                          
+                          {% if target_block.settings[img] != blank %}
+                            <a href="{{ target_block.settings[lnk] }}" class="c-learn-card">
+                              <img src="{{ target_block.settings[img] | image_url: width: 400 }}" alt="{{ target_block.settings[tit] }}">
+                              <h4>{{ target_block.settings[tit] }}</h4>
+                              <span class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+                            </a>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+
+                  </div>
+                </div>
+              {% endif %}
+            </li>
+          {% endfor %}
+          {% else %}
+            <!-- DEBUG: No menu configured or menu '{{ section.settings.menu }}' not found -->
+          {% endif %}
+        </ul>
+      </nav>
+
+      <div class="c-header__center">
+        <a href="{{ routes.root_url }}" style="display: flex; flex-direction: column; align-items: center; gap: 5px; text-decoration: none;">
+          {% if section.settings.logo_mobile != blank %}
+            <div class="c-header__logo-mobile">
+              <img src="{{ section.settings.logo_mobile | image_url: width: 300 }}" alt="{{ shop.name }}">
+            </div>
+          {% endif %}
+          
+          <div class="{% if section.settings.logo_mobile != blank %}c-header__logo-desktop{% endif %}">
+            {% if section.settings.use_svg_logo %}
+              <div class="c-header__logo-svg">
+                {% render 'c-bkl-logo' %}
+              </div>
+            {% elsif section.settings.logo != blank %}
+              <img src="{{ section.settings.logo | image_url: width: 300 }}" alt="{{ shop.name }}"  >
+            {% else %}
+              <h1 class="c-header__logo-text">{{ shop.name }}</h1>
+            {% endif %}
+          </div>
+          
+          {% if section.settings.logo_subtext != blank %}
+            <p class="c-header__logo-subtext">{{ section.settings.logo_subtext }}</p>
+          {% endif %}
+        </a>
+      </div>
+
+      <div class="c-header__right">
+        {% if section.settings.cta_text != blank %}
+          <a href="{{ section.settings.cta_link }}" class="c-header__cta">{{ section.settings.cta_text }}</a>
+        {% endif %}
+        
+        <div class="c-header__icons">
+          <div class="c-header__icons-extended">
+          <details-modal>
+            <details>
+              <summary aria-haspopup="dialog" aria-label="{{ 'general.search.search' | t }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              </summary>
+              <div class="c-search-overlay" role="dialog" aria-modal="true" aria-label="{{ 'general.search.search' | t }}" tabindex="-1">
+                <div class="c-search-inner">
+                  <predictive-search style="width:100%" data-loading-text="{{ 'accessibility.loading' | t }}">
+                    <form action="{{ routes.search_url }}" method="get" role="search" class="search c-search-form">
+                      <div class="c-search-input-wrap">
+                        <input id="Search-In-Modal-Desktop" type="search" name="q" placeholder="{{ 'general.search.search' | t }}"
+                        role="combobox" aria-expanded="false" aria-owns="predictive-search-results-list" aria-controls="predictive-search-results-list" aria-haspopup="listbox" aria-autocomplete="list"
+                        autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false">
+                        <label class="sr-only" for="Search-In-Modal-Desktop">{{ 'general.search.search' | t }}</label>
+                        <input type="hidden" name="options[prefix]" value="last">
+                        <button class="c-search-submit" aria-label="{{ 'general.search.search' | t }}">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </button>
+                      </div>
+                      <div class="predictive-search predictive-search--header" tabindex="-1" data-predictive-search>
+                        <div class="predictive-search__loading-state">
+                          <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                          </svg>
+                        </div>
+                      </div>
+                      <span class="sr-only predictive-search-status" role="status" aria-hidden="true"></span>
+                    </form>
+                  </predictive-search>
+                  <button type="button" class="c-search-close" aria-label="{{ 'accessibility.close' | t }}">
+                    {% render 'icon-close' %}
+                  </button>
+                </div>
+              </div>
+            </details>
+          </details-modal>
+          
+          {%- if shop.customer_accounts_enabled -%}
+            <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" aria-label="Account">
+              {% render 'icon-account' %}
+              <span class="sr-only">
+                {%- liquid
+                  if customer
+                    echo 'customer.account_fallback' | t
+                  else
+                    echo 'customer.log_in' | t
+                  endif
+                -%}
+              </span>
+            </a>
+          {%- endif -%}
+          </div>
+          
+          <a href="{{ routes.cart_url }}" class="relative" id="cart-icon-bubble" {% if settings.cart_drawer == true and request.page_type != 'cart' %}data-open-cart-drawer role="button" aria-controls="CartDrawer" aria-expanded="false" {% endif %}>
+            {%- liquid
+              if cart == empty
+                render 'icon-cart-empty'
+              else
+                render 'icon-cart'
+              endif
+            -%}
+            <span class="sr-only">{{ 'templates.cart.cart' | t }}</span>
+            {%- if cart != empty -%}
+              <div style="position: absolute; bottom: 12px; left: 20px; width: 20px; height: 20px; background: var(--brand-orange); color: var(--brand-white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">
+                {%- if cart.item_count < 100 -%}
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+                <span class="sr-only">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </div>
+            {%- endif -%}
+          </a>
+
+          <button class="c-header__mobile-toggle js-menu-toggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <div class="c-mobile-menu js-mobile-menu">
+    <div class="c-mobile-menu__body">
+      {% if section.settings.menu != blank and linklists[section.settings.menu] %}
+        {% for link in linklists[section.settings.menu].links %}
+          
+          {% assign is_mega = false %}
+          {% assign target_block = null %}
+
+          {% for block in section.blocks %}
+            {% assign block_trigger = block.settings.menu_trigger | downcase | strip %}
+            {% assign link_title = link.title | downcase | strip %}
+            {% if block_trigger == link_title %}
+              {% assign is_mega = true %}
+              {% assign target_block = block %}
+            {% endif %}
+        {% endfor %}
+
+        {% if is_mega and target_block %}
+          <div class="c-accordion js-accordion">
+            <button class="c-accordion__btn js-accordion-btn">
+              {{ link.title }}
+              {% render 'c-mm-arrow' %}
+            </button>
+            <div class="c-accordion__content js-accordion-content">
+              <div class="c-accordion__content-inner">
+                
+                {% if target_block.type == 'shop_menu' %}
+                  <div class="c-mobile-products">
+                    {% for i in (1..2) %}
+                      {% capture prod_obj %}product_{{ i }}{% endcapture %}
+                      {% capture prod_badge %}product_{{ i }}_badge{% endcapture %}
+                      {% assign prod = all_products[target_block.settings[prod_obj]] %}
+                      {% if prod != blank %}
+                        <a href="{{ prod.url }}" class="c-product-card">
+                          <div class="image_card_container">
+                            <img src="{{ prod.featured_image | image_url: width: 300 }}" alt="{{ prod.title }}">
+                          </div>
+                          <div class="text_card_container">
+                            <h4 style="font-size: 14px;">{{ prod.title }}</h4>
+                            <p>{{ prod.description | strip_html | truncate: 80 }}</p>
+                          </div>
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  
+                  {% if target_block.settings.mobile_shop_all_text != blank %}
+                    <a href="{{ target_block.settings.mobile_shop_all_link }}" class="c-mobile-shop-all">
+                      {{ target_block.settings.mobile_shop_all_text }}
+                    </a>
+                  {% endif %}
+                  
+                  <div>
+                    <h5 class="c-mega-list__title">{{ target_block.settings.list_1_title }}</h5>
+                    <ul class="c-mega-list">
+                      {% for child_link in linklists[target_block.settings.list_1].links %}
+                        <li><a href="{{ child_link.url }}">{{ child_link.title }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="c-mega-list__title">{{ target_block.settings.list_2_title }}</h5>
+                    <ul class="c-mega-list">
+                      {% for child_link in linklists[target_block.settings.list_2].links %}
+                        <li><a href="{{ child_link.url }}">{{ child_link.title }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="c-mega-list__title">{{ target_block.settings.list_3_title }}</h5>
+                    <ul class="c-mega-list">
+                      {% for child_link in linklists[target_block.settings.list_3].links %}
+                        <li><a href="{{ child_link.url }}">{{ child_link.title }}</a></li>
+                      {% endfor %}
+                    </ul>
+                    
+                    {% if target_block.settings.quiz_image != blank %}
+                      <a href="{{ target_block.settings.quiz_link }}" class="c-quiz-card" style="height: 100px;">
+                        <img src="{{ target_block.settings.quiz_image | image_url: width: 300 }}" alt="Quiz">
+                        <h4>Take The Quiz</h4>
+                        <span class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+                      </a>
+                    {% endif %}
+                  </div>
+
+                {% elsif target_block.type == 'learn_menu' %}
+                  <div>
+                    <h5 class="c-mega-list__title">{{ target_block.settings.list_1_title }}</h5>
+                    <ul class="c-mega-list">
+                      {% for child_link in linklists[target_block.settings.list_1].links %}
+                        <li><a href="{{ child_link.url }}">{{ child_link.title }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+
+                  <div class="c-mobile-cards">
+                    {% for i in (1..4) %}
+                      {% capture img %}image_{{ i }}{% endcapture %}
+                      {% capture tit %}title_{{ i }}{% endcapture %}
+                      {% capture lnk %}link_{{ i }}{% endcapture %}
+                      {% if target_block.settings[img] != blank %}
+                        <a href="{{ target_block.settings[lnk] }}" class="c-learn-card">
+                          <img src="{{ target_block.settings[img] | image_url: width: 300 }}" alt="{{ target_block.settings[tit] }}">
+                          <h4>{{ target_block.settings[tit] }}</h4>
+                          <span class="icon-circle" style="width: 30px; height: 30px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <a href="{{ link.url }}" class="c-mobile-link">{{ link.title }}</a>
+        {% endif %}
+      {% endfor %}
+      {% endif %}
+
+      {% if section.settings.cta_text != blank %}
+        <div class="c-mobile-menu__footer">
+          <a href="{{ section.settings.cta_link }}" class="c-mobile-cta">{{ section.settings.cta_text }}</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // --- Set header height CSS variable ---
+    const header = document.querySelector('.c-header__main');
+    function updateHeaderHeight() {
+      if (header) {
+        const bottom = header.getBoundingClientRect().bottom + window.scrollY;
+        document.documentElement.style.setProperty('--header-height', bottom + 'px');
+      }
+    }
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+
+    // --- Mobile Drawer Toggle ---
+    const toggleBtn = document.querySelector('.js-menu-toggle');
+    const closeBtn = document.querySelector('.js-menu-close');
+    const mobileMenu = document.querySelector('.js-mobile-menu');
+    const extendedIcons = document.querySelector('.c-header__icons-extended');
+
+    function lockScroll() {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function unlockScroll() {
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+    }
+
+    function openMenu() {
+      mobileMenu.classList.add('is-open');
+      lockScroll();
+      if (closeBtn) closeBtn.style.display = 'block';
+      if (toggleBtn) toggleBtn.style.display = 'none';
+      if (extendedIcons) {
+        // Trigger reflow to ensure animation plays
+        extendedIcons.offsetHeight;
+        extendedIcons.classList.add('is-visible');
+      }
+    }
+
+    function closeMenu() {
+      mobileMenu.classList.remove('is-open');
+      unlockScroll();
+      if (closeBtn) closeBtn.style.display = 'none';
+      if (toggleBtn) toggleBtn.style.display = '';
+      if (extendedIcons) extendedIcons.classList.remove('is-visible');
+    }
+
+    if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+
+    // --- Patch PredictiveSearch for megamenu section ---
+    document.querySelectorAll('#shopify-section-{{ section.id }} predictive-search').forEach(ps => {
+      if (ps.getResultsMaxHeight) {
+        ps.getResultsMaxHeight = function() {
+          const section = document.getElementById('shopify-section-{{ section.id }}');
+          if (section) {
+            this.resultsMaxHeight = window.innerHeight - section.getBoundingClientRect().bottom;
+          } else {
+            this.resultsMaxHeight = 400;
+          }
+          return this.resultsMaxHeight;
+        };
+      }
+    });
+
+    // --- Mobile Accordions ---
+    const accordions = document.querySelectorAll('.js-accordion-btn');
+    
+    accordions.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const content = this.nextElementSibling;
+        
+        // Toggle Active Class
+        this.classList.toggle('is-active');
+
+        // Toggle Max-Height for animation
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C MegaMenu",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_navy",
+      "label": "Brand Navy",
+      "default": "#161b33"
+    },
+    {
+      "type": "color",
+      "id": "color_orange",
+      "label": "Brand Orange",
+      "default": "#d25435"
+    },
+    {
+      "type": "color",
+      "id": "color_beige",
+      "label": "Brand Beige",
+      "default": "#f6f4f0"
+    },
+    {
+      "type": "color",
+      "id": "color_white",
+      "label": "Brand White",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_border",
+      "label": "Border Color",
+      "default": "#e2e0d8"
+    },
+    {
+      "type": "header",
+      "content": "Main Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_svg_logo",
+      "label": "Use Berkeley Life SVG Logo",
+      "default": true,
+      "info": "Enable to use the custom Berkeley Life logo. If disabled, the custom logo image below will be used."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Custom Logo Image",
+      "info": "Only used if 'Use Berkeley Life SVG Logo' is disabled"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_mobile",
+      "label": "Mobile Logo Image (Optional)",
+      "info": "If provided, this logo will be used on mobile devices instead of the main logo"
+    },
+    {
+      "type": "richtext",
+      "id": "logo_subtext",
+      "label": "Subtext under logo (Desktop)",
+      "default": "<p>recommended by over <strong>3000 HEALTHCARE PROVIDERS</strong></p>"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Main Navigation Menu",
+      "default": "main-menu",
+      "info": "Select the menu to use for navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "default": false,
+      "info": "The header will stay fixed at the top when scrolling"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Take the Quiz"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Link"
+    },
+    {
+      "type": "color",
+      "id": "cta_border_color",
+      "label": "CTA Border Color",
+      "default": "#d25435"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "CTA Text Color",
+      "default": "#d25435"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shop_menu",
+      "name": "MegaMenu: Shop All",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_trigger",
+          "label": "Trigger Link Name",
+          "default": "Shop All",
+          "info": "Must match exactly with the link name in the main menu (e.g., 'Shop All')"
+        },
+        {
+          "type": "header",
+          "content": "Featured Products"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product 1"
+        },
+        {
+          "type": "text",
+          "id": "product_1_badge",
+          "label": "Product 1 Badge",
+          "default": "BEST SELLER"
+        },
+        {
+          "type": "text",
+          "id": "product_1_cta",
+          "label": "Product 1 CTA Text",
+          "default": "Shop All"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product 2"
+        },
+        {
+          "type": "text",
+          "id": "product_2_badge",
+          "label": "Product 2 Badge",
+          "default": "NEW"
+        },
+        {
+          "type": "text",
+          "id": "product_2_cta",
+          "label": "Product 2 CTA Text",
+          "default": "Shop All"
+        },
+        {
+          "type": "header",
+          "content": "Menu Lists"
+        },
+        {
+          "type": "text",
+          "id": "list_1_title",
+          "label": "List 1 Title",
+          "default": "BEST SELLERS"
+        },
+        {
+          "type": "link_list",
+          "id": "list_1",
+          "label": "Menu 1"
+        },
+        {
+          "type": "text",
+          "id": "list_2_title",
+          "label": "List 2 Title",
+          "default": "BUNDLES & KITS"
+        },
+        {
+          "type": "link_list",
+          "id": "list_2",
+          "label": "Menu 2"
+        },
+        {
+          "type": "text",
+          "id": "list_3_title",
+          "label": "List 3 Title",
+          "default": "SHOP BY CONCERN"
+        },
+        {
+          "type": "link_list",
+          "id": "list_3",
+          "label": "Menu 3"
+        },
+        {
+          "type": "header",
+          "content": "Mobile Shop All Button"
+        },
+        {
+          "type": "text",
+          "id": "mobile_shop_all_text",
+          "label": "Button Text",
+          "default": "Shop All Products"
+        },
+        {
+          "type": "url",
+          "id": "mobile_shop_all_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "header",
+          "content": "Quiz Card"
+        },
+        {
+          "type": "image_picker",
+          "id": "quiz_image",
+          "label": "Quiz Background Image"
+        },
+        {
+          "type": "url",
+          "id": "quiz_link",
+          "label": "Quiz Link"
+        }
+      ]
+    },
+    {
+      "type": "learn_menu",
+      "name": "MegaMenu: Learn",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_trigger",
+          "label": "Trigger Link Name",
+          "default": "Learn",
+          "info": "Must match exactly with the link name in the main menu (e.g., 'Learn')"
+        },
+        {
+          "type": "header",
+          "content": "Menu List"
+        },
+        {
+          "type": "text",
+          "id": "list_1_title",
+          "label": "List Title",
+          "default": "MEET BERKELEY LIFE"
+        },
+        {
+          "type": "link_list",
+          "id": "list_1",
+          "label": "Menu"
+        },
+        {
+          "type": "header",
+          "content": "Image Grid Cards"
+        },
+        { "type": "image_picker", "id": "image_1", "label": "Image 1" },
+        { "type": "text", "id": "title_1", "label": "Title 1", "default": "Heart Health" },
+        { "type": "url", "id": "link_1", "label": "Link 1" },
+        
+        { "type": "image_picker", "id": "image_2", "label": "Image 2" },
+        { "type": "text", "id": "title_2", "label": "Title 2", "default": "Sexual Health" },
+        { "type": "url", "id": "link_2", "label": "Link 2" },
+        
+        { "type": "image_picker", "id": "image_3", "label": "Image 3" },
+        { "type": "text", "id": "title_3", "label": "Title 3", "default": "Energy & Performance" },
+        { "type": "url", "id": "link_3", "label": "Link 3" },
+        
+        { "type": "image_picker", "id": "image_4", "label": "Image 4" },
+        { "type": "text", "id": "title_4", "label": "Title 4", "default": "Women's Health" },
+        { "type": "url", "id": "link_4", "label": "Link 4" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C MegaMenu"
+    }
+  ]
+}
+{% endschema %}

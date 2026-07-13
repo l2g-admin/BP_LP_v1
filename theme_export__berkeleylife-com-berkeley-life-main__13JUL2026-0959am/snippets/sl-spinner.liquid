@@ -1,0 +1,32 @@
+{%- comment -%}
+  Usage:
+    {% render 'sl-spinner' %}
+    {% render 'sl-spinner', size: 48, color: '#cf5b43', thickness: 3 %}
+{%- endcomment -%}
+
+{%- assign sp_size = size | default: 40 -%}
+{%- assign sp_color = color | default: '#cf5b43' -%}
+{%- assign sp_thickness = thickness | default: 3 -%}
+
+<span class="sl-spinner" role="status" aria-label="Loading" style="--sl-spinner-size: {{ sp_size }}px; --sl-spinner-color: {{ sp_color }}; --sl-spinner-thickness: {{ sp_thickness }}px;"></span>
+
+<style>
+  .sl-spinner {
+    display: inline-block;
+    width: var(--sl-spinner-size, 40px);
+    height: var(--sl-spinner-size, 40px);
+    border: var(--sl-spinner-thickness, 3px) solid rgba(0, 0, 0, 0.08);
+    border-top-color: var(--sl-spinner-color, #cf5b43);
+    border-radius: 50%;
+    animation: sl-spinner-rotate 0.8s linear infinite;
+    box-sizing: border-box;
+  }
+
+  @keyframes sl-spinner-rotate {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sl-spinner { animation-duration: 2s; }
+  }
+</style>

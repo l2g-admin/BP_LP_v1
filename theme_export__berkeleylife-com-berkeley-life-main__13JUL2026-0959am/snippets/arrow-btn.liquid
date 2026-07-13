@@ -1,0 +1,43 @@
+{%- comment -%}
+  Arrow Button
+  @param {String} link - Button URL
+  @param {String} text - Button label
+  @param {String} bg_color - Background color (default: #d25435)
+  @param {String} extra_class - Additional CSS classes
+{%- endcomment -%}
+
+{% style %}
+  .arrow-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: {{ bg_color | default: '#d25435' }};
+    color: #ffffff;
+    padding: 14px 32px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 15px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .arrow-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  .arrow-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+  }
+{% endstyle %}
+
+<a href="{{ link }}" class="arrow-btn {{ extra_class }}">
+  {{ text }}
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M9 3.06201C9.11604 3.06201 9.22748 3.10793 9.30957 3.18994L13.8096 7.68994C13.8502 7.73057 13.8823 7.77941 13.9043 7.83252C13.9262 7.88551 13.9375 7.94216 13.9375 7.99951C13.9375 8.05701 13.9263 8.11437 13.9043 8.16748C13.8934 8.19384 13.88 8.21905 13.8643 8.24268L13.8096 8.30908L9.30957 12.8091C9.22747 12.8912 9.11611 12.938 9 12.938C8.88389 12.938 8.77253 12.8912 8.69043 12.8091C8.60842 12.727 8.5625 12.6156 8.5625 12.4995C8.56257 12.3835 8.6084 12.272 8.69043 12.1899L12.3369 8.54443L12.4443 8.43701H2.5C2.38397 8.43701 2.27248 8.39113 2.19043 8.30908C2.10847 8.22705 2.0625 8.11548 2.0625 7.99951C2.06257 7.88374 2.10867 7.77287 2.19043 7.69092C2.27248 7.60887 2.38397 7.56201 2.5 7.56201H12.4443L12.3369 7.45557L8.69043 3.80908C8.60842 3.727 8.5625 3.61555 8.5625 3.49951C8.56257 3.38351 8.6084 3.27198 8.69043 3.18994C8.77252 3.10793 8.88396 3.06201 9 3.06201Z" fill="white" stroke="white" stroke-width="0.125"/>
+  </svg>
+</a>

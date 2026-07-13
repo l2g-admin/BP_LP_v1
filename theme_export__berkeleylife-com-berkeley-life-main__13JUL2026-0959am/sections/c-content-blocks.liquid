@@ -1,0 +1,689 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+    {% if section.settings.bg_image %}
+      background: url("{{ section.settings.bg_image | image_url }}") no-repeat center;
+      background-size: cover;
+    {% endif %}
+  }
+
+  #{{ section.id }} .c-section-top-subheading,
+  #{{ section.id }} div,
+  #{{ section.id }} h2,
+  #{{ section.id }} h3 {
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .c-section-top {
+    align-items: {{ section.settings.section_top_alignment }};
+    text-align: {{ section.settings.text_alignment }};
+  }
+
+  #{{ section.id }} h2 {
+    color: {{ section.settings.accent_color }};
+  }
+
+  #{{ section.id }} .c-cb-grid {
+    display: grid;
+    gap: 0;
+    grid-template-columns: {{ section.settings.grid_template_columns }};
+  }
+
+  #{{ section.id }} .c-cb-column:not(.c-middle) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5em;
+    overflow: visible;
+    position: relative;
+  }
+  
+  #{{ section.id }} .c-cb-column:not(.c-middle) .c-cb-item {
+    background: rgba(255, 255, 255, 0.83);
+    box-shadow: 0 8px 11.2px 0 rgba(0, 0, 0, 0.19);
+    backdrop-filter: blur(5.699999809265137px);
+    border-radius: 16px;
+    padding: 16px;
+    display: block;
+  }
+
+  #{{ section.id }} .c-cb-column.c-middle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+    grid-row-end: span 2;
+  }
+
+  #{{ section.id }} .c-cb-column.c-middle img,
+  #{{ section.id }} .c-cb-column.c-middle video {
+    width: 83%;
+  }
+
+  #{{ section.id }} .c-cb-column.c-middle,
+  #{{ section.id }} .c-cb-column.c-middle .c-buttons-div {
+    justify-content: center;
+    align-items: {{ section.settings.blocks_alignment }};
+    text-align: left;
+    /* justify-content: center;
+    align-items: center;
+    text-align: center; */
+  }
+
+  #{{ section.id }} .c-cb-item {
+    display: flex;
+    justify-content: center;
+    {% if section.settings.blocks_direction == "vertical" %}
+      flex-direction: column;
+    {% endif %}
+    align-items: {{ section.settings.blocks_alignment }};
+    text-align: {{ section.settings.blocks_text_alignment }};
+  }
+
+  #{{ section.id }} .c-cb-item,
+  #{{ section.id }} .c-cb-item-content {
+    gap: 0.75em;
+  }
+
+  #{{ section.id }} .c-cb-item-image-div {
+    display: flex;
+  }
+
+  #{{ section.id }} .c-cb-item-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #{{ section.id }} .c-cb-item img {
+    width: {{ section.settings.icon_width }}em;
+    min-width: {{ section.settings.icon_width }}em;
+  }
+
+  #{{ section.id }} .c-cb-item-content h2 {
+    margin-top:0;
+    margin-bottom:0;
+    {% if section.settings.use_highlight_titles %}
+      border-radius: 30px;
+      background:  #00AEEF;
+      padding: 6px 18px;
+      font-size: 20px !important;
+      color: #fff;
+      width: fit-content;
+    {% endif %}
+  }
+
+  #{{ section.id }} .c-cb-item-content p {
+    margin: 0;
+    color:#000;
+    text-align: center;
+    font-family: Nunito;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; 
+  }
+
+  #{{ section.id }} .c-button {
+    background: linear-gradient(to bottom, #00AEEF, #14BFFF) !important;
+    margin-top: 80px;
+  }
+
+  #{{ section.id }} .c-cb-highlight-text {
+    color: #00AEEF;
+  }
+
+  #{{ section.id }} .c-cbi-top {
+    display: flex;
+    gap: 10px;
+    border-radius: 30px;
+    background: #00AEEF;
+    padding: 8px 18px;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  #{{ section.id }} .c-cbi-top h2 {
+    margin: 0;
+    color: white;
+    font-family: Caprasimo;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+    text-align: center;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-cbi-top .c-bi-icon {
+    border-radius: 50%;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    max-width: 35px;
+    max-height: 35px;
+  }
+
+  #{{ section.id }} .c-cbi-top .c-bi-icon svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  #{{ section.id }} .c-cb-arrow {
+    position: absolute;
+    top: 0;
+    width: 95px;
+    height: 95px;
+    z-index: 2;
+  }
+
+  #{{ section.id }} .c-cb-column:not(.c-middle):nth-child(1) .c-cb-arrow {
+    right: -9%;
+    top: 12%;
+    rotate: -37deg;
+  }
+
+  #{{ section.id }} .c-cb-column:not(.c-middle):nth-child(3) .c-cb-arrow {
+    left: -9%;
+    rotate: -130deg;
+    transform: scaleY(-1);
+    top: 14%;
+  }
+
+  #{{ section.id }} .c-cb-column:not(.c-middle):nth-child(4) .c-cb-arrow {
+    right: -9%;
+    rotate: -60deg;
+    top: 14%;
+  }
+
+  #{{ section.id }} .c-cb-column:not(.c-middle):nth-child(5) .c-cb-arrow {
+    left: -7%;
+    rotate: -130deg;
+    transform: scaleY(-1);
+    top: 11%;
+  }
+
+  #{{ section.id }} .c-cb-arrow svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 1400px) {
+    #{{ section.id }} .c-cb-column:not(.c-middle) .c-cb-arrow {
+      top: 2% !important;
+      z-index: 0;
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    
+    #{{ section.id }} .c-cb-column:not(.c-middle) .c-cb-arrow {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+
+    #{{ section.id }} .c-cb-grid .c-cb-column.c-middle {
+      grid-column-start: 1;
+      grid-column-end: 3;
+      grid-row-start: 1;
+      grid-row-end: 1;
+      display: flex;
+      margin-bottom: 2em;
+    }
+
+    #{{ section.id }} .c-cb-column:not(.c-middle) {
+      gap: 2em;
+    }
+
+    {% if section.settings.blocks_direction != "vertical" %}
+      #{{ section.id }} .c-cb-item {
+        flex-direction: column;
+      }
+    {% endif %}
+
+    #{{ section.id }} .c-cb-item img {
+      /* height: auto; */
+      /* width: 100%; */
+    }
+
+    {% if section.settings.one_column_mobile == true %}
+      #{{ section.id }} .c-cb-grid .c-cb-column.c-middle {
+        grid-column-end: 2;
+      }
+
+      #{{ section.id }} .c-cb-grid {
+        grid-template-columns: 1fr;
+      }
+    {% endif %}
+
+    #{{ section.id }} .c-cb-grid {
+      display: grid;
+      grid-auto-flow: dense;
+    }
+    
+    #{{ section.id }} .c-cb-grid .c-cb-column.c-middle {
+      grid-row: 6; 
+    }
+
+    #{{ section.id }} .c-button {
+      margin-top:20px;
+    }
+  }
+</style>
+
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="{{ section.settings.section_container }}">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}<p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>{%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}
+        <h2>
+          {{ section.settings.section_top_heading }}
+          {%- if section.settings.section_top_heading_highlight != empty -%}
+            <span class="c-cb-highlight-text">{{ section.settings.section_top_heading_highlight }}</span>
+          {% endif %}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}<div class="c-t-80">{{ section.settings.section_top_paragraph }}</div>{%- endif -%}
+    </div>
+    <div class="c-cb-grid">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'Item' %}
+            <div class="c-cb-column" {{ block.shopify_attributes }}>
+              {% if section.settings.show_arrow == true %}
+                <div class="c-cb-arrow">
+                  {% render 'c-cb-arrow' %}
+                </div>
+              {% endif %}
+              <div class="c-cb-item">
+                <div class="c-cbi-top">
+                  {% if block.settings.block_image %}
+                    <div class="c-cb-item-image-div">
+                      {{ block.settings.block_image | image_url: width: 750 | image_tag: loading: 'lazy', height: 'auto' }}
+                    </div>
+                  {% endif %}
+                  {% if block.settings.icon.size > 0 %}
+                    <div class="c-bi-icon">
+                      {{ block.settings.icon }}
+                    </div>
+                  {% endif %}
+                  <h2>{{ block.settings.block_heading }}</h2>
+                </div>
+                <div class="c-cb-item-content">
+                  <div>{{ block.settings.block_paragraph }}</div>
+                </div>
+              </div>
+            </div>
+
+          {% when 'Middle' %}
+            <div class="c-cb-column c-middle" {{ block.shopify_attributes }}>
+              {%- if block.settings.block_middle_subheading != empty -%}<p class="c-section-top-subheading">{{ block.settings.block_middle_subheading }}</p>{%- endif -%}
+              {%- if block.settings.block_middle_heading != empty -%}<h2>{{ block.settings.block_middle_heading }}</h2>{%- endif -%}
+              {%- if block.settings.block_middle_paragraph != empty -%}<div class="c-t-80">{{ block.settings.block_middle_paragraph }}</div>{%- endif -%}
+              {% if block.settings.block_image %}
+                {{ block.settings.block_image | image_url: width: 1250 | image_tag: loading: 'lazy', height: 'auto' }}
+              {% endif %}
+              {% if block.settings.block_video %}
+                {{ block.settings.block_video | media_tag: autoplay: true, loop: true, muted: true, controls: true }}
+              {% endif %}
+              {%- if block.settings.button_text != empty -%}
+                <a class="c-button {{ block.settings.button_style }}" href="{{ block.settings.button_url }}">{{ block.settings.button_text }}</a>
+              {%- endif -%}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<script>
+  gsap.fromTo("#{{ section.id }} .c-cb-column.c-middle", {y: 20}, {y: -20, ease: "linear", duration: 3, repeat: -1, yoyo: true});
+
+
+  /*
+    gsap.timeline({scrollTrigger: {
+    trigger: "#{{ section.id }} .c-cb-grid",
+    scrub: 0.5,
+    start: "10% 100%",
+    end: "100% 80%"
+  } })
+    .from("#{{ section.id }} .c-cb-grid .c-cb-column:not(.c-middle):nth-child(1)", {x: "-100%", duration: 0.8})
+    .from("#{{ section.id }} .c-cb-grid .c-cb-column:not(.c-middle):nth-child(3)", {x: "100%", duration: 0.8}, "-=0.3")
+  */
+</script>
+
+
+{% schema %}
+  {
+    "name": "C Content Blocks",
+    "blocks": [
+      {
+        "name": "Item",
+        "type": "Item",
+        "limit": 6,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "block_heading",
+            "label": "Heading",
+            "default": "My heading"
+          },
+          {
+            "type": "richtext",
+            "id": "block_paragraph",
+            "label": "Paragraph",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+          },
+          {
+            "type": "liquid",
+            "id": "icon",
+            "label": "Icon"
+          }
+        ]
+      },
+      {
+        "name": "Middle",
+        "type": "Middle",
+        "limit": 4,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Image"
+          },
+          {
+            "type": "video",
+            "id": "block_video",
+            "label": "Video Upload"
+          },
+          {
+            "type": "text",
+            "id": "block_middle_subheading",
+            "label": "Subheading",
+            "default": "subheading"
+          },
+          {
+            "type": "text",
+            "id": "block_middle_heading",
+            "label": "Heading",
+            "default": "My heading"
+          },
+          {
+            "type": "richtext",
+            "id": "block_middle_paragraph",
+            "label": "Paragraph",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+          },
+          {
+            "type": "header",
+            "content": "Button"
+          },
+          {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button text",
+            "default": "Buy Now"
+          },
+          {
+            "type": "url",
+            "id": "button_url",
+            "label": "Button Link"
+          },
+          {
+            "type": "text",
+            "id": "button_style",
+            "label": "Button style",
+            "default": "c-b1"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "use_highlight_titles",
+        "label": "Use Highlight Titles?"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_arrow",
+        "label": "Show Arrows",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_image",
+        "label": "Background repeat image"
+      },
+      {
+        "type": "text",
+        "id": "grid_template_columns",
+        "label": "Grid template columns",
+        "default": "1fr 1fr 1fr"
+      },
+      {
+        "type": "checkbox",
+        "id": "one_column_mobile",
+        "label": "One column mobile",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "icon_width",
+        "label": "Icon width",
+        "min": 0.4,
+        "max": 10,
+        "step": 0.2,
+        "default": 3,
+        "unit": "rem"
+      },
+      {
+        "type": "select",
+        "id": "blocks_direction",
+        "label": "Blocks direction",
+        "default": "vertical",
+        "options": [
+          {
+            "value": "vertical",
+            "label": "Vertical"
+          },
+          {
+            "value": "horizontal",
+            "label": "Horizontal"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "blocks_alignment",
+        "label": "Blocks alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "blocks_text_alignment",
+        "label": "Blocks text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "section_container",
+        "label": "Section container",
+        "default": "page-width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "Normal"
+          },
+          {
+            "value": "",
+            "label": "None"
+          },
+          {
+            "value": "page-width2",
+            "label": "Smaller"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent color",
+        "default": "#5d3be4"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Section Top"
+      },
+      {
+        "type": "text",
+        "id": "section_top_subheading",
+        "label": "Subheading",
+        "default": "subheading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading",
+        "label": "Heading",
+        "default": "My heading"
+      },
+      {
+        "type": "text",
+        "id": "section_top_heading_highlight",
+        "label": "Hightlight Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "section_top_paragraph",
+        "label": "Paragraph",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+      },
+      {
+        "type": "select",
+        "id": "section_top_alignment",
+        "label": "Section Top Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 4,
+        "unit": "rem"
+      }
+    ],
+    "presets": [
+      {
+        "name": "C Content Blocks"
+      }
+    ]
+  }
+{% endschema %}

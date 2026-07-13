@@ -1,0 +1,390 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "sticky_product_pKfVLz": {
+      "type": "sticky-product",
+      "settings": {
+        "product": "nitric-oxide-support"
+      }
+    },
+    "image_with_text_V7mVNg": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_GhTCbR": {
+          "type": "heading",
+          "settings": {
+            "heading": "Want More Energy **Everyday?**",
+            "cursive_color": "text-brand",
+            "heading_level": "h1",
+            "heading_style": "h2"
+          }
+        },
+        "richtext_8NhWCi": {
+          "type": "richtext",
+          "disabled": true,
+          "settings": {
+            "richtext": "<p>From <a href=\"/pages/berkeley-life-clinical-study-and-pilot-study\" title=\"Berkeley Life Clinical Study And Pilot Study\">Berkeley Life Clinical Study And Pilot Study</a></p>",
+            "text_size": "text-sm",
+            "enable_border": true
+          }
+        },
+        "text_kHkNUa": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Discover the power of Nitric Oxide to support natural, sustained energy. Just two capsules a day help you feel consistently energized while also laying the foundation for healthy aging in women.</p>",
+            "columns": false
+          }
+        },
+        "text_MgzEdD": {
+          "type": "text",
+          "settings": {
+            "text": "<ul><li><strong>SUPPORTS HEART HEALTH</strong></li><li><strong>PROMOTES HEALTHY SEXUAL FUNCTION</strong></li><li><strong>SUPPORTS HORMONE BALANCE</strong></li><li><strong>IMPROVES ENERGY AND ENDURANCE</strong></li></ul>",
+            "columns": false
+          }
+        },
+        "button_gP66PX": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Now",
+            "button_link": "shopify://collections/shop-all",
+            "button_style": "button button--tertiary",
+            "mobile_hide": true
+          }
+        }
+      },
+      "block_order": [
+        "heading_GhTCbR",
+        "richtext_8NhWCi",
+        "text_kHkNUa",
+        "text_MgzEdD",
+        "button_gP66PX"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Rectangle_47_3.png",
+        "eager": true,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-cover",
+        "layout": "text_first_both",
+        "split": "md:grid-cols-2",
+        "bg_color": "",
+        "text_color": "",
+        "text_align": "text-left",
+        "justify_top": false,
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "full_width": true,
+        "border": true,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "image_with_text_V6CwqA": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_CwNYBe": {
+          "type": "heading",
+          "settings": {
+            "heading": "Nitric Oxide Is Your Body’s <br>**Miracle Molecule**",
+            "cursive_color": "text-brand",
+            "heading_level": "h2",
+            "heading_style": "h2"
+          }
+        },
+        "text_MHKpDR": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Nitric Oxide is a natural molecule that helps your blood vessels relax and widen, promoting better blood flow. Healthy circulation means your cells get more oxygen and nutrients, powering everything from energy and endurance to focus and recovery. But as you age, N.O. levels decline—as much as 50% by your 40s.</p>",
+            "columns": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_CwNYBe",
+        "text_MHKpDR"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/DTS_Micro_Mouthwash_Studios_Photos_ID4054_2.png",
+        "eager": false,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-contain",
+        "layout": "image_first",
+        "split": "md:grid-cols-2",
+        "bg_color": "",
+        "text_color": "",
+        "text_align": "text-center md:text-left",
+        "justify_top": true,
+        "spacing_top": 24,
+        "mobile_spacing_top": 12,
+        "spacing_bottom": 0,
+        "mobile_spacing_bottom": 4,
+        "full_width": false,
+        "border": false,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "interactive_graph_hTNU6W": {
+      "type": "interactive-graph",
+      "settings": {
+        "title": "Do You **Know** Your N.O.?",
+        "bg_color": "#f6f3f0",
+        "text_color": ""
+      }
+    },
+    "stats_ieQFYx": {
+      "type": "stats",
+      "blocks": {
+        "collapsible_tab_amHrmm": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "**20%** Increase in Blood Flow",
+            "content": "<p>Clinical study shows a robust elevation in endothelial function improves circulation after 12 weeks of daily use.</p>"
+          }
+        },
+        "collapsible_tab_BwW8Qd": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Boosts **Energy** and Vitality",
+            "content": "<p>Research shows N.O. signals mitochondrial regeneration and increases energy output.</p>"
+          }
+        },
+        "collapsible_tab_XHn7gA": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Improves Hormone **Circulation**",
+            "content": "<p>N.O. dramatically declines as estrogen levels drop, but improved blood flow boosts hormone circulation.</p>"
+          }
+        },
+        "collapsible_tab_eAddLj": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "**83%** Elevated Female Sexual Function",
+            "content": "<p>Clinically proven to boost desire, lubrication, and orgasm.</p>"
+          }
+        },
+        "richtext_J7pJnw": {
+          "type": "richtext",
+          "disabled": true,
+          "settings": {
+            "richtext": "<p>From <a href=\"/pages/berkeley-life-clinical-study-and-pilot-study\" title=\"Berkeley Life Clinical Study And Pilot Study\">Berkeley Life Clinical Study And Pilot Study</a></p>",
+            "text_size": "text-sm"
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_tab_amHrmm",
+        "collapsible_tab_BwW8Qd",
+        "collapsible_tab_XHn7gA",
+        "collapsible_tab_eAddLj",
+        "richtext_J7pJnw"
+      ],
+      "settings": {
+        "heading": "One Molecule. **Total Health** For Women.",
+        "text": "Nitric Oxide is the foundation of long-term health for women.",
+        "image": "shopify://shop_images/Group_20601.png",
+        "header_color": "",
+        "text_color": "",
+        "inner_box_white": true
+      }
+    },
+    "image_with_text_yfi8jw": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_LFiFgR": {
+          "type": "heading",
+          "settings": {
+            "heading": "Science You Can Trust. <br>Results **You Can Feel.**",
+            "cursive_color": "text-brand",
+            "heading_level": "h2",
+            "heading_style": "h2"
+          }
+        },
+        "text_aDFWxN": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We follow rigorous research, clinically test our products, and partner with leading experts to set the bar for efficacy and quality.<br/><br/><strong>BACKED BY RESEARCH<br/></strong>Our formulas are built on rigorous research and proven results.<br/><strong>CLINICALLY TESTED FORMULAS</strong><br/>We clinically test our products to ensure they deliver.<br/><strong>EXPERT-LED PRODUCTS<br/></strong>Recommended by over 2500 Healthcare Providers.</p>",
+            "columns": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_LFiFgR",
+        "text_aDFWxN"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Group_20606_1.png",
+        "eager": false,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-contain",
+        "layout": "image_first",
+        "split": "md:grid-cols-2",
+        "bg_color": "",
+        "text_color": "",
+        "text_align": "text-left",
+        "justify_top": true,
+        "spacing_top": 0,
+        "mobile_spacing_top": 0,
+        "spacing_bottom": 0,
+        "mobile_spacing_bottom": 0,
+        "full_width": false,
+        "border": false,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "guarantee_callout_p9cUKK": {
+      "type": "guarantee-callout",
+      "settings": {
+        "bg_color": "#080b2b",
+        "svg": "<svg width=\"190\" height=\"190\" viewbox=\"0 0 190 190\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<ellipse cx=\"95\" cy=\"95\" rx=\"95\" ry=\"94.5923\" fill=\"#F6F3F0\"></ellipse>\n<path d=\"M95.8403 189C83.129 189 70.7981 186.509 59.1893 181.599C47.9759 176.856 37.9079 170.068 29.2604 161.42C20.6128 152.772 13.8242 142.704 9.08138 131.491C4.17094 119.882 1.68027 107.551 1.68027 94.8401C1.68027 82.1288 4.17094 69.7979 9.08138 58.1891C13.8242 46.9757 20.6128 36.9077 29.2604 28.2602C37.9079 19.6126 47.9759 12.824 59.1893 8.08116C70.7981 3.17073 83.129 0.680054 95.8403 0.680054C108.552 0.680054 120.882 3.17073 132.491 8.08116C143.705 12.824 153.773 19.6126 162.42 28.2602C171.068 36.9077 177.856 46.9757 182.599 58.1891C187.51 69.7979 190 82.131 190 94.8401C190 107.549 187.51 119.882 182.599 131.491C177.856 142.704 171.068 152.772 162.42 161.42C153.773 170.068 143.705 176.856 132.491 181.599C120.882 186.509 108.549 189 95.8403 189ZM95.8403 4.33333C83.6211 4.33333 71.7695 6.72515 60.6119 11.4443C49.8348 16.0023 40.1557 22.5288 31.8435 30.8411C23.5312 39.1534 17.0047 48.8324 12.4467 59.6096C7.72752 70.7671 5.33569 82.6188 5.33569 94.8379C5.33569 107.057 7.72752 118.909 12.4467 130.066C17.0047 140.843 23.5312 150.522 31.8435 158.835C40.1557 167.147 49.8348 173.674 60.6119 178.232C71.7695 182.951 83.6211 185.343 95.8403 185.343C108.059 185.343 119.911 182.951 131.069 178.232C141.846 173.674 151.525 167.147 159.837 158.835C168.149 150.522 174.676 140.843 179.234 130.066C183.953 118.909 186.345 107.057 186.345 94.8379C186.345 82.6188 183.953 70.7671 179.234 59.6096C174.676 48.8324 168.149 39.1534 159.837 30.8411C151.525 22.5288 141.846 16.0023 131.069 11.4443C119.911 6.72515 108.059 4.33333 95.8403 4.33333Z\" fill=\"#080B2B\"></path>\n<path d=\"M31.4391 65.4053L32.7027 63.0844C33.732 63.4755 34.8474 63.2413 35.5372 61.9755C36.1905 60.7742 35.9391 59.9211 35.3051 59.5773C33.1454 58.4039 30.9964 64.8294 26.8897 62.5944C25.0222 61.578 24.3883 59.3409 25.7486 56.8394C27.0466 54.4541 29.5351 53.7449 31.6669 54.7786L30.4033 57.0995C29.4427 56.6611 28.4004 56.9147 27.8266 57.9698C27.2443 59.0422 27.4871 59.9103 28.1855 60.2886C30.3281 61.4533 32.4448 55.0107 36.4871 57.2091C38.3696 58.2341 39.0358 60.4884 37.6153 63.1037C36.1754 65.7491 33.6525 66.4819 31.4412 65.4053H31.4391Z\" fill=\"#080B2B\"></path>\n<path d=\"M47.2628 49.2429L44.6239 48.2393L41.4648 51.9592L42.8832 54.4005L41.1489 56.442L34.4119 44.3905L36.0881 42.4177L49.0594 47.1305L47.265 49.2429H47.2628ZM37.7213 45.5746L40.169 49.7157L42.2041 47.3217L37.7213 45.5746Z\" fill=\"#080B2B\"></path>\n<path d=\"M53.0716 43.8468L46.5515 35.7623L43.6311 38.1176L42.0301 36.1319L49.9276 29.7623L51.5286 31.748L48.6081 34.1033L55.1281 42.1878L53.0716 43.8468Z\" fill=\"#080B2B\"></path>\n<path d=\"M61.5362 37.7951L55.0785 26.5839L57.3693 25.2644L63.827 36.4757L61.5362 37.7951Z\" fill=\"#080B2B\"></path>\n<path d=\"M66.1694 30.5466L68.6386 29.6054C69.1651 30.5724 70.1643 31.1204 71.5118 30.6068C72.7904 30.1211 73.1536 29.3088 72.8979 28.6362C72.0232 26.3389 66.2102 29.8181 64.5447 25.4493C63.7883 23.4636 64.7639 21.3511 67.4244 20.339C69.9623 19.3719 72.3133 20.455 73.2589 22.6255L70.7897 23.5667C70.3449 22.6083 69.3886 22.1226 68.2668 22.5503C67.1278 22.9844 66.7453 23.801 67.029 24.5445C67.8972 26.8246 73.6973 23.3089 75.3348 27.6111C76.0977 29.614 75.1349 31.7608 72.3542 32.8203C69.539 33.8926 67.1472 32.8052 66.1694 30.5488V30.5466Z\" fill=\"#080B2B\"></path>\n<path d=\"M87.6915 18.1943L81.6765 19.2043L82.1901 22.2666L87.3649 21.3963L87.7689 23.801L82.592 24.6714L83.3936 29.4464L80.7868 29.8848L78.6422 17.1263L87.2639 15.6779L87.6872 18.1922L87.6915 18.1943Z\" fill=\"#080B2B\"></path>\n<path d=\"M100.906 28.4063L100.031 25.7222L95.1528 25.5976L94.1428 28.2344L91.4651 28.1656L96.6184 15.3577L99.2058 15.4243L103.678 28.4794L100.908 28.4085L100.906 28.4063ZM97.7724 18.6757L96.0855 23.18L99.2273 23.2595L97.7724 18.6757Z\" fill=\"#080B2B\"></path>\n<path d=\"M107.67 22.5245C108.575 18.9035 112.112 16.7201 115.465 17.5582C118.619 18.3469 119.997 21.2244 119.973 23.6764L117.302 23.0081C117.281 21.8777 116.55 20.4572 114.846 20.0317C112.91 19.5482 110.817 20.8333 110.234 23.1649C109.652 25.4966 110.894 27.6155 112.83 28.1012C114.534 28.5267 115.847 27.6176 116.483 26.6721L119.155 27.3404C118.048 29.483 115.439 31.3827 112.211 30.5768C108.859 29.7387 106.766 26.1477 107.67 22.5267V22.5245Z\" fill=\"#080B2B\"></path>\n<path d=\"M123.939 34.4901L128.516 25.1678L125.149 23.5152L126.272 21.2266L135.38 25.6986L134.256 27.9873L130.888 26.3347L126.311 35.657L123.939 34.4923V34.4901Z\" fill=\"#080B2B\"></path>\n<path d=\"M132.992 39.6132L140.434 29.0316L142.596 30.551L135.154 41.1326L132.992 39.6132Z\" fill=\"#080B2B\"></path>\n<path d=\"M143.344 39.033C146.002 36.4113 150.158 36.3855 152.585 38.8461C155.011 41.3067 154.931 45.4628 152.275 48.0846C149.619 50.7063 145.461 50.7321 143.034 48.2715C140.608 45.8109 140.688 41.6548 143.344 39.033ZM150.418 46.2042C152.129 44.5172 152.172 42.0588 150.769 40.6383C149.368 39.2178 146.909 39.2264 145.198 40.9155C143.488 42.6025 143.445 45.0609 144.848 46.4814C146.249 47.9019 148.708 47.8933 150.418 46.2042Z\" fill=\"#080B2B\"></path>\n<path d=\"M165.427 56.313L166.742 58.4985L155.657 65.169L154.409 63.0952L158.698 53.8073L151.445 58.1719L150.13 55.9864L161.215 49.3159L162.463 51.3897L158.174 60.6776L165.427 56.313Z\" fill=\"#080B2B\"></path>\n<path d=\"M20.4214 125.796L32.3074 120.684L33.3518 123.112L21.4658 128.225L20.4214 125.796Z\" fill=\"#080B2B\"></path>\n<path d=\"M27.4899 131.534L28.8846 133.777C28.0357 134.478 27.6898 135.565 28.4505 136.79C29.1726 137.951 30.0386 138.153 30.6511 137.772C32.7377 136.474 28.212 131.433 32.1811 128.964C33.9863 127.842 36.2449 128.394 37.7492 130.812C39.1825 133.12 38.5701 135.632 36.6209 136.975L35.2262 134.732C36.0815 134.113 36.376 133.081 35.742 132.06C35.0973 131.025 34.2227 130.808 33.5479 131.227C31.4763 132.514 36.0343 137.536 32.1274 139.967C30.3072 141.099 28.0164 140.564 26.4455 138.037C24.8552 135.479 25.4634 132.924 27.492 131.532L27.4899 131.534Z\" fill=\"#080B2B\"></path>\n<path d=\"M47.0752 151.395L51.5515 155.259L47.0945 160.421L45.919 159.406L46.6797 157.818C45.5322 158.072 43.7743 157.874 42.3624 156.654C39.7471 154.395 39.4957 150.247 41.9348 147.422C44.3739 144.596 48.515 144.239 51.1303 146.497C53.593 148.623 53.694 151.786 52.6432 153.712L50.5587 151.913C50.8638 151.079 50.7929 149.577 49.4648 148.429C47.9541 147.125 45.5064 147.331 43.9355 149.149C42.3646 150.967 42.5193 153.419 44.03 154.724C45.5537 156.041 47.1762 155.633 47.9519 155.13L45.601 153.101L47.0752 151.395Z\" fill=\"#080B2B\"></path>\n<path d=\"M55.3663 160.004L59.1055 152.97L61.4393 154.21L57.7001 161.244C56.9888 162.583 57.266 164.027 58.7187 164.8C60.1715 165.572 61.5253 164.994 62.2366 163.657L65.9759 156.626L68.3097 157.865L64.5704 164.897C63.1908 167.491 60.2961 168.527 57.5217 167.052C54.7474 165.578 53.9867 162.6 55.3663 160.004Z\" fill=\"#080B2B\"></path>\n<path d=\"M76.2199 174.028L76.0587 171.209L71.374 169.844L69.7257 172.135L67.1534 171.385L75.4012 160.313L77.8854 161.037L78.8804 174.802L76.2199 174.026V174.028ZM75.6698 163.82L72.8911 167.747L75.9083 168.626L75.6719 163.823L75.6698 163.82Z\" fill=\"#080B2B\"></path>\n<path d=\"M91.5249 176.254L89.3222 171.404L87.6095 171.264L87.2334 175.906L84.5988 175.694L85.6432 162.797L90.8759 163.221C93.3817 163.423 95.1009 165.305 94.9053 167.738C94.7721 169.378 93.6266 170.695 91.9354 171.206L94.5658 176.499L91.5271 176.252L91.5249 176.254ZM88.0737 165.516L87.8029 168.868L90.3258 169.073C91.3573 169.156 92.189 168.518 92.2663 167.542C92.3459 166.567 91.6281 165.804 90.5966 165.72L88.0737 165.516Z\" fill=\"#080B2B\"></path>\n<path d=\"M108.87 175.367L107.619 172.835L102.773 173.411L102.152 176.166L99.4915 176.482L102.756 163.066L105.326 162.761L111.625 175.04L108.872 175.367H108.87ZM104.374 166.184L103.351 170.884L106.471 170.514L104.374 166.184Z\" fill=\"#080B2B\"></path>\n<path d=\"M120.842 158.76L123.253 157.928L127.467 170.16L125.179 170.949L116.987 164.818L119.744 172.82L117.333 173.652L113.118 161.42L115.407 160.631L123.599 166.762L120.842 158.76Z\" fill=\"#080B2B\"></path>\n<path d=\"M136.275 165.621L130.97 156.692L127.744 158.609L126.442 156.417L135.164 151.234L136.467 153.426L133.241 155.343L138.547 164.272L136.275 165.621Z\" fill=\"#080B2B\"></path>\n<path d=\"M146.905 155.113L151.699 150.881L153.362 152.766L146.587 158.747L138.025 149.048L144.661 143.19L146.324 145.075L141.67 149.184L143.393 151.137L147.521 147.492L149.135 149.321L145.007 152.966L146.903 155.113H146.905Z\" fill=\"#080B2B\"></path>\n<path d=\"M157.37 144.385L161.283 139.328L163.271 140.867L157.74 148.015L147.508 140.096L152.928 133.094L154.916 134.633L151.114 139.543L153.175 141.138L156.547 136.782L158.477 138.275L155.105 142.631L157.37 144.385Z\" fill=\"#080B2B\"></path>\n<path d=\"M166.765 135.314L155.163 129.593L157.058 125.747C158.627 122.564 162.471 121.285 165.686 122.871C168.918 124.466 170.197 128.351 168.661 131.467L166.765 135.312V135.314ZM165.645 131.815L166.372 130.339C167.255 128.549 166.522 126.23 164.517 125.242C162.512 124.253 160.228 125.085 159.345 126.875L158.618 128.349L165.648 131.813L165.645 131.815Z\" fill=\"#080B2B\"></path>\n<path d=\"M79.7208 107.352V80.2593H88.6992C96.1304 80.2593 102.092 86.2979 102.092 93.8065C102.092 101.315 95.9757 107.354 88.6992 107.354H79.7208V107.352ZM85.2544 102.009H88.6992C92.879 102.009 96.5559 98.487 96.5559 93.8043C96.5559 89.1217 92.879 85.5995 88.6992 85.5995H85.2544V102.011V102.009Z\" fill=\"#080B2B\"></path>\n<path d=\"M124.463 107.352L122.488 101.779H112.269L110.294 107.352H104.681L114.784 80.2593H120.203L130.267 107.352H124.46H124.463ZM117.38 87.1468L114.089 96.6689H120.67L117.38 87.1468Z\" fill=\"#080B2B\"></path>\n<path d=\"M147.064 80.257H153.025L144.199 97.249V107.351H138.665V97.249L129.842 80.257H135.996L141.53 91.3651L147.064 80.257Z\" fill=\"#080B2B\"></path>\n<path d=\"M155.965 98.7965H161.498C161.808 101.081 163.357 102.899 166.374 102.899C169.391 102.899 170.554 101.584 170.554 100.073C170.554 94.9261 156.581 97.4018 156.581 87.611C156.581 83.1604 160.065 79.7543 166.026 79.7543C171.987 79.7543 175.51 83.6246 175.742 88.578H170.208C170.053 86.371 168.545 84.7077 166.028 84.7077C163.512 84.7077 162.119 86.0229 162.119 87.6883C162.119 92.7965 176.092 90.2435 176.092 99.8795C176.092 104.369 172.609 107.852 166.376 107.852C160.144 107.852 156.197 103.943 155.965 98.7965Z\" fill=\"#080B2B\"></path>\n<path d=\"M95.8897 153.411C84.1519 153.411 72.8289 149.951 63.1412 143.407C53.69 137.02 46.3512 128.111 41.9221 117.639L45.2875 116.216C49.4393 126.035 56.3204 134.392 65.1849 140.381C74.2666 146.517 84.8826 149.76 95.8897 149.76C117.648 149.76 137.38 136.894 146.163 116.981L149.505 118.455C140.139 139.692 119.094 153.413 95.8897 153.413V153.411Z\" fill=\"#080B2B\"></path>\n<path d=\"M46.0569 71.7298L42.7432 70.1912C47.3828 60.2048 54.7238 51.7421 63.9752 45.7207C73.4715 39.538 84.5066 36.2694 95.8876 36.2694C107.269 36.2694 118.271 39.5273 127.757 45.6906C136.998 51.6948 144.339 60.1339 148.989 70.0945L145.68 71.6396C141.319 62.2979 134.434 54.3854 125.767 48.7529C116.875 42.9742 106.542 39.9205 95.8876 39.9205C85.2329 39.9205 74.8705 42.9828 65.9673 48.7787C57.2918 54.4262 50.4043 62.3624 46.0548 71.7277L46.0569 71.7298Z\" fill=\"#080B2B\"></path>\n<path d=\"M35.6317 99.7828C35.6317 104.04 31.9161 107.833 25.9935 107.833C20.0709 107.833 16.4327 103.963 16.0845 99.5507H21.6203C21.7751 100.943 23.2471 102.725 25.9548 102.725C28.6626 102.725 30.0959 101.255 30.0959 99.2412C30.0959 97.2276 28.6239 95.7964 25.7614 95.7964H23.5931V91.2298H25.568C28.1232 91.2298 29.477 89.8759 29.477 88.0557C29.477 86.2355 28.0823 84.843 25.8775 84.843C23.4384 84.843 22.0845 86.3129 21.8524 87.785H16.3166C16.6261 83.5665 20.3417 79.7349 25.8001 79.7349C31.2585 79.7349 35.0128 83.4505 35.0128 87.5142C35.0128 89.992 33.5794 91.9647 31.4519 93.166C33.6976 94.2104 35.6317 96.2627 35.6317 99.7849V99.7828Z\" fill=\"#080B2B\"></path>\n<path d=\"M40.4696 93.7849C40.4696 84.5336 45.3844 79.7349 51.1909 79.7349C56.9975 79.7349 61.9122 84.5336 61.9122 93.7849C61.9122 103.036 56.9975 107.835 51.1909 107.835C45.3844 107.835 40.4696 103.036 40.4696 93.7849ZM56.3764 93.7849C56.3764 87.5529 53.86 85.0772 51.1888 85.0772C48.5176 85.0772 46.0033 87.555 46.0033 93.7849C46.0033 100.015 48.5197 102.493 51.1888 102.493C53.8578 102.493 56.3764 100.015 56.3764 93.7849Z\" fill=\"#080B2B\"></path>\n</svg>",
+        "text_color": "#fdfeff",
+        "heading": "If you are not 100% satisfied with any of our products, simply return them within 30 days for a full refund*. No questions asked.",
+        "disclaimer": "*Full purchase price before shipping."
+      }
+    },
+    "testimonials_alt_mnPy6n": {
+      "type": "testimonials-alt",
+      "blocks": {
+        "testimonial_ia7q9x": {
+          "type": "testimonial",
+          "settings": {
+            "title": "More Energy, Better Sleep, and Weight Loss",
+            "name": "Aisha",
+            "stars": 5,
+            "quote": "<p>I seem to have more energy, sleep better, and have lost weight.</p>"
+          }
+        },
+        "testimonial_bJ4iF9": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Energy Boost with Reduced Cravings and Better Digestion",
+            "name": "Mei",
+            "stars": 5,
+            "quote": "<p>Huge energy boost, sugar cravings went away, fast food cravings disappeared, and better regularity.</p>"
+          }
+        },
+        "testimonial_Y3kMMP": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Improved Circulation, Mood, and Energy",
+            "name": "Sofia",
+            "stars": 5,
+            "quote": "<p>Improved circulation and overall mood and energy levels.</p>"
+          }
+        },
+        "testimonial_dN4tmy": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Lower Blood Pressure and Overall Wellness",
+            "name": "Amara",
+            "stars": 5,
+            "quote": "<p>Better blood pressure and general well-being.</p>"
+          }
+        },
+        "testimonial_49fyRW": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Feeling Confident About a Healthy Supplement",
+            "name": "Leila",
+            "stars": 5,
+            "quote": "<p>Feel like I'm taking a supplement good for me.</p>"
+          }
+        },
+        "testimonial_mpTCXN": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Better Sleep and Enhanced Alertness",
+            "name": "Priya",
+            "stars": 5,
+            "quote": "<p>Better sleep and feeling more alert throughout the day.</p>"
+          }
+        },
+        "testimonial_DFmDbY": {
+          "type": "testimonial",
+          "settings": {
+            "title": "I have this daily and everyone needs it",
+            "name": "Athena",
+            "stars": 5,
+            "quote": "<p>I will take this every day for the rest of my life. It is the best product.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_ia7q9x",
+        "testimonial_bJ4iF9",
+        "testimonial_Y3kMMP",
+        "testimonial_dN4tmy",
+        "testimonial_49fyRW",
+        "testimonial_mpTCXN",
+        "testimonial_DFmDbY"
+      ],
+      "settings": {
+        "title": "Hear From Women **Just Like You.**",
+        "subhead": "",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b"
+      }
+    },
+    "hotspot_Jdr4RP": {
+      "type": "hotspot",
+      "blocks": {
+        "slide_qWbtzP": {
+          "type": "slide",
+          "settings": {
+            "hot_spot_left_offset": 50,
+            "hot_spot_top_offset": 50,
+            "hot_spot_label": "",
+            "heading": "",
+            "content": "<p>Our easy-to-use test strips help you monitor your body’s N.O. levels in seconds, so you can take control of your health.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "slide_qWbtzP"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Group_59_1.png",
+        "static_content": "Curious About Your **N.O. Levels?**",
+        "background_color": "#f6f3f0",
+        "text_color": "#252525",
+        "button_label": "Get Your Test Strips",
+        "button_link": "shopify://products/nitric-oxide-test-strips",
+        "center_mobile": true,
+        "border": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "sticky_product_pKfVLz",
+    "image_with_text_V7mVNg",
+    "image_with_text_V6CwqA",
+    "interactive_graph_hTNU6W",
+    "stats_ieQFYx",
+    "image_with_text_yfi8jw",
+    "guarantee_callout_p9cUKK",
+    "testimonials_alt_mnPy6n",
+    "hotspot_Jdr4RP"
+  ]
+}

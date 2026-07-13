@@ -1,0 +1,599 @@
+{%- liquid
+  assign bg_color = section.settings.background_color | default: '#ffffff'
+  assign text_color = section.settings.text_color | default: '#1b1c29'
+  assign accent_color = section.settings.accent_color | default: '#D54F2F'
+  assign btn_bg = section.settings.button_bg_color | default: '#D54F2F'
+  assign btn_text = section.settings.button_text_color | default: '#ffffff'
+
+  assign pt_desktop = section.settings.padding_top_desktop | append: 'px'
+  assign pb_desktop = section.settings.padding_bottom_desktop | append: 'px'
+  assign pt_mobile = section.settings.padding_top_mobile | append: 'px'
+  assign pb_mobile = section.settings.padding_bottom_mobile | append: 'px'
+
+  assign heading = section.settings.heading
+  assign subtext = section.settings.subtext
+  assign button_text = section.settings.button_text
+  assign button_link = section.settings.button_link
+
+  assign media_type = section.settings.media_type
+  assign has_media = false
+  if media_type == 'video' and section.settings.video != blank
+    assign has_media = true
+  elsif media_type == 'image' and section.settings.image != blank
+    assign has_media = true
+  endif
+-%}
+
+<style>
+  .new-benefits-{{ section.id }} {
+    background-color: {{ bg_color }};
+    padding-top: {{ pt_mobile }};
+    padding-bottom: {{ pb_mobile }};
+    position: relative;
+    overflow: hidden;
+  }
+
+  .new-benefits__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+  }
+
+  .new-benefits__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* Left column - Section Title */
+  .new-benefits__col-left {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 100%;
+  }
+
+  .new-benefits__heading {
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1;
+    color: {{ text_color }};
+    margin: 0;
+  }
+
+  .new-benefits__heading em,
+  .new-benefits__heading i {
+    font-family: "cormorant-garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    color: {{ accent_color }};
+    font-size: 1.2em;
+  }
+
+  .new-benefits__subtext {
+    font-size: 18px;
+    line-height: 1.5;
+    color: {{ text_color }};
+    margin: 0;
+  }
+
+  .new-benefits__subtext p {
+    margin: 0;
+  }
+
+  .new-benefits__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 56px;
+    padding: 0 40px;
+    border-radius: 42px;
+    background-color: {{ btn_bg }};
+    color: {{ btn_text }};
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    width: fit-content;
+  }
+
+  .new-benefits__button:hover {
+    opacity: 0.9;
+  }
+
+  /* Right column - Benefits list */
+  .new-benefits__col-right {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Benefit item */
+  .new-benefits__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .new-benefits__item-number {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .new-benefits__item-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+
+  .new-benefits__item-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .new-benefits__item-num {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: {{ accent_color }};
+  }
+
+  .new-benefits__item-text {
+    padding-left: 16px;
+  }
+
+  .new-benefits__item-text-inner {
+    border-left: 2px dashed {{ accent_color }};
+    padding: 8px 0 32px 40px;
+    color: {{ text_color }};
+  }
+
+  /* .new-benefits__item:last-child .new-benefits__item-text-inner {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  } */
+
+  .new-benefits__item-title {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 8px;
+  }
+
+  .new-benefits__item-desc {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .new-benefits__item-desc p {
+    margin: 0;
+  }
+
+  /* Product / Media - floats on right side */
+  .new-benefits__product {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .new-benefits__product-circle {
+    position: absolute;
+    width: 90%;
+    aspect-ratio: 1;
+    bottom: -10%;
+    right: -5%;
+    border: 1.5px solid {{ accent_color }};
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .new-benefits__product-media {
+    position: relative;
+    z-index: 1;
+  }
+
+  .new-benefits__product-media img,
+  .new-benefits__product-media video {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    .new-benefits-{{ section.id }} {
+      padding-top: {{ pt_desktop }};
+      padding-bottom: {{ pb_desktop }};
+    }
+
+    .new-benefits__grid {
+      flex-direction: row;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .new-benefits__col-left {
+      flex: 0 0 auto;
+      width: 440px;
+      z-index: 2;
+    }
+
+    .new-benefits__col-right {
+      flex: 0 0 auto;
+      width: 580px;
+      z-index: 1;
+    }
+
+    .new-benefits__heading {
+      font-size: 54px;
+    }
+
+    .new-benefits__heading em,
+    .new-benefits__heading i {
+      font-size: 64px;
+    }
+
+    .new-benefits__subtext {
+      font-size: 20px;
+    }
+
+    .new-benefits__button {
+      height: 60px;
+      font-size: 18px;
+    }
+
+    .new-benefits__item-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    .new-benefits__item-num {
+      font-size: 32px;
+    }
+
+    .new-benefits__item-number {
+      gap: 24px;
+    }
+
+    .new-benefits__item-text {
+      padding-left: 20px;
+    }
+
+    .new-benefits__item-text-inner {
+      padding-left: 48px;
+      padding-bottom: 32px;
+    }
+
+    .new-benefits__item-title {
+      font-size: 32px;
+    }
+
+    .new-benefits__item-desc {
+      font-size: 20px;
+    }
+
+    /* Product absolutely positioned flush to the right edge of the screen */
+    .new-benefits__product {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 455px;
+      max-width: none;
+      margin: 0;
+      z-index: 0;
+    }
+
+    .new-benefits__product-circle {
+      width: 400px;
+      height: 400px;
+      bottom: -5%;
+      right: -5%;
+      aspect-ratio: auto;
+    }
+
+    .new-benefits__product-media img,
+    .new-benefits__product-media video {
+      filter: drop-shadow(8px 3px 10px rgba(0,0,0,0.25));
+    }
+  }
+</style>
+
+<div class="new-benefits-{{ section.id }}">
+  <div class="new-benefits__container">
+    <div class="new-benefits__grid">
+
+      {%- comment -%} Column 1: heading + subtext + CTA {%- endcomment -%}
+      <div class="new-benefits__col-left">
+        {%- if heading != blank -%}
+          <h2 class="new-benefits__heading">{{ heading }}</h2>
+        {%- endif -%}
+
+        {%- if subtext != blank -%}
+          <div class="new-benefits__subtext rte">{{ subtext }}</div>
+        {%- endif -%}
+
+        {%- if button_text != blank -%}
+          <a
+            class="new-benefits__button"
+            {% if button_link != blank %}href="{{ button_link }}"{% endif %}
+          >
+            {{- button_text | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Column 2: numbered benefits {%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="new-benefits__col-right">
+          {%- for block in section.blocks -%}
+            <div class="new-benefits__item" {{ block.shopify_attributes }}>
+              <div class="new-benefits__item-number">
+                <span class="new-benefits__item-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+  <path d="M17.0549 4.58761C18.5821 2.73382 21.4153 2.73382 22.9426 4.58761L24.6088 6.61016C24.9761 7.05596 25.5402 7.28975 26.1141 7.23408L28.7221 6.98106C31.096 6.75075 33.0923 8.73364 32.8954 11.1081L32.8903 11.1643L32.6397 13.7425V13.7426C32.5835 14.3209 32.8187 14.8892 33.2668 15.2576L35.2676 16.9024L35.3109 16.9386C37.1312 18.479 37.1167 21.3053 35.2676 22.8254L33.2668 24.4701L33.2669 24.4702C32.8257 24.8329 32.5909 25.3893 32.6373 25.9582L32.6397 25.9852V25.9853L32.8903 28.5636C33.1237 30.9627 31.1147 32.979 28.7221 32.7467V32.7467L26.1142 32.4938H26.114C25.5402 32.4381 24.9762 32.6719 24.6089 33.1176L24.6088 33.1176L22.9426 35.1402C21.4153 36.9941 18.5821 36.9941 17.0549 35.1402L15.3885 33.1176V33.1176C15.0213 32.6718 14.4573 32.4381 13.8834 32.4938H13.8832L11.2754 32.7467L11.2754 32.7467C8.88267 32.9789 6.87386 30.9627 7.10712 28.5636L7.35778 25.9853L7.36019 25.9582C7.40585 25.3983 7.17914 24.8506 6.75146 24.4876L6.73061 24.4702L4.72977 22.8254V22.8254C2.86611 21.2934 2.86611 18.4344 4.72981 16.9024L6.73061 15.2576C7.17872 14.8892 7.414 14.3209 7.35778 13.7426V13.7425L7.10712 11.1643C6.87386 8.76502 8.88268 6.74894 11.2754 6.98106L13.8833 7.23408H13.8833C14.4572 7.28976 15.0213 7.05597 15.3885 6.6102L17.0549 4.58761ZM21.3368 5.91798C20.6426 5.07537 19.3548 5.07537 18.6606 5.91798L16.9943 7.94058C16.1989 8.90599 14.9841 9.4194 13.7419 9.31838L13.6828 9.31311L11.0748 9.06013C9.98724 8.95463 9.07414 9.87099 9.18016 10.9616L9.43082 13.5399C9.55452 14.8122 9.03692 16.0625 8.05105 16.873L6.05026 18.5178L6.05022 18.5178C5.20975 19.2087 5.2032 20.4934 6.03055 21.1936L6.05022 21.21L6.05026 21.21L8.05109 22.8548L8.09699 22.8932C9.05296 23.7044 9.55259 24.9355 9.43082 26.188L9.18016 28.7663C9.07414 29.8568 9.98726 30.7732 11.0748 30.6676H11.0748L13.6827 30.4148L13.7419 30.4095C14.9643 30.31 16.1604 30.8057 16.9561 31.7416L16.9943 31.7872V31.7873L18.6606 33.8099L18.677 33.8295C19.3749 34.6525 20.6481 34.6459 21.3368 33.8099L23.0031 31.7873L23.0032 31.7872C23.8112 30.8065 25.052 30.2922 26.3147 30.4148H26.3146L28.9226 30.6676H28.9227C30.0102 30.7732 30.9233 29.8568 30.8173 28.7663V28.7663L30.5667 26.188L30.5613 26.1283C30.4592 24.8766 30.976 23.6527 31.9463 22.8549L31.9463 22.8548L33.9472 21.21L33.9472 21.21C34.7943 20.5137 34.7943 19.2142 33.9472 18.5178L33.9472 18.5178L31.9463 16.873V16.873C30.9606 16.0625 30.443 14.8122 30.5667 13.5398L30.8173 10.9616V10.9616C30.9225 9.87954 30.0244 8.96895 28.9482 9.05784L28.9227 9.06013L26.3146 9.31311C25.0717 9.43368 23.8499 8.93721 23.0413 7.98622L23.0032 7.94058L21.3368 5.91798Z" fill="#D54F2F"/>
+  <path d="M24.5516 16.0085C24.8976 15.5477 25.5505 15.4555 26.01 15.8024C26.4695 16.1494 26.5615 16.8042 26.2155 17.2649L20.7141 24.592L20.7142 24.592C19.8338 25.7648 18.1298 25.8947 17.0825 24.8771L17.0579 24.8528L13.8807 21.6792C13.4732 21.2721 13.4719 20.6109 13.8778 20.2022C14.2837 19.7936 14.9431 19.7922 15.3506 20.1993L18.5278 23.373C18.6773 23.5222 18.9235 23.5045 19.0501 23.3358L19.0502 23.3357L24.5516 16.0085Z" fill="#D54F2F"/>
+</svg>
+                </span>
+                <span class="new-benefits__item-num">{{ forloop.index | prepend: '00' | slice: -2, 2 }}</span>
+              </div>
+              <div class="new-benefits__item-text">
+                <div class="new-benefits__item-text-inner">
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="new-benefits__item-title">{{ block.settings.title | escape }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.description != blank -%}
+                    <div class="new-benefits__item-desc rte">{{ block.settings.description }}</div>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+
+  </div>
+
+  {%- comment -%} Product image/video floating on the right edge {%- endcomment -%}
+  {%- if has_media -%}
+    <div class="new-benefits__product">
+      <div class="new-benefits__product-media">
+        {%- if media_type == 'video' and section.settings.video != blank -%}
+          <video
+            {% if section.settings.video_autoplay %}autoplay muted{% endif %}
+            {% if section.settings.video_loop %}loop{% endif %}
+            {% if section.settings.video_controls %}controls{% endif %}
+            playsinline
+          >
+            {%- for source in section.settings.video.sources -%}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {%- endfor -%}
+          </video>
+        {%- elsif media_type == 'image' and section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1200 | image_tag:
+            loading: 'lazy',
+            alt: section.settings.image.alt
+          }}
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% schema %}
+{
+  "name": "C New Benefits",
+  "tag": "section",
+  "class": "new-benefits",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Why Nitric Oxide Matters for <em>Sexual Health</em></p>"
+    },
+    {
+      "type": "richtext",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "<p>Nitric Oxide plays a critical role in blood flow, stamina, and sexual performance — yet levels naturally decline with age.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Explore the Science"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Media (optional)"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media Type",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_controls",
+      "label": "Show video controls",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Padding Top (Desktop)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Padding Bottom (Desktop)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Benefit Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Benefit description goes here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C New Benefits",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Nitric Oxide = Healthy Blood Flow",
+            "description": "<p>Nitric Oxide helps blood vessels relax and widen, allowing blood to flow more freely throughout the body, including where it matters most for sexual performance.</p>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Blood Flow Fuels Performance",
+            "description": "<p>When circulation is optimized, the body can better support: Erections; Stamina; Sensitivity and Overall sexual response. Low Nitric Oxide levels can make these processes harder to maintain.</p>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Levels Decline With Age",
+            "description": "<p>As men age, natural Nitric Oxide production decreases. Supporting healthy levels can help maintain performance, energy, and confidence over time.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

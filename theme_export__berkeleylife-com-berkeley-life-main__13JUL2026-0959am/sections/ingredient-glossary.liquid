@@ -1,0 +1,89 @@
+<div class="ingredients-glossary-wrapper">
+</div>
+
+{% assign items = shop.metaobjects.ingredients.values %}
+{% assign items_count = 0 %}
+
+<div id="ingredients-gloss" class="bg-[#CEE2CD]">
+    <div class="max-w-screen-2xl mx-auto filter-bar sticky top-0 bg-[#CEE2CD] z-10 md:static overflow-x-auto  border-y border-black">
+        <div class="letters md:p-8 overscroll-x-contain snap-x snap-mandatory scroll-p-8 invisible-scrollbar mobile-invisibile-scrollbar flex items-start justify-between p-4 mx-auto overflow-x-auto overflow-y-hidden">
+            <button class="min-w-[100px] filter-letter text-left h6 md:mr-20 w-full font-bold uppercase" data-letter="ALL">View All</button>
+            {% assign alphabet = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z" | split: "," %}
+            {% for letter in alphabet %}
+                <button class="filter-letter h6 px-4 font-bold uppercase" data-letter="{{ letter }}">{{ letter }}</button>
+            {% endfor %}
+        </div>
+    </div>
+    <p class="max-w-screen-2xl p-8 text-xs">Ingredients > <button class="filter-letter" data-letter="ALL">View All</button> </p>
+    <div class="ingredient-cards max-w-screen-2xl md:grid-cols-3 md:gap-y-12 grid grid-cols-1 gap-4 p-8 mx-auto">
+            {% for item in items %}
+                <div class="ingredient-card tw-relative tw-aspect-square border-b border-black" data-ingredient-name="{{ item.name | upcase }}">
+                    <div class="">
+                        <h3 class="ingredient-name h6 mb-4 font-bold uppercase">{{ item.name }}</h3>
+                        <p class="ingredient-definition md:mb-12 mb-4 text-black">{{ item.definition }}</p>
+                    </div>
+                    {% comment %}
+                    {% if item.benefits != blank %}
+                    <div class="py-4 border-t border-black">
+                        <p class="inci tw-col-span-2 tw-justify-self-center text-lg">Benefits</p>
+                        <p class="ingredient-inc tw-col-span-8">{{ item.benefits }}</p>
+                    </div>
+                    {% endif %}
+                    {% endcomment %}
+                </div>
+            {% endfor %}
+    </div>
+</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('.filter-letter');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                let letter = this.getAttribute('data-letter').toUpperCase();
+
+                // Remove underline from all buttons
+                buttons.forEach(btn => btn.classList.remove('active-filter'));
+
+                // Add underline to active button
+                this.classList.add('active-filter');
+
+                const ingredientCards = document.querySelectorAll('.ingredient-card');
+
+                if (letter === 'ALL') {
+                    ingredientCards.forEach(card => {
+                        card.style.display = 'block';
+                    });
+                } else {
+                    ingredientCards.forEach(card => {
+                        const ingredientName = card.getAttribute('data-ingredient-name');
+                        const firstLetter = ingredientName.charAt(0).toUpperCase();
+
+                        if (firstLetter === letter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+
+{% schema %}
+{
+"name": "Ingredients Glossary",
+"settings": [
+
+],
+"presets": [
+  {
+    "name": "Ingredients Glossary",
+    "category": "Custom"
+  }
+]
+}
+{% endschema %}

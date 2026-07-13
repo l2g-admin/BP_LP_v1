@@ -1,0 +1,327 @@
+
+<div
+  class="bg-bg text-text"
+  style="--color-text: {{ section.settings.text_color | default: '#090909' }}; --color-bg: {{ section.settings.bg_color | default: '#ffffff' }}">
+  <div class="max-w-screen-lg mx-auto px-6 md:px-16 {{ section.settings.mobile_spacing_top | prepend: 'pt-' }} {{ section.settings.mobile_spacing_bottom | prepend: 'pb-' }} {{ section.settings.spacing_top | prepend: 'md:pt-' }} {{ section.settings.spacing_bottom | prepend: 'md:pb-' }}">
+
+    <div class="flex flex-col space-y-6 mb-10 max-w-xl">
+      {%- if section.settings.heading != blank -%}
+        <{{ section.settings.heading_level | default: 'h2' }} class="md:w-1/2 {{ section.settings.heading_style | default: 'h2' }}">
+          {%- if section.settings.cursive_text != blank -%}
+            {%- assign before_cursive = section.settings.heading | split: section.settings.cursive_text | first -%}
+            {{ before_cursive }}<span class="font-secondaryHeader italic text-text">{{ section.settings.cursive_text }}</span>{{ section.settings.heading | split: section.settings.cursive_text | last }}
+          {%- else -%}
+            {{ section.settings.heading | replace_first: "**", "<br><span class='  text-[34px] md:text-[50px] font-secondaryHeader'>" | replace: "**", "</span>"  }}
+          {%- endif -%}
+        </{{ section.settings.heading_level | default: 'h2' }}>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <div class="prose text-text md:w-2/3 ">{{ section.settings.description }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="overflow-x-auto pb-8 md:overflow-x-hidden md:mx-0 px-0">
+        <div class="min-w-[560px] md:min-w-0">
+          <table class="w-full comparison-table relative" >
+
+            <colgroup>
+              <col style="width: 40%;">
+              <col style="width: 30%;">
+              <col style="width: 30%;">
+            </colgroup>
+
+            <thead>
+              <tr>
+                <th class="pb-4 text-left min-w-[200px]"></th>
+                <th
+                  class="px-6 min-w-[200px]  pt-6 pb-4 text-center rounded-t-[20px] font-bold text-lg text-text"
+                  style="background-color: {{ section.settings.col1_bg | default: '#ede3e8' }};">
+                  <svg class="mx-auto" width="167" height="30" viewBox="0 0 167 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M140.45 8.35596L137.167 8.35596L137.167 23.4969L140.45 23.4969L140.45 8.35596Z" fill="#080B2B"/>
+                      <path d="M14.0719 13.9883C14.7427 14.8945 15.0806 15.9738 15.0806 17.2313C15.0806 18.9623 14.4713 20.3827 13.2474 21.4926C12.0235 22.6024 10.4207 23.1574 8.43389 23.1574L1.51749e-06 23.1574L5.0799e-06 2.78271L6.82086 2.78272C8.66433 2.78272 10.1494 3.28674 11.2759 4.29478C12.4025 5.30282 12.9709 6.61123 12.9709 8.21493C12.9709 9.81864 12.3922 11.0761 11.2298 12.0435C12.4537 12.4355 13.3959 13.082 14.0719 13.9883ZM3.23121 5.64901L3.23121 11.1423L6.51361 11.1423C7.52752 11.1423 8.311 10.8878 8.85892 10.3837C9.40684 9.87973 9.68336 9.2077 9.68336 8.36258C9.68336 7.51745 9.40684 6.85561 8.85892 6.37195C8.311 5.8883 7.52752 5.64392 6.51361 5.64392L3.23121 5.64392L3.23121 5.64901ZM10.8099 19.4357C11.4398 18.8706 11.7573 18.1019 11.7573 17.1346C11.7573 16.1673 11.4398 15.3934 10.8099 14.8181C10.1801 14.2428 9.29418 13.9526 8.15737 13.9526L3.23121 13.9526L3.2312 20.2809L8.15737 20.2809C9.29418 20.2809 10.1801 19.9958 10.8099 19.4307L10.8099 19.4357Z" fill="#080B2B"/>
+                      <path d="M42.7892 7.9923L42.7892 10.8637L41.7958 10.8637C40.5105 10.8637 39.4454 11.2302 38.5953 11.9583C37.7453 12.6914 37.3203 13.7249 37.3203 15.0588L37.3203 23.1485L34.0584 23.1485L34.0584 7.98721L37.1001 7.98721L37.1001 9.96256C38.1754 8.54214 39.6553 7.83447 41.5398 7.83447C41.9955 7.83447 42.4103 7.88539 42.7841 7.98721L42.7892 7.9923Z" fill="#080B2B"/>
+                      <path d="M44.4119 0L47.6738 5.70334e-07L47.6738 23.1544L44.4119 23.1544L44.4119 0ZM58.2942 23.1544L54.382 23.1544L47.766 14.6319L53.7265 7.99305L57.7617 7.99305L51.6117 14.6624L58.2891 23.1544L58.2942 23.1544Z" fill="#080B2B"/>
+                      <path d="M78.6956 23.1544L75.4337 23.1544L75.4337 0L78.6956 5.70334e-07L78.6956 23.1544Z" fill="#080B2B"/>
+                      <path d="M127.381 20.5662L135.462 20.5662L135.462 23.4987L124.088 23.4987L124.088 3.12402L127.381 3.12402L127.381 20.5662Z" fill="#080B2B"/>
+                      <path d="M23.9961 7.71777C19.751 7.71777 16.2996 11.2306 16.2996 15.6192C16.2996 20.0077 20.0428 23.5613 24.544 23.5613C26.8995 23.5613 29.0042 22.5991 30.5148 21.0514L28.9581 18.796C27.9493 19.967 26.4335 20.7205 24.713 20.7205C22.0655 20.7205 19.9199 19.0048 19.372 16.7087L31.6106 16.7087C31.6516 16.3319 31.6516 15.9959 31.6516 15.6192C31.6516 11.2306 28.2463 7.71778 23.9961 7.71777ZM19.582 14.1173C20.1299 11.9841 21.8966 10.4364 23.9961 10.4364C26.0956 10.4364 27.8674 11.9841 28.3692 14.1173L19.582 14.1173Z" fill="#080B2B"/>
+                      <path d="M167 15.9605C167 11.572 163.554 8.05908 159.304 8.05908C155.053 8.05908 151.607 11.572 151.607 15.9605C151.607 20.349 155.35 23.9026 159.851 23.9026C162.207 23.9026 164.353 22.9404 165.822 21.3927L164.266 19.1373C163.257 20.3083 161.741 21.0618 160.02 21.0618C157.414 21.0618 155.227 19.3461 154.679 17.05L166.918 17.05C166.959 16.6732 167 16.3372 167 15.9605ZM154.93 14.4586C155.437 12.3254 157.199 10.7777 159.304 10.7777C161.408 10.7777 163.175 12.3254 163.718 14.4586L154.93 14.4586Z" fill="#080B2B"/>
+                      <path d="M65.7047 7.71777C61.4596 7.71777 58.0082 11.2306 58.0082 15.6192C58.0082 20.0077 61.7515 23.5613 66.2527 23.5613C68.6082 23.5613 70.7538 22.5991 72.2235 21.0514L70.6668 18.796C69.658 19.967 68.1422 20.7205 66.4217 20.7205C63.8152 20.7205 61.6286 19.0048 61.0807 16.7087L73.3193 16.7087C73.3603 16.3319 73.4012 15.9959 73.4012 15.6192C73.4012 11.2306 69.955 7.71778 65.7047 7.71777ZM61.3316 14.1173C61.8386 11.9841 63.6001 10.4364 65.7047 10.4364C67.8094 10.4364 69.576 11.9841 70.1188 14.1173L61.3316 14.1173Z" fill="#080B2B"/>
+                      <path d="M89.5534 20.7205C86.9469 20.7205 84.7603 19.0048 84.2124 16.7087L96.451 16.7087C96.492 16.3319 96.533 15.9959 96.533 15.6192C96.533 11.2306 93.0867 7.71778 88.8365 7.71777C84.5862 7.71777 81.14 11.2306 81.14 15.6192C81.14 20.0077 84.8832 23.5613 89.3844 23.5613C91.7399 23.5613 93.8855 22.5991 95.3552 21.0514L93.7985 18.796C92.7897 19.967 91.2739 20.7205 89.5534 20.7205ZM88.8365 10.4364C90.9411 10.4364 92.7078 11.9841 93.2506 14.1173L84.4633 14.1173C84.9703 11.9841 86.7318 10.4364 88.8365 10.4364Z" fill="#080B2B"/>
+                      <path d="M137.208 5.92903C136.327 5.05336 136.327 3.62785 137.208 2.74709C138.089 1.87141 139.528 1.87141 140.409 2.74709C141.289 3.62276 141.289 5.05336 140.409 5.92903C139.528 6.8047 138.094 6.8047 137.208 5.92903Z" fill="#080B2B"/>
+                      <path d="M148.827 3.51796C149.323 3.12594 150.071 2.93248 151.064 2.93248C151.438 2.93248 151.873 2.96303 152.37 3.02412L152.37 0.280013C151.771 0.0967328 151.064 1.56058e-06 150.26 1.42001e-06C148.586 1.12723e-06 147.26 0.437837 146.287 1.31351C145.314 2.18918 144.827 3.51287 144.827 5.27948L144.827 8.33415L142.656 8.33415L142.656 11.1444L144.965 11.1444L144.965 22.8947C144.965 23.862 144.715 24.5392 144.218 24.9312C143.747 25.3028 143.055 25.4912 142.139 25.5116L142.139 28.4339C142.303 28.444 142.467 28.4491 142.651 28.4491C144.325 28.4491 145.652 28.0113 146.625 27.1356C147.536 26.316 148.017 25.0992 148.074 23.4904L148.084 23.4904L148.084 11.1394L151.684 11.1394L151.684 8.32906L148.084 8.32906L148.084 5.54931C148.084 4.582 148.335 3.90488 148.832 3.51287L148.827 3.51796Z" fill="#080B2B"/>
+                      <path d="M108.728 7.9917L104.227 19.0445L99.8484 7.9917L96.3406 7.9917L102.429 22.4708L101.81 23.8912C101.436 24.7364 100.98 25.3168 100.442 25.6375C99.9047 25.9582 99.2544 26.1161 98.4862 26.1161C98.4453 26.1161 98.3941 26.1161 98.3377 26.1161L98.3377 29.0129C98.6245 29.0384 98.9113 29.0536 99.2031 29.0536C100.509 29.0536 101.605 28.7176 102.496 28.0507C103.387 27.3838 104.15 26.3248 104.795 24.884L112.215 7.99679L108.738 7.99679L108.728 7.9917Z" fill="#080B2B"/>
+                    </svg>
+
+                </th>
+                <th
+                  class="px-6 pt-6 min-w-[200px] pb-4 text-center rounded-t-[20px] text-text"
+                  style="background-color: {{ section.settings.col2_bg | default: '#f0ece6' }};">
+                  {{ section.settings.col2_label | default: 'Other Brands' }}
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'row' -%}
+                  <tr class="comparison-table__row{% unless forloop.last %} comparison-table__row--divided{% endunless %}" {{ block.shopify_attributes }}>
+
+                    <td class="py-4 pr-6 align-middle">
+                      {%- if block.settings.feature != blank -%}
+                        <p class="subhead text-text">{{ block.settings.feature }}</p>
+                      {%- endif -%}
+                    </td>
+
+                    <td
+                      class="px-6 py-4 text-center align-middle{% if forloop.last %} rounded-b-[20px]{% endif %}"
+                      style="background-color: {{ section.settings.col1_bg | default: '#ede3e8' }};">
+                      {%- if block.settings.col1_value != blank -%}
+                        <span class="font-secondaryHeader italic text-brand text-base">{{ block.settings.col1_value }}</span>
+                      {%- elsif block.settings.col1_check -%}
+                   <svg class="mx-auto" width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <rect width="31" height="31" fill="url(#pattern0_100_113)"/>
+                    <defs>
+                    <pattern id="pattern0_100_113" patternContentUnits="objectBoundingBox" width="1" height="1">
+                    <use xlink:href="#image0_100_113" transform="scale(0.0111111)"/>
+                    </pattern>
+                    <image id="image0_100_113" width="90" height="90" preserveAspectRatio="none" xlink:href="data:image/png;base64,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"/>
+                    </defs>
+                    </svg>
+
+                      {%- endif -%}
+                    </td>
+
+                    <td
+                      class="px-6 py-4 text-center align-middle{% if forloop.last %} rounded-b-[20px]{% endif %}"
+                      style="background-color: {{ section.settings.col2_bg | default: '#f0ece6' }};">
+                      {%- if block.settings.col2_value != blank -%}
+                        <span class="font-secondaryHeader italic text-brand text-2xl">{{ block.settings.col2_value }}</span>
+                      {%- elsif block.settings.col2_check -%}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-navy inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      {%- endif -%}
+                    </td>
+
+                  </tr>
+                {%- endif -%}
+              {%- endfor -%}
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+
+<style>
+  /* Safari doesn't support position:relative on <tr>, so anchor to first <td> instead */
+  .comparison-table__row--divided td:first-child {
+    position: relative;
+    overflow: visible;
+  }
+
+  .comparison-table__row--divided td:first-child::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 1px;
+    background-color: #FF4E2466;
+    pointer-events: none;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Comparison Table",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Headline about the contrast here."
+    },
+    {
+      "type": "text",
+      "id": "cursive_text",
+      "label": "Cursive portion of heading",
+      "info": "Enter the exact text to appear in the cursive font. Must match the heading exactly.",
+      "default": "contrast here."
+    },
+    {
+      "type": "select",
+      "id": "heading_level",
+      "label": "Heading Hierarchy",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "Heading 1" },
+        { "value": "h2", "label": "Heading 2" },
+        { "value": "h3", "label": "Heading 3" },
+        { "value": "p", "label": "Paragraph" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_style",
+      "label": "Heading Style",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "subhead", "label": "Small Caps" }
+      ]
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Add a short description here.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Column Labels & Colors"
+    },
+    {
+      "type": "text",
+      "id": "col1_label",
+      "label": "Column 1 Label",
+      "default": "Berkeley Life"
+    },
+    {
+      "type": "color",
+      "id": "col1_bg",
+      "label": "Column 1 Background",
+      "default": "#ede3e8"
+    },
+    {
+      "type": "text",
+      "id": "col2_label",
+      "label": "Column 2 Label",
+      "default": "Other Brands"
+    },
+    {
+      "type": "color",
+      "id": "col2_bg",
+      "label": "Column 2 Background",
+      "default": "#f0ece6"
+    },
+    {
+      "type": "header",
+      "content": "Colors & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "range",
+      "id": "spacing_top",
+      "label": "Spacing Top (desktop)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom",
+      "label": "Spacing Bottom (desktop)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_top",
+      "label": "Spacing Top (mobile)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_bottom",
+      "label": "Spacing Bottom (mobile)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 12
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Comparison Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature",
+          "label": "Feature Label",
+          "default": "Clinically proven",
+          "info": "Shown in the left column feature list."
+        },
+        {
+          "type": "checkbox",
+          "id": "col1_check",
+          "label": "Berkeley Life: show checkmark",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "col1_value",
+          "label": "Berkeley Life: custom text",
+          "info": "Leave blank to use the checkmark setting above. Displayed in italic cursive."
+        },
+        {
+          "type": "checkbox",
+          "id": "col2_check",
+          "label": "Other Brands: show checkmark",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "col2_value",
+          "label": "Other Brands: custom text",
+          "info": "Leave blank to use the checkmark setting above. e.g. 'sometimes'. Displayed in italic cursive.",
+          "default": "sometimes"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison Table",
+      "blocks": [
+        { "type": "row" },
+        { "type": "row" },
+        { "type": "row" },
+        { "type": "row" },
+        { "type": "row" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,951 @@
+{%- liquid
+  assign section_id = section.settings.custom_id | default: section.id
+  assign has_graph_image = false
+  if section.settings.image_desktop != blank or section.settings.image_mobile != blank
+    assign has_graph_image = true
+  endif
+-%}
+
+<style>
+  .heading-graph {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .graph-subtext {
+    font-size: 22px;
+  }
+
+  @media (min-width: 768px) {
+    .graph-subtext {
+      font-size: 28px;
+    }
+  }
+
+  #{{ section_id }} {
+    --graph-cta-orange: #de532f;
+  }
+
+  #{{ section_id }} .graph-cta-group {
+    gap: 1rem;
+  }
+
+  #{{ section_id }} .graph-cta a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    padding: 0.85rem 2rem;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    font-size: 1.1rem;
+    line-height: 1;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  #{{ section_id }} .graph-cta.graph-cta--solid a {
+    background-color: var(--graph-cta-orange);
+    border-color: var(--graph-cta-orange);
+    color: #ffffff;
+  }
+
+  #{{ section_id }} .graph-cta.graph-cta--outline a {
+    background-color: transparent;
+    border-color: var(--graph-cta-orange);
+    color: var(--graph-cta-orange);
+  }
+
+  #{{ section_id }} .graph-cta.graph-cta--solid a:hover,
+  #{{ section_id }} .graph-cta.graph-cta--solid a:focus-visible {
+    background-color: #c64828;
+    border-color: #c64828;
+    transform: translateY(-1px);
+  }
+
+  #{{ section_id }} .graph-cta.graph-cta--outline a:hover,
+  #{{ section_id }} .graph-cta.graph-cta--outline a:focus-visible {
+    background-color: rgba(222, 83, 47, 0.08);
+    transform: translateY(-1px);
+  }
+
+  @media screen and (max-width: 767px) {
+    #{{ section_id }} .graph-cta-group {
+      width: 100%;
+      padding-right: 1rem;
+      padding-left: 1rem;
+    }
+
+    #{{ section_id }} .graph-cta {
+      width: 100%;
+    }
+
+    #{{ section_id }} .graph-cta a {
+      width: 100%;
+    }
+  }
+
+  #{{ section_id }} .graph-image {
+    margin: 2rem auto;
+    max-width: 100%;
+  }
+
+  #{{ section_id }} .graph-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  #{{ section_id }} .graph-image--desktop {
+    display: none;
+  }
+
+  #{{ section_id }} .graph-image--mobile {
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section_id }} .graph-image--desktop {
+      display: block;
+    }
+
+    #{{ section_id }} .graph-image--mobile {
+      display: none;
+    }
+  }
+
+  #{{ section_id }} .graph-image--desktop-only {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section_id }} .graph-image--desktop-only {
+      display: block;
+    }
+  }
+
+  #{{ section_id }} .graph-image--mobile-only {
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section_id }} .graph-image--mobile-only {
+      display: none;
+    }
+  }
+</style>
+
+<div id="{{ section_id }}"
+  class="py-8 md:border-0 md:pb-12 bg-bg"
+  style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}"
+>
+  <div id="chart-container" class="relative text-center overflow-hidden bg-bg text-text max-w-[1000px] mx-auto">
+    <h3 class="c-title heading-graph">
+      {{
+        section.settings.title
+        | replace_first: '**', "<span class='text-brand c-font-cormorant-title'>"
+        | replace_first: '**', '</span>'
+      }}
+    </h3>
+    {% if section.settings.paragraph != blank %}
+      <p class="mb-8 text-center">
+        {{ section.settings.paragraph }}
+      </p>
+    {% endif %}
+    {% if section.settings.subtext != blank %}
+      <p class="text-brand c-font-cormorant-title mb-8 graph-subtext">
+        {{ section.settings.subtext }}
+      </p>
+    {% endif %}
+    {%- if has_graph_image -%}
+      {%- if section.settings.image_desktop != blank and section.settings.image_mobile != blank -%}
+        <div class="graph-image graph-image--desktop">
+          {{ section.settings.image_desktop | image_url: width: 2000 | image_tag: alt: section.settings.image_desktop.alt | default: 'Chart', loading: 'lazy', widths: '600, 900, 1200, 1600, 2000' }}
+        </div>
+        <div class="graph-image graph-image--mobile">
+          {{ section.settings.image_mobile | image_url: width: 1200 | image_tag: alt: section.settings.image_mobile.alt | default: 'Chart', loading: 'lazy', widths: '400, 600, 800, 1200' }}
+        </div>
+      {%- elsif section.settings.image_desktop != blank -%}
+        <div class="graph-image graph-image--desktop-only">
+          {{ section.settings.image_desktop | image_url: width: 2000 | image_tag: alt: section.settings.image_desktop.alt | default: 'Chart', loading: 'lazy', widths: '600, 900, 1200, 1600, 2000' }}
+        </div>
+      {%- elsif section.settings.image_mobile != blank -%}
+        <div class="graph-image graph-image--mobile-only">
+          {{ section.settings.image_mobile | image_url: width: 1200 | image_tag: alt: section.settings.image_mobile.alt | default: 'Chart', loading: 'lazy', widths: '400, 600, 800, 1200' }}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+    <div class="flex w-[90%] flex-wrap px-8 justify-center gap-x-12 gap-y-4 md:mt-12 text-center inputs">
+      <div class="flex items-center justify-between gap-4">
+        <label class="w-20 text-xs tracking-widest uppercase md:text-base" for="gender-select">Gender</label>
+        <select
+          id="gender-select"
+          class="w-48 p-2 text-xs tracking-widest uppercase bg-transparent rounded-full md:text-base md:w-80"
+        >
+          <option value="choose">Choose One</option>
+          {% if section.settings.gender_select_order == 'men_first' %}
+            <option value="men">Men</option>
+            <option value="women">Women</option>
+          {% else %}
+            <option value="women">Women</option>
+            <option value="men">Men</option>
+          {% endif %}
+        </select>
+      </div>
+      <div class="flex items-center justify-between gap-4">
+        <label class="w-20 text-xs tracking-widest uppercase md:text-base" for="age-input">Age</label>
+        <select
+          id="age-input"
+          class="w-48 p-2 text-xs tracking-widest uppercase bg-transparent rounded-full md:text-base md:w-80"
+        >
+          <option value="choose">Choose One</option>
+          <option value="20-29">20-29</option>
+          <option value="30-39">30-39</option>
+          <option value="40-49">40-49</option>
+          <option value="50-59">50-59</option>
+          <option value="60-69">60-69</option>
+          <option value="70-79">70-79</option>
+          <option value="80-89">80-89</option>
+          <option value="90-100">90-100</option>
+        </select>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="chart-canvas"></canvas>
+    </div>
+    {%- endif -%}
+    {% if section.blocks.size > 0 %}
+      <div class="graph-cta-group flex flex-wrap items-center justify-center mx-auto">
+        {% for block in section.blocks %}
+          {% if block.settings.button_label != blank %}
+            <div
+              class="graph-cta text-center button w-fit {% if block.type == 'primary_button' %}graph-cta--solid{% else %}graph-cta--outline{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              <a
+                id="dynamic-button-{{ block.id }}"
+                aria-label="{{ block.settings.button_label }}"
+                href="{{ block.settings.button_link }}"
+                {% if block.settings.use_dynamic_gender_link %}
+                  data-dynamic-button="true"
+                  data-default-link="{{ block.settings.button_link }}"
+                  data-link-women="{{ block.settings.button_link_women }}"
+                  data-link-men="{{ block.settings.button_link_men }}"
+                {% endif %}
+              >
+                {{ block.settings.button_label }}
+              </a>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  window.chartData = {
+    women: [
+      { x: 20, y: 100 },
+      { x: 21, y: 99.5 },
+      { x: 22, y: 99 },
+      { x: 23, y: 98.5 },
+      { x: 24, y: 98 },
+      { x: 25, y: 97.5 },
+      { x: 26, y: 97 },
+      { x: 27, y: 96.5 },
+      { x: 28, y: 96 },
+      { x: 29, y: 95.5 },
+      { x: 30, y: 95 },
+      { x: 31, y: 94 },
+      { x: 32, y: 93 },
+      { x: 33, y: 92 },
+      { x: 34, y: 91 },
+      { x: 35, y: 90 },
+      { x: 36, y: 88 },
+      { x: 37, y: 86 },
+      { x: 38, y: 84 },
+      { x: 39, y: 82 },
+      { x: 40, y: 80 },
+      { x: 41, y: 78.75 },
+      { x: 42, y: 77.5 },
+      { x: 43, y: 76.25 },
+      { x: 44, y: 75 },
+      { x: 45, y: 75 },
+      { x: 46, y: 65 },
+      { x: 47, y: 55 },
+      { x: 48, y: 50 },
+      { x: 49, y: 45 },
+      { x: 50, y: 40 },
+      { x: 51, y: 38 },
+      { x: 52, y: 36 },
+      { x: 53, y: 34 },
+      { x: 54, y: 32 },
+      { x: 55, y: 30 },
+      { x: 56, y: 28.75 },
+      { x: 57, y: 27.5 },
+      { x: 58, y: 26.25 },
+      { x: 59, y: 25 },
+      { x: 60, y: 25 },
+      { x: 61, y: 23.75 },
+      { x: 62, y: 22.5 },
+      { x: 63, y: 21.25 },
+      { x: 64, y: 20 },
+      { x: 65, y: 17.5 },
+      { x: 66, y: 15 },
+      { x: 67, y: 15 },
+      { x: 68, y: 15 },
+      { x: 69, y: 15 },
+      { x: 70, y: 15 },
+      { x: 71, y: 15 },
+      { x: 72, y: 15 },
+      { x: 73, y: 15 },
+      { x: 74, y: 15 },
+      { x: 75, y: 15 },
+      { x: 76, y: 15 },
+      { x: 77, y: 15 },
+      { x: 78, y: 15 },
+      { x: 79, y: 15 },
+      { x: 80, y: 15 },
+      { x: 81, y: 15 },
+      { x: 82, y: 15 },
+      { x: 83, y: 15 },
+      { x: 84, y: 15 },
+      { x: 85, y: 15 },
+      { x: 86, y: 15 },
+      { x: 87, y: 15 },
+      { x: 88, y: 15 },
+      { x: 89, y: 15 },
+      { x: 90, y: 15 },
+      { x: 91, y: 15 },
+      { x: 92, y: 15 },
+      { x: 93, y: 15 },
+      { x: 94, y: 15 },
+      { x: 95, y: 15 },
+      { x: 96, y: 15 },
+      { x: 97, y: 15 },
+      { x: 98, y: 15 },
+      { x: 99, y: 15 },
+      { x: 100, y: 15 },
+    ],
+    men: [
+      { x: 20, y: 100 },
+      { x: 21, y: 98 },
+      { x: 22, y: 96 },
+      { x: 23, y: 94 },
+      { x: 24, y: 92 },
+      { x: 25, y: 90 },
+      { x: 26, y: 88 },
+      { x: 27, y: 86 },
+      { x: 28, y: 84 },
+      { x: 29, y: 82 },
+      { x: 30, y: 80 },
+      { x: 31, y: 79 },
+      { x: 32, y: 78 },
+      { x: 33, y: 77 },
+      { x: 34, y: 76 },
+      { x: 35, y: 75 },
+      { x: 36, y: 71.25 },
+      { x: 37, y: 67.5 },
+      { x: 38, y: 63.75 },
+      { x: 39, y: 60 },
+      { x: 40, y: 50 },
+      { x: 41, y: 48 },
+      { x: 42, y: 46 },
+      { x: 43, y: 44 },
+      { x: 44, y: 42 },
+      { x: 45, y: 40 },
+      { x: 46, y: 38 },
+      { x: 47, y: 36 },
+      { x: 48, y: 34 },
+      { x: 49, y: 32 },
+      { x: 50, y: 30 },
+      { x: 51, y: 28 },
+      { x: 52, y: 26 },
+      { x: 53, y: 24 },
+      { x: 54, y: 22 },
+      { x: 55, y: 20 },
+      { x: 56, y: 19 },
+      { x: 57, y: 18 },
+      { x: 58, y: 17 },
+      { x: 59, y: 16 },
+      { x: 60, y: 15 },
+      { x: 61, y: 14.5 },
+      { x: 62, y: 14 },
+      { x: 63, y: 13.5 },
+      { x: 64, y: 13 },
+      { x: 65, y: 12.5 },
+      { x: 66, y: 12 },
+      { x: 67, y: 11.5 },
+      { x: 68, y: 11 },
+      { x: 69, y: 10.5 },
+      { x: 70, y: 10 },
+      { x: 71, y: 10 },
+      { x: 72, y: 10 },
+      { x: 73, y: 10 },
+      { x: 74, y: 10 },
+      { x: 75, y: 10 },
+      { x: 76, y: 10 },
+      { x: 77, y: 10 },
+      { x: 78, y: 10 },
+      { x: 79, y: 10 },
+      { x: 80, y: 10 },
+      { x: 81, y: 10 },
+      { x: 82, y: 10 },
+      { x: 83, y: 10 },
+      { x: 84, y: 10 },
+      { x: 85, y: 10 },
+      { x: 86, y: 10 },
+      { x: 87, y: 10 },
+      { x: 88, y: 10 },
+      { x: 89, y: 10 },
+      { x: 90, y: 10 },
+      { x: 91, y: 10 },
+      { x: 92, y: 10 },
+      { x: 93, y: 10 },
+      { x: 94, y: 10 },
+      { x: 95, y: 10 },
+      { x: 96, y: 10 },
+      { x: 97, y: 10 },
+      { x: 98, y: 10 },
+      { x: 99, y: 10 },
+      { x: 100, y: 10 },
+    ],
+  };
+</script>
+
+<style>
+  /* Container for the chart */
+  .chart-container {
+    position: relative; /* Required for Chart.js responsiveness */
+    width: 100%; /* Fixed width */
+    height: 300px; /* Fixed height */
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  /* Ensure canvas does not auto-scale incorrectly */
+  #chart-canvas {
+    width: 100% !important; /* Forces it to take full container width */
+    height: 100% !important; /* Forces it to take full container height */
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function createChart() {
+      console.log('Chart Data Loaded:', window.chartData);
+
+      const canvas = document.getElementById('chart-canvas');
+      const chartContainer = document.getElementById('chart-container');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'Women',
+              borderWidth: 2,
+              borderColor: function (context) {
+                const index = context.dataIndex;
+                const dataset = context.dataset;
+
+                // Ensure data exists and index is valid
+                if (!dataset.data || index === undefined || !dataset.data[index]) {
+                  return dataset.label === 'Women' ? '#ff6347' : '#080B2B'; // Default colors
+                }
+
+                const xValue = dataset.data[index].x;
+
+                if (selectedAgeRange) {
+                  const [low, high] = selectedAgeRange.split('-').map(Number);
+                  if (xValue >= low && xValue <= high) {
+                    return '#00BED6'; // Highlighted section in blue
+                  }
+                }
+
+                return dataset.label === 'Women' ? '#ff6347' : '#080B2B'; // Default colors
+              },
+              backgroundColor: '#ff6347',
+              data: window.chartData.women.map((point) => ({
+                x: point.x,
+                y: point.y,
+                tooltipMessage: getCustomTooltipMessage('women', point.x),
+              })),
+              fill: false,
+              tension: 0.4,
+              pointRadius: 0,
+              pointHoverRadius: 0,
+              pointBackgroundColor: '#00BED6',
+              pointBorderColor: '#00BED6',
+              pointBorderWidth: 1,
+              pointHitRadius: 7,
+            },
+            {
+              label: 'Men',
+              borderWidth: 2,
+              borderColor: function (context) {
+                const index = context.dataIndex;
+                const dataset = context.dataset;
+
+                // Ensure data exists and index is valid
+                if (!dataset.data || index === undefined || !dataset.data[index]) {
+                  return dataset.label === 'Women' ? '#ff6347' : '#080B2B'; // Default colors
+                }
+
+                const xValue = dataset.data[index].x;
+
+                if (selectedAgeRange) {
+                  const [low, high] = selectedAgeRange.split('-').map(Number);
+                  if (xValue >= low && xValue <= high) {
+                    return '#00BED6'; // Highlighted section in blue
+                  }
+                }
+
+                return dataset.label === 'Women' ? '#ff6347' : '#080B2B'; // Default colors
+              },
+              backgroundColor: '#080B2B',
+              data: window.chartData.men.map((point) => ({
+                x: point.x,
+                y: point.y,
+                tooltipMessage: getCustomTooltipMessage('men', point.x),
+              })),
+              fill: false,
+              tension: 0.4,
+              pointRadius: 0,
+              pointHoverRadius: 0,
+              pointBackgroundColor: '#00BED6',
+              pointBorderColor: '#00BED6',
+              pointBorderWidth: 1,
+              pointHitRadius: 7,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'none',
+          },
+          scales: {
+            x: {
+              grid: {
+                color: (context) => {
+                  return context.tick.value % 10 === 0 ? '#cccccc' : '#e5e3e2';
+                },
+              },
+              type: 'linear',
+              title: {
+                display: true,
+                text: 'Age',
+                font: {
+                  size: 14,
+                  style: 'italic',
+                },
+                padding: 15,
+              },
+              min: 20,
+              max: 100,
+              ticks: {
+                stepSize: 5,
+                callback: function (value, index, values) {
+                  return value % 10 === 0 ? value : '';
+                },
+                font: { size: 12 },
+              },
+            },
+            y: {
+              grid: {
+                color: (context) => {
+                  return context.tick.value % 20 === 0 ? '#cccccc' : '#e5e3e2';
+                },
+              },
+              beginAtZero: true,
+              min: 0,
+              max: 100,
+              title: {
+                display: true,
+                text: 'Decline in N.O. Production (%)',
+                font: {
+                  size: 14,
+                  style: 'italic',
+                },
+                padding: 30,
+              },
+              ticks: {
+                stepSize: 10,
+                callback: function (value, index, values) {
+                  return value % 20 === 0 ? value : '';
+                },
+                font: { size: 12 },
+              },
+            },
+          },
+          plugins: {
+            tooltip: {
+              enabled: false,
+            },
+            legend: {
+              position: 'right',
+              align: 'center',
+              labels: {
+                boxHeight: 1,
+                boxWidth: 30,
+                padding: 15,
+                font: {
+                  size: 10,
+                  weight: 'normal',
+                },
+              },
+            },
+          },
+          layout: {
+            padding: {
+              right: 0,
+            },
+          },
+        },
+      });
+
+      const ageDropdown = document.getElementById('age-input');
+      const genderDropdown = document.getElementById('gender-select');
+
+      function updateTooltip() {
+        const selectedAgeRange = String(ageDropdown.value);
+        const selectedGender = genderDropdown.value.toLowerCase();
+
+        if (!selectedAgeRange.includes('-') || selectedGender === 'choose') {
+          resetChart();
+          return;
+        }
+
+        const [low, high] = selectedAgeRange.split('-').map(Number);
+        const datasetIndex = selectedGender === 'women' ? 0 : 1;
+        const dataset = chart.data.datasets[datasetIndex];
+
+        // Find both low and high points
+        const dataIndices = dataset.data
+          .map((point, index) => (point.x === low || point.x === high ? index : -1))
+          .filter((index) => index !== -1);
+
+        // Highlight both points
+        // Reset all datasets first
+        chart.data.datasets.forEach((ds) => {
+          ds.pointRadius = ds.data.map(() => 0);
+        });
+
+        // Then highlight the selected dataset
+        dataset.pointRadius = dataset.data.map((_, index) => (dataIndices.includes(index) ? 6 : 0));
+
+        // Update tooltip message
+        showCustomTooltip({
+          message: getCustomTooltipMessage(selectedGender, selectedAgeRange),
+        });
+        // Reset the line color for both datasets first
+        chart.data.datasets.forEach((ds) => {
+          ds.segment = {
+            borderColor: ds.label === 'Women' ? '#ff6347' : '#080B2B', // Default colors
+          };
+        });
+
+        dataset.segment = {
+          borderColor: (ctx) => {
+            const index = ctx.p1DataIndex; // First point of the segment
+            const xValue = dataset.data[index]?.x;
+
+            if (selectedAgeRange) {
+              const [low, high] = selectedAgeRange.split('-').map(Number);
+              if (xValue >= low + 1 && xValue < high + 1) {
+                return '#00BED6'; // Highlighted segment
+              }
+            }
+            return dataset.label === 'Women' ? '#ff6347' : '#080B2B'; // Default color
+          },
+        };
+
+        if (window.gtag) {
+          window.gtag('event', 'select_age_gender', {
+            category: 'Graph Selection',
+            label: `Age: ${selectedAgeRange}, Gender: ${selectedGender}`,
+            gender: selectedGender,
+            age_range: selectedAgeRange,
+          });
+          console.log(`GA Event Sent: Gender=${selectedGender}, Age Range=${selectedAgeRange}`);
+        }
+
+        // Force a re-render
+        chart.update();
+      }
+
+      function resetChart() {
+        chart.data.datasets.forEach((dataset) => {
+          dataset.pointRadius = Array(dataset.data.length).fill(0);
+        });
+        hideCustomTooltip();
+        chart.update();
+      }
+
+      ageDropdown.addEventListener('change', updateTooltip);
+      genderDropdown.addEventListener('change', updateTooltip);
+
+      function getCustomTooltipMessage(gender, ageRange) {
+        if (typeof ageRange !== 'string') return 'Invalid age range';
+        const [low, high] = String(ageRange).split('-').map(Number);
+
+        if (gender === 'women') {
+          if (low === 20) return 'N.O. levels are at 90-100% – if you maintain a healthy lifestyle.';
+          if (low === 30)
+            return 'N.O. levels start to fall, draining energy, disrupting hormones, and slowing metabolism.';
+          if (low === 40)
+            return 'At 40, N.O. levels plummet, driving weight gain, mood swings, and poor sleep during perimenopause.';
+          if (low === 50)
+            return 'Menopause triggers a sharp N.O. decline, impacting heart health and diminishing sexual function.';
+          if (low === 60)
+            return 'Healthy N.O. levels are necessary to regulate blood pressure, sex drive, energy, and cognitive abilities.';
+          if (low === 70)
+            return 'By 70, N.O. production plummets to 10-15% of youthful levels, impacting cognition and heart health.';
+        } else if (gender === 'men') {
+          if (low === 20) return 'N.O. levels stay at 80-100% – if you maintain a healthy lifestyle';
+          if (low === 30) return "At 30 years old, N.O. levels plummet for men, reducing men's energy and performance.";
+          if (low === 40)
+            return 'Continued sharp decline in N.O. levels with rising blood pressure and dwindling energy reserves.';
+          if (low === 50)
+            return 'Declining N.O. levels restrict blood flow, impairing heart health and sexual function.';
+          if (low === 60)
+            return 'Healthy N.O. levels are necessary to regulate blood pressure, sex drive, energy, and cognitive abilities.';
+          if (low === 70)
+            return 'By 70, N.O. production plummets to 10-15% of youthful levels, impacting cognition and heart health.';
+        }
+        return 'Is your blood pressure creeping up?';
+      }
+
+      function showCustomTooltip({ message }) {
+        let tooltipEl = document.getElementById('custom-tooltip');
+
+        if (!tooltipEl) {
+          tooltipEl = document.createElement('div');
+          tooltipEl.id = 'custom-tooltip';
+          tooltipEl.style.position = 'absolute';
+          tooltipEl.style.backgroundColor = '#FDFEFF';
+          tooltipEl.style.color = '#333333';
+          tooltipEl.style.padding = '10px';
+          tooltipEl.style.border = '2px solid #000000';
+          tooltipEl.style.borderRadius = '40px';
+          tooltipEl.style.fontSize = '14px';
+          tooltipEl.style.fontWeight = 'regular';
+          tooltipEl.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.1);';
+          tooltipEl.style.pointerEvents = 'none';
+          tooltipEl.style.display = 'none';
+          chartContainer.appendChild(tooltipEl);
+        }
+
+        // Position tooltip in upper right corner of the chart container
+        tooltipEl.style.left = '37%';
+        tooltipEl.style.top = '40%';
+        tooltipEl.style.display = 'block';
+        tooltipEl.innerText = message;
+      }
+
+      function hideCustomTooltip() {
+        const tooltipEl = document.getElementById('custom-tooltip');
+        if (tooltipEl) tooltipEl.style.display = 'none';
+      }
+    }
+
+    createChart();
+  });
+
+  function initializeDynamicButtons() {
+    const sectionRoot = document.getElementById('{{ section_id }}');
+    if (!sectionRoot) return;
+
+    const genderSelect = sectionRoot.querySelector('#gender-select');
+    const dynamicButtons = sectionRoot.querySelectorAll('[data-dynamic-button="true"]');
+
+    if (!genderSelect || dynamicButtons.length === 0) return;
+
+    function syncDynamicButtonLinks(activeGender) {
+      dynamicButtons.forEach((button) => {
+        const defaultLink = button.dataset.defaultLink || '#';
+        const linkWomen = button.dataset.linkWomen;
+        const linkMen = button.dataset.linkMen;
+
+        if (activeGender === 'women' && linkWomen) {
+          button.href = linkWomen;
+        } else if (activeGender === 'men' && linkMen) {
+          button.href = linkMen;
+        } else {
+          button.href = defaultLink;
+        }
+      });
+    }
+
+    syncDynamicButtonLinks(genderSelect.value);
+    genderSelect.addEventListener('change', function (event) {
+      syncDynamicButtonLinks(event.target.value);
+    });
+  }
+
+  initializeDynamicButtons();
+</script>
+
+{% schema %}
+{
+  "name": "Interactive Graph",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom_id",
+      "label": "Custom Section ID",
+      "info": "Optional. If empty, uses the default section ID."
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "paragraph",
+      "label": "Paragraph"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext (italic accent)"
+    },
+    {
+      "type": "header",
+      "content": "Chart Image Override",
+      "info": "When at least one image is set, the chart and its Gender/Age selectors are replaced by the image(s)."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Chart Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Chart Image (Mobile)"
+    },
+    {
+      "type": "select",
+      "id": "gender_select_order",
+      "label": "Gender Select Order",
+      "default": "women_first",
+      "options": [
+        {
+          "value": "women_first",
+          "label": "Women first"
+        },
+        {
+          "value": "men_first",
+          "label": "Men first"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "primary_button",
+      "name": "Primary button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_dynamic_gender_link",
+          "label": "Use dynamic gender links",
+          "default": true
+        },
+        {
+          "type": "url",
+          "id": "button_link_women",
+          "label": "Button link for women"
+        },
+        {
+          "type": "url",
+          "id": "button_link_men",
+          "label": "Button link for men"
+        }
+      ]
+    },
+    {
+      "type": "secondary_button",
+      "name": "Secondary button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_dynamic_gender_link",
+          "label": "Use dynamic gender links",
+          "default": false
+        },
+        {
+          "type": "url",
+          "id": "button_link_women",
+          "label": "Button link for women"
+        },
+        {
+          "type": "url",
+          "id": "button_link_men",
+          "label": "Button link for men"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Interactive Graph",
+      "blocks": [
+        {
+          "type": "primary_button"
+        },
+        {
+          "type": "secondary_button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

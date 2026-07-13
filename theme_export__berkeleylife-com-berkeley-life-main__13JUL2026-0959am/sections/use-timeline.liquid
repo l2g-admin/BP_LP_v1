@@ -1,0 +1,362 @@
+<div
+  class="bg-bg text-text"
+  data-id="{{ section.id }}"
+  style="--color-text: {{ section.settings.text_color | default: '#090909' }}; --color-bg: {{ section.settings.bg_color | default: '#F6F3F0' }}">
+  <div class="max-w-screen-xl mx-auto px-6 md:px-16 {{ section.settings.mobile_spacing_top | prepend: 'pt-' }} {{ section.settings.mobile_spacing_bottom | prepend: 'pb-' }} {{ section.settings.spacing_top | prepend: 'md:pt-' }} {{ section.settings.spacing_bottom | prepend: 'md:pb-' }}">
+
+    {%- if section.settings.subheading != blank or section.settings.heading != blank -%}
+      <div class="mb-8 max-w-xl">
+        {%- if section.settings.subheading != blank -%}
+          <p class="subhead text-text mb-3">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <{{ section.settings.heading_level | default: 'h2' }} class="md:w-2/3 {{ section.settings.heading_style | default: 'h2' }}">
+              {{ section.settings.heading | replace_first: "**", "<span class='text-navy  text-[34px] md:text-[50px] font-secondaryHeader'>" | replace: "**", "</span>"  }}
+          
+          </{{ section.settings.heading_level | default: 'h2' }}>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+
+
+      <div class="hidden md:block">
+
+
+        <div class="grid gap-8" style="grid-template-columns: repeat({{ section.blocks.size }}, minmax(0, 1fr));">
+          {%- for block in section.blocks -%}
+            <div {{ block.shopify_attributes }}>
+              {%- if block.settings.month != blank -%}
+                <p class="subhead text-text mb-1">{{ block.settings.month }}</p>
+              {%- endif -%}
+              {%- if block.settings.step_heading != blank -%}
+                <p class="font-secondaryHeader text-brand italic text-[24px]">{{ block.settings.step_heading }}</p>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+
+
+        <div class="relative my-6">
+          <span class="absolute top-1/2 left-0 right-0 h-1px -translate-y-1/2" style="background-color: {{ section.settings.line_color | default: '#c8a4a4' }};"></span>
+          <div class="grid gap-8 relative" style="grid-template-columns: repeat({{ section.blocks.size }}, minmax(0, 1fr));">
+            {%- for block in section.blocks -%}
+              <div class="flex items-center h-1px">
+                <span class="w-4 h-4 rounded-full relative flex-shrink-0" style="background-color: {{ section.settings.dot_color | default: '#3d1f3f' }};"></span>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+
+
+        <div class="grid gap-8" style="grid-template-columns: repeat({{ section.blocks.size }}, minmax(0, 1fr));">
+          {%- for block in section.blocks -%}
+            <div class="flex flex-col space-y-2 rounded-2xl overflow-hidden bg-white/70" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                <div class="{{ block.settings.image_ratio | default: 'aspect-[4/3]' }} relative w-full overflow-hidden">
+                  {%- render 'image',
+                    image: block.settings.image,
+                    fit: 'object-cover rounded-2xl',
+                    classes: 'w-full h-full',
+                    img_size: '(min-width: 768px) 33vw, 100vw'
+                  -%}
+                </div>
+              {%- else -%}
+                <div class="{{ block.settings.image_ratio | default: 'aspect-[4/3]' }} bg-cream/60 w-full"></div>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <div class="mt-4">
+                  <div class="text-text pt-4">{{ block.settings.description }}</div>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+
+      </div>
+
+
+      <div class="md:!hidden swiper timeline-swiper-container-{{ section.id }}">
+        <ul class="swiper-wrapper" role="list">
+          {%- for block in section.blocks -%}
+            <li class="swiper-slide" {{ block.shopify_attributes }}>
+
+
+              <div class="mb-4">
+                {%- if block.settings.month != blank -%}
+                  <p class="subhead text-text mb-1">{{ block.settings.month }}</p>
+                {%- endif -%}
+                {%- if block.settings.step_heading != blank -%}
+                  <p class="font-secondaryHeader text-brand italic text-xl">{{ block.settings.step_heading }}</p>
+                {%- endif -%}
+              </div>
+
+
+              <div class="relative mb-4 h-4 flex items-center">
+                <div class="absolute left-0 right-0 h-px" style="background-color: {{ section.settings.line_color | default: '#c8a4a4' }};"></div>
+                <div class="w-4 h-4 rounded-full relative z-10" style="background-color: {{ section.settings.dot_color | default: '#3d1f3f' }};"></div>
+              </div>
+
+
+              <div class="flex flex-col rounded-2xl overflow-hidden bg-white/70">
+                {%- if block.settings.image != blank -%}
+                  <div class="{{ block.settings.image_ratio | default: 'aspect-[4/3]' }} relative w-full overflow-hidden">
+                    {%- render 'image',
+                      image: block.settings.image,
+                      fit: 'object-cover',
+                      classes: 'w-full h-full',
+                      img_size: '100vw'
+                    -%}
+                  </div>
+                {%- else -%}
+                  <div class="{{ block.settings.image_ratio | default: 'aspect-[4/3]' }} bg-cream/60 w-full"></div>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <div class="p-5">
+                    <div class="prose prose-sm text-text text-sm">{{ block.settings.description }}</div>
+                  </div>
+                {%- endif -%}
+              </div>
+
+            </li>
+          {%- endfor -%}
+        </ul>
+
+
+        <div class="swiper-pagination timeline-pagination-{{ section.id }} !relative !bottom-0 mt-6"></div>
+      </div>
+
+    {%- endif -%}
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+<style>
+  .timeline-swiper-container-{{ section.id }} {
+    overflow: hidden;
+  }
+  .timeline-swiper-container-{{ section.id }} .swiper-slide {
+    height: auto;
+  }
+  .timeline-swiper-container-{{ section.id }} .swiper-pagination-bullet-active {
+    background-color: {{ section.settings.dot_color | default: '#3d1f3f' }};
+  }
+  .timeline-swiper-container-{{ section.id }} .swiper-pagination {
+    position: relative;
+    margin-top: 1.5rem;
+  }
+</style>
+
+{%- if section.blocks.size > 0 -%}
+  <script type="module">
+    import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs';
+    const init = () => {
+      new Swiper('.timeline-swiper-container-{{ section.id }}', {
+        slidesPerView: 1.15,
+        spaceBetween: 16,
+        grabCursor: true,
+        pagination: {
+          el: '.timeline-pagination-{{ section.id }}',
+          clickable: true,
+        },
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Use Timeline",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "What to Expect"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Like any supplement rooted in science—consistent daily use is key."
+    },
+    {
+      "type": "select",
+      "id": "heading_level",
+      "label": "Heading Hierarchy",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "Heading 1" },
+        { "value": "h2", "label": "Heading 2" },
+        { "value": "h3", "label": "Heading 3" },
+        { "value": "p", "label": "Paragraph" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_style",
+      "label": "Heading Style",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "subhead", "label": "Small Caps" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Timeline Style"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Timeline Line Color",
+      "default": "#c8a4a4"
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Timeline Dot Color",
+      "default": "#3d1f3f"
+    },
+    {
+      "type": "header",
+      "content": "Colors & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "range",
+      "id": "spacing_top",
+      "label": "Spacing Top (desktop)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom",
+      "label": "Spacing Bottom (desktop)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_top",
+      "label": "Spacing Top (mobile)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_bottom",
+      "label": "Spacing Bottom (mobile)",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Scheduling",
+      "info": "Enter a start date and/or end date to hide and show this section on a schedule."
+    },
+    {
+      "type": "text",
+      "id": "start_date",
+      "label": "Start Date",
+      "info": "Defaults to now"
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "End Date",
+      "info": "Defaults to never",
+      "placeholder": "2021-12-31 23:59 EST"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Timeline Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "month",
+          "label": "Month Label",
+          "default": "Month 1",
+          "info": "e.g. Month 1, Month 2–3, Months 4+"
+        },
+        {
+          "type": "text",
+          "id": "step_heading",
+          "label": "Step Heading",
+          "default": "building the foundation",
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card Image"
+        },
+        {
+          "type": "select",
+          "id": "image_ratio",
+          "label": "Image Ratio",
+          "default": "aspect-[4/3]",
+          "options": [
+            { "value": "aspect-square", "label": "Square" },
+            { "value": "aspect-[4/3]", "label": "Wide (4:3)" },
+            { "value": "aspect-[3/2]", "label": "Wide (3:2)" },
+            { "value": "aspect-[3/4]", "label": "Portrait" }
+          ]
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Add a description of what to expect during this period.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Use Timeline",
+      "blocks": [
+        { "type": "step" },
+        { "type": "step" },
+        { "type": "step" }
+      ]
+    }
+  ]
+}
+{% endschema %}

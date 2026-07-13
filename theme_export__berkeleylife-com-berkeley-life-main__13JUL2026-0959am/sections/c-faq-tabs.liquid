@@ -1,0 +1,534 @@
+<style>
+    #{{ section.id}} {
+      --faq-accent: {{ section.settings.faq_accent }};
+      --faq-border: {{ section.settings.faq_border }};
+      --faq-text:   {{ section.settings.faq_text }};
+      padding-top: {{ section.settings.padding_top }}em;
+      padding-bottom: {{ section.settings.padding_bottom }}em;
+      background-color: {{ section.settings.bg_color }};
+      color: var(--faq-text);
+    }
+
+    #{{ section.id}} [v-cloak] {
+      display: none;
+    }
+
+    #{{ section.id}} .faq__intro {
+      max-width: 520px;
+      margin-bottom: 2rem;
+      display: block !important;
+    }
+
+    #{{ section.id}} .faq__title {
+      font-size: 54px;
+      margin: 0 0 1rem;
+      font-style: normal;
+ 
+      line-height: 120%;
+    }
+
+    /* .font-secondaryHeader{
+      font-weight: 500;
+      font-size: 64px;
+      line-height: 100%;
+    } */
+
+    .text-orange{
+      color: #D44F2F;
+    }
+
+    #{{ section.id}} .faq__subtitle {
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%;
+    }
+
+    .faq-container{
+      justify-self: center;
+   
+    }
+
+    .faq__container{
+      justify-self: center;
+    }
+    @media (min-width: 992px) {
+      #{{ section.id}} .faq__container {
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+        align-items: start;
+        gap: 2rem;
+      }
+    }
+
+
+    #{{ section.id}} .faq__tabs {
+      display: flex;
+      gap: 0.75rem;
+      border-bottom: 1px solid;
+      border-color: #D44F2F;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    #{{ section.id}} .faq__tab {
+      appearance: none;
+      color: var(--faq-text);
+      padding: 0.75rem 1.25rem;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      cursor: pointer;
+      border-left: none !important;
+      border-right: none  !important;
+    }
+
+    #{{ section.id}} .faq__tab--active {
+      background: var(--faq-accent);
+      color: #fff;
+      border-color: var(--faq-accent);
+    }
+
+    #{{ section.id}} .faq__panel {
+      border-radius: 0.4rem;
+    }
+
+    #{{ section.id}} .faq__list {
+      border-radius: 0.4rem;
+      overflow: hidden;
+          border-left: none !important;
+      border-right: none  !important;
+    }
+
+    #{{ section.id}} .faq__item {
+        border-bottom: 1px solid var(--faq-border);
+    }
+
+    #{{ section.id}} .faq__question {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      padding: 2rem 1rem;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      & h2 {
+      font-size: clamp(16px, 2.5vw, 20px);
+      }
+    }
+
+
+  #{{ section.id}} .faq__chevron{
+    display: inline-flex;
+    align-items: center;
+    transition: transform .25s ease;
+    transform-origin: center;
+    transform: rotate(0deg);
+  }
+  #{{ section.id}} .faq__chevron svg{ display:block; }
+
+
+  #{{ section.id}} .faq__question[aria-expanded="true"] .faq__chevron{
+    transform: rotate(180deg);
+  }
+
+    #{{ section.id}} .faq__answer {
+      padding: 0 1rem 1rem 1rem;
+      line-height: 1.6;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%;
+    }
+
+
+    #{{ section.id}} .faq__divider {
+      height: 1px;
+      background: var(--faq-border);
+    }
+
+
+    .faq-slide-enter-from,
+    .faq-slide-leave-to {
+      max-height: 0;
+      opacity: 0;
+    }
+    .faq-slide-enter-to,
+    .faq-slide-leave-from {
+      max-height: 200px;
+      opacity: 1;
+    }
+    .faq-slide-enter-active,
+    .faq-slide-leave-active {
+      /* transition: all 0.25s ease; */
+    }
+
+
+    @media (max-width: 992px) {
+      #{{ section.id}} .faq__intro {
+        margin-bottom: 1.5rem;
+      }
+
+ 
+       #{{ section.id}} .faq__title {
+        font-size: 40px;
+      }
+
+      #{{ section.id}} {
+         {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+        {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+        padding-top: {{ half_padding_top }}em;
+        padding-bottom: {{ half_padding_bottom }}em;
+      }
+    }
+</style>
+
+<section id="{{ section.id }}" class="faq " v-cloak>
+  <div class="faq-container container-sl">
+    <div class="faq__container">
+      <header class="faq__intro">
+        {% if section.settings.faq_subheading != blank %}
+            <p class="faq__subheading">{{ section.settings.faq_subheading }}</p>
+          {% endif %}
+          {% if section.settings.faq_title != blank %}
+          <h2 class="faq__title">
+            {{ section.settings.faq_title | replace_first: "**", "<span class='text-orange text-[50px] md:text-[71px] font-secondaryHeader'>" | replace: "**", "</span>" }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.faq_subtitle != blank %}
+          <p class="faq__subtitle">
+            {{ section.settings.faq_subtitle }}
+          </p>
+        {% endif %}
+      </header>
+
+      <div class="faq__content" id="app">
+        <div v-if="hasTabs" class="faq__tabs" role="tablist" aria-label="FAQ Categories">
+          <button
+            v-for="(tab, i) in tabs"
+            :key="tab.id"
+            class="faq__tab"
+            :class="{'faq__tab--active': activeTab === tab.id}"
+            role="tab"
+            :id="`tab-${tab.id}`"
+            :aria-selected="activeTab === tab.id"
+            :tabindex="activeTab === tab.id ? 0 : -1"
+            @click="setTab(tab.id)"
+          >
+            ${ tab.label }
+          </button>
+        </div>
+
+        <div
+          v-if="hasTabs"
+          class="faq__panel"
+          v-for="tab in tabs"
+          :key="`panel-${tab.id}`"
+          v-show="activeTab === tab.id"
+          role="tabpanel"
+          :aria-labelledby="`tab-${tab.id}`"
+        >
+          <div class="faq__list">
+            <div
+              v-for="(item, idx) in tab.items"
+              :key="idx"
+              class="faq__item"
+            >
+              <button
+                class="faq__question"
+                :aria-expanded="item.open"
+                :aria-controls="`answer-${tab.id}-${idx}`"
+                @click="toggle(tab.id, idx)"
+              >
+                <h2>${ item.q }</h2>
+                <div class="faq__chevron">
+                  {% render 'c-arrow' %}
+                </div>
+              </button>
+
+              <transition name="faq-slide">
+                <div
+                  v-show="item.open"
+                  class="faq__answer"
+                  :id="`answer-${tab.id}-${idx}`"
+                  role="region"
+                  v-html="item.a"
+                ></div>
+              </transition>
+
+              <div class="faq__divider"></div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="faq__panel" role="region" aria-label="FAQ Questions">
+          <div class="faq__list">
+            <div
+              v-for="(item, idx) in allItems"
+              :key="`all-${idx}`"
+              class="faq__item"
+            >
+              <button
+                class="faq__question"
+                :aria-expanded="item.open"
+                :aria-controls="`answer-all-${idx}`"
+                @click="toggle(null, idx)"
+              >
+                <h2>${ item.q }</h2>
+                <div class="faq__chevron">
+                  {% render 'c-arrow' %}
+                </div>
+              </button>
+
+              <transition name="faq-slide">
+                <div
+                  v-show="item.open"
+                  class="faq__answer"
+                  :id="`answer-all-${idx}`"
+                  role="region"
+                  v-html="item.a"
+                ></div>
+              </transition>
+
+              <div class="faq__divider"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script
+  type="module"
+>
+  import { createApp, reactive, computed } from 'https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.prod.js';
+  document.addEventListener('DOMContentLoaded', () => {
+    const containerId = '{{ section.id }}';
+    const el = document.getElementById(containerId);
+    if (!el) return;
+
+    createApp({
+      delimiters: ['${', '}'],
+      setup() {
+        {%- assign tabs = section.blocks | where: 'type', 'faq_tab' -%}
+        {%- assign all_items = section.blocks | where: 'type', 'faq_item' -%}
+        {%- assign default_tab_raw = section.settings.default_active_tab | default: tabs.first.settings.tab_id -%}
+        {%- assign default_tab_handle = default_tab_raw | handleize | default: 'general' -%}
+
+        const state = reactive({
+        activeTab: {{ default_tab_handle | json }},
+        tabs: [
+            {%- for t in tabs -%}
+            {%- assign tab_handle = t.settings.tab_id | handleize -%}
+            {
+                id: {{ tab_handle | json }},
+                label: {{ t.settings.label | default: t.settings.tab_id | json }},
+                items: [
+                {%- assign first = true -%}
+                {%- for f in all_items -%}
+                    {%- assign f_handle = f.settings.tab_id | handleize -%}
+                    {%- if f_handle == tab_handle -%}
+                    {%- unless first -%},{%- endunless -%}
+                    {
+                        q: {{ f.settings.question | default: '' | json }},
+                        a: {{ f.settings.answer | default: '' | json }},
+                        open: {{ f.settings.open_by_default | default: false | json }}
+                    }
+                    {%- assign first = false -%}
+                    {%- endif -%}
+                {%- endfor -%}
+                ]
+            }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+        ],
+        allItems: [
+            {%- for f in all_items -%}
+            {
+              q: {{ f.settings.question | default: '' | json }},
+              a: {{ f.settings.answer | default: '' | json }},
+              open: {{ f.settings.open_by_default | default: false | json }}
+            }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+        ]
+        });
+
+        if (state.tabs.length && !state.tabs.some((t) => t.id === state.activeTab)) {
+          state.activeTab = state.tabs[0].id;
+        }
+
+        const tabs = computed(() => state.tabs);
+        const allItems = computed(() => state.allItems);
+        const activeTab = computed(() => state.activeTab);
+        const hasTabs = computed(() => state.tabs.length > 0);
+
+        function setTab(id) {
+          state.activeTab = id;
+          const t = state.tabs.find((t) => t.id === id);
+          if (t) {
+            t.items.forEach((it, i) => (it.open = i === 0));
+          }
+        }
+
+        function toggle(tabId, idx) {
+          if (!state.tabs.length || tabId === null) {
+            const item = state.allItems[idx];
+            if (!item) return;
+            item.open = !item.open;
+            return;
+          }
+
+          const t = state.tabs.find((t) => t.id === tabId);
+          if (!t) return;
+          const item = t.items[idx];
+          item.open = !item.open;
+        }
+
+        return { tabs, allItems, activeTab, hasTabs, setTab, toggle };
+      },
+    }).mount(`#${containerId}`);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C FAQ Tabs",
+  "blocks": [
+    {
+      "type": "faq_tab",
+      "name": "FAQ Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_id",
+          "label": "Tab ID (slug)",
+          "default": "shipping",
+          "info": "Use a simple slug (e.g., shipping, general). Must match items' Tab ID."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "default": "Shipping"
+        }
+      ]
+    },
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_id",
+          "label": "Tab ID (slug) to attach this item to",
+          "default": "shipping",
+          "info": "Must match a FAQ Tab’s Tab ID."
+        },
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Your question here"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Your answer here.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default?",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "text",
+      "id": "default_active_tab",
+      "label": "Default active tab ID (slug)",
+      "info": "If empty, the first tab will be active."
+    },
+    {
+      "type": "text",
+      "id": "faq_subheading",
+      "label": "FAQ subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "faq_title",
+      "label": "FAQ title",
+      "default": "Frequently Asked\nQuestions"
+    },
+    {
+      "type": "textarea",
+      "id": "faq_subtitle",
+      "label": "FAQ subtitle",
+      "default": "Everything you need to know about our products – craftsmanship, care, and more."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "faq_accent",
+      "label": "FAQ Accent",
+      "default": "#df0b14"
+    },
+    {
+      "type": "color",
+      "id": "faq_border",
+      "label": "FAQ Border",
+      "default": "#eaeaea"
+    },
+    {
+      "type": "color",
+      "id": "faq_text",
+      "label": "FAQ Text",
+      "default": "#222222"
+    },
+
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 4,
+      "unit": "em"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 4,
+      "unit": "em"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C FAQ Tabs"
+    }
+  ]
+}
+{% endschema %}

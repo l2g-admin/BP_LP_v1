@@ -1,0 +1,1604 @@
+{%- comment -%}
+  C Product Featured Section
+  - Two column layout (image left, product info right)
+  - Product selection via schema
+  - Override title/description with section settings
+  - Subscription widget & Add to Cart functionality from main-product
+{%- endcomment -%}
+
+{%- liquid
+  assign section_id = section.settings.custom_id | default: section.id
+  
+  assign selected_product = section.settings.product
+  if selected_product == blank
+    assign selected_product = collections.all.products.first
+  endif
+
+  assign display_title = section.settings.custom_title | default: selected_product.title
+  assign display_description = section.settings.custom_description | default: selected_product.description
+
+  assign product_form_id = 'product-form-' | append: section_id
+-%}
+
+<style>
+  #{{ section_id }} {
+    {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+    {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+    padding-top: {{ half_padding_top }}em;
+    padding-bottom: {{ half_padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+
+    & * {
+      color: {{ section.settings.text_color }};
+      position: relative;
+      z-index: 2;
+    }
+
+    & .section__product__container {
+      padding-block: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    & .product__content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+    & .product__image__container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+
+      & img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        border-radius: 16px;
+      }
+    }
+
+    & .product__gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    & .product__thumbnails {
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 80px;
+      flex-shrink: 0;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    & .product__thumbnail {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.2s ease;
+      flex-shrink: 0;
+
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 6px;
+      }
+
+      &:hover,
+      &.active {
+        border-color: {{ section.settings.accent_color }};
+      }
+    }
+
+    & .product__main-image {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    & .product__swiper-container {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    & .product__swiper-wrapper {
+      display: flex;
+      transition: transform 0.3s ease;
+    }
+
+    & .product__swiper-slide {
+      flex-shrink: 0;
+      width: 100%;
+
+      & img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        border-radius: 16px;
+      }
+    }
+
+    & .product__swiper-pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    & .product__swiper-bullet {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #D9D9D9;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &.active {
+        background-color: {{ section.settings.accent_color }};
+      }
+    }
+
+    & .product__info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    & .product__header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    & .product__subtitle {
+      font-size: clamp(12px, 2vw, 14px);
+      text-transform: uppercase;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+
+    & .product__title {
+      font-size: clamp(28px, 5vw + 1rem, 42px);
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    & .product__title--accent {
+      color: {{ section.settings.accent_color }};
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    & .product__description {
+      font-size: clamp(14px, 2.5vw, 16px);
+      margin: 0;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    & .product__price {
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 600;
+      color: {{ section.settings.accent_color }};
+      margin: 0;
+    }
+
+    & .product__price--compare {
+      font-size: clamp(14px, 2vw, 18px);
+      text-decoration: line-through;
+      opacity: 0.5;
+      margin-left: 0.5rem;
+    }
+
+    /* Variant/Subscription Picker Styles */
+    & .variant-picker-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    & .variant-picker-container fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    & .variant-picker-container legend {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    & .option-container {
+      transition: background 0.2s, border-color 0.2s;
+      position: relative;
+      overflow: visible;
+      background-color: {{ section.settings.option_bg_color }} !important;
+      border-color: {{ section.settings.option_border_color }} !important;
+    }
+
+    & .option-container.selected {
+      border-color: {{ section.settings.accent_color }} !important;
+      background-color: white !important;
+    }
+
+    & .option-container__badge {
+      position: absolute;
+      top: -12px;
+      right: 12px;
+      padding: 4px 16px;
+      font-weight: 500;
+      background-color: {{ section.settings.accent_color }};
+      color: white !important;
+      border-radius: 24px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      line-height: 19px;
+      z-index: 10;
+    }
+
+    & .subscription-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    & .subscription-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    /* Buy Button Styles */
+    & .product__buy-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background-color: {{ section.settings.accent_color }};
+      border-radius: 9999px;
+      color: #ffffff !important;
+      width: 100%;
+      font-size: clamp(14px, 2vw, 16px);
+      text-decoration: none;
+      text-transform: capitalize;
+      letter-spacing: 1px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 2px solid {{ section.settings.accent_color }};
+      cursor: pointer;
+      text-align: center;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+    }
+
+    & .product__buy-button.loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    & .product-form__truemed {
+      margin-top: 1rem;
+    }
+
+    & .product-form__trust-badge {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    & .trust-badge__image {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    #{{ section_id }} {
+      padding-top: {{ section.settings.padding_top }}em;
+      padding-bottom: {{ section.settings.padding_bottom }}em;
+
+      .section__product__container {
+        & .product__content {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 4rem;
+  
+        }
+
+        & .product__image__container {
+          order: -1;
+        }
+
+        & .product__thumbnails {
+          display: flex;
+        }
+
+        & .product__swiper-pagination {
+          display: none;
+        }
+      }
+    }
+  }
+
+  /* Radio button styles for this section */
+  #{{ section_id }} [type='checkbox'],
+  #{{ section_id }} [type='radio'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 0;
+    display: inline-block;
+    vertical-align: middle;
+    background-origin: border-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    flex-shrink: 0;
+    height: 18px;
+    width: 18px;
+    color: #F3F3F3 !important;
+    background-color: #F3F3F3 !important;
+    border: none !important;
+    --tw-shadow: 0 0 #0000;
+    border-radius: 50%;
+  }
+
+  #{{ section_id }} [type='radio']:checked {
+    background-color: #D9D9D9 !important;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='black' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='6'/%3e%3c/svg%3e") !important;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  #{{ section_id }} [type=radio]:focus {
+    --tw-ring-color: none !important;
+  }
+</style>
+
+<section id="{{ section_id }}">
+  <div class="section__product__container container-sl">
+    <div class="product__content">
+      {%- comment -%} Product Image Gallery - Left Side {%- endcomment -%}
+      <div class="product__image__container">
+        {%- if selected_product.media.size > 0 -%}
+          {%- comment -%} Thumbnails - Desktop Only {%- endcomment -%}
+          {%- if selected_product.media.size > 1 and section.settings.show_thumbnails -%}
+            <div class="product__thumbnails" data-thumbnails>
+              {%- for media in selected_product.media -%}
+                <div 
+                  class="product__thumbnail{% if forloop.first %} active{% endif %}" 
+                  data-thumbnail-index="{{ forloop.index0 }}"
+                  data-media-id="{{ media.id }}"
+                >
+                  {{
+                    media
+                    | image_url: width: 160
+                    | image_tag: 
+                      alt: media.alt | default: selected_product.title, 
+                      loading: 'lazy', 
+                      width: 80, 
+                      height: 80
+                  }}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Main Image Swiper {%- endcomment -%}
+          <div class="product__main-image">
+            <div class="product__swiper-container" data-swiper>
+              <div class="product__swiper-wrapper" data-swiper-wrapper>
+                {%- for media in selected_product.media -%}
+                  <div class="product__swiper-slide" data-slide-index="{{ forloop.index0 }}">
+                    {{
+                      media
+                      | image_url: width: 800
+                      | image_tag: 
+                        alt: media.alt | default: selected_product.title, 
+                        loading: forloop.first | then: 'eager' | default: 'lazy', 
+                        width: 800, 
+                        height: 'auto'
+                    }}
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+
+            {%- comment -%} Pagination Dots - Mobile Only {%- endcomment -%}
+            {%- if selected_product.media.size > 1 -%}
+              <div class="product__swiper-pagination" data-pagination>
+                {%- for media in selected_product.media -%}
+                  <span 
+                    class="product__swiper-bullet{% if forloop.first %} active{% endif %}" 
+                    data-bullet-index="{{ forloop.index0 }}"
+                  ></span>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'product__image placeholder-svg' }}
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Product Info - Right Side {%- endcomment -%}
+      <div class="product__info">
+        <div class="product__header">
+          {%- if section.settings.subtitle != blank -%}
+            <p class="product__subtitle">{{ section.settings.subtitle }}</p>
+          {%- endif -%}
+
+          <h2 class="product__title">
+            {%- if section.settings.use_accent_title -%}
+              {% assign title_with_accent = display_title
+                | replace: '{accent}', '<span class="product__title--accent">'
+                | replace: '{/accent}', '</span>'
+              %}
+              {{ title_with_accent }}
+            {%- else -%}
+              {{ display_title }}
+            {%- endif -%}
+          </h2>
+
+          {%- if display_description != blank -%}
+            <div class="product__description">{{ display_description }}</div>
+          {%- endif -%}
+        </div>
+        {%- comment -%} Variant & Subscription Picker {%- endcomment -%}
+        {%- unless selected_product.has_only_default_variant -%}
+          <div class="variant-picker-container">
+            <variant-radios
+              class="no-js-hidden"
+              data-section="{{ section_id }}"
+              data-url="{{ selected_product.url }}"
+              data-update-url="false"
+            >
+              {%- comment -%} Check if product has selling plans (subscriptions) {%- endcomment -%}
+              {%- if selected_product.selling_plan_groups.size > 0 -%}
+                <fieldset class="space-y-3 text-sm">
+                  <legend class="block mb-2 text-xl font-semibold">
+                    <span>Purchase Options:</span>
+                  </legend>
+
+                  <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    {%- for variant in selected_product.variants -%}
+                      {%- comment -%} Skip B2B only variants for non-B2B customers {%- endcomment -%}
+                      {%- if variant.metafields.custom.b2bonly.value == true and customer.b2b? == false -%}
+                        {%- continue -%}
+                      {%- endif -%}
+
+                      {%- if variant.selling_plan_allocations.size > 0 -%}
+                        {%- comment -%} Subscription Options {%- endcomment -%}
+                        {%- for allocation in variant.selling_plan_allocations -%}
+                          {%- assign subscription_price = allocation.price_adjustments.first.price -%}
+                          {%- assign one_time_price = variant.price -%}
+                          {%- assign savings_amount = one_time_price | minus: subscription_price -%}
+                          {%- assign savings_percentage = savings_amount | times: 100 | divided_by: one_time_price -%}
+
+                          <label
+                            class="relative option-container inline-flex flex-grow items-center border border-transparent rounded-lg p-4 cursor-pointer w-full"
+                            for="{{ section_id }}-variant-{{ variant.id }}-plan-{{ allocation.selling_plan.id }}"
+                          >
+                            {%- if variant.metafields.custom.is_most_popular_subscription == true -%}
+                              <div class="option-container__badge">
+                                MOST POPULAR
+                              </div>
+                            {%- endif -%}
+                            <input
+                              type="radio"
+                              id="{{ section_id }}-variant-{{ variant.id }}-plan-{{ allocation.selling_plan.id }}"
+                              name="variant_selling_plan"
+                              value="{{ variant.id }}-{{ allocation.selling_plan.id }}"
+                              form="{{ product_form_id }}"
+                              class="mr-4"
+                              {% if selected_product.selected_or_first_available_variant.id == variant.id
+                                and selected_product.selected_selling_plan.id == allocation.selling_plan.id
+                              %}
+                                checked
+                              {% endif %}
+                            >
+                            <div class="flex flex-col">
+                              <h3 class="text-lg">{{ variant.title }} Supply Subscription</h3>
+                              <ul class="mt-1 text-sm subscription-list">
+                                <li>Save {{ savings_percentage | round: 1 }}%</li>
+                                {%- assign first_char = variant.title | slice: 0, 1 -%}
+                                {%- assign first_number = first_char | plus: 0 -%}
+                                <li>
+                                  {{ variant.title }} supply delivered every&nbsp;
+                                  {%- if first_number > 1 -%}
+                                    {{ first_number }} months
+                                  {%- else -%}
+                                    1 month
+                                  {%- endif -%}
+                                </li>
+                                {% for item in shop.metaobjects.subscription_callout.values %}
+                                  <li>{{ item.callout_title }}</li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                            <div
+                              class="flex flex-col self-start ml-auto mt-2"
+                              style="color: {{ section.settings.accent_color }};"
+                            >
+                              <span class="ml-auto font-semibold">{{ subscription_price | money }}</span>
+                              <span class="ml-auto text-xs line-through opacity-50">{{ one_time_price | money }}</span>
+                            </div>
+                          </label>
+                        {%- endfor -%}
+
+                        {%- comment -%} One-time purchase option {%- endcomment -%}
+                        {%- unless variant.metafields.custom.disable_one_time_purchase -%}
+                          <label
+                            class="option-container border w-full border-transparent rounded-lg p-4 cursor-pointer"
+                            for="{{ section_id }}-variant-{{ variant.id }}-otp"
+                          >
+                            <div class="inline-flex items-center justify-between flex-grow w-full">
+                              <input
+                                type="radio"
+                                id="{{ section_id }}-variant-{{ variant.id }}-otp"
+                                name="variant_selling_plan"
+                                value="{{ variant.id }}-otp"
+                                form="{{ product_form_id }}"
+                                class="mr-4"
+                                {% if selected_product.selected_or_first_available_variant.id == variant.id
+                                  and selected_product.selected_selling_plan == null
+                                %}
+                                  checked
+                                {% endif %}
+                              >
+                              <div class="flex flex-col">
+                                <h3 class="text-lg">One-time Purchase</h3>
+                              </div>
+                              <span class="ml-auto font-semibold" style="color: {{ section.settings.accent_color }};">
+                                {{- variant.price | money -}}
+                              </span>
+                            </div>
+                          </label>
+                        {%- endunless -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                </fieldset>
+              {%- else -%}
+                {%- comment -%} Regular variant picker (no subscriptions) {%- endcomment -%}
+                {%- for option in selected_product.options_with_values -%}
+                  <fieldset class="space-y-2 text-sm">
+                    <legend class="block font-bold tracking-widest uppercase mb-2">
+                      <span>{{ option.name }}</span>
+                    </legend>
+                    <div class="flex flex-wrap gap-2">
+                      {%- for value in option.values -%}
+                        {%- assign valid_variant = false -%}
+                        {%- for variant in selected_product.variants -%}
+                          {%- if variant.options contains value -%}
+                            {%- if variant.metafields.custom.b2bonly.value != true -%}
+                              {%- assign valid_variant = true -%}
+                              {%- break -%}
+                            {%- elsif customer.b2b? -%}
+                              {%- assign valid_variant = true -%}
+                              {%- break -%}
+                            {%- endif -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+
+                        {%- if valid_variant -%}
+                          <div class="inline-flex">
+                            <input
+                              class="sr-only peer"
+                              type="radio"
+                              id="{{ section_id }}-{{ option.name }}-{{ forloop.index0 }}"
+                              name="{{ option.name }}"
+                              value="{{ value | escape }}"
+                              form="{{ product_form_id }}"
+                              {% if option.selected_value == value %}
+                                checked
+                              {% endif %}
+                            >
+                            <label
+                              class="px-4 py-2 text-sm font-bold tracking-wide uppercase bg-transparent border-2 border-gray-300 rounded-full cursor-pointer peer-checked:border-current peer-checked:bg-white"
+                              for="{{ section_id }}-{{ option.name }}-{{ forloop.index0 }}"
+                            >
+                              {{ value }}
+                            </label>
+                          </div>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  </fieldset>
+                {%- endfor -%}
+              {%- endif -%}
+            </variant-radios>
+          </div>
+        {%- endunless -%}
+
+        {%- comment -%} Add to Cart Form {%- endcomment -%}
+        <product-form class="product-form">
+          <div data-product-form-errors role="alert" hidden>
+            <span data-product-form-error-msg></span>
+          </div>
+
+          {%- form 'product',
+            selected_product,
+            data-productid: selected_product.id,
+            id: product_form_id,
+            class: 'form',
+            novalidate: 'novalidate',
+            data-type: 'add-to-cart-form'
+          -%}
+            <input
+              type="hidden"
+              name="id"
+              id="SelectedVariantId-{{ section_id }}"
+              value="{{ selected_product.selected_or_first_available_variant.id }}"
+            >
+
+            {%- comment -%} Hidden selling plan input (populated by JS) {%- endcomment -%}
+            <input
+              type="hidden"
+              name="selling_plan"
+              id="SelectedSellingPlan-{{ section_id }}"
+              value=""
+            >
+
+            <div class="product-form__buttons">
+              <button
+                type="submit"
+                name="add"
+                data-product-handle="{{ selected_product.handle }}"
+                data-product-id="{{ selected_product.selected_or_first_available_variant.id }}"
+                data-section-id="{{ section_id }}"
+                data-disableFlyout="true"
+                data-metadata="
+                  [
+                    {% for variant in selected_product.variants %}
+                      {%- if variant.metafields.custom.b2bonly.value != true or customer.b2b? -%}
+                      {
+                        "id": {{ variant.id }},
+                        "is_most_popular_subscription": "{{ variant.metafields.custom.is_most_popular_subscription | escape }}",
+                        "disable_one_time_purchase": "{{ variant.metafields.custom.disable_one_time_purchase | escape }}"
+                      }{% unless forloop.last %},{% endunless %}
+                      {%- endif -%}
+                    {% endfor %}
+                  ]
+                "
+                {% unless selected_product.selected_or_first_available_variant.available %}
+                  disabled
+                {% endunless %}
+                class="product-form__submit product__buy-button"
+                id="AddToCart-{{ section_id }}"
+              >
+                {%- if selected_product.selected_or_first_available_variant.available -%}
+                  {%- if selected_product.selected_selling_plan or selected_product.requires_selling_plan -%}
+                    {{ 'products.product.subscribe' | t | default: 'Subscribe' }}
+                  {%- else -%}
+                    {{ 'products.product.add_to_cart' | t | default: 'Add to Cart' }}
+                  {%- endif -%}
+                {%- else -%}
+                  {{ 'products.product.sold_out' | t | default: 'Sold Out' }}
+                {%- endif -%}
+              </button>
+            </div>
+
+            {%- if section.settings.show_truemed -%}
+              <div class="product-form__truemed">
+                {% render 'truemed-widget' %}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.trust_badge != blank -%}
+              <div class="product-form__trust-badge">
+                {{
+                  section.settings.trust_badge
+                  | image_url: width: 600
+                  | image_tag: alt: 'Trust Badge', loading: 'lazy', class: 'trust-badge__image'
+                }}
+              </div>
+            {%- endif -%}
+          {%- endform -%}
+        </product-form>
+
+        {%- comment -%} Blocks: Key Ingredients & Proven Results {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'key_ingredients' -%}
+              <div class="key-ingredients-container" {{ block.shopify_attributes }}>
+                <style>
+                  #{{ section_id }} .key-ingredients-container {
+                    border-radius: 16px;
+                    border: 1px solid rgba(27, 28, 41, 0.10);
+                    padding: 24px;
+                    margin-top: 1.5rem;
+                  }
+
+                  #{{ section_id }} .key-ingredients-title {
+                    color: {{ section.settings.text_color }};
+                    font-family: "Cormorant Garamond", serif;
+                    font-size: 32px;
+                    font-style: italic;
+                    font-weight: 400;
+                    margin: 0 0 24px 0;
+                    line-height: 1.2;
+                  }
+
+                  #{{ section_id }} .ingredients-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                  }
+
+                  #{{ section_id }} .ingredient-item {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 16px;
+                  }
+
+                  #{{ section_id }} .ingredient-icon {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    flex-shrink: 0;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  }
+
+                  #{{ section_id }} .ingredient-icon img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                  }
+
+                  #{{ section_id }} .ingredient-content {
+                    flex: 1;
+                  }
+
+                  #{{ section_id }} .ingredient-name {
+                    color: {{ section.settings.accent_color }};
+                    font-size: 18px;
+                    font-weight: 600;
+                    margin: 0 0 8px 0;
+                    line-height: 1.3;
+                  }
+
+                  #{{ section_id }} .ingredient-description {
+                    font-size: 16px;
+                    line-height: 1.5;
+                    margin: 0;
+                  }
+
+                  @media (max-width: 768px) {
+                    #{{ section_id }} .key-ingredients-container {
+                      padding: 20px;
+                    }
+
+                    #{{ section_id }} .key-ingredients-title {
+                      font-size: 28px;
+                    }
+
+                    #{{ section_id }} .ingredient-icon {
+                      width: 50px;
+                      height: 50px;
+                    }
+
+                    #{{ section_id }} .ingredient-name {
+                      font-size: 16px;
+                    }
+
+                    #{{ section_id }} .ingredient-description {
+                      font-size: 14px;
+                    }
+                  }
+                </style>
+
+                {%- if block.settings.title != blank -%}
+                  <h3 class="key-ingredients-title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+
+                <div class="ingredients-list">
+                  {%- if block.settings.ingredient_1_name != blank -%}
+                    <div class="ingredient-item">
+                      {%- if block.settings.ingredient_1_icon != blank -%}
+                        <div class="ingredient-icon">
+                          {% render 'image', image: block.settings.ingredient_1_icon, classes: 'ingredient-icon-img' %}
+                        </div>
+                      {%- endif -%}
+                      <div class="ingredient-content">
+                        <h4 class="ingredient-name">{{ block.settings.ingredient_1_name }}</h4>
+                        {%- if block.settings.ingredient_1_description != blank -%}
+                          <p class="ingredient-description">{{ block.settings.ingredient_1_description }}</p>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.ingredient_2_name != blank -%}
+                    <div class="ingredient-item">
+                      {%- if block.settings.ingredient_2_icon != blank -%}
+                        <div class="ingredient-icon">
+                          {% render 'image', image: block.settings.ingredient_2_icon, classes: 'ingredient-icon-img' %}
+                        </div>
+                      {%- endif -%}
+                      <div class="ingredient-content">
+                        <h4 class="ingredient-name">{{ block.settings.ingredient_2_name }}</h4>
+                        {%- if block.settings.ingredient_2_description != blank -%}
+                          <p class="ingredient-description">{{ block.settings.ingredient_2_description }}</p>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.ingredient_3_name != blank -%}
+                    <div class="ingredient-item">
+                      {%- if block.settings.ingredient_3_icon != blank -%}
+                        <div class="ingredient-icon">
+                          {% render 'image', image: block.settings.ingredient_3_icon, classes: 'ingredient-icon-img' %}
+                        </div>
+                      {%- endif -%}
+                      <div class="ingredient-content">
+                        <h4 class="ingredient-name">{{ block.settings.ingredient_3_name }}</h4>
+                        {%- if block.settings.ingredient_3_description != blank -%}
+                          <p class="ingredient-description">{{ block.settings.ingredient_3_description }}</p>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+
+            {%- when 'proven_results_tabs' -%}
+              <div class="c-proven-results-container" {{ block.shopify_attributes }}>
+                <style>
+                  #{{ section_id }} .c-proven-results-container {
+                    margin-top: 1.5rem;
+                  }
+
+                  #{{ section_id }} .c-proven-results-tabs {
+                    display: flex;
+                    gap: 0;
+                    margin-bottom: 24px;
+                    border-radius: 0;
+                    overflow: visible;
+                    border: none;
+                  }
+
+                  #{{ section_id }} .c-proven-tab {
+                    flex: 1;
+                    background: transparent;
+                    border: none;
+                    padding: .5rem;
+                    color: {{ section.settings.text_color }};
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 120%;
+                    letter-spacing: 0.7px;
+                    text-transform: uppercase;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    position: relative;
+                    text-align: left !important;
+                    text-decoration: none;
+                  }
+
+                  #{{ section_id }} .c-proven-tab:last-child {
+                    border-right: none;
+                  }
+
+                  #{{ section_id }} .c-proven-tab.active {
+                    background: transparent;
+                    color: {{ section.settings.accent_color }};
+                    font-family: "Cormorant Garamond";
+                    font-size: 20px;
+                    font-style: italic;
+                    font-weight: 500;
+                    line-height: 100%;
+                    letter-spacing: normal;
+                    text-transform: none;
+                    text-decoration: underline;
+                  }
+
+                  #{{ section_id }} .c-proven-tab:hover:not(.active) {
+                    background: transparent;
+                    opacity: 0.7;
+                  }
+
+                  #{{ section_id }} .c-proven-tab-content {
+                    display: none;
+                    animation: cProvenFadeIn-{{ section_id }} 0.3s ease-in-out;
+                  }
+
+                  #{{ section_id }} .c-proven-tab-content.active {
+                    display: block;
+                  }
+
+                  #{{ section_id }} .c-proven-results-title {
+                    color: {{ section.settings.accent_color }};
+                    font-family: "Cormorant Garamond", serif;
+                    font-style: italic;
+                    font-size: 32px;
+                    font-weight: 400;
+                    margin: 0 0 16px 0;
+                    line-height: 1.2;
+                  }
+
+                  #{{ section_id }} .c-proven-results-subtitle {
+                    color: {{ section.settings.text_color }};
+                    font-size: 20px;
+                    font-weight: 600;
+                    margin: 0 0 20px 0;
+                    line-height: 1.3;
+                  }
+
+                  #{{ section_id }} .c-proven-results-text {
+                    color: {{ section.settings.text_color }};
+                    font-size: 16px;
+                    line-height: 1.6;
+                    margin-bottom: 20px;
+                    opacity: 0.85;
+                  }
+
+                  #{{ section_id }} .c-proven-results-list {
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                  }
+
+                  #{{ section_id }} .c-proven-results-list li,
+                  #{{ section_id }} .c-proven-results-item {
+                    color: {{ section.settings.text_color }};
+                    font-size: 16px;
+                    line-height: 1.5;
+                    margin-bottom: 12px;
+                    padding-left: 24px;
+                    position: relative;
+                  }
+
+                  @keyframes cProvenFadeIn-{{ section_id }} {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                  }
+
+                  @media (max-width: 768px) {
+                    #{{ section_id }} .c-proven-results-container {
+                      padding: 0;
+                    }
+
+                    #{{ section_id }} .c-proven-tab {
+                      padding: 12px 16px;
+                      font-size: 12px;
+                    }
+
+                    #{{ section_id }} .c-proven-tab.active {
+                      font-size: 20px;
+                    }
+
+                    #{{ section_id }} .c-proven-results-title {
+                      font-size: 28px;
+                    }
+
+                    #{{ section_id }} .c-proven-results-subtitle {
+                      font-size: 18px;
+                    }
+                  }
+                </style>
+
+                <div class="c-proven-results-tabs">
+                  <button class="c-proven-tab active" data-tab="results-{{ section_id }}">
+                    {{ block.settings.tab1_title | default: "Is This Right for Me?" }}
+                  </button>
+                  <button class="c-proven-tab" data-tab="usage-{{ section_id }}">
+                    {{ block.settings.tab2_title | default: "How to Use" }}
+                  </button>
+                </div>
+
+                <!-- Tab 1: Proven Results -->
+                <div class="c-proven-tab-content active" data-content="results-{{ section_id }}">
+                  {%- if selected_product.metafields.custom.clinically_proven_benefits != blank -%}
+                    {% assign results = selected_product.metafields.custom.clinically_proven_benefits.value %}
+                    <div class="c-proven-results-list">
+                      {% for result in results %}
+                        <div class="c-proven-results-item">{{ result }}</div>
+                      {% endfor %}
+                    </div>
+                  {%- elsif block.settings.tab1_fallback_content != blank -%}
+                    <div class="c-proven-results-text">{{ block.settings.tab1_fallback_content }}</div>
+                  {%- endif -%}
+                </div>
+
+                <!-- Tab 2: How to Use -->
+                <div class="c-proven-tab-content" data-content="usage-{{ section_id }}">
+                  {%- if block.settings.usage_title != blank -%}
+                    <h3 class="c-proven-results-title">{{ block.settings.usage_title }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.usage_subtitle != blank -%}
+                    <h4 class="c-proven-results-subtitle">{{ block.settings.usage_subtitle }}</h4>
+                  {%- endif -%}
+                  {%- if block.settings.usage_text != blank -%}
+                    <div class="c-proven-results-text">{{ block.settings.usage_text }}</div>
+                  {%- endif -%}
+                </div>
+
+                <script>
+                  (function() {
+                    const sectionId = '{{ section_id }}';
+                    const container = document.getElementById(sectionId);
+                    if (!container) return;
+
+                    const tabs = container.querySelectorAll('.c-proven-tab');
+                    const contents = container.querySelectorAll('.c-proven-tab-content');
+
+                    tabs.forEach(tab => {
+                      tab.addEventListener('click', function() {
+                        const targetTab = this.getAttribute('data-tab');
+                        
+                        // Remove active class from all tabs and contents within this section
+                        tabs.forEach(t => t.classList.remove('active'));
+                        contents.forEach(c => c.classList.remove('active'));
+                        
+                        // Add active class to clicked tab and corresponding content
+                        this.classList.add('active');
+                        container.querySelector(`[data-content="${targetTab}"]`).classList.add('active');
+                      });
+                    });
+                  })();
+                </script>
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- comment -%} JavaScript for variant/selling plan selection {%- endcomment -%}
+<script type="application/json" id="ProductVariantsJson-{{ section_id }}">
+  {{ selected_product.variants | json }}
+</script>
+
+<script>
+  (function () {
+    // Store variants globally for this section
+    const sectionId = '{{ section_id }}';
+    window.productVariantsBySection = window.productVariantsBySection || {};
+
+    try {
+      const variantsJson = document.getElementById('ProductVariantsJson-' + sectionId);
+      if (variantsJson) {
+        window.productVariantsBySection[sectionId] = JSON.parse(variantsJson.textContent);
+      }
+    } catch (e) {
+      console.error('Error parsing variants:', e);
+    }
+  })();
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const sectionId = '{{ section_id }}';
+    const container = document.getElementById(sectionId);
+    if (!container) return;
+
+    // ========================
+    // IMAGE GALLERY / SWIPER
+    // ========================
+    const swiperWrapper = container.querySelector('[data-swiper-wrapper]');
+    const thumbnails = container.querySelectorAll('[data-thumbnail-index]');
+    const bullets = container.querySelectorAll('[data-bullet-index]');
+    const slides = container.querySelectorAll('[data-slide-index]');
+    let currentIndex = 0;
+    let startX = 0;
+    let isDragging = false;
+
+    function goToSlide(index) {
+      if (index < 0 || index >= slides.length) return;
+      currentIndex = index;
+      
+      // Update swiper position
+      if (swiperWrapper) {
+        swiperWrapper.style.transform = `translateX(-${index * 100}%)`;
+      }
+
+      // Update thumbnails
+      thumbnails.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+
+      // Update bullets
+      bullets.forEach((bullet, i) => {
+        bullet.classList.toggle('active', i === index);
+      });
+    }
+
+    // Thumbnail click handlers
+    thumbnails.forEach((thumb) => {
+      thumb.addEventListener('click', () => {
+        const index = parseInt(thumb.dataset.thumbnailIndex, 10);
+        goToSlide(index);
+      });
+    });
+
+    // Bullet click handlers
+    bullets.forEach((bullet) => {
+      bullet.addEventListener('click', () => {
+        const index = parseInt(bullet.dataset.bulletIndex, 10);
+        goToSlide(index);
+      });
+    });
+
+    // Touch/Swipe support for mobile
+    const swiperContainer = container.querySelector('[data-swiper]');
+    if (swiperContainer) {
+      swiperContainer.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+      }, { passive: true });
+
+      swiperContainer.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+      }, { passive: true });
+
+      swiperContainer.addEventListener('touchend', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+
+        if (Math.abs(diff) > 50) {
+          if (diff > 0 && currentIndex < slides.length - 1) {
+            goToSlide(currentIndex + 1);
+          } else if (diff < 0 && currentIndex > 0) {
+            goToSlide(currentIndex - 1);
+          }
+        }
+      }, { passive: true });
+    }
+
+    // ========================
+    // VARIANT/SELLING PLAN LOGIC
+    // ========================
+    const variantRadios = container.querySelectorAll("input[name='variant_selling_plan']");
+    const variantInput = container.querySelector('#SelectedVariantId-{{ section_id }}');
+    const sellingPlanInput = container.querySelector('#SelectedSellingPlan-{{ section_id }}');
+    const addToCartButton = container.querySelector('.product-form__submit');
+    const priceDisplay = container.querySelector('[data-product-price]');
+    const optionContainers = container.querySelectorAll('.option-container');
+
+    // Get product variants from global store
+    const productVariants = window.productVariantsBySection[sectionId] || [];
+
+    function updateSelected() {
+      optionContainers.forEach((option) => {
+        const radio = option.querySelector('input[type="radio"]');
+        if (radio && radio.checked) {
+          option.classList.add('selected');
+        } else {
+          option.classList.remove('selected');
+        }
+      });
+    }
+
+    function updateSellingPlan(event) {
+      if (!event.target.value) return;
+
+      // Parse the value into variantId and sellingPlanId (same as main-product)
+      const [variantId, sellingPlanId] = event.target.value.split('-');
+
+      if (variantInput) {
+        variantInput.value = variantId;
+      }
+
+      if (sellingPlanInput) {
+        if (sellingPlanId === 'otp') {
+          sellingPlanInput.value = '';
+        } else {
+          sellingPlanInput.value = sellingPlanId;
+        }
+      }
+
+      // Find the selected variant
+      const selectedVariant = productVariants.find((v) => v.id == variantId);
+
+      if (selectedVariant) {
+        setTimeout(() => {
+          if (selectedVariant.available) {
+            // Update button text based on selection
+            if (sellingPlanId === 'otp') {
+              addToCartButton.innerText = "{{ 'products.product.add_to_cart' | t | default: 'Add to Cart' }}";
+            } else if (sellingPlanId) {
+              addToCartButton.innerText = "{{ 'products.product.subscribe' | t | default: 'Subscribe' }}";
+            } else {
+              addToCartButton.innerText = "{{ 'products.product.add_to_cart' | t | default: 'Add to Cart' }}";
+            }
+
+            // Update the button's data attribute with the variant ID
+            addToCartButton.dataset.productId = variantId;
+            addToCartButton.disabled = false;
+          } else {
+            addToCartButton.innerText = "{{ 'products.product.sold_out' | t | default: 'Unavailable' }}";
+            addToCartButton.disabled = true;
+          }
+
+          // Update price display
+          if (priceDisplay) {
+            const formattedPrice = Shopify.formatMoney
+              ? Shopify.formatMoney(selectedVariant.price)
+              : '$' + (selectedVariant.price / 100).toFixed(2);
+            priceDisplay.textContent = formattedPrice;
+          }
+        }, 10);
+      }
+
+      updateSelected();
+    }
+
+    // Attach change event to variant radios
+    variantRadios.forEach((radio) => {
+      radio.addEventListener('change', updateSellingPlan);
+    });
+
+    // Select first radio if none selected and run initial update
+    function initializeSelection() {
+      const checkedRadio = container.querySelector('input[name="variant_selling_plan"]:checked');
+      if (checkedRadio) {
+        updateSellingPlan({ target: checkedRadio });
+      } else {
+        const firstRadio = container.querySelector('input[name="variant_selling_plan"]');
+        if (firstRadio) {
+          firstRadio.checked = true;
+          updateSellingPlan({ target: firstRadio });
+        }
+      }
+    }
+
+    // Initialize
+    initializeSelection();
+    updateSelected();
+
+    // Custom Add to Cart handler for this section
+    const addToCartBtn = document.getElementById('AddToCart-{{ section_id }}');
+    const productForm = container.querySelector('form[data-type="add-to-cart-form"]');
+
+    if (addToCartBtn && productForm) {
+      addToCartBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (addToCartBtn.disabled || addToCartBtn.classList.contains('loading')) return;
+
+        addToCartBtn.classList.add('loading');
+        addToCartBtn.setAttribute('aria-disabled', 'true');
+
+        const formData = new FormData(productForm);
+
+        fetch(window.routes?.cart_add_url || '/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            Accept: 'application/json',
+          },
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((response) => {
+            if (response.status) {
+              console.error('Error adding to cart:', response.description);
+              return;
+            }
+
+            // Open the cart drawer
+            const cartDrawer = document.querySelector('cart-drawer');
+            if (cartDrawer) {
+              cartDrawer.render();
+              cartDrawer.open();
+            }
+          })
+          .catch((error) => console.error('Add to cart failed:', error))
+          .finally(() => {
+            addToCartBtn.classList.remove('loading');
+            addToCartBtn.removeAttribute('aria-disabled');
+          });
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Product Featured V2",
+  "tag": "section",
+  "class": "section section-product-featured",
+  "blocks": [
+    {
+      "type": "key_ingredients",
+      "name": "Key Ingredients",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Section Title",
+          "default": "Key Ingredients"
+        },
+        {
+          "type": "header",
+          "content": "Ingredient 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_1_icon",
+          "label": "Ingredient 1 Icon"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_1_name",
+          "label": "Ingredient 1 Name",
+          "default": "Beet Root extract & Nitrate Blend"
+        },
+        {
+          "type": "textarea",
+          "id": "ingredient_1_description",
+          "label": "Ingredient 1 Description",
+          "default": "A potent source of dietary nitrates that is broken down in the body to form nitric oxide. Two of our capsules has the dietary nitrate equivalent of 7oz of beetroot."
+        },
+        {
+          "type": "header",
+          "content": "Ingredient 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_2_icon",
+          "label": "Ingredient 2 Icon"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_2_name",
+          "label": "Ingredient 2 Name",
+          "default": "VITAMIN C"
+        },
+        {
+          "type": "textarea",
+          "id": "ingredient_2_description",
+          "label": "Ingredient 2 Description",
+          "default": "An essential vitamin and potent antioxidant, Vitamin C helps convert nitrite to nitric oxide."
+        },
+        {
+          "type": "header",
+          "content": "Ingredient 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_3_icon",
+          "label": "Ingredient 3 Icon"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_3_name",
+          "label": "Ingredient 3 Name",
+          "default": "MAGNESIUM"
+        },
+        {
+          "type": "textarea",
+          "id": "ingredient_3_description",
+          "label": "Ingredient 3 Description",
+          "default": "A crucial mineral respected for its ability to relax blood vessels; sufficient magnesium intake is important for cardiovascular health."
+        }
+      ]
+    },
+    {
+      "type": "proven_results_tabs",
+      "name": "Proven Results (Tabs)",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Tab Titles"
+        },
+        {
+          "type": "text",
+          "id": "tab1_title",
+          "label": "Tab 1 Title",
+          "default": "Is This Right for Me?"
+        },
+        {
+          "type": "text",
+          "id": "tab2_title",
+          "label": "Tab 2 Title",
+          "default": "How to Use"
+        },
+        {
+          "type": "header",
+          "content": "Tab 1 - Results Content"
+        },
+        {
+          "type": "paragraph",
+          "content": "Tab 1 content is automatically populated from the product's 'Clinically Proven Benefits' metafield. Use fallback content below if the metafield is empty."
+        },
+        {
+          "type": "richtext",
+          "id": "tab1_fallback_content",
+          "label": "Tab 1 Fallback Content",
+          "info": "Displayed if the product has no 'Clinically Proven Benefits' metafield."
+        },
+        {
+          "type": "header",
+          "content": "Tab 2 - Usage Content"
+        },
+        {
+          "type": "text",
+          "id": "usage_title",
+          "label": "Usage Title",
+          "default": "How to Use"
+        },
+        {
+          "type": "text",
+          "id": "usage_subtitle",
+          "label": "Usage Subtitle",
+          "default": "Simple Daily Routine"
+        },
+        {
+          "type": "richtext",
+          "id": "usage_text",
+          "label": "Usage Instructions",
+          "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom_id",
+      "label": "Custom Section ID",
+      "info": "Optional. If empty, uses the default section ID."
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "header",
+      "content": "Image Gallery"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_thumbnails",
+      "label": "Show image thumbnails",
+      "default": true,
+      "info": "Display thumbnail navigation for product images on desktop. On mobile, pagination dots are shown instead."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "FEATURED PRODUCT"
+    },
+    {
+      "type": "text",
+      "id": "custom_title",
+      "label": "Custom Title",
+      "info": "Leave blank to use product title. Use {accent}text{/accent} for italic styling."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_accent_title",
+      "label": "Enable accent styling in title",
+      "default": true,
+      "info": "When enabled, text wrapped in {accent}{/accent} will be styled differently."
+    },
+    {
+      "type": "richtext",
+      "id": "custom_description",
+      "label": "Custom Description",
+      "info": "Leave blank to use product description."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_truemed",
+      "label": "Show TrueMed Widget",
+      "default": false,
+      "info": "Display TrueMed payment option below the add to cart button."
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_badge",
+      "label": "Trust Badge Image",
+      "info": "Optional trust badge to display below the add to cart button."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#080B2B"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "option_bg_color",
+      "label": "Option Background Color",
+      "default": "#ebe8e6",
+      "info": "Background color for unselected purchase options."
+    },
+    {
+      "type": "color",
+      "id": "option_border_color",
+      "label": "Option Border Color",
+      "info": "Border color for unselected purchase options."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Product Featured"
+    }
+  ]
+}
+{% endschema %}

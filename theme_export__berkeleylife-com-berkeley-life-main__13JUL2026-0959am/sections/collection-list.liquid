@@ -1,0 +1,127 @@
+<div class="md:py-20 py-12 md:px-8 max-w-screen-xl px-4 mx-auto">
+  <div class="pb-8">
+    <h2 class="h4 scroll-mt-20" id="{{ section.settings.title | handleize }}">{{ section.settings.title | escape }}</h2>
+  </div>
+
+  <div class="relative" data-scroll-container="{{ section.id }}">
+    <ul class="overscroll-x-contain snap-x snap-mandatory scroll-p-8 flex w-full gap-8 pt-1 pb-4 overflow-x-auto" role="list">
+      {%- for block in section.blocks -%}
+        <li class="w-[calc(33.3%-3rem)] min-w-[16rem] snap-center shrink-0 grow {% if forloop.first %} scroll-ml-8 md:scroll-ml-12 lg:scroll-ml-24{% endif %}" {{ block.shopify_attributes }}>
+          {% render 'collection-card',
+            card_collection: block.settings.collection,
+            image_override: block.settings.image,
+            image_ratio: section.settings.image_ratio
+          %}
+        </li>
+      {%- endfor -%}
+      <div spacer aria-hidden="true" class="{% if section.blocks.size > 3 %} w-px shrink-0{% else %}hidden{% endif %}">
+      </div>
+    </ul>
+
+    {%- comment -%}This is a simple arrow and shadow component for nicer horizontal scroll containers.{%- endcomment -%}
+    {%- if section.blocks.size > 1 -%}
+      <div data-shadow-l aria-hidden="true" class="empty:block from-white bg-gradient-to-r md:w-64 absolute top-0 left-0 w-32 h-full transition-opacity duration-500 opacity-0 pointer-events-none">
+      </div>
+      <button data-button-l type="button" class="top-1/2 left-2 md:left-8 disabled:opacity-0 disabled:cursor-not-allowed absolute -translate-y-1/2" disabled>
+        <span class="sr-only">Scroll Left</span>
+        <span aria-hidden="true" class="block w-8 rotate-180">{% render 'icon-arrow' %}</span>
+      </button>
+      <div data-shadow-r aria-hidden="true" class="empty:block from-white bg-gradient-to-l md:w-64 absolute top-0 right-0 w-32 h-full transition-opacity duration-500 pointer-events-none"></div>
+      <button data-button-r type="button" class="top-1/2 right-2 md:right-4 disabled:opacity-0 disabled:cursor-not-allowed absolute -translate-y-1/2">
+        <span class="sr-only">Scroll Right</span>
+        <span aria-hidden="true" class="block w-8">{% render 'icon-arrow' %}</span>
+      </button>
+      <script type="module">
+        import { scrollContainer } from "{{ 'scrollContainer.js' | asset_url }}"
+        const container = document.querySelector('[data-scroll-container="{{ section.id }}"]')
+        scrollContainer(container)
+      </script>
+    {%- endif -%}
+  </div>
+  {%- if section.settings.show_view_all and section.blocks.size < collections.size -%}
+    <div class="pt-4 text-center">
+      <a href="{{ routes.collections_url }}" class="button">{{ 'sections.collection_list.view_all' | t }}</a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Collection List",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Collections",
+      "label": "t:sections.collection-list.settings.title.label"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "aspect-video",
+          "label": "Wider"
+        },
+        {
+          "value": "aspect-[4/3]",
+          "label": "Wide"
+        },
+        {
+          "value": "aspect-[3/4]",
+          "label": "Portrait"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        }
+      ],
+      "default": "aspect-square",
+      "label": "Image Ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": false,
+      "label": "t:sections.collection-list.settings.show_view_all.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "t:sections.collection-list.blocks.featured_collection.name",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.collection-list.blocks.featured_collection.settings.collection.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override",
+          "info": "Use this to override the collection image."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection List",
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,356 @@
+<style>
+  #{{section.id}} {
+      {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+      {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+    padding-top: {{ half_padding_top }}em;
+    padding-bottom: {{ half_padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+
+    & * {
+        color: {{ section.settings.text_color }};
+        position: relative;
+        z-index: 2;
+    }
+
+    & .section__ingredient__container {
+      padding-block: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      & .ingredient__header {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        text-align: left;
+      }
+
+      & .ingredient__subtitle {
+        font-size: clamp(12px, 2vw, 14px);
+        text-transform: uppercase;
+        margin: 0;
+      }
+
+      & .ingredient__title {
+        font-size: clamp(28px, 5vw + 1rem, 48px);
+        max-width: 600px;
+        text-wrap: balance;
+        line-height: 1.2;
+        margin: 0;
+ 
+      }
+
+      & .ingredient__title--accent {
+        color: {{ section.settings.accent_color }};
+        font-family: "Cormorant Garamond";
+        font-style: italic;
+        font-weight: 400;
+      }
+
+      & .ingredient__description {
+        max-width: 650px;
+        font-size: clamp(14px, 2.5vw, 16px);
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      & .ingredient__content {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      & .ingredient__left {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        width: 100%;
+      }
+
+      & .ingredient__features {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        width: 100%;
+    
+      }
+
+      & .ingredient__feature {
+        border: 1px solid {{ section.settings.accent_color }};
+        border-radius: 1rem;
+        padding: 24px;
+        background-color: {{ section.settings.card_bg_color }};
+ 
+ 
+      }
+
+      & .feature__title {
+        font-size: clamp(18px, 3vw, 24px);
+        color: {{ section.settings.accent_color }};
+        font-family: "Cormorant Garamond";
+        font-style: italic;
+        margin: 0 0 0.75rem 0;
+        line-height: 1.3;
+      }
+
+      & .feature__description {
+        font-size: clamp(15px, 2.5vw, 16px);
+        margin: 0;
+        line-height: 1.5;
+        font-weight: 300;
+      }
+
+      & .ingredient__image__container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        & img {
+          width: 100%;
+          height: auto;
+          object-fit: contain;
+        }
+      }
+
+      & .ingredient__image {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        object-position: center;
+      }
+
+      & .chart__button {
+        display: inline-block;
+        padding: 1rem 2rem;
+        background-color: {{ section.settings.accent_color }};
+        border-radius: 9999px;
+        color: #ffffff;
+        width: max-content;
+        font-size: clamp(14px, 2vw, 16px);
+        text-decoration: none;
+        text-transform: capitalize;
+        letter-spacing: 0.5px;
+        font-weight: 400;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 2px solid {{ section.settings.accent_color }};
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+
+ 
+  @media (min-width: 1024px) {
+    #{{section.id}} {
+      padding-top: {{ section.settings.padding_top }}em;
+      padding-bottom: {{ section.settings.padding_bottom }}em;
+
+      .section__ingredient__container {
+        & .ingredient__content {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 4rem;
+        }
+ 
+        & .ingredient__features {
+            flex-direction: row;
+            gap: 1rem;
+ 
+        }
+      }
+    }
+  }
+
+  
+</style>
+
+<section id="{{section.id}}">
+  <div class="section__ingredient__container container-sl">
+    <div class="ingredient__content">
+      <div class="ingredient__left">
+        <div class="ingredient__header">
+          {% if section.settings.subtitle %}
+            <p class="ingredient__subtitle">{{ section.settings.subtitle }}</p>
+          {% endif %}
+          
+          <h2 class="ingredient__title">
+            {% assign title_with_accent = section.settings.title | replace: '{accent}', '<span class="ingredient__title--accent">' | replace: '{/accent}', '</span>' %}
+            {{ title_with_accent }}
+          </h2>
+          
+          {% if section.settings.description %}
+            <p class="ingredient__description">{{ section.settings.description }}</p>
+          {% endif %}
+        </div>
+
+        {% if section.blocks.size > 0 %}
+          <div class="ingredient__features">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'feature_item' %}
+                  <div class="ingredient__feature" {{ block.shopify_attributes }}>
+                    <h3 class="feature__title">{{ block.settings.title }}</h3>
+                    <p class="feature__description">{{ block.settings.description }}</p>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if section.settings.cta_text %}
+          <a href="{{ section.settings.cta_link }}" class="chart__button">{{ section.settings.cta_text }}</a>
+        {% endif %}
+      </div>
+
+      {% if section.settings.product_image %}
+        <div class="ingredient__image__container">
+          {{ section.settings.product_image | image_url: width: 500 | image_tag: 
+             alt: section.settings.product_image.alt | default: 'Product',
+             class: 'ingredient__image',
+             width: 500,
+             height: 'auto' }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Ingredient Blend",
+  "tag": "section",
+  "class": "section section-ingredient-blend",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "SCIENCE-BACKED FORMULA"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Precision-Crafted {accent}Ingredient{/accent} Blend"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "The first dual-action supplement to combine a clinically studied pollen blend for symptom relief with a proprietary Nitric Oxide support blend for blood flow, energy, and resilience."
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product Image"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "LOGIN TO ACCESS WHOLESALE PRICE"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#2c3e50"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#e74c3c"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#e1e8ed"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_item",
+      "name": "Feature Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Nitrate-Based Formula"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Supports Nitric Oxide production for cardiovascular health and sustained energy levels."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Ingredient Blend",
+      "blocks": [
+        {
+          "type": "feature_item",
+          "settings": {
+            "title": "Nitrate-Based Formula",
+            "description": "Supports Nitric Oxide production for cardiovascular health and sustained energy levels."
+          }
+        },
+        {
+          "type": "feature_item",
+          "settings": {
+            "title": "Pollen Complex",
+            "description": "Clinically studied to relieve hot flashes, night sweats, and mood fluctuations."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

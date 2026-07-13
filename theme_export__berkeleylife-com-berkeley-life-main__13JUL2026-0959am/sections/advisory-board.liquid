@@ -1,0 +1,244 @@
+{%-liquid
+    assign show = true
+    assign now = 'now' | date: '%s' | times: 1
+    assign start_date = section.settings.start_date | default: 'now' | date: '%s' | times: 1
+    assign end_date = section.settings.end_date | date: '%s' | times: 1
+    if start_date > now
+      assign show = false
+    endif
+    if end_date > 0 and end_date < now
+      assign show = false
+    endif
+  -%}
+  {%- if show -%}
+    <div class="relative bg-bg" style="--color-text: {{ section.settings.text_color | default: '#090909' }}; --color-bg: {{ section.settings.bg_color | default: '#F6F3F0' }}">
+        <div class="relative max-w-screen-xl mx-auto px-8 {{ section.settings.mobile_spacing_bottom | prepend: 'pb-' }} {{ section.settings.mobile_spacing_top | prepend: 'pt-' }} {{ section.settings.spacing_top | prepend: 'md:pt-' }} {{ section.settings.spacing_bottom | prepend: 'md:pb-' }} bg-bg text-text">
+            <div class="mb-8 text-center">
+                <h5 class="text-7xl font-secondaryHeader"> {{ section.settings.heading }}</h5>
+                <div class="text-2xl tracking-widest uppercase"> {{ section.settings.subhead }}</div>
+    
+            </div>
+            <div class="relative grid grid-cols-1 overflow-hidden md:grid-cols-2">
+            {%- for block in section.blocks -%}
+
+            <div class=" {% if block.settings.layout == 'text_first' %}md:order-1{% endif %}">
+            <div class="{{ section.settings.image_ratio }} mx-auto relative md:h-[80%] md:w-[80%]">
+              {%- liquid
+                if block.settings.image != blank
+                  render 'image', image: block.settings.image, fit: 'object-contain', eager: section.settings.eager, classes: 'h-full z-10 relative'
+                else
+                  echo 'image' | placeholder_svg_tag: 'placeholder-svg'
+                endif
+            -%}
+            </div>
+          </div>
+  
+          <div data-parent class="flex flex-col text-center md:text-left my-4 justify-center md:p-24 h-full  w-full max-w-4xl {{ section.settings.text_align | default: 'text-left' }}">
+  
+                <div
+                  data-pre="opacity-0 translate-y-8"
+                  data-post="opacity-100 translate-y-0"
+                  class="text-3xl motion-safe:transition-all motion-safe:duration-700"
+                  {{ block.shopify_attributes }}>
+                    {{ block.settings.heading }}
+                </div>
+                <div
+                    data-pre="opacity-0 translate-y-8"
+                    data-post="opacity-100 translate-y-0"
+                    class="mb-2 text-base font-bold tracking-wide uppercase motion-safe:transition-all motion-safe:duration-700"
+                    {{ block.shopify_attributes }}>
+                      {{ block.settings.title }}
+                  </div>
+                  <div
+                    data-pre="opacity-0 translate-y-8"
+                    data-post="opacity-100 translate-y-0"
+                    class="inline mb-4 prose-lg md:mb-0 motion-safe:transition-all motion-safe:duration-700 list_div"
+                    {{ block.shopify_attributes }}>
+                    {{ block.settings.text }}  
+                    <div
+                      data-pre="opacity-0 translate-y-8"
+                      data-post="opacity-100 translate-y-0"
+                      class="md:inline uppercase items-center readmoreButton text-xs tracking-wider font-bold mb-8 md:mb-0 mx-auto w-fit md:w-full {{ section.settings.text_align | default: 'text-left' }} motion-safe:transition-all motion-safe:duration-700">
+                      <span
+                        class="!text-aqua w-full max-w-full readMoreText"
+                        {{ block.shopify_attributes }}>
+                        {% render 'icon-plus', classes: 'w-3 mr-1 inline-block' %}
+                        Read More                     
+                      </span>
+                      <div class="hidden text-lg font-normal text-center normal-case md:text-left readMoreContent">
+                        {{ block.settings.readmore }}
+                      </div>
+                    </div>
+         
+                  </div>
+                  
+               
+          </div>
+          {% if forloop.first %}
+          <span class="absolute right-[20%] z-0 w-[60%] hidden lg:block h-[3px] {% if block.settings.layout == 'text_first' %}rotate-[135deg]  {% else %} rotate-45 {% endif %} bg-black diagonal-line top-1/2 -transform-y-1/2"></span>
+          {% endif %}
+        {%- endfor -%}
+
+        </div>
+      </div>
+
+    </div>
+  {%- endif -%}
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const buttons = document.querySelectorAll(".readmoreButton");
+      
+      buttons.forEach(button => {
+        button.addEventListener("click", function (event) {
+          console.log(button);
+          button.querySelector(".readMoreContent").classList.remove("hidden");
+          button.querySelector(".readMoreText").classList.add("hidden");
+   
+        });
+      });
+    });
+  </script>
+  
+  {% schema %}
+  {
+    "name": "Advisory Board",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Image and Color Settings"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background Color"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color"
+      },
+      {
+        "type": "header",
+        "content": "Heading and Text Settings"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "Image with text",
+        "label": "Title"
+      },
+      {
+        "type": "text",
+        "id": "subhead",
+        "label": "Subhead"
+      },
+      {
+        "type": "header",
+        "content": "Padding and Margin Settings"
+      },
+      {
+        "type": "range",
+        "id": "spacing_top",
+        "label": "Spacing top",
+        "unit": "x",
+        "min": 0,
+        "max": 40,
+        "step": 8,
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "mobile_spacing_top",
+        "label": "Mobile Spacing Top",
+        "unit": "x",
+        "min": 0,
+        "max": 40,
+        "step": 4,
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "spacing_bottom",
+        "label": "Spacing bottom",
+        "unit": "x",
+        "min": 0,
+        "max": 40,
+        "step": 8,
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "mobile_spacing_bottom",
+        "label": "Mobile Spacing bottom",
+        "unit": "x",
+        "min": 0,
+        "max": 40,
+        "step": 4,
+        "default": 4
+      }
+    ],
+    "blocks": [
+      {
+        "type": "member",
+        "name": "Member",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },{
+            "type": "text",
+            "id": "heading",
+            "default": "Image with text",
+            "label": "Name"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "label": "t:sections.image-with-text.blocks.text.settings.text.label"
+          },
+          {
+            "type": "richtext",
+            "id": "readmore",
+            "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "label": "Read More Content"
+          },
+          {
+            "type": "select",
+            "id": "layout",
+            "options": [
+              {
+                "value": "image_first",
+                "label": "Image First"
+              },
+              {
+                "value": "text_first",
+                "label": "Text First"
+              }
+            ],
+            "default": "image_first",
+            "label": "Image Order on Desktop",
+            "info": "Will default to image first on mobile."
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Advisory Board",
+        "blocks": [
+          {
+            "type": "member"
+          }
+        ]
+      }
+    ]
+  }
+  {% endschema %}

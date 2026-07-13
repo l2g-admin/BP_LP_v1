@@ -1,0 +1,229 @@
+{% comment %}
+    Renders a list of product's price (regular, sale, subscription)
+
+    Accepts:
+    - product: {Object} Product Liquid object (optional)
+    - variant: {Object} Variant Liquid object (optional)
+    - use_variant: {Boolean} Renders selected or first variant price instead of overall product pricing (optional)
+    - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
+    - price_class: {String} Adds a price class to the price element (optional)
+    - show_subscription_pricing: {Boolean} Shows subscription vs regular price layout (optional, default: true)
+
+    Usage:
+    {% render 'price', product: product %}
+    {% render 'price', product: product, show_subscription_pricing: true %}
+{% endcomment %}
+{%- liquid
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+    unless price_variant == blank
+      assign target = price_variant
+    endunless
+  else
+    assign target = product
+  endif
+
+  comment
+    For selling plans, we always need to check on the variant level
+  endcomment
+  assign variant_for_selling_plans = product.selected_or_first_available_variant
+
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign initialPrice = target.price | default: 1999
+  assign one_time_price = variant_for_selling_plans.price | default: target.price | default: 1999
+
+  comment
+    If the resolved price is 0 or the target variant is hidden, fall back to the next non-hidden variant whose price is greater than 0
+  endcomment
+  if price == 0 or target.metafields.custom.hide_variant == true
+    for variant in product.variants
+      if variant.metafields.custom.hide_variant == true
+        continue
+      endif
+      if variant.price > 0
+        assign price = variant.price
+        assign initialPrice = variant.price
+        assign compare_at_price = variant.compare_at_price
+        assign one_time_price = variant.price
+        break
+      endif
+    endfor
+  endif
+  
+  comment
+    Check if product has selling plans (subscriptions)
+    Find the LOWEST subscription price across ALL variants to show the best deal
+  endcomment
+  assign has_selling_plans = false
+  assign subscription_price = nil
+  assign savings_percentage = 0
+  assign lowest_subscription_price = 999999999
+  assign lowest_one_time_price = 999999999
+  
+  for variant in product.variants
+    if variant.metafields.custom.hide_variant == true
+      continue
+    endif
+    if variant.selling_plan_allocations.size > 0
+      for allocation in variant.selling_plan_allocations
+        assign current_sub_price = allocation.price_adjustments.first.price | plus: 0
+        if current_sub_price > 0 and current_sub_price < lowest_subscription_price
+          assign has_selling_plans = true
+          assign lowest_subscription_price = current_sub_price
+          assign lowest_one_time_price = variant.price | plus: 0
+        endif
+      endfor
+    endif
+  endfor
+  
+  if has_selling_plans and lowest_subscription_price < 999999999
+    assign subscription_price = lowest_subscription_price
+    assign one_time_price = lowest_one_time_price
+    assign savings_amount = one_time_price | minus: subscription_price
+    if one_time_price > 0
+      assign savings_percentage = savings_amount | times: 100 | divided_by: one_time_price | round
+    endif
+  endif
+
+  comment
+    Handle selected selling plan if any
+  endcomment
+  if product.selected_selling_plan
+    assign selling_plan_allocation = variant_for_selling_plans.selling_plan_allocations | where: 'selling_plan_id', product.selected_selling_plan.id | first
+    assign adj = product.selected_selling_plan.price_adjustments[0]
+    if adj.value_type == 'percentage'
+      assign subscription_savings = price | divided_by: 100 | times: adj.value
+      assign price = variant_for_selling_plans.selling_plan_allocations[0].price
+    endif
+  endif
+  
+  assign available = target.available | default: false
+  assign money_price = price | money
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+  endif
+
+  assign money_price_numeric = money_price | remove: '$' | replace: ',', '' | times: 100
+  assign discount_amount = initialPrice | minus: money_price_numeric
+  assign discount_percentage = discount_amount | divided_by: initialPrice | times: 100 | round
+  
+  if target == product and product.price_varies
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+  endif
+
+  if compare_at_price > price
+    assign on_sale = true
+  endif
+  if available == false
+    assign sold_out = true
+  endif
+
+  comment
+    Default show_subscription_pricing to true if not specified
+  endcomment
+  unless show_subscription_pricing == false
+    assign show_subscription_pricing = true
+  endunless
+-%}
+
+<div data-price class="flex flex-wrap items-center relative {{ price_class }} gap-2">
+  
+  {%- comment -%}
+    ============================================
+    SUBSCRIPTION PRICING LAYOUT
+    Shows subscription price when product has selling plans
+    ============================================
+  {%- endcomment -%}
+  {%- if has_selling_plans and show_subscription_pricing -%}
+    <div data-price-subscription style="flex-direction: column !important; align-items: center !important;" class="flex flex-column items-center gap-1">
+      {%- comment -%} Subscription Price {%- endcomment -%}
+      <span class=" text-brand">From</span>
+      <span data-subscription-price class="  text-brand">
+        {%- if settings.currency_code_enabled -%}
+          {{ subscription_price | money_with_currency }}
+        {%- else -%}
+          {{ subscription_price | money }}
+        {%- endif -%}
+      </span>
+      {%- comment -%}
+      {%- if savings_percentage > 0 -%}
+        <span class="px-2 py-0.5 text-xs font-bold text-white rounded-full bg-brand">
+          Save {{ savings_percentage }}%
+        </span>
+      {%- endif -%}
+      {%- endcomment -%}
+    </div>
+  {%- else -%}
+    {%- comment -%}
+      ============================================
+      STANDARD PRICING LAYOUT (no subscription)
+      ============================================
+    {%- endcomment -%}
+    
+    {%- comment -%}The regular price, show if no sale{%- endcomment -%}
+    <div data-price-regular class="{% if on_sale %}hidden{% endif %}">
+      <span class="sr-only">{{ 'products.product.price.regular_price' | t }}</span>
+      {%- comment -%}The [data-price-content] here is used to grab and replace the price on variant changes.{%- endcomment -%}
+      <span data-price-content class="mr-1">
+        {{ money_price }}
+      </span>
+    </div>
+
+    {%- comment -%}The sale price, shown only if on sale.{%- endcomment -%}
+    <div data-price-sale class="{% unless on_sale %}hidden{% endunless %}">
+      <span class="sr-only">{{ 'products.product.price.regular_price' | t }}</span>
+      <span class="mr-1 text-gray-400">
+        <s>
+          {% if settings.currency_code_enabled %}
+            {{ compare_at_price | money_with_currency }}
+          {% else %}
+            {{ compare_at_price | money }}
+          {% endif %}
+        </s>
+      </span>
+      <span class="sr-only">{{ 'products.product.price.sale_price' | t }}</span>
+      <span class="mr-1 ">
+        {{ money_price }}
+      </span>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%}This is a special case, used for a per-unit pricing structure.{%- endcomment -%}
+  <small class="{% if product.selected_or_first_available_variant.unit_price_measurement == nil %} hidden{% endif %}">
+    <span class="sr-only">{{ 'products.product.price.unit_price' | t }}</span>
+    <span>
+      <span>{{- product.selected_or_first_available_variant.unit_price | money -}}</span>
+      <span aria-hidden="true">/</span>
+      <span class="sr-only">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+      <span>
+        {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+          {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+        {%- endif -%}
+        {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+      </span>
+    </span>
+  </small>
+
+  {%- if show_badges -%}
+    <div class="flex flex-wrap gap-2">
+      <span class="rounded-full px-2 py-1 text-sm text-white bg-brand {% unless on_sale %}hidden{% endunless %}">
+        {{ 'products.product.on_sale' | t }}
+      </span>
+      <span class="rounded-full px-2 py-1 text-sm text-white bg-gray-700 {% unless sold_out %}hidden{% endunless %}">
+        {{ 'products.product.sold_out' | t }}
+      </span>
+    </div>
+    {%- if subscription_savings -%}
+    <div class="flex flex-wrap w-full gap-2">
+      <span class="flex items-center gap-1 text-sm text-brand">
+        Save
+        <span class="px-2 py-1 text-sm font-bold text-white rounded-full bg-brand">
+          {{ discount_percentage | append: '%' }}
+        </span>
+        with subscription
+      </span>
+    </div>
+    {%- endif -%}
+  {%- endif -%}
+</div>

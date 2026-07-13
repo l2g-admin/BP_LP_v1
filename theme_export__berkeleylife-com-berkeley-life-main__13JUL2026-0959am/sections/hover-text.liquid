@@ -1,0 +1,101 @@
+    <div class="py-4 md:py-8 bg-cream" >
+      <div class="mb-4 text-center subhead md:text-base">{{ section.settings.title }}</div>
+      <div class=" hidden md:leading-[90px] md:flex justify-center items-center  gap-x-4 flex-wrap capitalize text-[24px] md:leading[100px] md:text-[74px]">
+        {%- for block in section.blocks -%}
+            <div class="relative group {% cycle 'text-brand', 'text-aqua', 'text-navy md:text-[94px] font-secondaryHeader', 'text-berkley_red', 'text-navy' %}">
+            {{- block.settings.title -}}
+            <div class="absolute z-10 hidden w-3/4 p-4 text-base not-italic tracking-normal normal-case border font-body text-navy border-navy bg-cream/90 group-hover:block top-1/2 left-1/4 rounded-2xl">
+                {{ block.settings.hover_text }}
+             </div>
+            </div>
+          {%- endfor -%}
+      </div>
+
+      {% comment %} Mobile Marquee {% endcomment %}
+
+      {%- capture content -%}
+        {%- for block in section.blocks -%}
+          <span class="mx-4 {% cycle 'text-brand', 'text-aqua', 'text-navy md:text-[94px] font-secondaryHeader', 'text-berkley_red', 'text-navy' %}">
+          {{- block.settings.title  -}}
+          </span>
+        {%- endfor -%}
+        {%- endcapture -%}
+
+        {% assign reverse_content = content | reverse %}
+        
+        <div class="block overflow-hidden md:hidden motion-reduce:overflow-auto " style="--color-text: {{ section.settings.text_color | default: '#ffffff' }}; --color-bg: {{ section.settings.bg_color | default: '#000000' }}">
+          <div class="flex select-none ticker odd-ticker">
+            {%- for i in (1..3) -%}
+              <div class="table text-6xl w-max shrink-0 transform-gpu" {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+                {{- content -}}
+              </div>
+            {%- endfor -%}
+
+          </div>
+        </div>
+        <div class="block overflow-hidden md:hidden motion-reduce:overflow-auto " style="--color-text: {{ section.settings.text_color | default: '#ffffff' }}; --color-bg: {{ section.settings.bg_color | default: '#000000' }}">
+          <div class="flex select-none ticker even-ticker">
+            {%- for i in (1..3) -%}
+              <div class="table text-6xl w-max shrink-0 transform-gpu" {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+                {{ content }}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="block overflow-hidden md:hidden motion-reduce:overflow-auto " style="--color-text: {{ section.settings.text_color | default: '#ffffff' }}; --color-bg: {{ section.settings.bg_color | default: '#000000' }}">
+          <div class="flex select-none ticker odd-ticker">
+            {%- for i in (1..3) -%}
+              <div class="table text-6xl w-max shrink-0 transform-gpu" {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+                {%- for block in section.blocks -%}
+                  {% unless forloop.first %}
+                  <span class="mx-4 {% cycle 'text-brand', 'text-aqua', 'text-navy md:text-[94px] font-secondaryHeader', 'text-berkley_red', 'text-navy' %}">
+                  {{- block.settings.title  -}}
+                  </span>
+                {% endunless %}
+                {%- endfor -%}              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+    </div>
+
+    {% schema %}
+    {
+      "name": "Text Callouts",
+      "tag": "section",
+      "max_blocks": 16,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Callouts",
+          "info": "The title to this marquee section. It needs to be here for accessibility even if you want to visually hide it."
+        }
+      ],
+      "blocks": [
+        {
+          "type": "phrase",
+          "name": "Phrase",
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+              "label": "Text"
+            },
+            {
+                "type": "text",
+                "id": "hover_text",
+                "label": "Hover Text"
+              }
+          ]
+        }
+      ],
+      "presets": [
+        {
+          "name": "Text Callouts",
+        }
+      ]
+    }
+    {% endschema %}
+    

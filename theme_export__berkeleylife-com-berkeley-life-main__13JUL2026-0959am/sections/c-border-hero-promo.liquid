@@ -1,0 +1,1054 @@
+<style>
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top_mobile }}rem;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}rem;
+    background-color: {{ section.settings.section_bg_color }};
+    font-family: inherit;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}rem;
+      padding-bottom: {{ section.settings.padding_bottom }}rem;
+    }
+  }
+
+  #{{ section.id }} .hero__fullwidth {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .hero__fullwidth {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    #{{ section.id }} .hero__fullwidth {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
+
+  #{{ section.id }} .hero__wrapper {
+    position: relative;
+    border-radius: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: {{ section.settings.mobile_content_bg }};
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .hero__wrapper {
+      border-radius: 1.5rem;
+    }
+  }
+
+  /* --- BACKGROUND & OVERLAY --- */
+  #{{ section.id }} .hero__bg {
+    position: relative;
+    width: 100%;
+    height: {{ section.settings.mobile_image_height }}px;
+    flex-shrink: 0;
+  }
+
+  #{{ section.id }} .hero__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    object-position: {{ section.settings.image_position_mobile }};
+  }
+
+  #{{ section.id }} .hero__overlay {
+    display: none;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .hero__wrapper {
+      flex-direction: row;
+      align-items: center;
+      min-height: 600px;
+      background-color: transparent;
+    }
+
+    #{{ section.id }} .hero__bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      z-index: 1;
+    }
+
+    #{{ section.id }} .hero__bg img {
+      object-position: {{ section.settings.image_position }};
+    }
+
+    #{{ section.id }} .hero__overlay {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: {{ section.settings.overlay_color }};
+      opacity: {{ section.settings.overlay_opacity }};
+      z-index: 2;
+    }
+  }
+
+  /* --- INNER CONTAINER --- */
+  #{{ section.id }} .hero__inner {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 1rem;
+    padding-bottom: 0;
+    gap: 2rem;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .hero__inner {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5rem 4rem;
+    }
+  }
+
+  /* --- LEFT: TEXT CONTENT --- */
+  #{{ section.id }} .hero__content {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: {{ section.settings.text_color }};
+    width: 100%;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .hero__content {
+      max-width: 600px;
+    }
+  }
+
+  #{{ section.id }} .hero__subtitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 1rem 0;
+    opacity: 0.9;
+  }
+
+  #{{ section.id }} .hero__title {
+    margin: 0 0 1.25rem 0;
+    color: inherit;
+  }
+
+  #{{ section.id }} .hero__title-italic {
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  #{{ section.id }} .hero__description {
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .hero__description {
+      margin: 0 0 1.5rem 0;
+    }
+  }
+
+  /* --- PROMO BOX --- */
+  /* Mobile: a single contained orange rounded box with text on top and code/copy row at bottom. */
+  #{{ section.id }} .hero__promo {
+    order: 2;
+    box-sizing: border-box;
+    width: calc(100% + 2rem);
+    margin-left: -1rem;
+    margin-right: -1rem;
+    background: {{ section.settings.promo_bg_color_mobile }};
+    border: 1px solid {{ section.settings.promo_border_color_mobile }};
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  #{{ section.id }} .hero__promo-text {
+    box-sizing: border-box;
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    color: {{ section.settings.promo_text_color }};
+    font-size: 0.875rem;
+    line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  #{{ section.id }} .hero__promo-headline {
+    font-weight: 400;
+    color: {{ section.settings.promo_headline_color }};
+  }
+
+  #{{ section.id }} .hero__promo-headline strong {
+    font-weight: 700;
+    display: block;
+  }
+
+  #{{ section.id }} .hero__promo-note {
+    font-size: 0.8125rem;
+    opacity: 0.9;
+  }
+
+  /* Mobile code block: row inside the promo box with rounded corners */
+  #{{ section.id }} .hero__promo-code {
+    order: 3;
+    display: flex;
+     background-color: {{ section.settings.promo_code_bg }};
+    align-items: stretch;
+    flex-shrink: 0;
+    width: 100%;
+    overflow: hidden;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  #{{ section.id }} .hero__promo-code-value {
+    background-color: {{ section.settings.promo_code_bg }};
+    color: {{ section.settings.promo_code_color }};
+    padding: 1rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 50%;
+  }
+
+  #{{ section.id }} .hero__promo-copy-btn {
+    background-color: {{ section.settings.promo_copy_bg }};
+    color: {{ section.settings.promo_copy_color }};
+    border: none;
+    padding: 1rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    flex: 1 1 50%;
+    border-radius: 8px;
+  }
+
+  #{{ section.id }} .hero__promo-copy-btn:hover {
+    opacity: 0.85;
+  }
+
+  #{{ section.id }} .hero__promo-copy-btn.is-copied {
+    opacity: 0.7;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .hero__promo {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+      background: {{ section.settings.promo_bg_color }};
+      border: 1px solid {{ section.settings.promo_border_color }};
+      border-radius: 1rem;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      order: initial;
+      padding: 1rem 1.25rem;
+      gap: 1rem;
+    }
+
+    #{{ section.id }} .hero__promo-text {
+      order: initial;
+      width: auto;
+      margin-left: 0;
+      margin-right: 0;
+      flex: 1 1 auto;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      font-size: 1rem;
+      text-align: left;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+
+    #{{ section.id }} .hero__promo-note {
+      font-size: 0.8125rem;
+    }
+
+    #{{ section.id }} .hero__promo-code {
+      order: initial;
+      width: auto;
+      margin: 0;
+      flex: 0 0 auto;
+      background-color: {{ section.settings.promo_code_bg }};
+      border-radius: 0.625rem;
+      padding: 0.375rem;
+      gap: 0;
+      align-items: stretch;
+    }
+
+    #{{ section.id }} .hero__promo-code-value {
+      background-color: transparent;
+      padding: 0.5rem 1.25rem;
+      font-size: 0.875rem;
+      flex: 0 0 auto;
+    }
+
+    #{{ section.id }} .hero__promo-copy-btn {
+      padding: 0.5rem 1.25rem;
+      font-size: 0.875rem;
+      flex: 0 0 auto;
+      border-radius: 0.5rem;
+    }
+  }
+
+  /* --- BUTTON --- */
+  #{{ section.id }} .hero__btn-main {
+    order: 1;
+    background-color: {{ section.settings.accent_color }};
+    color: #ffffff;
+    padding: 1rem 2.5rem;
+    border-radius: 3rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  #{{ section.id }} .hero__btn-main:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .hero__btn-main {
+      order: initial;
+      margin-bottom: 0;
+    }
+  }
+
+  /* --- RIGHT: FLOATING PRODUCT CARD (GLASSMORPHISM) --- */
+  #{{ section.id }} .hero__product-card {
+    display: none;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .hero__product-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-self: end;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 1rem;
+      padding: 3rem 2rem 2rem 2rem;
+      position: relative;
+      text-decoration: none;
+      color: {{ section.settings.text_color }};
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    #{{ section.id }} .hero__product-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.12);
+    }
+  }
+
+  /* Card Elements */
+  #{{ section.id }} .card__badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: {{ section.settings.accent_color }};
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    white-space: nowrap;
+  }
+
+  #{{ section.id }} .card__image {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+  }
+
+  #{{ section.id }} .card__title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    text-align: center;
+  }
+
+  #{{ section.id }} .card__link {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    opacity: 0.8;
+  }
+
+  #{{ section.id }} .card__link svg {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  /* --- BADGES (Blocks) --- */
+  #{{ section.id }} .hero__badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .hero__badges {
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: 1.25rem;
+    }
+  }
+
+  #{{ section.id }} .hero__badge {
+    display: inline-flex;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+  }
+
+
+  #{{ section.id }} .hero__badge-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
+
+<section id="{{ section.id }}" class="c-hero-product-promo">
+  <div class="{% if section.settings.use_container %}container-sl{% else %}hero__fullwidth{% endif %}">
+    <div class="hero__wrapper">
+
+    <div class="hero__bg">
+      {%- if section.settings.bg_image != blank -%}
+        {{ section.settings.bg_image | image_url: width: 2000 | image_tag: loading: 'lazy' }}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+    <div class="hero__overlay"></div>
+
+    <div class="hero__inner">
+
+      <div class="hero__content">
+        {%- if section.settings.subtitle != blank -%}
+          <p class="hero__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+
+        <h2 class="hero__title c-hero-title">
+          {%- if section.settings.title_part_1_italic != blank -%}
+            <span class="hero__title-italic c-font-cormorant">{{ section.settings.title_part_1_italic }}</span>
+          {%- endif -%}
+          {{ ' ' }}{{ section.settings.title_part_2 }}
+        </h2>
+
+        {%- if section.settings.description != blank -%}
+          <p class="hero__description c-description">{{ section.settings.description }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.show_promo and section.settings.promo_code != blank -%}
+          <div class="hero__promo">
+            <div class="hero__promo-text">
+              {%- if section.settings.promo_headline != blank -%}
+                <div class="hero__promo-headline">{{ section.settings.promo_headline }}</div>
+              {%- endif -%}
+              {%- if section.settings.promo_note != blank -%}
+                <div class="hero__promo-note">{{ section.settings.promo_note }}</div>
+              {%- endif -%}
+            </div>
+            <div class="hero__promo-code">
+              <span class="hero__promo-code-value">{{ section.settings.promo_code }}</span>
+              <button
+                type="button"
+                class="hero__promo-copy-btn"
+                data-promo-code="{{ section.settings.promo_code }}"
+                data-copy-label="{{ section.settings.promo_copy_label | default: 'Copy' }}"
+                data-copied-label="{{ section.settings.promo_copied_label | default: 'Copied!' }}"
+                aria-label="Copy promo code {{ section.settings.promo_code }}"
+              >
+                {{ section.settings.promo_copy_label | default: 'Copy' }}
+              </button>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.btn_label != blank -%}
+          <a href="{{ section.settings.btn_link | default: '#' }}" class="hero__btn-main">
+            {{ section.settings.btn_label }}
+          </a>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          <div class="hero__badges">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'badge' and block.settings.image != blank -%}
+                {%- if block.settings.open_trust_reviews -%}
+                  <button
+                    type="button"
+                    class="hero__badge"
+                    data-et-reviews-trigger
+                    aria-label="Open expert reviews"
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.image | image_url: width: 440 | image_tag: loading: 'lazy', class: 'hero__badge-img' }}
+                  </button>
+                {%- else -%}
+                  <a
+                    href="{{ block.settings.link | default: '#' }}"
+                    class="hero__badge"
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.image | image_url: width: 440 | image_tag: loading: 'lazy', class: 'hero__badge-img' }}
+                  </a>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_product_card -%}
+        {%- assign card_product = section.settings.card_product -%}
+        {%- assign card_url = section.settings.card_link_override | default: card_product.url | default: '#' -%}
+        {%- assign card_img = section.settings.card_image_override | default: card_product.featured_image -%}
+        {%- assign card_name = card_product.title -%}
+        <a href="{{ card_url }}" class="hero__product-card">
+
+          {%- if section.settings.card_badge != blank -%}
+            <div class="card__badge">{{ section.settings.card_badge }}</div>
+          {%- endif -%}
+
+          {%- if card_img != blank -%}
+            {{ card_img | image_url: width: 400 | image_tag: loading: 'lazy', class: 'card__image' }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'card__image' }}
+          {%- endif -%}
+
+          {%- if card_name != blank -%}
+            <h3 class="card__title">{{ card_name }}</h3>
+          {%- endif -%}
+
+          {%- if section.settings.card_link_text != blank -%}
+            <div class="card__link">
+              {{ section.settings.card_link_text }}
+              <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+          {%- endif -%}
+
+        </a>
+      {%- endif -%}
+
+    </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var section = document.getElementById('{{ section.id }}');
+    if (!section) return;
+    var btn = section.querySelector('.hero__promo-copy-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var code = btn.getAttribute('data-promo-code') || '';
+      var copyLabel = btn.getAttribute('data-copy-label') || 'Copy';
+      var copiedLabel = btn.getAttribute('data-copied-label') || 'Copied!';
+      var done = function () {
+        btn.textContent = copiedLabel;
+        btn.classList.add('is-copied');
+        setTimeout(function () {
+          btn.textContent = copyLabel;
+          btn.classList.remove('is-copied');
+        }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(done).catch(function () {
+          var ta = document.createElement('textarea');
+          ta.value = code;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'absolute';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(ta);
+          done();
+        });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = code;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'absolute';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        done();
+      }
+    });
+  })();
+
+  (function () {
+    var section = document.getElementById('{{ section.id }}');
+    if (!section) return;
+    var badges = section.querySelectorAll('[data-et-reviews-trigger]');
+    if (!badges.length) return;
+    badges.forEach(function (badge) {
+      badge.addEventListener('click', function (e) {
+        e.preventDefault();
+        var trustSection = document.querySelector('.c-expert-trust');
+        if (!trustSection) return;
+        var toggle = trustSection.querySelector('[data-et-reviews-toggle]');
+        var wrapper = trustSection.querySelector('.et__reviews-wrapper');
+        if (toggle && toggle.getAttribute('aria-expanded') !== 'true') {
+          toggle.click();
+        } else if (wrapper) {
+          wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          trustSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "C Border Hero Promo",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_container",
+      "label": "Use container-sl",
+      "info": "If unchecked, the section becomes full width with 2rem side padding.",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Background Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Position (Desktop)",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "top", "label": "Top" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "image_position_mobile",
+      "label": "Image Position (Mobile)",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "top", "label": "Top" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "top"
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_height",
+      "label": "Mobile Image Height",
+      "min": 200,
+      "max": 500,
+      "step": 10,
+      "default": 320,
+      "unit": "px",
+      "info": "Height of the top image band on mobile. Image becomes a full background on desktop."
+    },
+    {
+      "type": "color",
+      "id": "mobile_content_bg",
+      "label": "Mobile Content Background",
+      "default": "#1b1e2a",
+      "info": "Solid background behind the content on mobile (below the image)."
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color (Desktop)",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity (Desktop)",
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.1,
+      "default": 0.4
+    },
+
+    {
+      "type": "header",
+      "content": "Main Content (Left)"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "CLINICALLY STUDIED · DOCTOR TRUSTED"
+    },
+    {
+      "type": "text",
+      "id": "title_part_1_italic",
+      "label": "Title Part 1 (Italic Serif)",
+      "default": "Prime Savings"
+    },
+    {
+      "type": "text",
+      "id": "title_part_2",
+      "label": "Title Part 2 (Normal)",
+      "default": "Are Here. Shop & Save 48%"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Healthy blood flow is the foundation of health. Berkeley Life delivers clinically studied Nitric Oxide support — trusted by physicians, backed by decades of research, and proven to support energy, performance, recovery, and long-term heart health."
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Main Button Label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Main Button Link"
+    },
+
+    {
+      "type": "header",
+      "content": "Promo Code Box"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_promo",
+      "label": "Show Promo Box",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "promo_headline",
+      "label": "Promo Headline",
+      "info": "Use bold text for the highlighted savings.",
+      "default": "<p>25% off storewide + up to <strong>48% off first subscriptions</strong></p>"
+    },
+    {
+      "type": "text",
+      "id": "promo_note",
+      "label": "Promo Note",
+      "default": "Free Test Strips with NO Support or Menopause orders"
+    },
+    {
+      "type": "text",
+      "id": "promo_code",
+      "label": "Promo Code",
+      "default": "PRIME"
+    },
+    {
+      "type": "text",
+      "id": "promo_copy_label",
+      "label": "Copy Button Label",
+      "default": "Copy"
+    },
+    {
+      "type": "text",
+      "id": "promo_copied_label",
+      "label": "Copied Confirmation Label",
+      "default": "Copied!"
+    },
+    {
+      "type": "color_background",
+      "id": "promo_bg_color_mobile",
+      "label": "Promo Box Background (Mobile)",
+      "default": "#d15234"
+    },
+    {
+      "type": "color",
+      "id": "promo_border_color_mobile",
+      "label": "Promo Box Border (Mobile)",
+      "default": "#d15234"
+    },
+    {
+      "type": "color_background",
+      "id": "promo_bg_color",
+      "label": "Promo Box Background (Desktop)",
+      "default": "#7a2a18"
+    },
+    {
+      "type": "color",
+      "id": "promo_border_color",
+      "label": "Promo Box Border (Desktop)",
+      "default": "#d15234"
+    },
+    {
+      "type": "color",
+      "id": "promo_text_color",
+      "label": "Promo Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "promo_headline_color",
+      "label": "Promo Headline Color",
+      "default": "#f4b89a",
+      "info": "Color for the headline line (e.g. '25% off storewide...')."
+    },
+    {
+      "type": "color",
+      "id": "promo_code_bg",
+      "label": "Code Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "promo_code_color",
+      "label": "Code Text Color",
+      "default": "#1b1e2a"
+    },
+    {
+      "type": "color",
+      "id": "promo_copy_bg",
+      "label": "Copy Button Background",
+      "default": "#1b1e2a"
+    },
+    {
+      "type": "color",
+      "id": "promo_copy_color",
+      "label": "Copy Button Text Color",
+      "default": "#ffffff"
+    },
+
+    {
+      "type": "header",
+      "content": "Floating Product Card (Right - Desktop)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_card",
+      "label": "Show Floating Product Card",
+      "default": true
+    },
+    {
+      "type": "product",
+      "id": "card_product",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "card_badge",
+      "label": "Badge Text",
+      "default": "BEST SELLER"
+    },
+    {
+      "type": "text",
+      "id": "card_link_text",
+      "label": "Link Text",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_image_override",
+      "label": "Image Override",
+      "info": "Optional. Overrides the product featured image if set."
+    },
+    {
+      "type": "url",
+      "id": "card_link_override",
+      "label": "Link Override",
+      "info": "Optional. Overrides the product URL if set."
+    },
+
+    {
+      "type": "header",
+      "content": "Global Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section Outer Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d15234"
+    },
+
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 0,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 0,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top (Desktop)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 0,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom (Desktop)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Badge Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_trust_reviews",
+          "label": "Open inline reviews from C Expert Trust",
+          "info": "If enabled, clicking the badge scrolls to the C Expert Trust section on this page and opens its FrontRow reviews widget (requires 'Show reviews inline' enabled on that section).",
+          "default": false
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Used only when 'Open inline reviews' is OFF."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Border Hero Promo"
+    }
+  ]
+}
+{% endschema %}

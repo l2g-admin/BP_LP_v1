@@ -1,0 +1,93 @@
+<div class="bg-bg text-text" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+  <div class="{% unless section.settings.full_width %} md:px-8 max-w-screen-xl px-4 mx-auto py-12{% endunless %}">
+
+    {%- unless section.settings.heading == blank -%}
+    <div class="mb-8 space-y-8 text-center {% if section.settings.full_width %}pt-8{% endif %}">
+      <h2 class="h3">{{ section.settings.heading }}</h2>
+    </div>
+    {%- endunless -%}
+
+    {%- if section.settings.video_url != blank -%}
+      <div class="aspect-video relative" data-embed-video>
+        {%- if section.settings.video_url.type == 'youtube' -%}
+          <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}?enablejsapi=1" allow="autoplay; encrypted-media" allowfullscreen title="{{ section.settings.description | escape }}" loading="lazy"></iframe>
+        {%- else -%}
+          <iframe class="absolute inset-0 w-full h-full" src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}" allow="autoplay; encrypted-media" allowfullscreen title="{{ section.settings.description | escape }}" loading="lazy"></iframe>
+        {%- endif -%}
+
+        {%- if section.settings.cover_image != blank -%}
+          {% render 'image', image: section.settings.cover_image, classes: 'absolute inset-0 h-full w-full' %}
+          <button type="button" class="left-1/2 top-1/2 hover:scale-110 text-bg bg-text absolute flex items-center justify-center w-24 h-24 transition-transform -translate-x-1/2 -translate-y-1/2 rounded-full" data-embed-button>
+            <span class="sr-only">Play Video</span>
+            <span class="w-8 h-8">{%- render 'icon-play' -%}</span>
+          </button>
+        {%- endif -%}
+      </div>
+      <script type="module">
+        import { videoEmbed } from "{{ 'video-embed.js' | asset_url }}";
+        const element = document.querySelector("#shopify-section-{{ section.id }} [data-embed-video]");
+        videoEmbed(element, {{ section.settings.video_url.type | json }})
+      </script>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video Embed",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Video Embed",
+      "label": "t:sections.video.settings.heading.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "cover_image",
+      "label": "t:sections.video.settings.cover_image.label"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "label": "t:sections.video.settings.video_url.label",
+      "placeholder": "t:sections.video.settings.video_url.placeholder",
+      "info": "t:sections.video.settings.video_url.info"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "t:sections.video.settings.description.label",
+      "info": "t:sections.video.settings.description.info"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:sections.video.settings.full_width.label",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Embed"
+    }
+  ]
+}
+{% endschema %}

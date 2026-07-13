@@ -1,0 +1,442 @@
+{%- liquid
+  assign bg_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+  assign accent_color = section.settings.accent_color
+  assign step_color = section.settings.step_color
+
+  assign pt_desktop = section.settings.padding_top_desktop | append: 'rem'
+  assign pb_desktop = section.settings.padding_bottom_desktop | append: 'rem'
+  assign pt_mobile = section.settings.padding_top_mobile | append: 'rem'
+  assign pb_mobile = section.settings.padding_bottom_mobile | append: 'rem'
+-%}
+
+<style>
+  #{{ section.id }} {
+   
+    padding-top: {{ pt_mobile }};
+    padding-bottom: {{ pb_mobile }};
+ 
+    position: relative;
+    overflow: hidden;
+
+    & * {
+      color: {{ text_color }};
+    }
+
+    & .c-steps-wrapper {
+      display: flex;
+      flex-direction: column;
+      padding: 40px 20px;
+      gap: 3rem;
+      background-color: {{ bg_color }};
+      border-radius: 64px;
+    }
+
+    & .c-steps-header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    & .c-steps-title {
+      margin: 0;
+      font-size: clamp(32px, 5vw + 1rem, 54px);
+      line-height: 110%;
+ 
+      font-family: "Inter", sans-serif;
+
+      & .accent-text {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+ 
+        color: {{ accent_color }};
+      }
+    }
+
+ 
+
+    & .c-steps-description {
+      margin: 0;
+      font-size: 16px;
+      line-height: 150%;
+      font-weight: 400;
+      opacity: 0.8;
+    }
+
+    & .c-steps-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    & .step-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+ 
+      position: relative;
+    }
+
+    & .step-image-wrapper {
+      width: 100%;
+ 
+ 
+      aspect-ratio: 4/3;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    & .step-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    & .step-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    & .step-header {
+      display: flex;
+ 
+      gap: 1rem;
+      align-items: center;
+    }
+
+    & .step-number-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      justify-content: center;
+ 
+    }
+
+    & .step-number {
+      font-size: 48px;
+ 
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      color: {{ step_color }};
+      line-height: 100%;
+    }
+
+    & .step-title {
+      margin: 0;
+      font-size: clamp(28px, 3vw, 32px);
+      font-weight: 500;
+      line-height: 120%;
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      color: {{ text_color }};
+    }
+
+    & .step-dotted-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+     
+      opacity: 0.6;
+    }
+
+    & .dot {
+      width: 3px;
+      height: 3px;
+      background-color: {{ step_color }};
+      border-radius: 50%;
+    }
+
+    & .step-description {
+      margin: 0;
+      line-height: 150%;
+      font-weight: 400;
+   
+    }
+  }
+
+  
+  /* Desktop styles */
+  @media (min-width: 1200px) {
+    #{{ section.id }} {
+      padding-top: {{ pt_desktop }};
+      padding-bottom: {{ pb_desktop }};
+
+      & .c-steps-wrapper {
+        gap: 4rem;
+        padding: 80px;
+      }
+
+      & .c-steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+ 
+        align-items: start;
+ 
+      }
+ 
+      & .step-number {
+        font-size: 64px;
+      }
+
+ 
+      & .step-description {
+        font-size: 16px;
+        witdh: 90%;
+      }
+
+      & .step-dotted-line {
+        
+      }
+
+      & .c-steps-subtitle {
+        font-size: 18px;
+      }
+
+      & .c-steps-description {
+        font-size: 18px;
+      }
+    }
+  }
+
+  
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="c-steps-wrapper">
+      
+      
+      {% if section.settings.title != blank or section.settings.subtitle != blank %}
+        <div class="c-steps-header">
+          {% if section.settings.title != blank %}
+            <h2 class="c-steps-title">{{ section.settings.title }}</h2>
+          {% endif %}
+ 
+          {% if section.settings.description != blank %}
+            <p class="c-steps-description">{{ section.settings.description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    
+      {% if section.blocks.size > 0 %}
+        <div class="c-steps-grid">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'step' %}
+                <div class="step-card" {{ block.shopify_attributes }}>
+                  {% if block.settings.image != blank %}
+                    <div class="step-image-wrapper">
+                      {{
+                        block.settings.image
+                        | image_url: width: 800
+                        | image_tag: loading: 'lazy', class: 'step-image', alt: block.settings.title
+                      }}
+                    </div>
+                  {% endif %}
+                  
+                  <div class="step-content">
+                    <div class="step-header">
+                      <div class="step-number-title">
+                        {% if block.settings.step_number != blank %}
+                          <span class="step-number">{{ block.settings.step_number }}</span>
+                        {% endif %}
+                        {% if block.settings.title != blank %}
+                          <h3 class="step-title">{{ block.settings.title }}</h3>
+                        {% endif %}
+                      </div>
+                      {% if block.settings.show_dotted_line %}
+                        <div class="step-dotted-line">
+                          {% for i in (1..10) %}
+                            <span class="dot"></span>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                    </div>
+                    {% if block.settings.description != blank %}
+                      <p class="step-description">{{ block.settings.description }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Steps",
+  "tag": "section",
+  "class": "shopify-section-steps",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Section Title",
+      "default": "<p><em>See Results</em> in 3 Simple Steps</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Section Description",
+      "default": "You can test, track, and see your progress."
+    },
+    {
+      "type": "header",
+      "content": "Design Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#E8E0D5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#2C3E50"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Title Emphasis)",
+      "default": "#D95D39"
+    },
+    {
+      "type": "color",
+      "id": "step_color",
+      "label": "Step Numbers & Dotted Line Color",
+      "default": "#D95D39"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Desktop Top Padding",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Desktop Bottom Padding",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile Top Padding",
+      "min": 0,
+      "max": 8,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile Bottom Padding",
+      "min": 0,
+      "max": 8,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Step Image"
+        },
+        {
+          "type": "text",
+          "id": "step_number",
+          "label": "Step Number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step Title",
+          "default": "Measure"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Step Description",
+          "default": "Check your nitric oxide with our at-home test strip."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_dotted_line",
+          "label": "Show dotted line",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Steps",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "01",
+            "title": "Measure",
+            "description": "Check your nitric oxide with our at-home test strip."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "02",
+            "title": "Take",
+            "description": "2 capsules daily to restore optimal nitric oxide levels."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "03",
+            "title": "Validate",
+            "description": "Retest after 90 minutes — and see measurable results."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

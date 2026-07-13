@@ -1,0 +1,68 @@
+{%- doc -%}
+  C Prime Badge - Image badge overlay for product cards. Renders only when:
+    1. `show_prime_badge` is true (block is added to the section)
+    2. `prime_badge_force_all` is true OR `product` has a truthy `custom.prime_badge` metafield
+
+  Parameters:
+  - product: {Object} Product Liquid object (required)
+  - show_prime_badge: {Boolean} Whether the section enabled the badge (required)
+  - prime_badge_image: {Image} Badge image uploaded in the block
+  - prime_badge_position: {String} 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+  - prime_badge_width: {Number} Badge width in px (default: 64)
+  - prime_badge_offset: {Number} Distance from the edge in px (default: 8)
+  - prime_badge_alt: {String} Alt text (default: 'Prime badge')
+  - prime_badge_force_all: {Boolean} If true, skip the metafield check and apply to every product (default: false)
+
+  Usage:
+    {% render 'c-prime-badge',
+      product: product_card_product,
+      show_prime_badge: show_prime_badge,
+      prime_badge_image: prime_badge_image,
+      prime_badge_position: prime_badge_position,
+      prime_badge_width: prime_badge_width,
+      prime_badge_offset: prime_badge_offset
+    %}
+{%- enddoc -%}
+
+{%- liquid
+  assign pb_eligible = false
+  if prime_badge_force_all
+    assign pb_eligible = true
+  elsif product.metafields.custom.prime_badge
+    assign pb_eligible = true
+  endif
+-%}
+{%- if show_prime_badge and prime_badge_image != blank and pb_eligible -%}
+  {%- assign pb_position = prime_badge_position | default: 'bottom-right' -%}
+  {%- assign pb_width = prime_badge_width | default: 64 -%}
+  {%- assign pb_offset = prime_badge_offset | default: 8 -%}
+  {%- assign pb_alt = prime_badge_alt | default: 'Prime badge' -%}
+
+  {%- liquid
+    case pb_position
+      when 'top-left'
+        assign pb_pos_css = 'top: ' | append: pb_offset | append: 'px; left: ' | append: pb_offset | append: 'px;'
+      when 'top-right'
+        assign pb_pos_css = 'top: ' | append: pb_offset | append: 'px; right: ' | append: pb_offset | append: 'px;'
+      when 'bottom-left'
+        assign pb_pos_css = 'bottom: ' | append: pb_offset | append: 'px; left: ' | append: pb_offset | append: 'px;'
+      else
+        assign pb_pos_css = 'bottom: ' | append: pb_offset | append: 'px; right: ' | append: pb_offset | append: 'px;'
+    endcase
+  -%}
+
+  <div
+    class="c-prime-badge"
+    style="position: absolute; z-index: 4; width: {{ pb_width }}px; pointer-events: none; {{ pb_pos_css }}"
+  >
+    {{
+      prime_badge_image
+      | image_url: width: 240
+      | image_tag:
+        alt: pb_alt,
+        loading: 'lazy',
+        widths: '80, 160, 240, 320',
+        class: 'block w-full h-auto'
+    }}
+  </div>
+{%- endif -%}

@@ -1,0 +1,74 @@
+<script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+
+<style>
+  [data-hide-if-empty]{
+    display: block;
+  }
+  [data-show-if-empty]{
+    display: none;
+  }
+  .is-empty [data-hide-if-empty]{
+    display: none;
+  }
+  .is-empty [data-show-if-empty]{
+    display: block;
+  }
+</style>
+
+<cart-items>
+  <div class="mx-auto max-w-screen-md px-4 md:px-8 {% if settings.cart_drawer == false %}md:px-12{% endif %} {% if cart == empty %} is-empty{% endif %}">
+    <div class="p-8 space-y-12 text-center" data-show-if-empty>
+      <div class="space-y-4">
+        <h1 class="h5">{{ 'sections.cart.empty' | t }}</h1>
+        <a href="/collections/shop-all" class="button button--primary">
+          {{ 'general.continue_shopping' | t }}
+        </a>
+      </div>
+      {%- if shop.customer_accounts_enabled -%}
+        <div class="space-y-4">
+          <h2 class="text-lg font-bold">{{ 'sections.cart.login.title' | t }}</h2>
+          <p class="">
+            {{ 'sections.cart.login.paragraph_html' | t: link: routes.account_login_url }}
+          </p>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <form action="{{ routes.cart_url }}" class="" method="post" id="cart" data-hide-if-empty>
+      <div class="cart__items" id="main-cart-items" data-id="{{ section.id }}">
+        <div class="js-contents">
+          {%- if cart != empty -%}
+            <div class="w-full">
+              <ul role="list" class="border-t-2 divide-y-2 border-navy divide-navy">
+                {% render 'cart-item' for cart.items as item, show_vendor: section.settings.show_vendor, enable_selector: section.settings.enable_selector %}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <p class="sr-only" id="cart-live-region-text" aria-live="polite" role="status"></p>
+      <p class="sr-only" id="shopping-cart-line-item-status" aria-live="polite" aria-hidden="true" role="status">{{ 'accessibility.loading' | t }}</p>
+    </form>
+  </div>
+</cart-items>
+
+{% schema %}
+{
+  "name": "t:sections.main-cart-items.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.main-cart-items.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_selector",
+      "default": true,
+      "label": "t:sections.main-cart-items.settings.enable_selector.label"
+    }
+  ]
+}
+{% endschema %}

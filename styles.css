@@ -90,7 +90,8 @@ body {
   color: var(--header-bg);
 }
 
-.fold--dark .hero__lede {
+.fold--dark .hero__lede,
+.fold--dark .hero__sub {
   color: rgba(246, 244, 240, 0.62);
 }
 
@@ -108,11 +109,11 @@ body {
    as transition delays:
      0s     headline words rise in one after another, echoing slide 1's
             opening word-rise instead of landing as one block;
-     0.8s   the atoms drift in from opposite sides and dock, over-
+     0.45s  the atoms drift in from opposite sides and dock, over-
             shooting into the overlap and settling back: a bond forming;
-     1.65s  the N and O surface on the docked atoms;
-     2.0s   the tick draws down, the caption names the molecule;
-     2.7s   the lede and the Nobel line land together, one beat; the
+     1.15s  the N and O surface on the docked atoms;
+     1.35s  the tick draws down, the caption names the molecule;
+     1.8s   the lede and the Nobel line land together, one beat; the
             medal + citation get the headline's blur-rise, the lede
             itself stays a plain fade-rise (see note below).
    Reduced motion: everything below sits inside the no-preference query,
@@ -123,7 +124,7 @@ body {
     opacity: 0;
     transform: translateY(0.3em);
     filter: blur(4px);
-    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
   }
 
   #the-molecule .hero__headline .w.is-on {
@@ -135,28 +136,28 @@ body {
   #the-molecule .atom {
     opacity: 0;
     transition:
-      transform 0.95s cubic-bezier(0.34, 1.45, 0.5, 1) 0.8s,
-      opacity 0.45s ease 0.8s;
+      transform 0.8s cubic-bezier(0.34, 1.45, 0.5, 1) 0.45s,
+      opacity 0.4s ease 0.45s;
   }
   #the-molecule .atom--n { transform: translateX(-38px); }
   #the-molecule .atom--o { transform: translateX(38px); }
 
   #the-molecule .mol-symbol {
     opacity: 0;
-    transition: opacity 0.5s ease 1.65s;
+    transition: opacity 0.4s ease 1.15s;
   }
 
   #the-molecule .molecule__note::before {
     transform: scaleY(0);
     transform-origin: top;
-    transition: transform 0.4s ease 2s;
+    transition: transform 0.35s ease 1.35s;
   }
 
   #the-molecule .molecule__note span {
     display: inline-block;
     opacity: 0;
     transform: translateY(6px);
-    transition: opacity 0.6s ease 2.25s, transform 0.6s ease 2.25s;
+    transition: opacity 0.5s ease 1.5s, transform 0.5s ease 1.5s;
   }
 
   /* Lede and Nobel line land together, one beat. The lede stays a
@@ -170,17 +171,17 @@ body {
   #the-molecule .nobel-lockup {
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity 0.7s ease 2.7s, transform 0.7s ease 2.7s;
+    transition: opacity 0.55s ease 1.8s, transform 0.55s ease 1.8s;
   }
 
   #the-molecule .nobel-lockup {
     filter: blur(4px);
-    transition: opacity 0.7s ease 2.7s, transform 0.7s ease 2.7s, filter 0.7s ease 2.7s;
+    transition: opacity 0.55s ease 1.8s, transform 0.55s ease 1.8s, filter 0.55s ease 1.8s;
   }
 
   #the-molecule .mol-shadow {
     opacity: 0;
-    transition: opacity 0.7s ease 1.5s;
+    transition: opacity 0.5s ease 0.9s;
   }
 
   #the-molecule.is-visible .atom,
@@ -206,24 +207,27 @@ body {
    Slide 3 choreography: "the demonstration". The poster assembles:
    copy accumulates with the scene's events and nothing informative
    ever dissolves, so the resting slide keeps its whole argument.
-   app.js adds two beat classes after .is-visible (walls, cells, and
-   the release ride its rAF clock); the copy rides the beats as
-   transition delays:
+   Walls, cells, molecules and signal rings all move on app.js's one
+   rAF clock (one motion language — see drawFlight); CSS keeps only
+   the copy beats:
      0s     headline words rise in one after another, like slides 1
             and 2, over the constricted vessel and its trickle;
-     1.2s   is-docking: two NO pairs drift in and land on the walls
-            with the same overshoot-settle as slide 2's bond;
-     2.7s   is-releasing: walls ease open, flow surges, the pairs
-            fade — their work done; the lede follows (+0.9s), one
-            paragraph in slide 2's voice.
-   Beat classes accumulate (none are removed until reset). */
+     0.65s  (app.js) two NO pairs ride in with the blood, mid-stream
+            among the cells, and settle onto the inner walls of the
+            constriction — NO works from inside the vessel, carried
+            in the blood — each marking delivery with a quiet ring;
+     1.8s   is-releasing: walls ease open, flow surges, the pairs ride
+            the widening walls out and are carried off downstream —
+            their work done; the lede follows (+0.45s), one paragraph
+            in slide 2's voice.
+   The beat class accumulates (not removed until reset). */
 @media (prefers-reduced-motion: no-preference) {
   #the-vessel .vessel-scene__headline .w {
     display: inline-block;
     opacity: 0;
     transform: translateY(0.3em);
     filter: blur(4px);
-    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
   }
 
   #the-vessel .vessel-scene__headline .w.is-on {
@@ -234,7 +238,7 @@ body {
 
   #the-vessel .vessel__tag {
     opacity: 0;
-    transition: opacity 0.6s ease 0.5s;
+    transition: opacity 0.5s ease 0.3s;
   }
 
   #the-vessel.is-visible .vessel__tag {
@@ -249,22 +253,7 @@ body {
   #the-vessel.is-releasing .hero__lede {
     opacity: 1;
     transform: none;
-    transition: opacity 0.9s ease 0.9s, transform 0.9s ease 0.9s;
-  }
-
-  #the-vessel .no-pair {
-    transition:
-      transform 1.1s cubic-bezier(0.34, 1.45, 0.5, 1),
-      opacity 0.5s ease;
-  }
-  #the-vessel.is-docking .no-pair { opacity: 1; }
-  #the-vessel.is-docking .no-pair--a { transform: translate(310px, 86px); }
-  #the-vessel.is-docking .no-pair--b { transform: translate(480px, 171px); }
-  #the-vessel.is-releasing .no-pair {
-    opacity: 0;
-    transition:
-      transform 1.1s cubic-bezier(0.34, 1.45, 0.5, 1),
-      opacity 0.7s ease;
+    transition: opacity 0.6s ease 0.45s, transform 0.6s ease 0.45s;
   }
 
   #the-vessel.is-resetting *,
@@ -282,8 +271,8 @@ body {
    keyed to the is-pill class the clock adds when the pill's spikes
    begin — the words land on a scene that has already shown them.
      0s      headline words rise in one after another;
-     0.35s   the chart surfaces;
-     0.8s    the draw starts: age sweeps 20 -> 70, the cream supply
+     0.2s    the chart surfaces;
+     0.4s    the draw starts: age sweeps 20 -> 70, the cream supply
              line falls 100 -> ~25;
      ~mid    is-pill: from age 40 the blue spikes appear and fall back
              to the line, shrinking; the lede follows. */
@@ -293,7 +282,7 @@ body {
     opacity: 0;
     transform: translateY(0.3em);
     filter: blur(4px);
-    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
   }
 
   #the-supply .hero__headline .w.is-on {
@@ -302,10 +291,12 @@ body {
     filter: none;
   }
 
+  /* The stat line rises with the chart it summarises. */
+  #the-supply .hero__sub,
   #the-supply .chart-hero {
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity 0.7s ease 0.35s, transform 0.7s ease 0.35s;
+    transition: opacity 0.55s ease 0.2s, transform 0.55s ease 0.2s;
   }
 
   #the-supply .hero__action > * {
@@ -318,9 +309,10 @@ body {
   #the-supply.is-pill .hero__lede {
     opacity: 1;
     transform: none;
-    transition: opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
+    transition: opacity 0.55s ease 0.3s, transform 0.55s ease 0.3s;
   }
 
+  #the-supply.is-visible .hero__sub,
   #the-supply.is-visible .chart-hero {
     opacity: 1;
     transform: none;
@@ -343,8 +335,8 @@ body {
    home.
      0s      headline words rise in one after another;
      0s      the figure surfaces as a nitrate molecule;
-     1.2s    step-nitrite: one oxygen peels away and fades;
-     2.5s    step-no + is-made: the second oxygen peels, the N and O
+     0.8s    step-nitrite: one oxygen peels away and fades;
+     1.7s    step-no + is-made: the second oxygen peels, the N and O
              settle into the pair, the halo blooms, the lede lands. */
 @media (prefers-reduced-motion: no-preference) {
   #the-source .hero__headline .w {
@@ -352,7 +344,7 @@ body {
     opacity: 0;
     transform: translateY(0.3em);
     filter: blur(4px);
-    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
   }
 
   #the-source .hero__headline .w.is-on {
@@ -364,7 +356,7 @@ body {
   #the-source .conv {
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition: opacity 0.55s ease, transform 0.55s ease;
   }
 
   #the-source.is-visible .conv {
@@ -377,16 +369,16 @@ body {
      classes below animate along. */
   #the-source .conv__n {
     transform: translate(120px, 96px);
-    transition: transform 0.9s cubic-bezier(0.34, 1.2, 0.5, 1);
+    transition: transform 0.7s cubic-bezier(0.34, 1.2, 0.5, 1);
   }
   #the-source .conv__o {
-    transition: transform 0.9s cubic-bezier(0.34, 1.2, 0.5, 1), opacity 0.5s ease;
+    transition: transform 0.7s cubic-bezier(0.34, 1.2, 0.5, 1), opacity 0.4s ease;
   }
   #the-source .conv__o1 { transform: translate(120px, 62px); opacity: 1; }
   #the-source .conv__o2 { transform: translate(149px, 113px); }
   #the-source .conv__o3 { transform: translate(90px, 113px); opacity: 1; }
 
-  #the-source .conv__glow { opacity: 0; transition: opacity 0.9s ease; }
+  #the-source .conv__glow { opacity: 0; transition: opacity 0.7s ease; }
 
   #the-source .conv__label {
     opacity: 0;
@@ -424,7 +416,7 @@ body {
   #the-source.is-made .hero__lede {
     opacity: 1;
     transform: none;
-    transition: opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s;
+    transition: opacity 0.55s ease 0.2s, transform 0.55s ease 0.2s;
   }
 
   /* The loop's seam. step-exit: the finished pair drifts up and off,
@@ -453,13 +445,16 @@ body {
    from the dark room is itself the first beat (the room floods with
    light); everything here just assembles the poster:
      0s     headline words rise in one after another, like slides 1-4;
-     0.6s   the bottle rises in and settles — the museum-object entrance
-            slide 2's molecule made, now for the product;
-     1.4s   the stamp ring surfaces behind it and begins its slow turn;
-     2.1s   the lede lands;
-     2.5s+  the review pill and the two review cards slide out from
+     0.3s   the bottle rises in and settles — the museum-object entrance
+            slide 2's molecule made, now for the product — and the stamp
+            ring surfaces WITH it, already turning;
+     1.25s  the lede lands;
+     1.65s+ the review pill and the two review cards slide out from
             behind the bottle, staggered — the slide's quiet receipts,
-            arriving as objects from the same physical world.
+            arriving as objects from the same physical world — and the
+            ring bows out beneath them (Ewan, Jul 13: once the widgets
+            are up the ring read as clutter half-hidden behind them;
+            it's an entrance flourish now, not part of the poster).
    (A caption under the bottle — "This is Nitric Oxide Support." in
    slide 2's tick idiom — shipped in the first cut; Ewan cut the echo.
    The label names the product itself.) */
@@ -469,7 +464,7 @@ body {
     opacity: 0;
     transform: translateY(0.3em);
     filter: blur(4px);
-    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
   }
 
   #the-capsule .hero__headline .w.is-on {
@@ -481,21 +476,23 @@ body {
   #the-capsule .reveal__bottle {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.85s ease 0.6s, transform 0.85s ease 0.6s;
+    transition: opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s;
   }
 
   #the-capsule .reveal__ring {
     opacity: 0;
-    transition: opacity 1.1s ease 1.4s;
   }
 
   /* The award takes the old lede beat — with the "Each capsule..."
      line cut (Jul 9), this is the slide's only copy below the
-     bottle: the award landing under the object it credentials. */
-  #the-capsule .laurel {
+     bottle: the award landing under the object it credentials.
+     (Jul 13: the award is now FrontrowMD's live badge iframe; the
+     beat rides its wrapper, whose reserved height keeps the rise
+     steady even though the badge's own paint is network-timed.) */
+  #the-capsule .frontrow-award {
     opacity: 0;
     transform: translateY(14px);
-    transition: opacity 0.7s ease 2.1s, transform 0.7s ease 2.1s;
+    transition: opacity 0.55s ease 1.25s, transform 0.55s ease 1.25s;
   }
 
   /* The receipts band follows the award, one beat later — the same
@@ -503,7 +500,7 @@ body {
   #the-capsule .stats {
     opacity: 0;
     transform: translateY(14px);
-    transition: opacity 0.7s ease 2.35s, transform 0.7s ease 2.35s;
+    transition: opacity 0.55s ease 1.45s, transform 0.55s ease 1.45s;
   }
 
   /* The review widgets start tucked at the bottle's center — rotation
@@ -523,24 +520,24 @@ body {
      pokes out the cap's far side mid-slide. */
   #the-capsule .reveal__pill {
     transform: translate(30%, 20%) scale(0.9) rotate(0deg);
-    transition: opacity 0.45s ease 2.5s,
-                transform 0.9s cubic-bezier(0.22, 0.9, 0.3, 1) 2.5s;
+    transition: opacity 0.4s ease 1.65s,
+                transform 0.8s cubic-bezier(0.22, 0.9, 0.3, 1) 1.65s;
   }
 
   #the-capsule .reveal__card--right {
     transform: translate(-48%, -8%) scale(0.92) rotate(0deg);
-    transition: opacity 0.45s ease 2.75s,
-                transform 0.9s cubic-bezier(0.22, 0.9, 0.3, 1) 2.75s;
+    transition: opacity 0.4s ease 1.85s,
+                transform 0.8s cubic-bezier(0.22, 0.9, 0.3, 1) 1.85s;
   }
 
   #the-capsule .reveal__card--left {
     transform: translate(48%, -8%) scale(0.92) rotate(0deg);
-    transition: opacity 0.45s ease 2.95s,
-                transform 0.9s cubic-bezier(0.22, 0.9, 0.3, 1) 2.95s;
+    transition: opacity 0.4s ease 2s,
+                transform 0.8s cubic-bezier(0.22, 0.9, 0.3, 1) 2s;
   }
 
   #the-capsule.is-visible .reveal__bottle,
-  #the-capsule.is-visible .laurel,
+  #the-capsule.is-visible .frontrow-award,
   #the-capsule.is-visible .stats {
     opacity: 1;
     transform: none;
@@ -554,12 +551,18 @@ body {
     transform: var(--pose);
   }
 
-  /* The ring only fades — its transform is the centering translate,
-     which must survive .is-visible (transform: none would unseat it).
-     The turn lives on the inner group, around the viewBox's exact
-     center, so surfacing and spinning never fight over one transform. */
+  /* The ring is a CAMEO (Ewan, Jul 13): it surfaces with the bottle,
+     holds while the object stands alone, and bows out as the review
+     widgets slide over it — half-hidden behind the popped widgets it
+     just read as clutter. Keyframes, not a transition: one run needs
+     a fade-in AND a fade-out, and `both` keeps the settled poster
+     ring-free. Only opacity animates — the element's transform is
+     the centering translate (never touch it); the turn lives on the
+     inner group, around the viewBox's exact center. Percentages of
+     the 2.45s run: in over the bottle's beat (0.3-1.0s), hold, out
+     across the widgets' arrival (1.65-2.45s). */
   #the-capsule.is-visible .reveal__ring {
-    opacity: 1;
+    animation: ring-cameo 2.45s ease both;
   }
 
   #the-capsule .reveal__ring-spin {
@@ -578,6 +581,12 @@ body {
   to { transform: rotate(360deg); }
 }
 
+@keyframes ring-cameo {
+  0%, 12.2% { opacity: 0; }
+  40.8%, 67.3% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 .site-header {
   background: var(--header-bg);
   border-bottom: 1px solid var(--hairline);
@@ -592,12 +601,38 @@ body {
   height: auto;
 }
 
-/* Clinicians' Choice lockup (slide 6, directly under the bottle):
-   the FrontrowMD award redrawn in brand type — serif title flanked
-   by laurel branches, with the awarder named underneath. The source
-   line is deliberately kept: an unattributed "Clinicians' Choice"
-   reads as self-declared; naming FrontrowMD and the no-compensation
-   condition is what makes it a credential. */
+/* Clinicians' Choice (slide 6, directly under the bottle): now
+   FrontrowMD's LIVE badge iframe — they require their real clickable
+   widget wherever the award appears (Ewan, Jul 13). The wrapper is
+   the piece we own: it takes the award's choreography beat, centers
+   the badge, and RESERVES the badge's settled height (113px at every
+   phone width tested) so the iframe's async resize — height 0 until
+   their script gets the RESIZE_HEIGHT postMessage — never reflows
+   the fold mid-choreography. Width capped near the badge content's
+   natural measure: the iframe fills its box but lays its content out
+   left-aligned, so a wider box would read as off-center whitespace.
+   .iframe-frontrow (class name is load-bearing — their script finds
+   the badge by it, see index.html) starts at height 0; their script
+   sets the real height inline. */
+.frontrow-award {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 380px;
+  min-height: 113px;
+}
+
+.iframe-frontrow {
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  display: block;
+}
+
+/* The laurel lockup the badge replaced (our redrawing of the same
+   award, retired Jul 13 to snippets/laurel.html — reference copy). */
 .laurel {
   display: flex;
   flex-direction: column;
@@ -791,7 +826,7 @@ body {
 .morph-hook {
   max-width: none;
   font-size: clamp(1.7rem, 6.9vw, 2.7rem);
-  transition: opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
 }
 
 .morph-hook.is-out {
@@ -807,7 +842,7 @@ body {
   opacity: 0;
   transform: translateY(0.3em);
   filter: blur(4px);
-  transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+  transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
 }
 
 .morph-hook .w.is-on,
@@ -826,7 +861,7 @@ body {
   opacity: 0;
   transform: translateY(16px);
   filter: blur(6px);
-  transition: opacity 0.9s ease, transform 0.9s ease, filter 0.9s ease;
+  transition: opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease;
 }
 
 .headline-claim.is-in {
@@ -838,7 +873,7 @@ body {
 #the-better-way .scrollcue {
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+  transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
 }
 
 #the-better-way .scrollcue.is-in {
@@ -885,7 +920,7 @@ body {
   font-family: var(--serif);
   font-style: italic;
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: var(--muted);
 }
 
@@ -1003,14 +1038,21 @@ body {
   dominant-baseline: central;
 }
 
-/* Parked at their start posts (off the vessel, past the frame's top
-   and bottom) until the docking beat; invisible in the reduced-
-   motion end state — their work is already done. */
+/* The pairs are flown by app.js on its rAF clock (inline styles);
+   parked invisible until their flight begins, and invisible in the
+   no-JS and reduced-motion states — their work is already done. */
 .no-pair {
   opacity: 0;
 }
-.no-pair--a { transform: translate(310px, -14px); }
-.no-pair--b { transform: translate(480px, 272px); }
+
+/* The signal: a quiet ring in the wall's own color, expanding from
+   the pair into the wall it has just told to relax; app.js spawns,
+   grows and fades one per delivery. */
+.vessel__pulse {
+  fill: none;
+  stroke: var(--brand-deep);
+  stroke-width: 2;
+}
 
 /* supply (slide 4, the first dark room) — the lifespan chart (v5) ---------------
 
@@ -1239,6 +1281,54 @@ body {
   padding-bottom: calc(188px + env(safe-area-inset-bottom));
 }
 
+/* Short screens: the fold's minimum content overran the viewport
+   (~35px on a 667px SE with the old laurel; the live FrontrowMD
+   badge's 113px then pushed a 740px Galaxy S8+ over too), and since
+   the stats band is pinned to the fold's FOOT the overflow surfaces
+   as the band's labels sinking under the sticky bar (Ewan, Jul 13 —
+   the receipts must never be the thing that gets cut). Under 750px
+   tall, reclaim ~85px from the pieces with the most give: the logo
+   band's air and width, the hero's stack gaps and paddings, four
+   viewport-points of bottle, and the foot footprint itself (stats
+   ride 2px above the bar instead of 12, buying the flow 12px).
+   Verified fits: 375x667 and 360x740. Scoped to this fold — the
+   other slides fit these heights as they are. */
+@media (max-height: 750px) {
+  #the-capsule {
+    padding-bottom: calc(176px + env(safe-area-inset-bottom));
+  }
+
+  #the-capsule .site-header {
+    padding: 10px 24px 8px;
+  }
+
+  #the-capsule .site-header__logo {
+    width: min(200px, 56vw);
+  }
+
+  #the-capsule .hero {
+    gap: 10px;
+    padding-top: 12px;
+    padding-bottom: 14px;
+  }
+
+  #the-capsule .reveal__bottle {
+    height: min(34svh, 420px);
+  }
+
+  /* The shorter bottle shrinks the stage the cards anchor to, and at
+     28% the right card's top corner rode up over the headline's last
+     word. 16% keeps its whole box below the headline at both tested
+     heights while staying inside the stage's foot. */
+  #the-capsule .reveal__card--right {
+    bottom: 16%;
+  }
+
+  #the-capsule .stats {
+    bottom: calc(114px + env(safe-area-inset-bottom));
+  }
+}
+
 .reveal {
   display: flex;
   flex-direction: column;
@@ -1322,9 +1412,14 @@ body {
    one shared rule. Base styles below are the settled poster (the
    no-JS / reduced-motion state). */
 
+/* top 8% -> 3% (Jul 13): on 375px-and-under phones the left card's
+   content-driven height brings its top corner up into the pill's
+   band; 3% keeps most of the pill clear of it (the card still grazes
+   the pill's tail, which now paints on top — see the DOM-order note
+   in index.html) while staying at cap height on tall screens. */
 .reveal__pill {
   position: absolute;
-  top: 8%;
+  top: 3%;
   right: calc(82% - 20px);
   display: inline-flex;
   align-items: center;
@@ -1379,7 +1474,7 @@ body {
    Cards anchor by BOTTOM, not top (Jul 9): card height is content-
    driven (the vw-scaled quote wraps more lines on a narrow phone),
    so a top anchor let the taller phone cards hang past the stage's
-   foot and cover the Clinicians' Choice laurel below it. Pinning
+   foot and cover the Clinicians' Choice award below it. Pinning
    each bottom inside the stage caps how far down a card can reach
    at every size; the top edge is the side that varies. */
 .reveal__card--right {
@@ -1394,6 +1489,21 @@ body {
   right: calc(100% - 20px);
   padding-right: 32px;
   --pose: rotate(-2.5deg);
+}
+
+/* 380px-and-under phones: the stage is short enough that the left
+   card's top corner and the pill want the same band, and the pill
+   (painting on top, see index.html) was sitting on the quote's first
+   line. Pill to the stage's very top, card down to the stage's foot:
+   the two now only graze at the card's top padding, never its text. */
+@media (max-width: 380px) {
+  .reveal__pill {
+    top: 0;
+  }
+
+  .reveal__card--left {
+    bottom: 2%;
+  }
 }
 
 .reveal__card-quote {
@@ -1565,6 +1675,22 @@ body {
   max-width: 42ch;
 }
 
+/* Headline + its stat line as one block, tight against each other so
+   the hero's space-evenly doesn't drift them apart. */
+.hero__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero__sub {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 42ch;
+}
+
 /* Copy blocks that rise in on a transform transition keep their
    compositor layer at rest. Without this, the layer the browser
    promotes for the animation is torn down the instant the transition
@@ -1575,6 +1701,7 @@ body {
    place right as the rise settles. */
 @media (prefers-reduced-motion: no-preference) {
   .hero__lede,
+  .hero__sub,
   .headline-claim,
   .nobel-lockup {
     will-change: transform;

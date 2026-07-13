@@ -1,0 +1,606 @@
+{%- comment -%}
+  Section: C Sample Kit Offer
+  Description: Two-column promotional section with configurable mobile and desktop media position.
+  sl-id: sl-section-sample-kit-offer-v1
+  Figma: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5771-9597&m=dev
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-sample-kit-offer-v1'
+  assign section_anchor_id = section.settings.sl_anchor_id | default: section.id
+-%}
+
+<section
+  id="{{ section_anchor_id }}"
+  class="c-sample-kit-offer"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-sample-kit-offer"
+  data-desktop-media-position="{{ section.settings.desktop_media_position }}"
+  data-mobile-media-position="{{ section.settings.mobile_media_position }}"
+>
+  <div class="c-sample-kit-offer__inner">
+    <div class="c-sample-kit-offer__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="c-sample-kit-offer__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <div class="c-sample-kit-offer__heading-wrap">
+        {%- if section.settings.title_richtext != blank -%}
+          <h2 class="c-sample-kit-offer__title">
+            {{ section.settings.title_richtext | replace: '<p>', '' | replace: '</p>', '' }}
+          </h2>
+        {%- elsif section.settings.title_line_one != blank -%}
+          <h2 class="c-sample-kit-offer__title">
+            <span class="c-sample-kit-offer__title-line">{{ section.settings.title_line_one }}</span>
+
+            {%- if section.settings.title_line_two != blank or section.settings.title_highlight != blank -%}
+              <span class="c-sample-kit-offer__title-line">
+                {{ section.settings.title_line_two }}
+                {%- if section.settings.title_highlight != blank -%}
+                  <span class="c-sample-kit-offer__title-highlight">{{ section.settings.title_highlight }}</span>
+                {%- endif -%}
+              </span>
+            {%- endif -%}
+          </h2>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.lead != blank -%}
+        <p class="c-sample-kit-offer__lead">{{ section.settings.lead }}</p>
+      {%- endif -%}
+
+      <div class="c-sample-kit-offer__body">
+        {%- if section.settings.body_line_one != blank -%}
+          <p>{{ section.settings.body_line_one }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.body_line_highlight != blank -%}
+          <p class="c-sample-kit-offer__body-highlight">{{ section.settings.body_line_highlight }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.body_line_two != blank -%}
+          <p>{{ section.settings.body_line_two }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.button_label != blank -%}
+        <div class="c-sample-kit-offer__actions">
+          <a
+            class="c-sample-kit-offer__button"
+            {% if section.settings.button_link != blank %}
+              href="{{ section.settings.button_link }}"
+            {% else %}
+              role="link"
+              aria-disabled="true"
+            {% endif %}
+          >
+            {{ section.settings.button_label }}
+          </a>
+
+          {%- if section.settings.button_caption != blank -%}
+            <p class="c-sample-kit-offer__button-caption">{{ section.settings.button_caption }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="c-sample-kit-offer__media">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 1400
+          | image_tag:
+            class: 'c-sample-kit-offer__image',
+            loading: 'eager',
+            fetchpriority: 'high',
+            sizes: '(min-width: 1200px) 620px, (min-width: 978px) 46vw, (min-width: 768px) calc(100vw - 64px), calc(100vw - 40px)',
+            widths: '480, 768, 960, 1200, 1400',
+            alt: section.settings.image_alt | default: section.settings.title_line_one | escape
+        }}
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'c-sample-kit-offer__image c-sample-kit-offer__image--placeholder' }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&display=swap');
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer {
+    --c-sample-kit-offer-bg: {{ section.settings.background_color }};
+    --c-sample-kit-offer-text: {{ section.settings.text_color }};
+    --c-sample-kit-offer-accent: {{ section.settings.accent_color }};
+    --c-sample-kit-offer-button-bg: {{ section.settings.button_background_color }};
+    --c-sample-kit-offer-button-text: {{ section.settings.button_text_color }};
+    --c-sample-kit-offer-caption: {{ section.settings.caption_color }};
+    --c-sample-kit-offer-max-width: 1320px;
+    background: var(--c-sample-kit-offer-bg);
+    color: var(--c-sample-kit-offer-text);
+    display: block;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__inner {
+    box-sizing: border-box;
+    display: grid;
+    gap: 40px;
+    margin: 0 auto;
+    max-width: var(--c-sample-kit-offer-max-width);
+    padding: {{ section.settings.padding_top_mobile }}px 20px {{ section.settings.padding_bottom_mobile }}px;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__content,
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__media {
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__content {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    order: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__media {
+    display: flex;
+    justify-content: center;
+    order: 2;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer[data-mobile-media-position='top'] .c-sample-kit-offer__content {
+    order: 2;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer[data-mobile-media-position='top'] .c-sample-kit-offer__media {
+    order: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__eyebrow {
+    color: var(--c-sample-kit-offer-accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    line-height: 1.2;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__heading-wrap {
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__title {
+    color: var(--c-sample-kit-offer-text);
+    font-size: clamp(40px, 10vw, 54px);
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__title p {
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__title-line {
+    display: block;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__title-highlight {
+    color: var(--c-sample-kit-offer-accent);
+    display: inline;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(47px, 10.4vw, 64px);
+    font-style: italic;
+    font-weight: 500;
+    margin-left: 0.12em;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__title em,
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__title i {
+    color: var(--c-sample-kit-offer-accent);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1852em;
+    font-style: italic;
+    font-weight: 500;
+    line-height: inherit;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__lead {
+    color: var(--c-sample-kit-offer-text);
+    font-size: clamp(24px, 4.2vw, 24px);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+    margin: 0;
+    max-width: 18em;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__body {
+    color: var(--c-sample-kit-offer-text);
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 38rem;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__body p {
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__body-highlight {
+    color: var(--c-sample-kit-offer-accent);
+    font-weight: 700;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__actions {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__button {
+    background: var(--c-sample-kit-offer-button-bg);
+    border-radius: 999px;
+    color: var(--c-sample-kit-offer-button-text);
+    display: inline-flex;
+    font-size: 18px;
+    font-weight: 500;
+    justify-content: center;
+    line-height: 1.5;
+    min-height: 60px;
+    min-width: min(100%, 264px);
+    padding: 16px 40px;
+    text-align: center;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__button:hover {
+    opacity: 0.9;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__button[aria-disabled='true'] {
+    cursor: default;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__button-caption {
+    color: var(--c-sample-kit-offer-caption);
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.7;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__image {
+    display: block;
+    height: auto;
+    max-width: min(100%, 620px);
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-sample-kit-offer__image--placeholder {
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 24px;
+    min-height: 280px;
+    width: 100%;
+  }
+
+  @media screen and (min-width: 768px) {
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__inner {
+      gap: 56px;
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__title {
+      font-size: clamp(46px, 6vw, 54px);
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__title-highlight {
+      font-size: clamp(54px, 6.5vw, 64px);
+    }
+  }
+
+  @media screen and (min-width: 978px) {
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__inner {
+      align-items: center;
+      gap: 64px;
+      grid-template-columns: minmax(0, 1fr) minmax(420px, 0.96fr);
+      padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+      padding-top: {{ section.settings.padding_top_desktop }}px;
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__content,
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__media {
+      order: initial;
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer[data-desktop-media-position='left'] .c-sample-kit-offer__content {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer[data-desktop-media-position='left'] .c-sample-kit-offer__media {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer[data-desktop-media-position='right'] .c-sample-kit-offer__content {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer[data-desktop-media-position='right'] .c-sample-kit-offer__media {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__inner {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__title {
+      font-size: 54px;
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__title-highlight {
+      font-size: 64px;
+    }
+  }
+
+  @media screen and (min-width: 1980px) {
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__inner {
+      max-width: 1520px;
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__title {
+      font-size: 64px;
+    }
+
+    #shopify-section-{{ section.id }} .c-sample-kit-offer__title-highlight {
+      font-size: 74px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "C Sample Kit Offer",
+  "tag": "section",
+  "class": "c-sample-kit-offer-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Exclusive Super Age Offer"
+    },
+    {
+      "type": "richtext",
+      "id": "title_richtext",
+      "label": "Heading",
+      "default": "<p>Try Berkeley Life for Free<br>Your Exclusive <em>3-Day Sample Kit</em></p>"
+    },
+    {
+      "type": "text",
+      "id": "title_line_one",
+      "label": "Title line one (legacy)",
+      "default": "Try Berkeley Life for Free"
+    },
+    {
+      "type": "text",
+      "id": "title_line_two",
+      "label": "Title line two (legacy)",
+      "default": "Your Exclusive"
+    },
+    {
+      "type": "text",
+      "id": "title_highlight",
+      "label": "Highlighted title text (legacy)",
+      "default": "3-Day Sample Kit"
+    },
+    {
+      "type": "text",
+      "id": "lead",
+      "label": "Lead",
+      "default": "Because better blood flow isn't something you feel in one day."
+    },
+    {
+      "type": "text",
+      "id": "body_line_one",
+      "label": "Body line one",
+      "default": "Blood flow is the foundation of energy, heart health, and longevity. Start with 3 days — on us."
+    },
+    {
+      "type": "text",
+      "id": "body_line_highlight",
+      "label": "Highlighted body line",
+      "default": "Test, track, and support your Nitric Oxide levels for yourself."
+    },
+    {
+      "type": "text",
+      "id": "body_line_two",
+      "label": "Body line two",
+      "default": "Clinically-backed. Provider trusted. One habit for whole-system support."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Claim My Free Samples"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "button_caption",
+      "label": "Button caption",
+      "default": "Just cover shipping"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Berkeley Life sample kit"
+    },
+    {
+      "type": "select",
+      "id": "desktop_media_position",
+      "label": "Desktop image position",
+      "default": "right",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_media_position",
+      "label": "Mobile image position",
+      "default": "bottom",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F6F3F0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1B1C29"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button background color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "caption_color",
+      "label": "Caption color",
+      "default": "#6B625D"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Desktop top padding",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Desktop bottom padding",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "C Sample Kit Offer"
+    }
+  ]
+}
+{% endschema %}

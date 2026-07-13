@@ -1,0 +1,450 @@
+<style>
+
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    color: {{ section.settings.text_color }};
+    overflow: hidden;
+
+    & .c-cperc__container {
+
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      gap: 4rem;
+    }
+
+    /* --- RIGHT COLUMN (Text Content) --- */
+    & .c-cperc__text-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    & .c-cperc__eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: {{ section.settings.accent_color }};
+      margin: 0 0 1rem 0;
+    }
+
+    & .c-cperc__title {
+      font-size: clamp(32px, 4vw, 44px);
+      line-height: 1.2;
+      color: {{ section.settings.title_color }};
+      margin: 0 0 1.5rem 0;
+
+      & span {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        color: {{ section.settings.accent_color }};
+        font-size: clamp(36px, 4.5vw, 48px);
+      }
+    }
+
+    & .c-cperc__desc {
+      font-size: clamp(14px, 1.2vw, 16px);
+      font-style: normal;
+      font-weight: 500;
+      line-height: 150%;
+      color: {{ section.settings.text_color }};
+      margin: 0 0 2.5rem 0;
+
+      & p {
+        margin-top: 0;
+        margin-bottom: 1rem;
+      }
+      & p:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    /* Highlight Percentage Box */
+    & .c-cperc__hl-box {
+      background-color: {{ section.settings.hl_bg }};
+      border-radius: 12px;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    & .c-cperc__hl-num {
+      font-size: clamp(36px, 4vw, 48px);
+      color: {{ section.settings.accent_color }};
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    & .c-cperc__hl-text {
+      font-size: clamp(16px, 1.2vw, 18px);
+      line-height: 1.5;
+      font-style: normal;
+
+      line-height: 150%;
+      color: {{ section.settings.text_color }};
+      margin: 0;
+
+      & p {
+        margin: 0;
+      }
+    }
+
+    /* --- LEFT COLUMN (Image & Signs Box) --- */
+    & .c-cperc__img-col {
+      flex: 1;
+      width: 100%;
+    }
+
+    & .c-cperc__img-wrap {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+    }
+
+    & .c-cperc__img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    & .c-cperc__signs-box {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      background-color: {{ section.settings.signs_bg }};
+      border-radius: 12px;
+      padding: 24px;
+      z-index: 2;
+      backdrop-filter: blur(14px);
+    }
+
+    & .c-cperc__signs-title {
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 120%; /* 16.8px */
+      letter-spacing: 2.1px;
+      text-transform: uppercase;
+      color: {{ section.settings.accent_color }};
+      margin: 0 0 1.5rem 0;
+    }
+
+    & .c-cperc__signs-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 1.5rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    & .c-cperc__sign-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 16px;
+      color: #ffffff;
+      line-height: 1.4;
+    }
+
+    & .c-cperc__sign-plus {
+      color: {{ section.settings.accent_color }};
+      font-size: 16px;
+      line-height: 1.2;
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (max 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+      & .c-cperc__container {
+        flex-direction: column;
+
+        gap: 2.5rem;
+      }
+
+      & .c-cperc__text-col {
+        width: 100%;
+      }
+
+      & .c-cperc__title {
+        font-size: 32px;
+      }
+
+      & .c-cperc__hl-box {
+        padding: 1.5rem;
+        gap: 1rem;
+      }
+
+      & .c-cperc__hl-num {
+        font-size: 32px;
+      }
+
+      & .c-cperc__img-wrap {
+        aspect-ratio: 3 / 4;
+      }
+
+      & .c-cperc__signs-box {
+        bottom: 1rem;
+        left: 1rem;
+        right: 1rem;
+        padding: 1.5rem;
+      }
+
+      & .c-cperc__signs-list {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="c-cperc__container">
+      <div class="c-cperc__text-col">
+        {% if section.settings.eyebrow != blank %}
+          <p class="c-cperc__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+
+        {% if section.settings.title != blank %}
+          <h2 class="c-cperc__title">{{ section.settings.title | newline_to_br }}</h2>
+        {% endif %}
+
+        {% if section.settings.description != blank %}
+          <div class="c-cperc__desc">{{ section.settings.description }}</div>
+        {% endif %}
+
+        <div class="c-cperc__hl-box">
+          <span class="c-cperc__hl-num">{{ section.settings.highlight_num }}</span>
+          <div class="c-cperc__hl-text">{{ section.settings.highlight_text }}</div>
+        </div>
+      </div>
+
+      <div class="c-cperc__img-col">
+        <div class="c-cperc__img-wrap">
+          {% if section.settings.image != blank %}
+            <img
+              src="{{ section.settings.image | image_url: width: 1000 }}"
+              alt="{{ section.settings.title | strip_html | escape }}"
+              class="c-cperc__img"
+              loading="lazy"
+            >
+          {% else %}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'c-cperc__img' }}
+          {% endif %}
+
+          <div class="c-cperc__signs-box">
+            <p class="c-cperc__signs-title">{{ section.settings.signs_title }}</p>
+            <ul class="c-cperc__signs-list">
+              {% for block in section.blocks %}
+                <li class="c-cperc__sign-item" {{ block.shopify_attributes }}>
+                  <span class="c-cperc__sign-plus">+</span>
+                  <span>{{ block.settings.text }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C content percentage",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#1a1f4c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d25435"
+    },
+    {
+      "type": "header",
+      "content": "Highlight Box Colors"
+    },
+    {
+      "type": "color",
+      "id": "hl_bg",
+      "label": "Highlight Box Background",
+      "default": "#f6f4f2"
+    },
+    {
+      "type": "color",
+      "id": "signs_bg",
+      "label": "Signs Box Background",
+      "default": "rgba(28, 29, 36, 0.95)"
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "THE PROBLEM"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Nitric Oxide Is Your\n<span>Body's Miracle</span> Molecule. And It's Disappearing.",
+      "info": "Wrap text in <span></span> to apply the italic serif font and accent color."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Starting at 30, men lose 10-12% of their Nitric Oxide production every decade. NO is the signaling molecule that controls blood vessel dilation, oxygen delivery, hormone communication, and sexual function. When it drops, everything follows.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Percentage Box Content"
+    },
+    {
+      "type": "text",
+      "id": "highlight_num",
+      "label": "Percentage Text",
+      "default": "~50%"
+    },
+    {
+      "type": "richtext",
+      "id": "highlight_text",
+      "label": "Percentage Description",
+      "default": "<p><strong>Decline in NO production</strong> between ages 40 and 70 — the primary driver of cardiovascular and performance issues in aging men.</p>",
+      "info": "Use the editor to add bold formatting."
+    },
+    {
+      "type": "header",
+      "content": "Image & Overlay"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Main Image"
+    },
+    {
+      "type": "text",
+      "id": "signs_title",
+      "label": "Signs Box Title",
+      "default": "SIGNS OF LOW NO LEVELS"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "sign",
+      "name": "Sign List Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Item Text",
+          "default": "Low energy & fatigue"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C content percentage",
+      "blocks": [
+        { "type": "sign", "settings": { "text": "Low energy & fatigue" } },
+        { "type": "sign", "settings": { "text": "Poor circulation" } },
+        { "type": "sign", "settings": { "text": "ED & low drive" } },
+        { "type": "sign", "settings": { "text": "High blood pressure" } },
+        { "type": "sign", "settings": { "text": "Slow gym recovery" } },
+        { "type": "sign", "settings": { "text": "Brain fog" } },
+        { "type": "sign", "settings": { "text": "Hormone imbalance" } },
+        { "type": "sign", "settings": { "text": "Weak blood flow" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,51 @@
+{%- if section.settings.menu -%}
+<div class="bg-bg text-text {% if section.settings.hide_on_desktop %}md:hidden{% endif %}" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+  <div class="overscroll-contain w-full overflow-auto">
+    <nav id="QuickNav" aria-label="Quick Navigation">
+      <ul class="w-max md:px-8 flex gap-2 px-4 mx-auto">
+        {%- for link in section.settings.menu.links -%}
+        <li>
+          <a href="{{ link.url }}" class="block md:py-4 py-3 p-2 first:pl-0 {% if link.current %}underline{% endif %}">
+            {{ link.title }}
+          </a>
+        </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Simple Link List",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_desktop",
+      "label": "Hide on desktop?",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Simple Link List"
+    }
+  ]
+}
+{% endschema %}

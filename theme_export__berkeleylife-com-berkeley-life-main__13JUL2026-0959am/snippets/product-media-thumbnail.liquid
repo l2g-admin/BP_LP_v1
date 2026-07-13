@@ -1,0 +1,13 @@
+<div class="">
+  <div class="relative w-full aspect-square">
+    <img
+    src="{{ media | image_url: width: 300 }}"
+    loading="lazy"
+    width="80"
+    height="80"
+    class="object-contain w-full h-full transition-opacity duration-700 opacity-0"
+    alt=""
+    onload="imgLoaded(this, 'opacity-0', 'opacity-100')"
+    >
+  </div>
+</div>

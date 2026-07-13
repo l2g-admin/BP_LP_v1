@@ -1,0 +1,403 @@
+{% comment %}
+  Shopify Section: Testimonial with Certifications
+  - Heading block
+  - Star rating block
+  - Testimonial text block
+  - Author block (image + name)
+  - Repeatable certification blocks
+  - Fully responsive
+{% endcomment %}
+
+{%- liquid
+  assign bg_color = section.settings.background_color
+  assign container_bg_color = section.settings.container_bg_color
+  assign text_color = section.settings.text_color
+  assign heading_color = section.settings.heading_color
+  assign star_color = section.settings.star_color
+
+  # Star SVG for re-use
+  assign star_svg = '<svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-star" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 .5l2.939 5.455 6.572.955-4.756 4.635 1.123 6.545z" fill="currentColor"/></svg>'
+-%}
+
+<style>
+  .testimonial-certs-section {
+    background-color: {{ bg_color }};
+    padding: 50px 20px;
+    color: {{ text_color }};
+  }
+
+  .testimonial-certs__container {
+    max-width: 1280px;
+    padding: 32px;
+    background-color: {{ container_bg_color }};
+    border-radius: 32px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .testimonial-certs__heading {
+    color: {{ heading_color }};
+    font-size: 32px;
+ 
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .text-secondary {
+    font-size: 40px;
+  }
+
+  .testimonial-certs__stars {
+    display: flex;
+    gap: 4px;
+    color: {{ star_color }};
+    margin-top: -10px;
+  }
+
+  .testimonial-certs__stars .icon-star {
+    width: 24px;
+    height: 24px;
+  }
+
+  .testimonial-certs__quote {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 65ch; /* Limits line length for readability */
+    margin: 0;
+  }
+
+  .testimonial-certs__author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+  }
+
+  .testimonial-certs__author-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .testimonial-certs__author-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .testimonial-certs__certifications-row {
+    display: flex;
+    flex-direction: column; /* Mobile: Stack vertically */
+    gap: 30px;
+    margin-top: 30px;
+    width: 100%;
+  }
+
+  .testimonial-certs__certification-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .testimonial-certs__certification-item .cert_icon {
+    opacity: 0.5;
+  }
+
+  .testimonial-certs__certification-item .cert_icon svg{
+    border-radius: 99px;
+  }
+
+  .testimonial-certs__certification-item img {
+    max-width: 65px;
+    height: auto;
+  }
+  
+  .testimonial-certs__certification-item p {
+    text-align: start;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .testimonial-certs__certification-item strong {
+    font-size: 1rem;
+  }
+
+  /* Desktop Styles */
+  @media screen and (min-width: 768px) {
+    .testimonial-certs__container {
+      padding: 64px;
+      border-radius: 64px;
+    }
+
+    .testimonial-certs-section {
+      padding: 80px 40px;
+    }
+
+    .testimonial-certs__heading {
+      font-size: 3rem;
+    }
+
+    .text-secondary{
+      font-size: 50px;
+    }
+
+    .testimonial-certs__certifications-row {
+      flex-direction: row; /* Desktop: Arrange horizontally */
+      justify-content: space-evenly;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .testimonial-certs__certification-item {
+      flex-direction: row;
+      flex-basis: 150px; /* Controls how many items fit in a row */
+      flex-grow: 1;
+    }
+
+    .testimonial-certs__certification-item p {
+        text-align: start;
+    }
+  }
+</style>
+
+<section class="testimonial-certs-section">
+  <div class="testimonial-certs__container">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'heading' -%}
+          <h2 class="testimonial-certs__heading" {{ block.shopify_attributes }}>
+            {{ block.settings.heading_text | replace_first: "**", "<span class='text-orange text-secondary md:text-[50px] font-secondaryHeader'>" | replace: "**", "</span>" }}
+          </h2>
+
+        {%- when 'stars' -%}
+          <div class="testimonial-certs__stars" {{ block.shopify_attributes }}>
+            {%- for i in (1..block.settings.star_rating) -%}
+              {{ star_svg }}
+            {%- endfor -%}
+          </div>
+
+        {%- when 'testimonial_text' -%}
+          <div class="testimonial-certs__quote" {{ block.shopify_attributes }}>
+            {{ block.settings.quote_text }}
+          </div>
+
+        {%- when 'author' -%}
+          <div class="testimonial-certs__author" {{ block.shopify_attributes }}>
+            {%- if block.settings.author_image != blank -%}
+              <img
+                src="{{ block.settings.author_image | image_url: width: 100 }}"
+                alt="{{ block.settings.author_image.alt | default: block.settings.author_name | escape }}"
+                class="testimonial-certs__author-image"
+                width="50"
+                height="50"
+                loading="lazy"
+              >
+            {%- endif -%}
+            <p class="testimonial-certs__author-name">{{ block.settings.author_name | escape }}</p>
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+
+    {%- liquid
+      # We render the certification blocks separately to group them in their own row
+      assign certification_blocks = section.blocks | where: "type", "certification_item"
+    -%}
+    {%- if certification_blocks.size > 0 -%}
+      <div class="testimonial-certs__certifications-row">
+        {%- for block in certification_blocks -%}
+          <div class="testimonial-certs__certification-item" {{ block.shopify_attributes }}>
+            {%- if block.settings.cert_icon != blank -%}
+                <div class="cert_icon">
+                    {{ block.settings.cert_icon }}
+                </div>
+              {% comment %} <img
+                src="{{ block.settings.cert_icon | image_url: width: 130 }}"
+                alt="{{ block.settings.cert_icon.alt | escape }}"
+                width="65"
+                height="{{ 65 | divided_by: block.settings.cert_icon.aspect_ratio | round }}"
+                loading="lazy"
+              > {% endcomment %}
+            {%- endif -%}
+            <div class="testimonial-certs__certification-text">
+              {{ block.settings.cert_text }}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Testimonial with Certs",
+  "tag": "section",
+  "class": "testimonial-with-certifications",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FDFBF7"
+    },
+    {
+      "type": "color",
+      "id": "container_bg_color",
+      "label": "Container Background Color",
+      "default": "#f6f2ef"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#CB5A42"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star Color",
+      "default": "#F4A328"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading_text",
+          "label": "Heading",
+          "default": "Trusted by 3,000+ healthcare providers"
+        }
+      ]
+    },
+    {
+      "type": "stars",
+      "name": "Star Rating",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "star_rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Star Rating",
+          "default": 5
+        }
+      ]
+    },
+    {
+      "type": "testimonial_text",
+      "name": "Testimonial Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "quote_text",
+          "label": "Quote",
+          "default": "<p>“Blood flow and healing are critical to the success of our treatments, and the integration of Nitric Oxide has really helped. We continue to promote Berkeley's N.O. for all of our body procedures as well as men presenting to our men’s clinic – our patients are loving the results.”</p>"
+        }
+      ]
+    },
+    {
+      "type": "author",
+      "name": "Author",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author Image"
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author Name",
+          "default": "Dr. Richard Moore"
+        }
+      ]
+    },
+    {
+      "type": "certification_item",
+      "name": "Certification Item",
+      "settings": [
+        {
+          "type": "html",
+          "id": "cert_icon",
+          "label": "Icon"
+        },
+        {
+          "type": "richtext",
+          "id": "cert_text",
+          "label": "Text",
+          "default": "<p><strong>GMP Certified</strong><br/>Produced under strict quality and safety standards.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Testimonial with Certs",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "stars"
+        },
+        {
+          "type": "testimonial_text"
+        },
+        {
+          "type": "author"
+        },
+        {
+          "type": "certification_item",
+          "settings": {
+            "cert_text": "<p><strong>GMP Certified</strong><br/>Produced under strict quality and safety standards.</p>"
+          }
+        },
+        {
+          "type": "certification_item",
+          "settings": {
+            "cert_text": "<p><strong>FDA Registered Facility</strong><br/>Made in facilities registered with the U.S. FDA.</p>"
+          }
+        },
+        {
+          "type": "certification_item",
+          "settings": {
+            "cert_text": "<p><strong>GMO Free</strong><br/>Formulated without genetically modified ingredients.</p>"
+          }
+        },
+        {
+          "type": "certification_item",
+          "settings": {
+            "cert_text": "<p><strong>Made in USA</strong><br/>Proudly manufactured in the United States.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

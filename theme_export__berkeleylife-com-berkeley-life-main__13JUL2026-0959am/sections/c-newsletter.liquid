@@ -1,0 +1,303 @@
+<!-- 
+  This Shopify section creates a customizable newsletter signup form.
+  - It uses blocks for the title and paragraph, allowing you to edit them in the theme customizer.
+  - The form is a standard Shopify customer form which will add users to your customer list with the 'newsletter' tag.
+  - Styles are included within the file for easy management and are designed to be responsive.
+-->
+<style>
+  .newsletter-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  }
+
+  .newsletter-container {
+    max-width: 1280px;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255);
+    border-radius: 20px;
+    padding: 40px 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .newsletter-container-column {
+    max-width: 800px;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255);
+    border-radius: 20px;
+    padding: 40px 50px;
+    display: grid;
+    text-align: center;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .newsletter-title {
+    font-size: 3.5rem;
+    color: #ffffff;
+    margin: 0 0 15px 0;
+    line-height: 1.1;
+    font-weight: 500;
+  }
+
+  .newsletter-paragraph {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+  }
+
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+
+  .form-input::placeholder {
+    color: #888;
+  }
+
+  .form-button {
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #1a2b43;
+    color: #ffffff;
+    border: none;
+    border-radius: 42px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .form-button:hover {
+    background-color: #2c476e;
+  }
+  
+  .form-privacy-notice {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .form-success {
+    color: #ffffff;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .form-errors {
+    color: #ff5c5c;
+    border: 1px solid #ff5c5c;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 900px) {
+    .newsletter-container {
+      grid-template-columns: 1fr;
+      padding: 30px;
+    }
+    .newsletter-content {
+      text-align: center;
+    }
+    .newsletter-title {
+        font-size: 2.5rem;
+    }
+  }
+</style>
+
+<div class="newsletter-wrapper" style="
+  {%- if section.settings.background_image != blank -%}
+    background-image: url('{{ section.settings.background_image | image_url: width: 1920 }}');
+    background-size: cover;
+  {%- endif -%}">
+  <div class="{% if section.settings.layout_style == "row"%}newsletter-container{% else %}newsletter-container-column{% endif %}">
+    <div class="newsletter-content">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {% render block %}
+          {%- when 'title' -%}
+            <h2 class="newsletter-title" {{ block.shopify_attributes }}>
+              {{ block.settings.title | replace_first: "**", "<span class='text-white text-[50px] md:text-[71px] font-secondaryHeader'>" | replace: "**", "</span>" }}
+            </h2>
+          {%- when 'paragraph' -%}
+            <div class="newsletter-paragraph" {{ block.shopify_attributes }}>
+              {{ block.settings.paragraph }}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+    <div class="newsletter-form-container">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'email_form' -%}
+          {%- form 'customer', class: 'newsletter-form', id: 'ContactForm' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            
+            {%- if form.errors -%}
+              <div class="form-errors">
+                {{ form.errors | default_errors }}
+              </div>
+            {%- endif -%}
+
+            {%- if form.posted_successfully? -%}
+              <p class="form-success">Thanks for subscribing!</p>
+            {%- else -%}
+              <div class="form-fields">
+                <div class="form-field">
+                  <label for="FirstName" class="visually-hidden">First Name</label>
+                  <input type="text"
+                    name="contact[first_name]"
+                    id="FirstName"
+                    class="form-input"
+                    placeholder="Enter Your first name"
+                    autocorrect="off"
+                    autocapitalize="off">
+                </div>
+                <div class="form-field">
+                  <label for="Email" class="visually-hidden">Email address</label>
+                  <input type="email"
+                    name="contact[email]"
+                    id="Email"
+                    class="form-input"
+                    placeholder="Enter Your email address"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    required>
+                </div>
+                <button type="submit" class="form-button" name="commit">
+                  {{section.settings.button_text | default: 'SIGN UP'}}
+                </button>
+              </div>
+              <p class="form-privacy-notice">We respect your privacy. Unsubscribe at any time.</p>
+            {%- endif -%}
+          {%- endform -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "C Newsletter",
+  "tag": "section",
+  "class": "newsletter-section-wrapper",
+  "settings": [
+    {
+        "type": "image_picker",
+        "id":"background_image",
+        "label":"Background Image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#C96551"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "SIGN UP"
+    },
+    {
+      "type":"select",
+      "id":"layout_style",
+      "label":"Layout Style",
+      "options":[
+        {
+          "value":"row",
+          "label":"Row"
+        },
+        {
+          "value":"column",
+          "label":"Column"
+        },
+      ],
+      "default": "row"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Stay Ahead in Health & Longevity"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "paragraph",
+          "label": "Paragraph",
+          "default": "<p>Join our wellness newsletter for science-backed insights on energy, heart health, and vitality — plus exclusive offers for subscribers.</p>"
+        }
+      ]
+    },
+    {
+      "type": "email_form",
+      "name": "Email Form",
+      "limit": 1,
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Newsletter",
+      "blocks": [
+        {
+          "type": "title"
+        },
+        {
+          "type": "paragraph"
+        },
+        {
+          "type": "email_form"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

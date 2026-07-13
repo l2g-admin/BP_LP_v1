@@ -1,0 +1,2514 @@
+{% comment %}theme-check-disable TemplateLength{% endcomment %}
+{%- liquid
+  assign product = section.settings.product
+
+  assign initialSlide = 0
+
+  assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src'
+  assign hide_variants = section.settings.hide_variants
+  assign productSticker = product.metafields.my_fields.product_sticker
+-%}
+
+<section class="md:mt-8 md:px-8 px-4 mt-4 py-8 md:py-12 bg-white">
+  <div id="ProductGrid" class="max-w-screen-xl mx-auto  grid grid-cols-1 {% if product.media.size > 0 %}md:grid-cols-2{% else %}product--no-media{% endif %} gap-4 md:gap-8 items-start justify-start">
+
+    <div id="ProductImages" class="md:sticky top-5 md:col-span-1 w-full col-span-2 relative">
+          {%- assign has_frontrow_banner = section.blocks | where: 'type', 'frontrow_banner' | first -%}
+          {%- unless has_frontrow_banner -%}
+            <span class="absolute z-10 p-2 px-4 text-xs font-bold tracking-widest text-center uppercase rounded-full top-4 left-4 bg-brand text-cream"> {{ section.settings.callout }} </span>
+          {%- endunless -%}
+
+
+      {% if product.media.size == 1 %}
+        {%- comment -%}Only one image — same on mobile and desktop{%- endcomment -%}
+        <div class="relative w-full h-auto">
+          {% if product.metafields.custom.featured_image != blank %}
+            {% render 'product-media', media: product.metafields.custom.featured_image, position: 1, loop: section.settings.enable_video_looping, modal_id: section.id, aspect: section.settings.image_ratio, zoom: section.settings.enable_zoom %}
+          {% else %}
+          {% render 'product-media', media: product.media[0], position: 1, loop: section.settings.enable_video_looping, modal_id: section.id, aspect: section.settings.image_ratio, zoom: section.settings.enable_zoom %}
+          {% endif %}
+          {%- if productSticker != blank -%}
+            {% render 'image', image: productSticker, classes: 'w-20 rounded-2xl absolute top-4 md:top-10 left-4 md:left-10 z-10', img_size: "10vw" %}
+          {%- endif -%}
+
+          {%- comment -%}FrontRow Banner Block - Single Image{%- endcomment -%}
+          {%- assign frontrow_banner_block = section.blocks | where: 'type', 'frontrow_banner' | first -%}
+          {%- if frontrow_banner_block -%}
+            <div>
+              {% render 'frontrow-banner', product_type: frontrow_banner_block.settings.product_type %}
+            </div>
+          {%- endif -%}
+        </div>
+
+      {% elsif product.media.size > 1 %}
+
+        {%- comment -%}
+          MOBILE: full swiper (all images)
+          DESKTOP: first image hero + remaining images in 2-col grid
+        {%- endcomment -%}
+
+        {%- comment -%}MOBILE swiper — hidden on md+{%- endcomment -%}
+        <script src="{{ 'product-swiper.js' | asset_url }}" type="module"></script>
+        <product-swiper class="relative flex flex-col-reverse items-start w-full md:hidden" data-initial-slide="{{ initialSlide }}" data-section-id="{{ section.id }}" {% if hide_variants %}data-hide-variants{% endif %} {% if section.settings.enable_zoom %}data-zoom{% endif %}>
+          {%- comment -%}Empty thumb slot (no thumbnails){%- endcomment -%}
+          <div class="hidden w-full h-full">
+            <div class="thumb-swiper-container relative pt-1">
+              <ul role="list" class="swiper-wrapper w-full"></ul>
+            </div>
+          </div>
+
+          {%- comment -%}Main swiper slides{%- endcomment -%}
+          <div class="w-full overflow-hidden">
+            <div class="product-swiper-container pb-20 relative">
+              <ul role="list" class="swiper-wrapper w-full">
+                {%- for media in product.media -%}
+                  {%- assign media_belongs_to_other_variants = false -%}
+                  {%- if media.id == product.selected_or_first_available_variant.featured_media.id -%}
+                    {%- assign media_belongs_to_other_variants = false -%}
+                  {%- elsif variant_images contains media.src -%}
+                    {%- assign media_belongs_to_other_variants = true -%}
+                  {%- endif -%}
+                  {%- unless hide_variants == true and media_belongs_to_other_variants == true -%}
+                    <li class="swiper-slide" data-media-id="{{ section.id }}-{{ media.id }}" data-position="{{ forloop.index0 }}">
+                      {% render 'product-media', media: media, position: forloop.index, loop: section.settings.enable_video_looping, modal_id: section.id, aspect: section.settings.image_ratio, zoom: section.settings.enable_zoom %}
+                    </li>
+                  {%- endunless -%}
+                {%- endfor -%}
+              </ul>
+              <div class="swiper-pagination"></div>
+
+              {%- comment -%}FrontRow Banner Block - Inside Swiper Container{%- endcomment -%}
+              {%- assign frontrow_banner_block = section.blocks | where: 'type', 'frontrow_banner' | first -%}
+              {%- if frontrow_banner_block -%}
+                {% render 'frontrow-banner', product_type: frontrow_banner_block.settings.product_type %}
+              {%- endif -%}
+            </div>
+          </div>
+          {%- if productSticker != blank -%}
+            {% render 'image', image: productSticker, classes: 'w-20 absolute top-4 left-4 z-10', img_size: "10vw" %}
+          {%- endif -%}
+        </product-swiper>
+
+        {%- comment -%}DESKTOP grid layout — hidden on mobile{%- endcomment -%}
+
+        <div class="hidden md:block relative">
+          {%- if productSticker != blank -%}
+            {% render 'image', image: productSticker, classes: 'w-20 rounded-2xl absolute top-10 left-10 z-10', img_size: "10vw" %}
+          {%- endif -%}
+
+          {%- assign desktop_position = 0 -%}
+          {%- for media in product.media -%}
+            {%- assign media_belongs_to_other_variants = false -%}
+            {%- if media.id == product.selected_or_first_available_variant.featured_media.id -%}
+              {%- assign media_belongs_to_other_variants = false -%}
+            {%- elsif variant_images contains media.src -%}
+              {%- assign media_belongs_to_other_variants = true -%}
+            {%- endif -%}
+            {%- unless hide_variants == true and media_belongs_to_other_variants == true -%}
+              {%- assign desktop_position = desktop_position | plus: 1 -%}
+              {%- if desktop_position == 1 -%}
+                <div class="w-full mb-4">
+                   {% if product.metafields.custom.featured_image != blank %}
+                   <img src="{{ product.metafields.custom.featured_image | image_url }}"> 
+                    {% else %}
+                            {% render 'product-media', media: media, position: desktop_position, loop: section.settings.enable_video_looping, modal_id: section.id, aspect: section.settings.image_ratio, zoom: section.settings.enable_zoom, extra: 'rounded-2xl' %}
+                    {% endif %}
+                </div>
+              {%- elsif desktop_position == 2 -%}
+                <div class="grid grid-cols-2 gap-4">
+                  <div>{% render 'product-media', extra: 'rounded-2xl', media: media, position: desktop_position, loop: section.settings.enable_video_looping, modal_id: section.id, aspect: section.settings.image_ratio, zoom: section.settings.enable_zoom %}</div>
+              {%- else -%}
+                  <div>{% render 'product-media', extra: 'rounded-2xl', media: media, position: desktop_position, loop: section.settings.enable_video_looping, modal_id: section.id, aspect: section.settings.image_ratio, zoom: section.settings.enable_zoom %}</div>
+              {%- endif -%}
+            {%- endunless -%}
+          {%- endfor -%}
+          {%- if desktop_position >= 2 -%}</div>{%- endif -%}
+
+          {%- comment -%}FrontRow Banner Block - Desktop Grid{%- endcomment -%}
+          {%- assign frontrow_banner_block = section.blocks | where: 'type', 'frontrow_banner' | first -%}
+          {%- if frontrow_banner_block -%}
+            {% render 'frontrow-banner', product_type: frontrow_banner_block.settings.product_type %}
+          {%- endif -%}
+
+        </div>
+
+      {% endif %}
+    </div>
+
+
+    <div class="md:sticky top-5 p-4">
+      <div id="ProductInfo-{{ section.id }}" class="space-y-4">
+        {%- assign product_form_id = 'product-form-' | append: section.id -%}
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+          {%- when '@app' -%}
+            {% render block %}
+          {%- when 'text' -%}
+            <p class="{% if block.settings.text_style == 'uppercase' %} uppercase{% elsif block.settings.text_style == 'subtitle' %} {% endif %}" {{ block.shopify_attributes }}>
+              {{- block.settings.text -}}
+            </p>
+            {%- when 'highlights' -%}
+            <div class="font-secondaryHeader h5 flex items-center gap-4" {{ block.shopify_attributes }}>
+             <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="5.5" cy="5.5" r="5.5" fill="#FF4E24"/>
+<path d="M6.072 7.45409H5.12471V6.12632H3.88235V5.21009H5.12471V3.88232H6.072V5.21009H7.31435V6.12632H6.072V7.45409Z" fill="#F6F3F0"/>
+</svg>
+ {{- block.settings.highlight -}}
+            </div>
+          {%- when 'title' -%}
+            <h1 class="h3 border-b border-brand pb-4" {{ block.shopify_attributes }}>
+              {{ product.title | escape }}
+            </h1>
+          {%- when 'price' -%}
+            <div class="sr-only no-js-hidden" id="price-{{ section.id }}" {{ block.shopify_attributes }}>
+              {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: 'text-lg' -%}
+            </div>
+
+          {%- when 'description' -%}
+            {%- if product.description != blank -%}
+              <div {{ block.shopify_attributes }}>
+                <details class="group" {% if block.settings.open %}open{% endif %}>
+                  <summary class="py-4 border-b border-gray-200 border-solid">
+                    <h2 class="flex items-center gap-2">
+                      <span class="subhead flex-grow">
+                        {{ block.settings.heading | default: "Description" }}
+                      </span>
+                      <span class="shrink-0 group-open:rotate-180 w-4 transition-transform">{% render 'icon-caret' %}</span>
+                    </h2>
+                  </summary>
+                  <div class="rte pt-4 space-y-4">
+                    {{ product.description }}
+                  </div>
+                </details>
+              </div>
+            {%- endif -%}
+          {%- when 'custom_liquid' -%}
+            {{ block.settings.custom_liquid }}
+          {%- when 'add_banner' -%}
+              <div class="add-banner-container" {{ block.shopify_attributes }}>
+                <style>
+                  .add-banner-container {
+                    background-color: {{ block.settings.bg_color | default: '#1B202B' }};
+                    border-radius: 12px;
+                    padding: 4px 16px 4px 16px;
+                    margin: 16px 0;
+                    text-align: center;
+                    width: max-content;
+                  }
+
+                  .add-banner-text {
+                    color: {{ block.settings.text_color | default: '#ffffff' }};
+                    margin: 0;
+                    line-height: revert;
+                    font-size: 14px;
+                  }
+
+                  .add-banner-copy-wrapper {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                  }
+
+                  .add-banner-content {
+                    display: flex;
+                    align-items: center;
+                    gap: .5rem;
+                  }
+
+                  .add-banner-copy-code {
+                    color: {{ block.settings.text_color | default: '#ffffff' }};
+                    font-size: 14px;
+                    letter-spacing: 0.05em;
+                    margin: 0;
+                  }
+
+                  .add-banner-copy-btn {
+                    background-color: {{ block.settings.copy_btn_bg_color | default: '#D44F2F' }};
+                    color: {{ block.settings.copy_btn_text_color | default: '#ffffff' }};
+                    border: none;
+                    border-radius: 6px;
+                     padding: 5px 10px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    text-transform: uppercase;
+                    transition: opacity 0.2s;
+                  }
+
+                  .add-banner-copy-btn:hover {
+                    opacity: 0.85;
+                  }
+
+                  @media (max-width: 768px) {
+                    .add-banner-container {
+                      padding: 16px;
+                    }
+                  }
+                </style>
+
+                <div class="add-banner-content">
+                  {%- if block.settings.banner_text != blank -%}
+                    <p class="add-banner-text">{{ block.settings.banner_text }}</p>
+                  {%- endif -%}
+                  {%- if block.settings.enable_copy_code -%}
+                    <div class="add-banner-copy-wrapper">
+                      <button
+                        type="button"
+                        class="add-banner-copy-btn"
+                        data-discount-code="{{ block.settings.discount_code }}"
+                        onclick="navigator.clipboard.writeText(this.dataset.discountCode).then(function(){ this.textContent='Copied!'; setTimeout(function(){ this.textContent='Copy'; }.bind(this), 2000); }.bind(this))"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+          {%- when 'collapsible_tab' -%}
+            {%- unless block.settings.hide_if_empty and block.settings.content == blank and block.settings.page.content == blank and block.settings.enable_clinical_drawer == false -%}
+              <div {{ block.shopify_attributes }}>
+                <details class="group" {% if block.settings.open %}open{% endif %}>
+                  <summary class="gap-2 pb-4 border-b border-brand border-solid">
+                    <h2 class="flex items-center gap-2">
+                      {% render 'icon-accordion', icon: block.settings.icon %}
+                      <span class="subhead flex-grow">
+                        {{ block.settings.heading | default: block.settings.page.title }}
+                      </span>
+                      <span class="shrink-0  w-4 transition-transform"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="9" cy="9" r="9" fill="#4D233B"/>
+<path class="group-open:hidden" d="M9.3913 5.47826V13.3043" stroke="#F6F3F0" stroke-linecap="round"/>
+<path d="M13.3044 9.39131L5.4783 9.39131" stroke="#F6F3F0" stroke-linecap="round"/>
+</svg>
+</span>
+                    </h2>
+                  </summary>
+                  <div class="rte pt-4 space-y-4">
+                    {{ block.settings.content }}
+                    {{ block.settings.page.content }}
+                  </div>
+                  {%- if block.settings.enable_clinical_drawer -%}
+                    <div class="pt-4">
+                      <button
+                        type="button"
+                        class="clinical-drawer-trigger"
+                        aria-haspopup="dialog"
+                        data-drawer-target="ClinicalDrawerTab-{{ block.id }}"
+                        style="{% if block.settings.ct_button_style == 'link' %}background:none;border:none;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:0.02em;{% endif %}"
+                      >
+                        {{ block.settings.ct_button_text | default: 'Clinical Trials' }}
+                      </button>
+                    </div>
+                  {%- endif -%}
+                </details>
+              </div>
+
+              {%- if block.settings.enable_clinical_drawer -%}
+                <div
+                  id="ClinicalDrawerTab-{{ block.id }}"
+                  class="clinical-drawer-overlay"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label="{{ block.settings.ct_drawer_title }}"
+                  tabindex="-1"
+                >
+                  <div
+                    class="clinical-drawer-panel"
+                    style="background-color: {{ block.settings.ct_bg_color }}; color: {{ block.settings.ct_text_color }};"
+                  >
+                    <div class="clinical-drawer-header" style="background-color: {{ block.settings.ct_bg_color }}; color: {{ block.settings.ct_text_color }};">
+                      <h2 class="clinical-drawer-title" style="color: {{ block.settings.ct_text_color }};">
+                        {{ block.settings.ct_drawer_title }}
+                      </h2>
+                      <button
+                        type="button"
+                        class="clinical-drawer-close"
+                        aria-label="Close drawer"
+                        data-drawer-close="ClinicalDrawerTab-{{ block.id }}"
+                        style="color: {{ block.settings.ct_text_color }};"
+                      >
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="clinical-drawer-body">
+                      <div class="clinical-drawer-content" style="color: {{ block.settings.ct_text_color }};">
+                        {{ block.settings.ct_body }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <script>
+                  (function() {
+                    const drawerId = 'ClinicalDrawerTab-{{ block.id }}';
+                    const overlay = document.getElementById(drawerId);
+                    if (!overlay) return;
+
+                    const triggers = document.querySelectorAll('[data-drawer-target="' + drawerId + '"]');
+                    const closeBtn = overlay.querySelector('[data-drawer-close="' + drawerId + '"]');
+                    let scrollY = 0;
+
+                    function openDrawer() {
+                      scrollY = window.scrollY;
+                      document.body.style.top = '-' + scrollY + 'px';
+                      document.body.classList.add('clinical-drawer-no-scroll');
+                      overlay.classList.add('is-open');
+                      overlay.focus();
+                    }
+
+                    function closeDrawer() {
+                      overlay.classList.remove('is-open');
+                      document.body.classList.remove('clinical-drawer-no-scroll');
+                      document.body.style.top = '';
+                      window.scrollTo(0, scrollY);
+                    }
+
+                    triggers.forEach(function(trigger) {
+                      trigger.addEventListener('click', openDrawer);
+                    });
+
+                    if (closeBtn) {
+                      closeBtn.addEventListener('click', closeDrawer);
+                    }
+
+                    overlay.addEventListener('click', function(e) {
+                      if (e.target === overlay) closeDrawer();
+                    });
+
+                    document.addEventListener('keydown', function(e) {
+                      if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
+                        closeDrawer();
+                      }
+                    });
+                  })();
+                </script>
+
+                <style>
+                  .clinical-drawer-trigger {
+                    margin: 8px 0;
+                    color: #080b2b;
+                    display: inline-flex;
+                    align-items: center;
+                    cursor: pointer;
+                    font-size: 16px;
+                    letter-spacing: 0.02em;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    text-decoration: underline;
+                    background: none;
+                    border: none;
+                    padding: 0;
+                    transition: opacity 0.2s ease;
+                  }
+                  .clinical-drawer-trigger:hover {
+                    opacity: 0.7;
+                  }
+                  .clinical-drawer-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    backdrop-filter: blur(2px);
+                    z-index: 99999;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: opacity 0.3s ease, visibility 0.3s ease;
+                  }
+                  .clinical-drawer-overlay.is-open {
+                    opacity: 1;
+                    visibility: visible;
+                  }
+                  .clinical-drawer-panel {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 100%;
+                    max-width: 500px;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    transform: translateX(100%);
+                    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                    box-shadow: -4px 0 30px rgba(0, 0, 0, 0.15);
+                  }
+                  .clinical-drawer-overlay.is-open .clinical-drawer-panel {
+                    transform: translateX(0);
+                  }
+                  .clinical-drawer-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 24px 40px;
+                    flex-shrink: 0;
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                    position: sticky;
+                    top: 0;
+                    z-index: 2;
+                  }
+                  .clinical-drawer-title {
+                    font-size: 20px;
+                    font-weight: 600;
+                    margin: 0;
+                    line-height: 1.3;
+                    letter-spacing: 0.01em;
+                    flex: 1;
+                    padding-right: 16px;
+                  }
+                  .clinical-drawer-close {
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    padding: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    transition: background 0.2s ease;
+                    flex-shrink: 0;
+                  }
+                  .clinical-drawer-close:hover {
+                    background: rgba(0, 0, 0, 0.06);
+                  }
+                  .clinical-drawer-body {
+                    flex: 1;
+                    overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
+                    overscroll-behavior: contain;
+                  }
+                  .clinical-drawer-content {
+                    padding: 32px 40px;
+                    font-size: 16px;
+                    line-height: 1.65;
+                  }
+                  .clinical-drawer-content h1,
+                  .clinical-drawer-content h2,
+                  .clinical-drawer-content h3,
+                  .clinical-drawer-content h4,
+                  .clinical-drawer-content h5 {
+                    margin-top: 1.5em;
+                    margin-bottom: 0.5em;
+                    line-height: 1.3;
+                    color: inherit;
+                    font-weight: 800;
+                  }
+                  .clinical-drawer-content h1:first-child,
+                  .clinical-drawer-content h2:first-child,
+                  .clinical-drawer-content h3:first-child {
+                    margin-top: 0;
+                  }
+                  .clinical-drawer-content p {
+                    margin-bottom: 1em;
+                  }
+                  .clinical-drawer-content ul {
+                    list-style: circle;
+                  }
+                  .clinical-drawer-content ul,
+                  .clinical-drawer-content ol {
+                    margin-bottom: 1em;
+                    padding-left: 1.5em;
+                  }
+                  .clinical-drawer-content li {
+                    margin-bottom: 0.5em;
+                  }
+                  .clinical-drawer-content img {
+                    max-width: 100%;
+                    height: auto;
+                    display: block;
+                    margin: 1em auto;
+                  }
+                  .clinical-drawer-content a {
+                    color: inherit;
+                    text-decoration: underline;
+                  }
+                  body.clinical-drawer-no-scroll {
+                    overflow: hidden !important;
+                    position: fixed;
+                    width: 100%;
+                  }
+                  #shopify-section-header,
+                  sticky-header,
+                  .header-wrapper {
+                    transition: opacity 0.3s ease;
+                  }
+                  body.clinical-drawer-no-scroll #shopify-section-header,
+                  body.clinical-drawer-no-scroll sticky-header,
+                  body.clinical-drawer-no-scroll .header-wrapper {
+                    opacity: 0 !important;
+                    pointer-events: none !important;
+                    z-index: 0 !important;
+                  }
+                  body.clinical-drawer-no-scroll .space-y-4>:not([hidden])~:not([hidden]) {
+                    margin-top: 0 !important;
+                  }
+                  @media (max-width: 600px) {
+                    .clinical-drawer-panel {
+                      max-width: 100%;
+                    }
+                    .clinical-drawer-header {
+                      padding: 20px 24px;
+                    }
+                    .clinical-drawer-content {
+                      padding: 24px;
+                    }
+                  }
+                </style>
+              {%- endif -%}
+            {%- endunless -%}
+          {%- when 'popup' -%}
+              <modal-opener class="product-popup-modal__opener no-js-hidden" data-modal="#PopupModal-{{ block.id }}" {{ block.shopify_attributes }}>
+                <button id="ProductPopup-{{ block.id }}" class="product-popup-modal__button link" type="button" aria-haspopup="dialog">{{ block.settings.text | default: block.settings.page.title }}</button>
+              </modal-opener>
+              <a href="{{ block.settings.page.url }}" class="product-popup-modal__button link no-js">{{ block.settings.text }}</a>
+          {%- when 'share' -%}
+              {% render 'share', share_url: product.url, block: block, type: 'Product' %}
+          {%- when 'variant_picker' -%}
+            {%- unless product.has_only_default_variant -%}
+                {%- if block.settings.picker_type == 'button' -%}
+                  {%- if product.metafields.custom.disable_subscription_flyout != true or customer.b2b? -%}
+                    <variant-radios
+                      class="no-js-hidden"
+                      data-section="{{ section.id }}"
+                      data-url="{{ product.url }}"
+                      {% if quickshop %}
+                        data-update-url="false"
+                      {% endif -%}
+                      {{ block.shopify_attributes }}
+                    >
+                      <fieldset class="!my-8 space-y-1 text-sm">
+                        <div class="flex flex-wrap gap-4">
+                          {% if customer.b2b? %}
+                            {% comment %} Wholesale Variants {% endcomment %}
+                            <legend class="block text-2xl">
+                              <span>One Time Purchase:</span>
+                            </legend>
+                            <div class="flex flex-wrap w-full gap-2 gap-y-6">
+                              {%- for variant in product.variants -%}
+                                {%- if variant.metafields.custom.b2bonly.value == true
+                                  or variant.metafields.custom.both_d2c_b2b.value == true
+                                -%}
+                                  {% unless variant.metafields.custom.subscription_30_days == true %}
+                                    <label
+                                      class="relative gap-4 p-4 bg-transparent border-2 rounded-full cursor-pointer w-fit option-container border-brand"
+                                      for="variant-{{ variant.id }}-otp"
+                                    >
+                                      <div class="relative inline-flex items-center justify-between flex-grow w-full gap-2">
+                                        {% if variant.metafields.custom.b2b_savings_amount != blank %}
+                                          <div class="absolute top-[-35px] tracking-widest leading-[12px] uppercase right-[-4px] px-2 py-2 bg-[#1B1C29] text-white rounded-3xl text-xs font-medium">
+                                            Save {{ variant.metafields.custom.b2b_savings_amount }}
+                                          </div>
+                                        {% endif %}
+                                        <input
+                                          type="radio"
+                                          id="variant-{{ variant.id }}-otp"
+                                          name="variant_selling_plan"
+                                          value="{{ variant.id }}-otp"
+                                          form="product-form-{{ section.id }}"
+                                          class="sr-only"
+                                          {% if product.selected_or_first_available_variant.id == variant.id
+                                            and product.selected_selling_plan == null
+                                          %}
+                                            checked
+                                          {% endif %}
+                                        >
+                                        <div class="flex flex-col">
+                                          <h3 class="text-base">{{ variant.title }}</h3>
+                                        </div>
+                                        <span class="ml-auto text-[#D54F2F] font-semibold">
+                                          {{- variant.price | money -}}
+                                        </span>
+                                      </div>
+                                      {% comment %}
+                                        {% if customer.b2b? %}
+                                          <ul class="mt-1 mb-2 text-sm subscription-list">
+                                            <li>The more you buy the more you save</li>
+                                          </ul>
+                                        {% endif %}
+                                      {% endcomment %}
+                                    </label>
+                                  {% endunless %}
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                            {%- for variant in product.variants -%}
+                              {% if variant.metafields.custom.subscription_30_days == true %}
+                                {% assign subscription = true %}
+                              {% endif %}
+                            {% endfor %}
+                            <legend class="block text-2xl {% unless subscription %} hidden {% endunless %}">
+                              <span>Subscribe & Save:</span>
+                            </legend>
+                            <div class="relative w-full {% unless subscription %} hidden {% endunless %}">
+                              <select
+                                name="variant_selling_plan"
+                                form="product-form-{{ section.id }}"
+                                class="w-full p-4 text-base bg-white border-2 rounded-full border-brand"
+                              >
+                                <option value="">Select a subscription option</option>
+                                {%- for variant in product.variants -%}
+                                  {%- if variant.metafields.custom.b2bonly.value == true -%}
+                                    {% unless variant.metafields.custom.subscription_30_days != true %}
+                                      {%- if block.settings.use_recharge_titles
+                                        and variant.selling_plan_allocations.size > 0
+                                      -%}
+                                        {%- for allocation in variant.selling_plan_allocations -%}
+                                          <option
+                                            value="{{ variant.id }}-{{ allocation.selling_plan.id }}"
+                                            {% if product.selected_or_first_available_variant.id == variant.id
+                                              and product.selected_selling_plan.id == allocation.selling_plan.id
+                                            %}
+                                              selected
+                                            {% endif %}
+                                          >
+                                            {{ allocation.selling_plan.name }} - {{ allocation.price | money }}
+                                          </option>
+                                        {%- endfor -%}
+                                      {%- else -%}
+                                        <option
+                                          value="{{ variant.id }}-otp"
+                                          {% if product.selected_or_first_available_variant.id == variant.id
+                                            and product.selected_selling_plan == null
+                                          %}
+                                            selected
+                                          {% endif %}
+                                        >
+                                          {{ variant.title }} - {{ variant.price | money }}
+                                        </option>
+                                      {%- endif -%}
+                                    {% endunless %}
+                                  {%- endif -%}
+                                {%- endfor -%}
+                              </select>
+                              {%- if product.metafields.custom.wholesale_subscription_savings_percentage != blank -%}
+                                <div class="absolute top-[-14px] uppercase right-[10px] px-6 font-medium py-2 bg-[#1B1C29] text-white rounded-3xl text-xs tracking-widest leading-[19px]">
+                                  Save an extra
+                                  {{ product.metafields.custom.wholesale_subscription_savings_percentage }}
+                                </div>
+                              {%- endif %}
+                            </div>
+                            <ul class="w-full text-base {% unless subscription %} hidden {% endunless %}">
+                              <li>Save {{ product.metafields.custom.wholesale_subscription_savings_percentage }}</li>
+                              <li>Supply delivered every month</li>
+                              <li>Pause or cancel at any time</li>
+                            </ul>
+
+                          {% else %}
+      
+                            {%- for variant in product.variants -%}
+                              {%- comment -%}Only show non-B2B variants to regular customers, or all variants to B2B customers{%- endcomment -%}
+                              {%- if variant.metafields.custom.b2bonly.value != true -%}
+                                {%- comment -%}
+                                  Render Subscription options:
+                                {%- endcomment -%}
+                                {%- for allocation in variant.selling_plan_allocations -%}
+                                  {%- assign subscription_price = allocation.price_adjustments.first.price -%}
+                                  {%- assign one_time_price = variant.price -%}
+                                  {%- assign savings_amount = one_time_price | minus: subscription_price -%}
+                                  {%- assign savings_percentage = savings_amount
+                                    | times: 100
+                                    | divided_by: one_time_price
+                                  -%}
+
+                                  <label
+                                    class="relative option-container inline-flex flex-grow items-center border border-transparent rounded-lg p-4 bg-[#F6F3F066] cursor-pointer"
+                                    for="variant-{{ variant.id }}-plan-{{ allocation.selling_plan.id }}"
+                                  >
+                                    {%- if variant.metafields.custom.is_most_popular_subscription == true -%}
+                                      <div class="absolute top-[-14px] right-[10px] px-6 font-medium py-2 bg-[#1B1C29] text-white rounded-3xl text-xs tracking-widest leading-[19px]">
+                                        MOST POPULAR
+                                      </div>
+                                    {%- endif %}
+                                    <input
+                                      type="radio"
+                                      id="variant-{{ variant.id }}-plan-{{ allocation.selling_plan.id }}"
+                                      name="variant_selling_plan"
+                                      value="{{ variant.id }}-{{ allocation.selling_plan.id }}"
+                                      form="product-form-{{ section.id }}"
+                                      class="mr-4"
+                                      {% if product.selected_or_first_available_variant.id == variant.id
+                                        and product.selected_selling_plan.id == allocation.selling_plan.id
+                                      %}
+                                        checked
+                                      {% endif %}
+                                    >
+                                    <div class="flex flex-col">
+                                      <h3 class="text-lg">
+                                        {% if block.settings.use_recharge_titles -%}
+                                          {{- variant.title -}}
+                                          <br>
+                                          <span class="text-base font-normal">{{ allocation.selling_plan.name }}</span>
+                                        {%- else -%}
+                                          {{- variant.title }} Supply Subscription
+                                        {%- endif %}
+                                      </h3>
+                                      <ul class="mt-1 text-sm ">
+                                        {% comment %} <li>Save {{ savings_percentage | round: 1 }}%</li> {% endcomment %}
+                                        {%- assign first_char = variant.title | slice: 0, 1 -%}
+                                        {%- assign first_number = first_char | plus: 0 -%}
+                                        <li>
+                                          {{ variant.title }} supply delivered every&nbsp;
+                                          {%- if first_number > 1 -%}
+                                            {{ first_number }} months. Free Shipping
+                                          {%- else -%}
+                                            1 month. Free Shipping
+                                          {%- endif -%}
+                                        </li>
+                                        {% comment %} {% for item in shop.metaobjects.subscription_callout.values %}
+                                          <li>{{ item.callout_title }}</li>
+                                        {% endfor %} {% endcomment %}
+                                      </ul>
+                                    </div>
+                                    <div class="flex flex-col self-start ml-auto text-[#D54F2F] mt-2">
+                                      <span class="ml-auto font-semibold">{{ subscription_price | money }}</span>
+                                      <span class="ml-auto text-xs line-through opacity-50">
+                                        {{- one_time_price | money -}}
+                                      </span>
+                                    </div>
+                                  </label>
+                                {%- endfor -%}
+
+                                {%- comment -%}
+                                  Render One-time purchase option (if allowed):
+                                {%- endcomment -%}
+                                {%- unless variant.metafields.custom.disable_one_time_purchase -%}
+                                  <label
+                                    class="option-container  border w-full border-transparent rounded-lg p-4 bg-[#F6F3F066] cursor-pointer"
+                                    for="variant-{{ variant.id }}-otp"
+                                  >
+                                    <div class="inline-flex items-center justify-between flex-grow w-full">
+                                      <input
+                                        type="radio"
+                                        id="variant-{{ variant.id }}-otp"
+                                        name="variant_selling_plan"
+                                        value="{{ variant.id }}-otp"
+                                        form="product-form-{{ section.id }}"
+                                        class="mr-4"
+                                        {% if product.selected_or_first_available_variant.id == variant.id
+                                          and product.selected_selling_plan == null
+                                        %}
+                                          checked
+                                        {% endif %}
+                                      >
+                                      <div class="flex flex-col">
+                                        <h3 class="text-lg">One-time Purchase</h3>
+                                      </div>
+                                      <span class="ml-auto text-[#D54F2F] font-semibold">
+                                        {{- variant.price | money -}}
+                                      </span>
+                                    </div>
+                                    {% comment %}
+                                      {% if customer.b2b? %}
+                                        <ul class="mt-1 mb-2 text-sm subscription-list">
+                                          <li>The more you buy the more you save</li>
+                                        </ul>
+                                      {% endif %}
+                                    {% endcomment %}
+                                  </label>
+                                {%- endunless -%}
+                              {%- endif -%}
+                            {%- endfor -%}
+                          {% endif %}
+                        </div>
+                      </fieldset>
+
+                      <!-- CSS: Style the option container and selected state -->
+                      <style>
+                        .option-container {
+                          transition: background 0.2s, border-color 0.2s;
+                        }
+                        .option-container.selected {
+                          border-color: #1b1c29; /* Replace with your brand color */
+                          background-color: white;
+                        }
+                      </style>
+
+                      <!-- JavaScript: Add 'selected' class to the container of the checked radio -->
+                      <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                          const options = document.querySelectorAll('.option-container');
+                          const variantSelect = document.querySelector("select[name='variant_selling_plan']");
+
+                          // Function to update selected state on all option containers
+                          function updateSelected() {
+                            options.forEach((option) => {
+                              const radio = option.querySelector('input[type="radio"]');
+                              if (radio.checked) {
+                                option.classList.add('selected');
+                              } else {
+                                option.classList.remove('selected');
+                              }
+                            });
+                          }
+
+                          // Function to handle mutual exclusivity between radios and select
+                          function handleMutualExclusivity(event) {
+                            if (event.target.tagName === 'SELECT') {
+                              // If select dropdown was changed, deselect all radio buttons
+                              document
+                                .querySelectorAll('input[name="variant_selling_plan"][type="radio"]')
+                                .forEach((radio) => {
+                                  radio.checked = false;
+                                });
+                              // Remove selected class from all option containers
+                              options.forEach((option) => {
+                                option.classList.remove('selected');
+                              });
+                            } else if (event.target.type === 'radio') {
+                              // If radio button was changed, clear the select dropdown
+                              if (variantSelect) {
+                                variantSelect.value = '';
+                              }
+                            }
+                            updateSelected();
+                          }
+
+                          // Automatically select the first radio if none are selected
+                          function selectFirstRadio() {
+                            const firstRadio = options[0]?.querySelector('input[type="radio"]');
+                            if (firstRadio && !document.querySelector('input[type="radio"]:checked')) {
+                              firstRadio.checked = true;
+                            }
+                          }
+
+                          // Attach change event to every radio input
+                          options.forEach((option) => {
+                            const radio = option.querySelector('input[type="radio"]');
+                            radio.addEventListener('change', handleMutualExclusivity);
+                          });
+
+                          // Attach change event to select dropdown if it exists
+                          if (variantSelect) {
+                            variantSelect.addEventListener('change', handleMutualExclusivity);
+                          }
+
+                          // Run on initial load
+                          selectFirstRadio();
+                          updateSelected();
+                        });
+                      </script>
+
+                      <script type="application/json" id="ProductVariantsData">
+                        {{ product.variants | json }}
+                      </script>
+
+                      <script>
+                        window.productVariants = JSON.parse(document.getElementById('ProductVariantsData').textContent);
+                      </script>
+                    </variant-radios>
+                  {%- else -%}
+                    <variant-radios
+                      class="no-js-hidden !my-8"
+                      data-section="{{ section.id }}"
+                      data-url="{{ product.url }}"
+                      {% if quickshop %}
+                        data-update-url="false"
+                      {% endif -%}
+                      {{ block.shopify_attributes }}
+                    >
+                      {%- for option in product.options_with_values -%}
+                        <fieldset class="mt-4 space-y-1 text-sm js">
+                          <legend class="block font-bold tracking-widest uppercase">
+                            <span>{{ option.name }}</span>
+                            {%- if option.name == 'Color' -%}
+                              <span class="opacity-50" id="CurrentColor-{{ section.id }}">
+                                {{ option.selected_value }}
+                              </span>
+                            {%- endif -%}
+                          </legend>
+
+                          <div class="flex flex-wrap gap-2">
+                            {%- for value in option.values -%}
+                              {%- assign valid_variant = false -%}
+                              {%- for variant in product.variants -%}
+                                {%- if variant.options contains value -%}
+                                  {%- comment -%}Show non-B2B variants to all customers{%- endcomment -%}
+                                  {%- if variant.metafields.custom.b2bonly.value != true -%}
+                                    {%- assign valid_variant = true -%}
+                                    {%- break -%}
+                                    {%- comment -%}Show B2B-only variants only to B2B customers{%- endcomment -%}
+                                  {%- elsif customer.b2b? -%}
+                                    {%- assign valid_variant = true -%}
+                                    {%- break -%}
+                                  {%- endif -%}
+                                {%- endif -%}
+                              {%- endfor -%}
+                              {%- if valid_variant -%}
+                                <div class="inline-flex">
+                                  <input
+                                    class="sr-only peer"
+                                    type="radio"
+                                    id="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                                    name="{{ option.name }}"
+                                    value="{{ value | escape }}"
+                                    form="product-form-{{ section.id }}"
+                                    {% if option.selected_value == value %}
+                                      checked
+                                    {% endif %}
+                                  >
+                                  {%- if block.settings.enable_swatches and option.name == 'Color' -%}
+                                    <label
+                                      class="inline-block overflow-hidden border border-transparent rounded-full cursor-pointer peer-checked:border-gray-400"
+                                      for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                                    >
+                                      {% render 'swatch', handle: value %}
+                                      <span class="sr-only">{{ value }}</span>
+                                    </label>
+                                  {%- else -%}
+                                    <label
+                                      class="px-3 py-2 text-xs font-bold tracking-wide uppercase bg-transparent border border-transparent rounded-full cursor-pointer text-brand md:px-4 md:py-3 md:text-sm peer-checked:border-brand peer-focus-visible:outline-dashed peer-focus-visible:outline-2 peer-focus-visible:outline-current peer-focus-visible:outline-offset-2"
+                                      for="{{ section.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                                    >
+                                      {{ value }}
+                                    </label>
+                                  {%- endif -%}
+                                </div>
+                              {% endif %}
+                            {%- endfor -%}
+                          </div>
+                        </fieldset>
+                      {%- endfor -%}
+                      <script type="application/json">
+                        {{ product.variants | json }}
+                      </script>
+                    </variant-radios>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endunless -%}
+          {%- when 'selling_plan_picker' -%}
+            {%- unless product.selling_plan_groups == empty -%}
+              {%- if block.settings.picker_type == 'button' -%}
+                <selling-plan-radios class="no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}" data-update-url="false" {{ block.shopify_attributes }}>
+
+                  <div class="py-2">
+                    <legend class="block text-sm font-bold tracking-widest uppercase">
+                      <span>Purchase Options</span>
+                    </legend>
+
+                    <div class="flex flex-wrap gap-2">
+                      {% unless product.requires_selling_plan %}
+                        <div class="inline-flex">
+                          <input
+                            class="peer sr-only"
+                            type="radio"
+                            id="{{ section.id }}-otp"
+                            name="selling_plan"
+                            value=""
+                            form="product-form-{{ section.id }}"
+                            {% unless product.selected_selling_plan %}checked{% endunless %}
+                          >
+                          <label class="md:px-4 md:py-3 md:text-sm peer-checked:border-gray-400 peer-focus-visible:outline-dashed peer-focus-visible:outline-2 peer-focus-visible:outline-current peer-focus-visible:outline-offset-2 px-3 py-2 text-xs bg-gray-100 border border-transparent rounded-full cursor-pointer" for="{{ section.id }}-otp">
+                              One-time Purchase
+                          </label>
+                        </div>
+                      {% endunless %}
+                      {%- for allocation in product.selected_or_first_available_variant.selling_plan_allocations -%}
+                        <div class="inline-flex">
+                          <input
+                            class="peer sr-only"
+                            type="radio"
+                            id="{{ section.id }}-{{ allocation.selling_plan.id }}-{{ forloop.index0 }}"
+                            name="selling_plan"
+                            value="{{ allocation.selling_plan.id }}"
+                            form="product-form-{{ section.id }}"
+                            {% if allocation.selling_plan.selected %}checked{% elsif product.requires_selling_plan and forloop.index == 1 %} checked{% endif %}
+                          >
+                          <label class="md:px-4 md:py-3 md:text-sm peer-checked:border-gray-400 peer-focus-visible:outline-dashed peer-focus-visible:outline-2 peer-focus-visible:outline-current peer-focus-visible:outline-offset-2 px-3 py-2 text-xs bg-gray-100 border border-transparent rounded-full cursor-pointer" for="{{ section.id }}-{{ allocation.selling_plan.id }}-{{ forloop.index0 }}">
+                            {{ allocation.selling_plan.name }}
+                          </label>
+                        </div>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+
+                  <script type="application/json">
+                    {{ product.selling_plan_groups | json }}
+                  </script>
+                </selling-plan-radios>
+              {%- else -%}
+                <selling-plan-selects class="no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}" data-update-url="false" {{ block.shopify_attributes }}>
+                  <div class="py-2">
+                    <label for="SellingPlan-{{ section.id }}-{{ forloop.index0 }}" class="block text-sm font-bold tracking-widest uppercase">
+                      Purchase Options
+                    </label>
+                    <div>
+                      <select id="SellingPlan-{{ section.id }}-{{ forloop.index0 }}"
+                      name="selling_plan"
+                      form="product-form-{{ section.id }}"
+                      >
+                        {% unless product.requires_selling_plan %}
+                        <option value="">
+                          One-time Purchase
+                        </option>
+                        {% endunless %}
+                        {% for allocation in product.selected_or_first_available_variant.selling_plan_allocations %}
+                          <option value="{{ allocation.selling_plan.id }}" {% if allocation.selling_plan.selected %} selected {% elsif product.requires_selling_plan and forloop.index == 1 %} selected {% endif %}>
+                            {{ allocation.selling_plan.name }}
+                          </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <script type="application/json">
+                    {{ product.selling_plan_groups | json }}
+                  </script>
+                </selling-plan-selects>
+              {%- endif -%}
+            {%- endunless -%}
+          {%- when 'buy_buttons' -%}
+            <div {{ block.shopify_attributes }}>
+              {%- if block.settings.show_stock_info -%}
+                {% render 'product-stock-details', product: product, id: section.id, block: block %}
+              {%- endif -%}
+              <product-form class="product-form mb-4">
+                <div data-product-form-errors role="alert" hidden>
+                  <span data-product-form-error-msg></span>
+                </div>
+                {%- form 'product', product, data-productid: product.id, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                  <input type="hidden" name="id" id="SelectedVariantId" data-productid="{{ product.id }}" value="{{ product.selected_or_first_available_variant.id }}">
+                  <div class="product-form__buttons">
+                    <div class="flex gap-2 mb-2">
+
+                      <div class="product-form__quantity" {{ block.shopify_attributes }}>
+                        <label class="sr-only" for="Quantity-{{ section.id }}">
+                          {{ 'products.product.quantity.label' | t }}
+                        </label>
+                        <quantity-input class="relative flex w-24 h-full rounded-full text-navy">
+                          <button class="no-js-hidden shrink-0 text-navy flex w-8 text-sm border-none" name="minus" type="button">
+                            <span class="sr-only">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span>
+                            <span class="w-3 m-auto opacity-50 pointer-events-none">{% render 'icon-minus' %}</span>
+                          </button>
+                          <input class="grow w-full h-full text-navy p-1 text-base bg-transparent text-center border-none appearance-none"
+                              data-quantity
+                              type="number"
+                              name="quantity"
+                              id="Quantity-{{ section.id }}"
+                              min="1"
+                              value="1"
+                              form="product-form-{{ section.id }}"
+                            >
+                          <button class="no-js-hidden shrink-0 flex w-8 text-sm border-none" name="plus" type="button">
+                            <span class="sr-only">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span>
+                            <span class="w-3 m-auto opacity-50 text-navy pointer-events-none">{% render 'icon-plus' %}</span>
+                          </button>
+                        </quantity-input>
+                      </div>
+                      <button
+                        type="submit"
+                        name="add"
+                        {% if product.requires_selling_plan %}data-subscribe-only{% endif %}
+                        class="product-form__submit button button--full-width {% if block.settings.show_dynamic_checkout %}button--secondary{% else %}button--tertiary !uppercase subhead{% endif %}"
+                      {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}
+                      >
+                          {%- if product.selected_or_first_available_variant.available -%}
+                            {%- if product.selected_selling_plan or product.requires_selling_plan -%}
+                              {{ 'products.product.subscribe' | t }}
+                            {%- else -%}
+                              {{ 'products.product.add_to_cart' | t }}
+                            {%- endif -%}
+                            {{ product.selected_or_first_available_variant.price | money | prepend: ' - ' }}
+                          {%- else -%}
+                            {{ 'products.product.sold_out' | t }}
+                          {%- endif -%}
+                      </button>
+                      
+                    </div>
+                       {% render 'truemed-widget' %}
+                    {%- if block.settings.show_dynamic_checkout -%}
+                      {{ form | payment_button }}
+                    {%- endif -%}
+                  </div>
+                {%- endform -%}
+              </product-form>
+
+              {%- if block.settings.show_pickup -%}
+                {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+
+                <pickup-availability class="no-js-hidden bg-black/5 relative block p-4 rounded-md"
+                  {% if product.selected_or_first_available_variant.available and pick_up_availabilities.size > 0 %} available{% endif %}
+                  data-base-url="{{ shop.url }}{{ routes.root_url }}"
+                  data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                  data-has-only-default-variant="{{ product.has_only_default_variant }}"
+                >
+                  <template>
+                    <pickup-availability-preview>
+                      <span class="w-6">{% render 'icon-unavailable' %}</span>
+                      <div>
+                        <p>{{ 'products.product.pickup_availability.unavailable' | t }}</p>
+                        <button class="button--text">{{ 'products.product.pickup_availability.refresh' | t }}</button>
+                      </div>
+                    </pickup-availability-preview>
+                  </template>
+                </pickup-availability>
+                <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
+              {%- endif -%}
+
+            </div>
+
+          {%- when 'upsell' -%}
+            {%- if block.settings.product and block.settings.product.available -%}
+              <div class="pt-4 pb-2">
+                <h2 class="sr-only">Special Offer</h2>
+                <div class="relative mt-4 mb-8">
+                  <hr class="border-t border-black border-solid"/>
+                  {%- if block.settings.title != blank -%}
+                    <div class="absolute top-0 left-1/2 w-max max-w-[calc(100%-4rem)] md:max-w-[calc(100%-8rem)] -translate-x-1/2 -translate-y-1/2 p-2 bg-white">
+                      <span class="block uppercase text-xs md:text-sm tracking-[0.2em] mr-[-0.2em] text-center">
+                        {{- block.settings.title -}}
+                      </span>
+                    </div>
+                  {%- endif -%}
+                </div>
+                <div class="flex pb-2">
+                  {%- if block.settings.product.featured_image != blank -%}
+                    <div class="w-24 mr-4">
+                      {% render 'image', image: block.settings.product.featured_image, classes: 'image' %}
+                    </div>
+                  {%- endif -%}
+                  <div class="space-y-2">
+                    <a href="{{ block.settings.product.url }}" class="h6 block">{{ block.settings.product.title }}</a>
+                    {%- if block.settings.text != blank -%}
+                      <div>{{ block.settings.text }}</div>
+                    {%- endif -%}
+                    <a href="{{ block.settings.product.url }}" class="button button--secondary button--small">Shop the Set</a>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- when 'modal' -%}
+              <style>
+                .product-popup-modal {
+                  box-sizing: border-box;
+                  opacity: 0;
+                  position: fixed;
+                  visibility: hidden;
+                  z-index: -1;
+                  margin: 0 auto;
+                  top: 0;
+                  left: 0;
+                  overflow: auto;
+                  width: 100%;
+                  padding: 30px;
+                  background: rgba(var(--color-overlay-rgb), 0.7);
+                  backdrop-filter: blur(3px);
+                  height: 100%;
+                }
+                .product-popup-modal[open] {
+                  opacity: 1;
+                  visibility: visible;
+                  z-index: 101;
+                }
+                .product-popup-modal__button {
+                  margin: 20px 0 30px;
+                  color: #080b2b;
+                  display: flex;
+                  align-items: center;
+                  cursor: pointer;
+                  font-size: 16px;
+                  letter-spacing: -0.01em;
+                  text-transform: uppercase;
+                  font-weight: bold;
+                  text-decoration: underline;
+                }
+                .product-popup-modal__button svg {
+                  height: 12px;
+                  width: auto;
+                  margin-right: 9px;
+                  fill: var(--color-accent);
+                }
+                .product-popup-modal__button span {
+                  font-size: 0.8125rem;
+                  letter-spacing: 0.02em;
+                }
+                .product-popup-modal__button.no-js {
+                  display: none;
+                }
+                .no-js .product-popup-modal__button.no-js {
+                  display: flex;
+                }
+                .product-popup-modal__toggle {
+                  position: absolute;
+                  top: 50%;
+                  right: 30px;
+                  margin-top: 15px;
+                }
+                .product-popup-modal__content {
+                  overflow: auto;
+                  max-height: 90vh;
+                  max-width: clamp(300px, 90vw, 800px);
+                  margin: 0 auto;
+                  left: 50%;
+                  transform: translate3d(-50%, -50%, 0);
+                  width: 100%;
+                  position: absolute;
+                  top: 50%;
+                  display: flex;
+                  flex-direction: column;
+                  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
+                }
+                .product-popup-modal__content-header {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  text-align: center;
+                  position: sticky;
+                  background-color: var(--bg-body, #fff);
+                  top: 0;
+                  left: 0;
+                  flex-shrink: 0;
+                }
+                .product-popup-modal__content-header h5 {
+                  color: inherit;
+                  margin: 0;
+                }
+                .product-popup-modal__content scroll-shadow {
+                  flex: 1;
+                  display: flex;
+                  width: 100%;
+                  overflow: hidden;
+                }
+                .product-popup-modal__content img {
+                  display: block;
+                  max-width: 500px;
+                  @media (max-width: 768px) {
+                    max-width: 310px;
+                  }
+                  margin: 0 auto;
+                }
+                .product-popup-modal__content-info {
+                  padding: 25px;
+                  background-color: var(--bg-body, #fff);
+                  width: 100%;
+                  color: var(--color-body);
+                }
+                @media only screen and (min-width: 768px) {
+                  .product-popup-modal__content-info {
+                    padding: 20px;
+                  }
+                }
+                .product-popup-modal__content-info table:last-child {
+                  margin-bottom: 0;
+                }
+                .product-popup-modal {
+                  transition: all 0.25s cubic-bezier(0.104, 0.204, 0.492, 1);
+                }
+              </style>
+              {%- if block.settings.title != '' -%}
+                <modal-opener class="product-popup-modal__opener no-js-hidden" data-modal="#PopupModal-{{ block.id }}">
+                  <button
+                    id="ProductPopup-{{ block.id }}"
+                    class="product-popup-modal__button"
+                    type="button"
+                    aria-haspopup="dialog"
+                  >
+                    <span>{{ block.settings.title }}</span>
+                  </button>
+                </modal-opener>
+                <modal-dialog id="PopupModal-{{ block.id }}" class="product-popup-modal">
+                  <div
+                    role="dialog"
+                    aria-label="{{ block.settings.title }}"
+                    aria-modal="true"
+                    class="product-popup-modal__content"
+                    tabindex="-1"
+                  >
+                    <div class="product-popup-modal__content-header">
+                      <button
+                        id="ModalClose-{{ block.id }}"
+                        type="button"
+                        class="product-popup-modal__toggle"
+                        aria-label="{{ 'accessibility.close' | t }}"
+                      >
+                        {% render 'svg-icons' with 'close' %}
+                      </button>
+                    </div>
+                    <scroll-shadow>
+                      <div class="product-popup-modal__content-info">
+                        {%- liquid
+                          assign image = block.settings.content
+                          assign sizes = image.src.width | append: 'x' | append: image.src.height
+                          render 'responsive-image', image: image, sizes: sizes
+                        -%}
+                      </div>
+                    </scroll-shadow>
+                  </div>
+                </modal-dialog>
+              {%- endif -%}
+          {%- when 'clinical_drawer' -%}
+              <div {{ block.shopify_attributes }}>
+                <button
+                  type="button"
+                  class="clinical-drawer-trigger"
+                  aria-haspopup="dialog"
+                  data-drawer-target="ClinicalDrawer-{{ block.id }}"
+                  style="{% if block.settings.button_style == 'link' %}background:none;border:none;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:0.02em;{% endif %}"
+                >
+                  {{ block.settings.button_text | default: 'Learn More' }}
+                </button>
+              </div>
+
+              {%- comment -%} Clinical Drawer Overlay + Panel {%- endcomment -%}
+              <div
+                id="ClinicalDrawer-{{ block.id }}"
+                class="clinical-drawer-overlay"
+                role="dialog"
+                aria-modal="true"
+                aria-label="{{ block.settings.drawer_title }}"
+                tabindex="-1"
+              >
+                <div
+                  class="clinical-drawer-panel"
+                  style="background-color: {{ block.settings.bg_color }}; color: {{ block.settings.text_color }};"
+                >
+                  <div class="clinical-drawer-header" style="background-color: {{ block.settings.bg_color }}; color: {{ block.settings.text_color }};">
+                    <h2 class="clinical-drawer-title" style="color: {{ block.settings.text_color }};">
+                      {{ block.settings.drawer_title }}
+                    </h2>
+                    <button
+                      type="button"
+                      class="clinical-drawer-close"
+                      aria-label="Close drawer"
+                      data-drawer-close="ClinicalDrawer-{{ block.id }}"
+                      style="color: {{ block.settings.text_color }};"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="clinical-drawer-body">
+                    <div class="clinical-drawer-content" style="color: {{ block.settings.text_color }};">
+                      {{ block.settings.body }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <style>
+                .clinical-drawer-trigger {
+                  margin: 8px 0;
+                  color: #080b2b;
+                  display: inline-flex;
+                  align-items: center;
+                  cursor: pointer;
+                  font-size: 16px;
+                  letter-spacing: 0.02em;
+                  text-transform: uppercase;
+                  font-weight: 600;
+                  text-decoration: underline;
+                  background: none;
+                  border: none;
+                  padding: 0;
+                  transition: opacity 0.2s ease;
+                }
+                .clinical-drawer-trigger:hover {
+                  opacity: 0.7;
+                }
+                .clinical-drawer-overlay {
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  background: rgba(0, 0, 0, 0.5);
+                  backdrop-filter: blur(2px);
+                  z-index: 99999;
+                  opacity: 0;
+                  visibility: hidden;
+                  transition: opacity 0.3s ease, visibility 0.3s ease;
+                }
+                .clinical-drawer-overlay.is-open {
+                  opacity: 1;
+                  visibility: visible;
+                }
+                .clinical-drawer-panel {
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                  width: 100%;
+                  max-width: 500px;
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  transform: translateX(100%);
+                  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                  box-shadow: -4px 0 30px rgba(0, 0, 0, 0.15);
+                }
+                .clinical-drawer-overlay.is-open .clinical-drawer-panel {
+                  transform: translateX(0);
+                }
+                .clinical-drawer-header {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  padding: 24px 40px;
+                  flex-shrink: 0;
+                  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                  position: sticky;
+                  top: 0;
+                  z-index: 2;
+                }
+                .clinical-drawer-title {
+                  font-size: 20px;
+                  font-weight: 600;
+                  margin: 0;
+                  line-height: 1.3;
+                  letter-spacing: 0.01em;
+                  flex: 1;
+                  padding-right: 16px;
+                }
+                .clinical-drawer-close {
+                  background: none;
+                  border: none;
+                  cursor: pointer;
+                  padding: 8px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  border-radius: 50%;
+                  transition: background 0.2s ease;
+                  flex-shrink: 0;
+                }
+                .clinical-drawer-close:hover {
+                  background: rgba(0, 0, 0, 0.06);
+                }
+                .clinical-drawer-body {
+                  flex: 1;
+                  overflow-y: auto;
+                  -webkit-overflow-scrolling: touch;
+                  overscroll-behavior: contain;
+                }
+                .clinical-drawer-content {
+                  padding: 32px 40px;
+                  font-size: 16px;
+                  line-height: 1.65;
+                }
+                .clinical-drawer-content h1,
+                .clinical-drawer-content h2,
+                .clinical-drawer-content h3,
+                .clinical-drawer-content h4,
+                .clinical-drawer-content h5 {
+                  margin-top: 1.5em;
+                  margin-bottom: 0.5em;
+                  line-height: 1.3;
+                  color: inherit;
+                  font-weight: 800;
+                }
+                .clinical-drawer-content h1:first-child,
+                .clinical-drawer-content h2:first-child,
+                .clinical-drawer-content h3:first-child {
+                  margin-top: 0;
+                }
+                .clinical-drawer-content p {
+                  margin-bottom: 1em;
+                }
+                .clinical-drawer-content ul {
+                  list-style: circle;
+                }
+                .clinical-drawer-content ul,
+                .clinical-drawer-content ol {
+                  margin-bottom: 1em;
+                  padding-left: 1.5em;
+                }
+                .clinical-drawer-content li {
+                  margin-bottom: 0.5em;
+                }
+                .clinical-drawer-content img {
+                  max-width: 100%;
+                  height: auto;
+                  display: block;
+                  margin: 1em auto;
+                }
+                .clinical-drawer-content a {
+                  color: inherit;
+                  text-decoration: underline;
+                }
+                body.clinical-drawer-no-scroll {
+                  overflow: hidden !important;
+                  position: fixed;
+                  width: 100%;
+                }
+                #shopify-section-header,
+                sticky-header,
+                .header-wrapper {
+                  transition: opacity 0.3s ease;
+                }
+                body.clinical-drawer-no-scroll #shopify-section-header,
+                body.clinical-drawer-no-scroll sticky-header,
+                body.clinical-drawer-no-scroll .header-wrapper {
+                  opacity: 0 !important;
+                  pointer-events: none !important;
+                  z-index: 0 !important;
+                }
+                body.clinical-drawer-no-scroll .space-y-4>:not([hidden])~:not([hidden]) {
+                  margin-top: 0 !important;
+                }
+                @media (max-width: 600px) {
+                  .clinical-drawer-panel {
+                    max-width: 100%;
+                  }
+                  .clinical-drawer-header {
+                    padding: 20px 24px;
+                  }
+                  .clinical-drawer-content {
+                    padding: 24px;
+                  }
+                }
+              </style>
+
+              <script>
+                (function() {
+                  const drawerId = 'ClinicalDrawer-{{ block.id }}';
+                  const overlay = document.getElementById(drawerId);
+                  if (!overlay) return;
+
+                  const triggers = document.querySelectorAll('[data-drawer-target="' + drawerId + '"]');
+                  const closeBtn = overlay.querySelector('[data-drawer-close="' + drawerId + '"]');
+                  let scrollY = 0;
+
+                  function openDrawer() {
+                    scrollY = window.scrollY;
+                    document.body.style.top = '-' + scrollY + 'px';
+                    document.body.classList.add('clinical-drawer-no-scroll');
+                    overlay.classList.add('is-open');
+                    overlay.focus();
+                  }
+
+                  function closeDrawer() {
+                    overlay.classList.remove('is-open');
+                    document.body.classList.remove('clinical-drawer-no-scroll');
+                    document.body.style.top = '';
+                    window.scrollTo(0, scrollY);
+                  }
+
+                  triggers.forEach(function(trigger) {
+                    trigger.addEventListener('click', openDrawer);
+                  });
+
+                  if (closeBtn) {
+                    closeBtn.addEventListener('click', closeDrawer);
+                  }
+
+                  // Close on overlay click (outside panel)
+                  overlay.addEventListener('click', function(e) {
+                    if (e.target === overlay) closeDrawer();
+                  });
+
+                  // Close on Escape key
+                  document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
+                      closeDrawer();
+                    }
+                  });
+                })();
+              </script>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  {% assign popups = section.blocks | where: "type", "popup" %}
+  {%- for block in popups -%}
+    <modal-dialog id="PopupModal-{{ block.id }}" class="product-popup-modal" {{ block.shopify_attributes }}>
+      <div role="dialog" aria-label="{{ block.settings.text }}" aria-modal="true" class="product-popup-modal__content" tabindex="-1">
+        <button id="ModalClose-{{ block.id }}" type="button" class="product-popup-modal__toggle" aria-label="{{ 'accessibility.close' | t }}">{% render 'icon-close' %}</button>
+        <div class="product-popup-modal__content-info">
+          <h1 class="h2">{{ block.settings.page.title }}</h1>
+          {{ block.settings.page.content }}
+        </div>
+      </div>
+    </modal-dialog>
+  {%- endfor -%}
+</section>
+
+{%- comment -%}
+  ============================================
+  CONDITIONAL SCRIPTS BASED ON VARIANT PICKER TYPE
+  ============================================
+  If third_party_picker block is present, use the standard Shopify script.
+  Otherwise, use the custom variant_selling_plan script for the default variant picker.
+  ============================================
+{%- endcomment -%}
+
+{%- assign third_party_picker_block = section.blocks | where: 'type', 'third_party_picker' | first -%}
+
+{%- if third_party_picker_block -%}
+  {%- comment -%}
+    ============================================
+    STANDARD VARIANT/SELLING PLAN SCRIPT (Third Party Compatible)
+    ============================================
+    This script works with Shopify's standard form structure:
+    - name="id" for variant ID (in the hidden input)
+    - name="selling_plan" for subscription plan selection
+
+    Compatible with 3rd party subscription apps.
+    ============================================
+  {%- endcomment -%}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Standard Shopify form elements
+      const variantInput = document.getElementById('SelectedVariantId');
+      const addToCartButton = document.querySelector('.product-form__submit');
+      const sellingPlanRadios = document.querySelectorAll('input[name="selling_plan"]');
+
+      // Skip if no variant input found (3rd party apps may handle this)
+      if (!variantInput) {
+        console.log('Standard variant input not found - 3rd party app may be handling form');
+        return;
+      }
+
+      // Update button text based on selling plan selection
+      function updateButtonText() {
+        if (!addToCartButton) return;
+
+        const selectedSellingPlan = document.querySelector('input[name="selling_plan"]:checked');
+        const sellingPlanValue = selectedSellingPlan ? selectedSellingPlan.value : '';
+
+        if (sellingPlanValue && sellingPlanValue !== '') {
+          addToCartButton.innerText = 'Subscribe';
+        } else {
+          addToCartButton.innerText = 'Add to Cart';
+        }
+      }
+
+      // Attach change event to selling plan radios (if using built-in UI)
+      sellingPlanRadios.forEach((radio) => {
+        radio.addEventListener('change', updateButtonText);
+      });
+
+      // Initialize button text on load
+      updateButtonText();
+
+      // Listen for variant changes from variant-radios component
+      document.addEventListener('variant:changed', function (event) {
+        if (event.detail && event.detail.variant) {
+          const variant = event.detail.variant;
+          if (variantInput) {
+            variantInput.value = variant.id;
+          }
+          if (addToCartButton) {
+            addToCartButton.disabled = !variant.available;
+            if (!variant.available) {
+              addToCartButton.innerText = 'Sold Out';
+            } else {
+              updateButtonText();
+            }
+          }
+        }
+      });
+    });
+  </script>
+{%- else -%}
+  {%- comment -%}
+    ============================================
+    CUSTOM VARIANT/SELLING PLAN SCRIPT (Default)
+    ============================================
+    This script works with the custom variant_selling_plan combined field.
+    Used by the default variant_picker block.
+    ============================================
+  {%- endcomment -%}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const variantRadios = document.querySelectorAll("input[name='variant_selling_plan']");
+      const variantSelect = document.querySelector("select[name='variant_selling_plan']");
+      const variantInput = document.getElementById('SelectedVariantId');
+      const addToCartButton = document.querySelector('.product-form__submit');
+
+      // Create hidden input for selling plan if it doesn't already exist
+      let sellingPlanInput = document.getElementById('SelectedSellingPlan');
+      if (!sellingPlanInput) {
+        sellingPlanInput = document.createElement('input');
+        sellingPlanInput.setAttribute('type', 'hidden');
+        sellingPlanInput.setAttribute('name', 'selling_plan');
+        sellingPlanInput.setAttribute('id', 'SelectedSellingPlan');
+        variantInput.parentNode.appendChild(sellingPlanInput);
+      }
+
+      function updateSellingPlan(event) {
+        console.log('VARIANT CHANGE');
+
+        // Parse the value into variantId and sellingPlanId
+        const [variantId, sellingPlanId] = event.target.value.split('-');
+        variantInput.value = variantId;
+
+        if (sellingPlanId === 'otp') {
+          sellingPlanInput.value = ''; // Clear selling plan if one-time purchase
+        } else {
+          sellingPlanInput.value = sellingPlanId; // Assign selected selling plan ID
+        }
+
+        console.log('SELLING PLAN ID', sellingPlanId);
+
+        // Handle mutual exclusivity between radio buttons and select dropdown
+        if (event.target.tagName === 'SELECT') {
+          // If select dropdown was changed, deselect all radio buttons
+          variantRadios.forEach((radio) => {
+            radio.checked = false;
+          });
+          // Also remove the 'selected' class from all option containers
+          document.querySelectorAll('.option-container').forEach((container) => {
+            container.classList.remove('selected');
+          });
+        } else if (event.target.type === 'radio') {
+          // If radio button was changed, clear the select dropdown
+          if (variantSelect) {
+            variantSelect.value = '';
+          }
+        }
+
+        // Fetch variant data
+        const selectedVariant = window.productVariants.find((variant) => variant.id == variantId);
+
+        console.log('SELECTED VARIANT', selectedVariant);
+        if (selectedVariant) {
+          setTimeout(() => {
+            if (selectedVariant.available) {
+              console.log('SELLING PLAN IS AVAILABLE', sellingPlanId);
+              console.log('ADD TO CART BUTTON', addToCartButton);
+
+              // Update button text based on selection
+              if (event.target.tagName === 'SELECT' && event.target.value !== '') {
+                // If selection came from dropdown and has a value, it's a subscription
+                addToCartButton.innerText = 'Subscribe';
+              } else if (sellingPlanId === 'otp') {
+                // If it's a one-time purchase (radio button)
+                addToCartButton.innerText = 'Add to Cart';
+              } else if (sellingPlanId) {
+                // If it has a selling plan ID (regular subscription)
+                addToCartButton.innerText = 'Subscribe';
+              } else {
+                addToCartButton.innerText = 'Add to Cart';
+              }
+
+              // Update the button's data attribute with the variant ID
+              addToCartButton.dataset.productId = variantId;
+              addToCartButton.disabled = false;
+            } else {
+              addToCartButton.innerText = 'Unavailable';
+              addToCartButton.disabled = true;
+            }
+
+            console.log('Forced Button Update:', addToCartButton.innerText);
+            console.log('Button Data Product ID:', addToCartButton.dataset.productId);
+          }, 10);
+        }
+      }
+
+      // Attach change event to every radio input
+      variantRadios.forEach((radio) => {
+        radio.addEventListener('change', updateSellingPlan);
+      });
+
+      // Attach change event to select dropdown if it exists
+      if (variantSelect) {
+        variantSelect.addEventListener('change', updateSellingPlan);
+      }
+
+      // Run update for the initially selected option on page load
+      const initialChecked = document.querySelector("input[name='variant_selling_plan']:checked");
+      const initialSelected = variantSelect ? variantSelect.value : null;
+
+      if (initialChecked) {
+        updateSellingPlan({ target: initialChecked });
+      } else if (initialSelected && initialSelected !== '') {
+        updateSellingPlan({ target: variantSelect });
+      }
+    });
+  </script>
+{%- endif -%}
+{% schema %}
+{
+  "name": "t:sections.main-product.name",
+  "tag": "section",
+  "class": "product-section",
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "text",
+      "name": "t:sections.main-product.blocks.text.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Text block",
+          "label": "t:sections.main-product.blocks.text.settings.text.label"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "options": [
+            {
+              "value": "body",
+              "label": "t:sections.main-product.blocks.text.settings.text_style.options__1.label"
+            },
+            {
+              "value": "subtitle",
+              "label": "t:sections.main-product.blocks.text.settings.text_style.options__2.label"
+            },
+            {
+              "value": "uppercase",
+              "label": "t:sections.main-product.blocks.text.settings.text_style.options__3.label"
+            }
+          ],
+          "default": "body",
+          "label": "t:sections.main-product.blocks.text.settings.text_style.label"
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "t:sections.main-product.blocks.title.name",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "t:sections.main-product.blocks.price.name",
+      "limit": 1
+    },
+    {
+      "type": "callouts",
+      "name": "Callouts",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "list",
+          "label": "Tag list",
+          "info": "A comma-separated list of tags for showing callouts. They only show up if the current product has them applied."
+        }
+      ]
+    },
+    {
+      "type": "highlights",
+      "name": "Product Highlights",
+      "settings": [
+        {
+          "type": "text",
+          "id": "highlight",
+          "label": "Text",
+        }
+      ]
+    },
+    {
+      "type": "variant_picker",
+      "name": "t:sections.main-product.blocks.variant_picker.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "picker_type",
+          "options": [
+            {
+              "value": "dropdown",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__1.label"
+            },
+            {
+              "value": "button",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__2.label"
+            }
+          ],
+          "default": "button",
+          "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_swatches",
+          "label": "Enable swatches for 'Color'?",
+          "default": true,
+          "info": "This enables swatches for the Color option. Refer to documentation on how to upload files for use in swatches."
+        }
+      ]
+    },
+    {
+      "type": "selling_plan_picker",
+      "name": "Selling Plan Picker",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "picker_type",
+          "options": [
+            {
+              "value": "dropdown",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__1.label"
+            },
+            {
+              "value": "button",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__2.label"
+            }
+          ],
+          "default": "button",
+          "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.label"
+        }
+      ]
+    },
+    {
+      "type": "buy_buttons",
+      "name": "t:sections.main-product.blocks.buy_buttons.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "default": false,
+          "label": "t:sections.main-product.blocks.buy_buttons.settings.show_dynamic_checkout.label",
+          "info": "t:sections.main-product.blocks.buy_buttons.settings.show_dynamic_checkout.info"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_stock_info",
+          "default": false,
+          "label": "t:sections.main-product.blocks.stock.settings.show_stock_info.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_in_stock",
+          "default": false,
+          "label": "t:sections.main-product.blocks.stock.settings.show_in_stock.label",
+          "info": "t:sections.main-product.blocks.stock.settings.show_in_stock.info"
+        },
+        {
+          "type": "select",
+          "id": "low_stock_quantity",
+          "options": [
+            {
+              "value": "quantity",
+              "label": "t:sections.main-product.blocks.stock.settings.quantity.options__1.label"
+            },
+            {
+              "value": "no_quantity",
+              "label": "t:sections.main-product.blocks.stock.settings.quantity.options__2.label"
+            }
+          ],
+          "default": "quantity",
+          "label": "t:sections.main-product.blocks.stock.settings.quantity.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_pickup",
+          "default": false,
+          "label": "Show Pick-up Options",
+          "info": "Even if set to true, you will still need to set pick-up options in the admin."
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "t:sections.main-product.blocks.description.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Load in an opened state",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        }
+      ]
+    },
+    {
+      "type": "share",
+      "name": "t:sections.main-product.blocks.share.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "share_label",
+          "label": "t:sections.main-product.blocks.share.settings.text.label",
+          "default": "Share"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.main-product.blocks.share.settings.featured_image_info.content"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.main-product.blocks.share.settings.title_info.content"
+        }
+      ]
+    },
+    {
+      "type": "custom_liquid",
+      "name": "t:sections.main-product.blocks.custom_liquid.name",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "t:sections.main-product.blocks.custom_liquid.settings.custom_liquid.label",
+          "info": "t:sections.main-product.blocks.custom_liquid.settings.custom_liquid.info"
+        }
+      ]
+    },
+    {
+      "type": "add_banner",
+      "name": "Add Banner",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "banner_text",
+          "label": "Banner Text",
+          "default": "EXCLUSIVE PRE-SALE FOR HEALTHCARE PROVIDERS",
+          "placeholder": "Enter your banner message"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color",
+          "default": "#1B202B"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Copy Discount Code"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_copy_code",
+          "label": "Enable copy discount code",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "discount_code",
+          "label": "Discount Code",
+          "default": "SPRING"
+        },
+        {
+          "type": "color",
+          "id": "copy_btn_bg_color",
+          "label": "Copy Button Background Color",
+          "default": "#D44F2F"
+        },
+        {
+          "type": "color",
+          "id": "copy_btn_text_color",
+          "label": "Copy Button Text Color",
+          "default": "#ffffff"
+        }
+      ]
+    },
+    {
+      "type": "collapsible_tab",
+      "name": "t:sections.main-product.blocks.collapsible_tab.name",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Load in an opened state",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_if_empty",
+          "label": "Hide if dynamic source of content is empty",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Collapsible tab",
+          "info": "t:sections.main-product.blocks.collapsible_tab.settings.heading.info",
+          "label": "t:sections.main-product.blocks.collapsible_tab.settings.heading.label"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.main-product.blocks.collapsible_tab.settings.content.label"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "t:sections.main-product.blocks.collapsible_tab.settings.page.label"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__1.label"
+            },
+            {
+              "value": "box",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__2.label"
+            },
+            {
+              "value": "chat_bubble",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__3.label"
+            },
+            {
+              "value": "check_mark",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__4.label"
+            },
+            {
+              "value": "dryer",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__5.label"
+            },
+            {
+              "value": "eye",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__6.label"
+            },
+            {
+              "value": "heart",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__7.label"
+            },
+            {
+              "value": "iron",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__8.label"
+            },
+            {
+              "value": "leaf",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__9.label"
+            },
+            {
+              "value": "leather",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__10.label"
+            },
+            {
+              "value": "lock",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__11.label"
+            },
+            {
+              "value": "map_pin",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__12.label"
+            },
+            {
+              "value": "pants",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__13.label"
+            },
+            {
+              "value": "plane",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__14.label"
+            },
+            {
+              "value": "price_tag",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__15.label"
+            },
+            {
+              "value": "question_mark",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__16.label"
+            },
+            {
+              "value": "return",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__17.label"
+            },
+            {
+              "value": "ruler",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__18.label"
+            },
+            {
+              "value": "shirt",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__19.label"
+            },
+            {
+              "value": "shoe",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__20.label"
+            },
+            {
+              "value": "silhouette",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__21.label"
+            },
+            {
+              "value": "star",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__22.label"
+            },
+            {
+              "value": "truck",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__23.label"
+            },
+            {
+              "value": "washing",
+              "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.options__24.label"
+            }
+          ],
+          "default": "check_mark",
+          "label": "t:sections.main-product.blocks.collapsible_tab.settings.icon.label"
+        },
+        {
+          "type": "header",
+          "content": "Clinical Trials Drawer"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_clinical_drawer",
+          "label": "Enable Clinical Trials drawer inside this tab",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "ct_button_text",
+          "label": "Button Text",
+          "default": "Clinical Trials"
+        },
+        {
+          "type": "select",
+          "id": "ct_button_style",
+          "label": "Button Style",
+          "options": [
+            {
+              "value": "link",
+              "label": "Underlined Link"
+            },
+            {
+              "value": "default",
+              "label": "Default"
+            }
+          ],
+          "default": "link"
+        },
+        {
+          "type": "text",
+          "id": "ct_drawer_title",
+          "label": "Drawer Title",
+          "default": "Clinical Trials"
+        },
+        {
+          "type": "richtext",
+          "id": "ct_body",
+          "label": "Drawer Body Content"
+        },
+        {
+          "type": "color",
+          "id": "ct_bg_color",
+          "label": "Drawer Background Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "ct_text_color",
+          "label": "Drawer Text Color",
+          "default": "#080b2b"
+        }
+      ]
+    },
+    {
+      "type": "popup",
+      "name": "t:sections.main-product.blocks.popup.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Pop-up link text",
+          "label": "t:sections.main-product.blocks.popup.settings.link_label.label"
+        },
+        {
+          "id": "page",
+          "type": "page",
+          "label": "t:sections.main-product.blocks.popup.settings.page.label"
+        }
+      ]
+    },
+    {
+      "type": "upsell",
+      "name": "Upsell",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Upsell title",
+          "placeholder": "Upgrade"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Upsell text"
+        }
+      ]
+    },
+    {
+      "type": "frontrow_banner",
+      "name": "FrontRow Banner",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "product_type",
+          "label": "Product Type",
+          "options": [
+            {
+              "value": "menopause",
+              "label": "Menopause & Heart Health Support"
+            },
+            {
+              "value": "nitric-oxide",
+              "label": "Nitric Oxide Support"
+            }
+          ],
+          "default": "menopause",
+          "info": "Select which FrontRow banner to display (sticky sticker widget)"
+        }
+      ]
+    },
+    {
+      "type": "modal",
+      "name": "Modal",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "content",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "clinical_drawer",
+      "name": "Clinical Drawer",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Clinical Trials"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button Style",
+          "options": [
+            {
+              "value": "link",
+              "label": "Underlined Link"
+            },
+            {
+              "value": "default",
+              "label": "Default"
+            }
+          ],
+          "default": "link"
+        },
+        {
+          "type": "text",
+          "id": "drawer_title",
+          "label": "Drawer Title",
+          "default": "Clinical Trials"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Drawer Body Content"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Drawer Background Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Drawer Text Color",
+          "default": "#080b2b"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-product.settings.header.content",
+      "info": "t:sections.main-product.settings.header.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_variants",
+      "default": false,
+      "label": "t:sections.main-product.settings.hide_variants.label"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "info": "Crop all product media to a specific ratio. If soom is enabled, the images are contained and don't fill the whole space.",
+      "options": [
+        {
+          "value": "aspect-[4/3]",
+          "label": "Wide"
+        },
+        {
+          "value": "aspect-[3/4]",
+          "label": "Portrait"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        },
+        {
+          "value": "w-full",
+          "label": "No Crop"
+        }
+      ],
+      "default": "aspect-square",
+      "label": "Image Ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Enable zoom",
+      "default": true,
+      "info": "This feature lets users double-tap (double-click on desktop) on the image to zoom."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "default": false,
+      "label": "t:sections.main-product.settings.enable_video_looping.label"
+    },
+    {
+        "type": "text",
+        "id": "callout",
+        "label": "Product Callout",
+        "default": "Bestseller"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Product",
+      "blocks": [
+        {
+          "type": "title"
+        },
+        {
+          "type": "price"
+        },
+        {
+          "type": "variant_picker"
+        },
+        {
+          "type": "buy_buttons"
+        },
+        {
+          "type": "share"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,674 @@
+<style>
+  #{{ section.id }} {
+    & .section__numbered-features {
+      width: 100%;
+      background-color: {{ section.settings.bg_color }};
+      padding-top: {{ section.settings.padding_top_mobile }}rem;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}rem;
+    }
+
+    @media screen and (min-width: 768px) {
+      & .section__numbered-features {
+        padding-top: {{ section.settings.padding_top_desktop }}rem;
+        padding-bottom: {{ section.settings.padding_bottom_desktop }}rem;
+      }
+    }
+
+    & .numbered-features__header {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+      place-items: center;
+      margin-bottom: 2.5rem;
+    }
+
+    & .numbered-features__title {
+      font-size: clamp(28px, 5vw, 48px);
+      color: {{ section.settings.title_color }};
+      margin: 0;
+      line-height: 120%;
+
+      & span {
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(28px, 5vw, 48px);
+        font-family: "Cormorant Garamond";
+        color: {{ section.settings.accent_color }};
+      }
+    }
+
+    & .numbered-features__subtitle {
+      font-size: clamp(14px, 2vw, 16px);
+      color: {{ section.settings.subtitle_color }};
+      margin: 0;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    & .numbered-features__content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    & .numbered-features__media {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 16px;
+      position: relative;
+
+      & img,
+      & video {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 16px;
+      }
+
+      & video {
+        cursor: pointer;
+      }
+    }
+
+    & .numbered-features__video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    & .numbered-features__play-icon {
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    & .numbered-features__play-icon.icon-hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    & .numbered-features__overlay-content {
+      position: absolute;
+      padding: min(1.25rem, 6dvw);
+      bottom: 0;
+      inset-inline: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      margin-top: auto;
+      user-select: none;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    & .numbered-features__overlay-quote {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 300;
+      color: {{ section.settings.overlay_text_color }};
+    }
+
+    & .numbered-features__overlay-footer {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      & svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    & .numbered-features__overlay-author {
+      margin: 0;
+      font-size: clamp(28px, 5vw + 1rem, 48px);
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-weight: 300;
+      color: {{ section.settings.overlay_text_color }};
+    }
+
+    & .numbered-features__list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    & .numbered-feature__item {
+      border: 1px solid {{ section.settings.card_border_color }};
+      border-radius: 12px;
+      padding: 1.5rem;
+      background-color: {{ section.settings.card_bg_color }};
+      transition: box-shadow 0.3s ease-in-out;
+
+      &:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+    }
+
+    & .numbered-feature__item--link {
+      display: block;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    & .numbered-feature__number {
+      font-size: clamp(24px, 4vw, 32px);
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-weight: 400;
+      color: {{ section.settings.accent_color }};
+      margin: 0 0 0.5rem 0;
+      line-height: 1;
+    }
+
+    & .numbered-feature__title {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: {{ section.settings.accent_color }};
+      margin: 0 0 0.75rem 0;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    & .numbered-feature__description {
+      font-size: clamp(13px, 2vw, 15px);
+      color: {{ section.settings.text_color }};
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    & .numbered-features__cta-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 2.5rem;
+    }
+
+    & .numbered-features__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background-color: {{ section.settings.accent_color }};
+      color: #fff;
+      text-decoration: none;
+      border-radius: 9999px;
+      font-size: 15px;
+      font-weight: 500;
+      transition: opacity 0.2s ease-in-out;
+
+      &:hover {
+        opacity: 0.85;
+      }
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    #{{ section.id }} {
+      & .numbered-features__content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: stretch;
+        max-height: 650px;
+      }
+
+      & .numbered-features__media {
+        height: 100%;
+
+        & img,
+        & video {
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+
+      & .numbered-features__list {
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+        gap: 24px;
+      }
+
+      & .numbered-feature__item {
+        padding: 1.75rem 2rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      {%- if section.settings.flip_layout_desktop -%}
+        & .numbered-features__media {
+          order: 2;
+        }
+
+        & .numbered-features__list {
+          order: 1;
+        }
+      {%- endif -%}
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="section__numbered-features">
+    <div class="container-sl">
+      {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+        <div class="numbered-features__header">
+          {%- if section.settings.title != blank -%}
+            <h2 class="numbered-features__title">{{ section.settings.title }}</h2>
+          {%- endif -%}
+          {%- if section.settings.subtitle != blank -%}
+            <p class="numbered-features__subtitle">{{ section.settings.subtitle }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="numbered-features__content">
+        <div class="numbered-features__media">
+          {%- if section.settings.video != blank -%}
+            <video
+              class="numbered-features__video"
+              {% if section.settings.video_controls %}controls{% endif %}
+              {% if section.settings.video_loop %}loop{% endif %}
+              {% if section.settings.video_autoplay %}autoplay muted{% endif %}
+              playsinline
+            >
+              {%- for source in section.settings.video.sources -%}
+                <source src="{{ source.url }}" type="{{ source.mime_type }}">
+              {%- endfor -%}
+            </video>
+            {%- if section.settings.show_play_button -%}
+              <div class="numbered-features__video-overlay">
+                <div class="numbered-features__play-icon {% if section.settings.video_autoplay %}icon-hide{% endif %}">
+                  {%- render 'icon-play-button' -%}
+                </div>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.video_quote != blank or section.settings.video_author != blank -%}
+              <div class="numbered-features__overlay-content">
+                {%- if section.settings.video_author != blank -%}
+                  <div class="numbered-features__overlay-footer">
+                    {%- render 'icon-verified', color: section.settings.verified_color -%}
+                    <h3 class="numbered-features__overlay-author">{{ section.settings.video_author }}</h3>
+                  </div>
+                {%- endif -%}
+                {%- if section.settings.video_quote != blank -%}
+                  <p class="numbered-features__overlay-quote">{{ section.settings.video_quote }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- elsif section.settings.image != blank -%}
+            {{
+              section.settings.image
+              | image_url: width: 1200
+              | image_tag: class: 'numbered-features__image', alt: section.settings.image_alt, loading: 'lazy'
+            }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'numbered-features__image placeholder-svg' }}
+          {%- endif -%}
+        </div>
+
+        <div class="numbered-features__list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'feature_item' -%}
+              {%- if block.settings.link != blank -%}
+                <a href="{{ block.settings.link }}" class="numbered-feature__item numbered-feature__item--link" {{ block.shopify_attributes }}>
+                  <p class="numbered-feature__number">{{ block.settings.number | default: forloop.index | prepend: '0' | slice: -2, 2 }}</p>
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="numbered-feature__title">{{ block.settings.title }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.description != blank -%}
+                    <div class="numbered-feature__description">{{ block.settings.description }}</div>
+                  {%- endif -%}
+                </a>
+              {%- else -%}
+                <div class="numbered-feature__item" {{ block.shopify_attributes }}>
+                  <p class="numbered-feature__number">{{ block.settings.number | default: forloop.index | prepend: '0' | slice: -2, 2 }}</p>
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="numbered-feature__title">{{ block.settings.title }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.description != blank -%}
+                    <div class="numbered-feature__description">{{ block.settings.description }}</div>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- if section.settings.cta_text != blank -%}
+        <div class="numbered-features__cta-wrapper">
+          <a href="{{ section.settings.cta_link }}" class="numbered-features__cta">
+            {{ section.settings.cta_text }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.getElementById('{{ section.id }}');
+    if (!section) return;
+
+    const videoContainer = section.querySelector('.numbered-features__media');
+    const video = section.querySelector('.numbered-features__video');
+    const playIcon = section.querySelector('.numbered-features__play-icon');
+    const overlay = section.querySelector('.numbered-features__video-overlay');
+
+    if (!video) return;
+
+    const toggleVideo = () => {
+      if (video.paused) {
+        video.play();
+        if (playIcon) playIcon.classList.add('icon-hide');
+      } else {
+        video.pause();
+        if (playIcon) playIcon.classList.remove('icon-hide');
+      }
+    };
+
+    video.addEventListener('click', toggleVideo);
+    video.addEventListener('ended', () => {
+      if (playIcon) playIcon.classList.remove('icon-hide');
+    });
+
+    if (overlay) {
+      overlay.addEventListener('click', toggleVideo);
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Numbered Features",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Padding Mobile"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top Mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom Mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "header",
+      "content": "Padding Desktop"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Padding Top Desktop",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Padding Bottom Desktop",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#1B1C29"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle Color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "flip_layout_desktop",
+      "label": "Flip Layout (Desktop)",
+      "default": false,
+      "info": "Move image to right and cards to left on desktop"
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Why Nitric Oxide Matters for <span>Sexual Health</span>"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Nitric Oxide plays a critical role in blood flow, stamina, and sexual performance — yet levels naturally decline with age."
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "If both video and image are uploaded, the video will be displayed."
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay Video",
+      "default": false,
+      "info": "Video will autoplay muted. If disabled, user must click to play."
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop Video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_controls",
+      "label": "Show Video Controls",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_play_button",
+      "label": "Show Play Button Overlay",
+      "default": true,
+      "info": "Display a play button icon over the video."
+    },
+    {
+      "type": "header",
+      "content": "Video Overlay Content"
+    },
+    {
+      "type": "textarea",
+      "id": "video_quote",
+      "label": "Video Quote",
+      "info": "Optional quote text displayed at the bottom of the video."
+    },
+    {
+      "type": "text",
+      "id": "video_author",
+      "label": "Video Author",
+      "info": "Optional author name displayed with verified icon."
+    },
+    {
+      "type": "color",
+      "id": "overlay_text_color",
+      "label": "Overlay Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "verified_color",
+      "label": "Verified Icon Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Displayed only if no video is uploaded."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image Alt Text"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Learn How Nitric Oxide Works"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_item",
+      "name": "Feature Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "info": "Leave empty to auto-number (01, 02, 03...)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Nitric Oxide = Healthy Blood Flow"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Nitric Oxide helps blood vessels relax and widen, allowing blood to flow more freely throughout the body, including where it matters most for sexual performance.</p>"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (Optional)",
+          "info": "Add a URL or use #section-id to scroll to a section"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Numbered Features",
+      "blocks": [
+        {
+          "type": "feature_item",
+          "settings": {
+            "number": "01",
+            "title": "Nitric Oxide = Healthy Blood Flow",
+            "description": "<p>Nitric Oxide helps blood vessels relax and widen, allowing blood to flow more freely throughout the body, including where it matters most for sexual performance.</p>"
+          }
+        },
+        {
+          "type": "feature_item",
+          "settings": {
+            "number": "02",
+            "title": "Blood Flow Fuels Performance",
+            "description": "<p>When circulation is optimized, the body can better support: <strong>Erections</strong>, <strong>Stamina</strong>, <strong>Sensitivity</strong> and <strong>Overall sexual response</strong>. Low Nitric Oxide levels can make these processes harder to maintain.</p>"
+          }
+        },
+        {
+          "type": "feature_item",
+          "settings": {
+            "number": "03",
+            "title": "Levels Decline With Age",
+            "description": "<p>As men age, natural Nitric Oxide production decreases. Supporting healthy levels can help maintain performance, energy, and confidence over time.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

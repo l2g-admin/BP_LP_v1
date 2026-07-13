@@ -1,0 +1,82 @@
+{%- capture content -%}
+{%- for block in section.blocks -%}
+<div class="mx-20 text-center">
+  <p class=" font-light">{{- block.settings.title -}}</p>
+  <p class="font-extrabold">{{- block.settings.name -}}</p>
+</div>
+{%- endfor -%}
+{%- endcapture -%}
+
+<div class="md:py-8 bg-bg text-text py-4 overflow-hidden" style="--color-text: {{ section.settings.text_color | default: '#ffffff' }}; --color-bg: {{ section.settings.bg_color | default: '#000000' }}">
+  <div class="flex tracking-widest select-none">
+    {%- for i in (1..10) -%}
+      <div class="w-max shrink-0 {% cycle 'motion-safe:animate-marquee-1', 'motion-safe:animate-marquee-2', 'motion-safe:animate-marquee-3' %} transform-gpu flex" {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+        {{- content -}}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Social Proof",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "phrase",
+      "name": "Phrase",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Proof",
+      "blocks": [
+        {
+          "type": "phrase",
+          "settings": {
+            "title": "Callout Lorem",
+            "name": "Name"
+          }
+        },
+        {
+          "type": "phrase",
+          "settings": {
+            "title": "Callout Ipsum"
+          }
+        },
+        {
+          "type": "phrase",
+          "settings": {
+            "title": "Callout Dolor"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

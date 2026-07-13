@@ -1,0 +1,828 @@
+{%- comment -%}
+  Section: C Science Proof Grid
+  Description: Two-column science/proof section with a full-bleed background image, editorial content panel, and block-based metrics card.
+  sl-id: sl-section-science-proof-grid-v1
+  Figma: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5789-10720&m=dev
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-science-proof-grid-v1'
+  assign section_anchor_id = section.settings.sl_anchor_id | default: section.id
+-%}
+
+{%- capture clinical_trials_drawer_body_default -%}
+  <p>Only a small percentage of dietary supplements are tested in gold-standard human clinical trials.</p>
+  <p>Berkeley Life® Nitric Oxide Support has been evaluated in double-blind, placebo-controlled research demonstrating its ability to increase nitric oxide bioavailability in humans.</p>
+  <p>The dietary nitrate ingredients used in our formulation are supported by a growing body of peer-reviewed clinical research validating improvements in vascular function, endothelial health, and blood pressure regulation.</p>
+  <h3>The Impact of Clinical Proof</h3>
+  <p>Double-blind, placebo-controlled trials (DBPCTs) are considered the gold standard in scientific research because they help ensure:</p>
+  <ul>
+    <li>Bias elimination</li>
+    <li>Control for placebo effect</li>
+    <li>Validated efficacy</li>
+    <li>Safety and tolerability assessment</li>
+  </ul>
+  <p>By studying the full nitrate formulation as it is consumed, Berkeley Life® ensures the product is evaluated for real-world effectiveness and safety - not just theoretical ingredient benefits.</p>
+  <h3>Nitric Oxide Production</h3>
+  <p>Berkeley Life® is formulated to increase nitric oxide through the dietary nitrate → nitrite → nitric oxide pathway.</p>
+  <p>Unlike L-arginine-based supplements, this pathway remains active even when endothelial nitric oxide synthase (eNOS) declines with age.</p>
+  <h3>Clinical Trial Results</h3>
+  <p>In a double-blind, placebo-controlled study, participants taking Berkeley Life® demonstrated significant increases in salivary nitrite and plasma nitrite compared to placebo. Test strip readings correlated with laboratory measurements, confirming improved nitric oxide bioavailability.</p>
+  <h3>Vascular &amp; Endothelial Health</h3>
+  <p>Nitric oxide is essential for healthy blood vessel function. It supports vasodilation, circulation, and endothelial integrity - all of which naturally decline with age.</p>
+  <h3>Clinical Trial Results</h3>
+  <p>In clinical research evaluating dietary nitrate supplementation over 12 weeks, participants showed improvements in endothelial function and reductions in carotid artery stiffness, a recognized marker of cardiovascular risk. These findings support the role of nitrate-based nitric oxide in maintaining vascular flexibility and heart health.</p>
+  <h3>Blood Pressure Support</h3>
+  <p>Nitric oxide helps relax and widen blood vessels, supporting healthy blood pressure regulation.</p>
+  <h3>Clinical Trial Results</h3>
+  <p>Clinical studies of dietary nitrates have demonstrated improvements in systolic blood pressure and vascular responsiveness compared to placebo, particularly with consistent daily use over 8-12 weeks.</p>
+  <h3>Energy &amp; Oxygen Efficiency</h3>
+  <p>Nitric oxide plays a critical role in oxygen delivery and mitochondrial signaling. Healthy nitric oxide levels support efficient energy production and muscle performance.</p>
+  <h3>Clinical Research Findings</h3>
+  <p>Research on dietary nitrates has shown improvements in oxygen utilization and exercise efficiency, including reduced oxygen cost during physical activity.</p>
+  <h3>Aging &amp; Nitric Oxide Decline</h3>
+  <p>Nitric oxide production naturally declines with age due to oxidative stress, hormonal shifts, and reduced enzyme activity.</p>
+  <p>Berkeley Life® provides a nitrate-based pathway that supports nitric oxide production independently of age-related enzymatic decline, offering measurable vascular support as the body's natural production decreases.</p>
+{%- endcapture -%}
+
+<section
+  id="{{ section_anchor_id }}"
+  class="c-science-proof-grid"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-science-proof-grid"
+>
+  <div class="c-science-proof-grid__bg" aria-hidden="true">
+    {%- if section.settings.background_image != blank -%}
+      {{
+        section.settings.background_image
+        | image_url: width: 2400
+        | image_tag:
+          class: 'c-science-proof-grid__bg-image',
+          loading: 'lazy',
+          widths: '750, 1100, 1500, 2000, 2400',
+          alt: section.settings.background_image_alt | escape
+      }}
+    {%- endif -%}
+  </div>
+
+  <div class="c-science-proof-grid__overlay"></div>
+
+  <div class="c-science-proof-grid__container container-sl">
+    <div class="c-science-proof-grid__intro">
+      {%- if section.settings.subheading != blank -%}
+        <p class="c-science-proof-grid__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="c-science-proof-grid__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.description != blank -%}
+        <div class="c-science-proof-grid__description rte">
+          {{ section.settings.description }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.action_link_label != blank -%}
+        {%- if section.settings.action_link_opens_modal -%}
+          {%- liquid
+            assign action_drawer_body = section.settings.action_drawer_body
+            if action_drawer_body == blank
+              assign action_drawer_body = clinical_trials_drawer_body_default
+            endif
+          -%}
+          <div class="c-science-proof-grid__drawer-wrap">
+            {%- render 'clinical-drawer',
+              drawer_id: 'science-proof-grid-clinical-drawer-' | append: section.id,
+              button_text: section.settings.action_link_label,
+              button_style: 'default',
+              drawer_title: section.settings.action_drawer_title,
+              drawer_body: action_drawer_body,
+              bg_color: section.settings.action_drawer_bg_color,
+              text_color: section.settings.action_drawer_text_color
+            -%}
+          </div>
+        {%- else -%}
+          <a
+            class="c-science-proof-grid__action-link"
+            {% if section.settings.action_link_url != blank %}
+              href="{{ section.settings.action_link_url }}"
+            {% else %}
+              role="link"
+              aria-disabled="true"
+            {% endif %}
+          >
+            <span>{{ section.settings.action_link_label }}</span>
+            <svg class="c-science-proof-grid__action-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+              <path d="M3 8H13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M9.5 4.5L13 8L9.5 11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    <div class="c-science-proof-grid__metrics">
+      {%- for block in section.blocks -%}
+        <article class="c-science-proof-grid__metric" {{ block.shopify_attributes }}>
+          <div class="c-science-proof-grid__metric-header">
+            {%- if block.settings.title != blank -%}
+              <h3 class="c-science-proof-grid__metric-title">{{ block.settings.title }}</h3>
+            {%- endif -%}
+
+            <div class="c-science-proof-grid__metric-icon-wrap">
+              {%- if block.settings.icon != blank -%}
+                {{
+                  block.settings.icon
+                  | image_url: width: 96
+                  | image_tag:
+                    class: 'c-science-proof-grid__metric-icon',
+                    loading: 'lazy',
+                    widths: '48, 72, 96',
+                    alt: block.settings.icon_alt | escape
+                }}
+              {%- else -%}
+                <span class="c-science-proof-grid__metric-icon-placeholder" aria-hidden="true"></span>
+              {%- endif -%}
+            </div>
+          </div>
+
+          {%- if block.settings.description != blank -%}
+            <p class="c-science-proof-grid__metric-description">{{ block.settings.description }}</p>
+          {%- endif -%}
+
+          {%- if block.settings.value != blank -%}
+            <p class="c-science-proof-grid__metric-value">{{ block.settings.value }}</p>
+          {%- endif -%}
+
+          {%- if block.settings.value_caption != blank -%}
+            <p class="c-science-proof-grid__metric-caption">{{ block.settings.value_caption }}</p>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+
+      {%- if section.settings.cta_text != blank -%}
+        <div class="c-science-proof-grid__cta">
+          <a href="{{ section.settings.cta_link }}" class="c-science-proof-grid__cta-button">
+            {{ section.settings.cta_text }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .c-science-proof-grid {
+    --c-science-proof-grid-text: {{ section.settings.text_color }};
+    --c-science-proof-grid-accent: {{ section.settings.accent_color }};
+    --c-science-proof-grid-cyan: {{ section.settings.value_color }};
+    --c-science-proof-grid-intro-bg: {{ section.settings.intro_background_color }};
+    --c-science-proof-grid-metrics-bg: {{ section.settings.metrics_background_color }};
+    --c-science-proof-grid-metrics-border: {{ section.settings.metrics_border_color }};
+    --c-science-proof-grid-overlay: {{ section.settings.background_overlay_color }};
+    --c-science-proof-grid-caption: {{ section.settings.caption_color }};
+    --c-science-proof-grid-max: 1280px;
+    color: var(--c-science-proof-grid-text);
+    display: block;
+    isolation: isolate;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__bg,
+  #shopify-section-{{ section.id }} .c-science-proof-grid__overlay {
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__bg-image {
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__overlay {
+    background: var(--c-science-proof-grid-overlay);
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__container {
+    box-sizing: border-box;
+    display: grid;
+    gap: 24px;
+    margin: 0 auto;
+    max-width: var(--c-science-proof-grid-max);
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__intro,
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metrics {
+    border-radius: 24px;
+    min-width: 0;
+    justify-content: center;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__intro {
+    background: var(--c-science-proof-grid-intro-bg);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px 24px;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__subheading {
+    color: var(--c-science-proof-grid-cyan);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    line-height: 1.2;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__heading {
+    color: var(--c-science-proof-grid-text);
+    font-family: "TT Commons Pro", sans-serif;
+    font-size: clamp(34px, 8vw, 52px);
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.16;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__heading em {
+    color: var(--c-science-proof-grid-accent);
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__description {
+    color: var(--c-science-proof-grid-text);
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__description p {
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__action-link {
+    align-items: center;
+    border-bottom: 2px solid currentColor;
+    color: var(--c-science-proof-grid-accent);
+    display: inline-flex;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 8px;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    margin-top: 4px;
+    padding-bottom: 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
+    width: fit-content;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__action-link:hover {
+    opacity: 0.85;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__action-link[aria-disabled='true'] {
+    cursor: default;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__action-icon {
+    display: block;
+    flex-shrink: 0;
+    height: 14px;
+    width: 14px;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__drawer-wrap {
+    margin-top: 4px;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__drawer-wrap .clinical-drawer-trigger {
+    align-items: center;
+    border-bottom: 2px solid currentColor;
+    color: var(--c-science-proof-grid-accent);
+    display: inline-flex;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 8px;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    margin-top: 4px;
+    padding-bottom: 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
+    width: fit-content;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__drawer-wrap .clinical-drawer-trigger::after {
+    content: '\2192';
+    display: block;
+    flex-shrink: 0;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__drawer-wrap .clinical-drawer-trigger:hover {
+    opacity: 0.85;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metrics {
+    background: var(--c-science-proof-grid-metrics-bg);
+    border: 1px solid var(--c-science-proof-grid-metrics-border);
+    display: grid;
+    gap: 32px;
+    grid-template-columns: 1fr;
+    padding: 28px 24px;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metric {
+    display: grid;
+    gap: 14px;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metric-header {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metric-title {
+    color: var(--c-science-proof-grid-text);
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metric-icon-wrap {
+    align-items: center;
+    display: inline-flex;
+    flex-shrink: 0;
+    height: 32px;
+    justify-content: center;
+    width: 32px;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metric-icon {
+    display: block;
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metric-icon-placeholder {
+    border: 1px solid var(--c-science-proof-grid-accent);
+    border-radius: 50%;
+    display: block;
+    height: 18px;
+    width: 18px;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metric-description {
+    color: var(--c-science-proof-grid-text);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 28ch;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metric-value {
+    color: var(--c-science-proof-grid-cyan);
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(42px, 7vw, 52px);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.12;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__metric-caption {
+    color: var(--c-science-proof-grid-caption);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 30ch;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__cta {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    background-color: {{ section.settings.cta_bg_color }};
+    color: {{ section.settings.cta_text_color }};
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.1px;
+    line-height: 1.2;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+     
+  }
+
+  #shopify-section-{{ section.id }} .c-science-proof-grid__cta-button:hover {
+    transform: translateY(-2px);
+    background-color: {{ section.settings.cta_bg_color | color_darken: 10 }};
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  @media screen and (min-width: 768px) {
+    #shopify-section-{{ section.id }} .c-science-proof-grid__container {
+      gap: 30px;
+    }
+
+      #shopify-section-{{ section.id }} .c-science-proof-grid__cta-button {
+        font-size: 14px !important;
+      }
+
+    #shopify-section-{{ section.id }} .c-science-proof-grid__intro,
+    #shopify-section-{{ section.id }} .c-science-proof-grid__metrics {
+      border-radius: 30px;
+      padding: 40px;
+    }
+
+    #shopify-section-{{ section.id }} .c-science-proof-grid__metrics {
+      gap: 42px 36px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #shopify-section-{{ section.id }} .c-science-proof-grid__metric-title {
+      font-size: 24px;
+    }
+  }
+
+  @media screen and (min-width: 978px) {
+    #shopify-section-{{ section.id }} .c-science-proof-grid__container {
+      align-items: stretch;
+      gap: 34px;
+      grid-template-columns: minmax(0, 499px) minmax(0, 1fr);
+      padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+      padding-top: {{ section.settings.padding_top_desktop }}px;
+    }
+
+    #shopify-section-{{ section.id }} .c-science-proof-grid__intro {
+      gap: 24px;
+      padding: 48px;
+    }
+
+    #shopify-section-{{ section.id }} .c-science-proof-grid__metrics {
+      align-content: center;
+      backdrop-filter: blur(12px);
+      gap: 64px;
+      min-height: 100%;
+      padding: 64px;
+    }
+
+    #shopify-section-{{ section.id }} .c-science-proof-grid__metric-title {
+      font-size: 30px;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    #shopify-section-{{ section.id }} .c-science-proof-grid__container {
+      gap: 61px;
+    }
+  }
+
+  @media screen and (min-width: 1980px) {
+    #shopify-section-{{ section.id }} .c-science-proof-grid__container {
+      max-width: 1520px;
+    }
+
+    #shopify-section-{{ section.id }} .c-science-proof-grid__heading {
+      font-size: 56px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "C Science Proof Grid",
+  "tag": "section",
+  "class": "c-science-proof-grid-wrapper",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "background_image_alt",
+      "label": "Background image alt text",
+      "default": "People running outdoors"
+    },
+    {
+      "type": "color",
+      "id": "background_overlay_color",
+      "label": "Background overlay color",
+      "default": "rgba(0, 0, 0, 0.18)"
+    },
+    {
+      "type": "header",
+      "content": "Column 1 Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "The Science"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "One Molecule. <em>Total Health.</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Your body naturally produces Nitric Oxide - the molecule that keeps blood flowing, cells nourished, and your body performing at its best.</p>"
+    },
+    {
+      "type": "text",
+      "id": "action_link_label",
+      "label": "Action link label",
+      "default": "See Clinical Trials"
+    },
+    {
+      "type": "url",
+      "id": "action_link_url",
+      "label": "Action link URL"
+    },
+    {
+      "type": "checkbox",
+      "id": "action_link_opens_modal",
+      "label": "Open clinical trials modal",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "action_drawer_title",
+      "label": "Action drawer title",
+      "default": "Nitric Oxide Support"
+    },
+    {
+      "type": "richtext",
+      "id": "action_drawer_body",
+      "label": "Action drawer content",
+      "info": "Leave empty to use the default clinical trials content."
+    },
+    {
+      "type": "color",
+      "id": "action_drawer_bg_color",
+      "label": "Action drawer background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "action_drawer_text_color",
+      "label": "Action drawer text color",
+      "default": "#080b2b"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Action link color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "value_color",
+      "label": "Metric value color",
+      "default": "#00BED6"
+    },
+    {
+      "type": "color",
+      "id": "caption_color",
+      "label": "Metric caption color",
+      "default": "rgba(255, 255, 255, 0.6)"
+    },
+    {
+      "type": "color",
+      "id": "intro_background_color",
+      "label": "Left column background",
+      "default": "#1B1C29"
+    },
+    {
+      "type": "color",
+      "id": "metrics_background_color",
+      "label": "Right column background",
+      "default": "rgba(27, 28, 41, 0.42)"
+    },
+    {
+      "type": "color",
+      "id": "metrics_border_color",
+      "label": "Right column border color",
+      "default": "rgba(255, 255, 255, 0.35)"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button (Right Column)"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg_color",
+      "label": "Button Background Color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Desktop top padding",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Desktop bottom padding",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "metric",
+      "name": "Metric",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heart Health"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "icon_alt",
+          "label": "Icon alt text",
+          "default": "Heart icon"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Supports healthy blood pressure and cardiovascular function through improved vessel dilation."
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Statistic / Value",
+          "default": "12.5 mmHg"
+        },
+        {
+          "type": "text",
+          "id": "value_caption",
+          "label": "Text below statistic",
+          "default": "reduction in systolic blood pressure in clinical trial"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Science Proof Grid",
+      "blocks": [
+        {
+          "type": "metric",
+          "settings": {
+            "title": "Heart Health",
+            "value": "12.5 mmHg",
+            "value_caption": "reduction in systolic blood pressure in clinical trial"
+          }
+        },
+        {
+          "type": "metric",
+          "settings": {
+            "title": "Daily Energy",
+            "value": "+378%",
+            "value_caption": "increase in Nitric Oxide production"
+          }
+        },
+        {
+          "type": "metric",
+          "settings": {
+            "title": "Cognitive Function",
+            "value": "28%",
+            "value_caption": "improvement in circulation markers (ΔMW)"
+          }
+        },
+        {
+          "type": "metric",
+          "settings": {
+            "title": "Measurable Proof",
+            "value": "15 sec",
+            "value_caption": "to see your levels at home"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

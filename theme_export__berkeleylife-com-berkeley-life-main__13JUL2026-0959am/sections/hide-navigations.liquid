@@ -1,0 +1,153 @@
+{%- liquid
+  assign hide_header = section.settings.hide_header
+  assign hide_nav = section.settings.hide_nav
+  assign hide_search = section.settings.hide_search
+  assign hide_account = section.settings.hide_account
+  assign mobile_logo_only = section.settings.mobile_logo_only
+  assign hide_layout_headers = section.settings.hide_layout_headers
+  assign hide_cart = section.settings.hide_cart
+  assign hide_cta = section.settings.hide_cta
+  assign hide_mobile_toggle = section.settings.hide_mobile_toggle
+-%}
+
+{% style %}
+  {% if hide_header %}
+    #shopify-section-c-megamenu,
+    #shopify-section-header {
+      display: none !important;
+    }
+  {% endif %}
+
+  {% if hide_nav %}
+    @media (min-width: 992px) {
+      .c-header__nav { visibility: hidden !important; }
+    }
+    @media (max-width: 991px) {
+      .c-header__nav { display: none !important; }
+    }
+  {% endif %}
+
+  {% if hide_search %}
+    .c-header__icons-extended details-modal { display: none !important; }
+  {% endif %}
+
+  {% if hide_account %}
+    .c-header__icons-extended > a[aria-label="Account"] { display: none !important; }
+  {% endif %}
+
+  {% if mobile_logo_only %}
+    .c-header__logo-desktop { display: none !important; }
+    .c-header__logo-mobile { display: block !important; }
+  {% endif %}
+
+  {% if hide_layout_headers %}
+    #shopify-section-announcement-bar,
+    #shopify-section-c-header-banner-o {
+      display: none !important;
+    }
+  {% endif %}
+
+  {% if hide_cart %}
+    #cart-icon-bubble { display: none !important; }
+  {% endif %}
+
+  {% if hide_cta %}
+    .c-header__cta { display: none !important; }
+  {% endif %}
+
+  {% if hide_mobile_toggle %}
+    .c-header__mobile-toggle.js-menu-toggle { display: none !important; }
+  {% endif %}
+
+  /* Fix cart drawer transparent background when hide-navigations is present */
+  #CartDrawer.bg-cream,
+  cart-drawer .bg-cream {
+    --tw-bg-opacity: 1 !important;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Hide Navigations",
+  "tag": "section",
+  "class": "section-hide-navigations",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Use this section to hide elements of the C Megamenu header on the pages where it is added. The cart icon will always remain visible. Add this section to a template (e.g. a landing page) to apply the visibility rules below."
+    },
+    {
+      "type": "header",
+      "content": "Visibility Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_header",
+      "label": "Hide entire header (megamenu)",
+      "info": "Hides the full header section (#shopify-section-c-megamenu or #shopify-section-header). Overrides the individual options below.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_nav",
+      "label": "Hide main navigation",
+      "info": "Hides the .c-header__nav menu (main navigation links).",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_search",
+      "label": "Hide search icon",
+      "info": "Hides the search icon in the header.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_account",
+      "label": "Hide account/user icon",
+      "info": "Hides the user/account icon in the header.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_logo_only",
+      "label": "Show only mobile logo (universal)",
+      "info": "Forces the mobile logo to be displayed on all screen sizes and hides the desktop logo.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_layout_headers",
+      "label": "Hide layout headers (Announcement Bar & C Header Banner)",
+      "info": "Hides the announcement-bar and c-header-banner-o sections rendered globally from theme.liquid.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_cart",
+      "label": "Hide cart icon",
+      "info": "Hides the cart icon (#cart-icon-bubble) in the header.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_cta",
+      "label": "Hide header CTA",
+      "info": "Hides the .c-header__cta button in the megamenu header.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_mobile_toggle",
+      "label": "Hide mobile hamburger button",
+      "info": "Hides the .c-header__mobile-toggle.js-menu-toggle hamburger button in the megamenu header.",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hide Navigations"
+    }
+  ]
+}
+{% endschema %}

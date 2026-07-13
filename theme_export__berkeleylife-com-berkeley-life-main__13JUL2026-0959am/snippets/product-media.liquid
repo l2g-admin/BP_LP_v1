@@ -1,0 +1,24 @@
+<div class="relative w-full">
+  <div class="{{ aspect | default: "aspect-square" }} relative">
+    {%- liquid
+      case media.media_type
+        when 'image'
+          assign eager = false
+          if position == 1
+            assign eager = true
+          endif
+          if zoom
+            echo '<div class="swiper-zoom-container">'
+          endif
+            render 'image', image: media, eager: eager, extra: extra, classes: 'absolute h-full w-full', fit: 'object-contain'
+          if zoom
+            echo '<div data-zoom-info class="bottom-2 absolute left-0 w-full text-sm pointer-events-none">'
+            echo '<span class="hidden">Double-click to zoom</span>'
+            echo '</div></div>'
+          endif
+        when 'video'
+        render 'product-video', video: media
+      endcase
+    -%}
+  </div>
+</div>

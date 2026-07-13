@@ -1,0 +1,551 @@
+<style>
+  #{{section.id}} {
+    {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+    {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+    padding-top: {{ half_padding_top }}em;
+    padding-bottom: {{ half_padding_bottom }}em;
+    position: relative;
+    overflow: hidden;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & * {
+      position: relative;
+      z-index: 2;
+    }
+
+    & .banner__background {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      {% if section.settings.background_image != blank %}
+        background-image: url('{{ section.settings.background_image | image_url: width: 1920 }}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      {% endif %}
+    }
+
+    & .section__banner__container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    & .banner__card {
+      background: {{ section.settings.card_bg }};
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-radius: 32px;
+      border: 5px solid {{ section.settings.card_border_color }};
+      padding: clamp(2rem, 5vw, 3.5rem);
+      max-width: 650px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    & .banner__title {
+      font-size: clamp(28px, 5vw + 1rem, 48px);
+      font-weight: 400;
+      line-height: 120%;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+    }
+
+    & .banner__subheading {
+      font-size: clamp(12px, 1.8vw, 14px);
+      line-height: 120%;
+      margin: 0;
+      color: {{ section.settings.subheading_color }};
+      text-transform: uppercase;
+      letter-spacing: 2.1px;
+      font-weight: 700;
+    }
+
+    & .banner__title--span {
+      color: {{ section.settings.accent_color }};
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    & .banner__subtitle {
+      font-size: clamp(20px, 3vw + 0.5rem, 32px);
+      font-weight: 500;
+      line-height: 130%;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+    }
+
+    & .banner__subtitle--span {
+      color: {{ section.settings.accent_color }};
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    & .banner__description {
+      font-size: clamp(14px, 2vw, 16px);
+      line-height: 160%;
+      font-weight: 300;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+      opacity: 0.9;
+    }
+
+    & .banner__description strong {
+      font-weight: 600;
+      opacity: 1;
+    }
+
+    & .banner__button-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 0.5rem;
+
+      & a {
+        text-decoration: none;
+      }
+    }
+
+    & .banner__button-undertext {
+      margin: 0;
+      font-size: 14px;
+      line-height: 150%;
+      letter-spacing: 0.42px;
+      font-style: italic;
+      color: {{ section.settings.text_color }};
+      text-align: center;
+      opacity: 0.9;
+    }
+
+    & .banner__form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    & .banner__input__wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+      background-color: transparent;
+      border-radius: 9999px;
+      padding: 0.5rem;
+    }
+
+    & .banner__input {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      border: none;
+      border-radius: 9999px;
+      font-size: 16px;
+      background-color: {{ section.settings.input_bg }};
+      color: {{ section.settings.input_text_color }};
+      outline: none;
+    }
+
+    & .banner__input::placeholder {
+      color: {{ section.settings.input_text_color }};
+      opacity: 0.6;
+    }
+
+    & .banner__button {
+      padding: 1rem 2rem;
+      background-color: {{ section.settings.button_bg }};
+      color: {{ section.settings.button_text_color }};
+      border: none;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      white-space: nowrap;
+    }
+
+    & .banner__button:hover {
+      background-color: {{ section.settings.button_bg | color_darken: 10 }};
+      transform: scale(1.02);
+    }
+
+    & .chart__button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background-color: {{ section.settings.button_bg }};
+      border-radius: 9999px;
+      color: #ffffff;
+      font-size: clamp(14px, 2vw, 16px);
+      text-decoration: none;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      font-weight: 400;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+
+  @media screen and (width >= 48rem) {
+    #{{section.id}} {
+      padding-top: {{ section.settings.padding_top }}em;
+      padding-bottom: {{ section.settings.padding_bottom }}em;
+      min-height: 600px;
+
+      & .banner__card {
+        padding: 3.5rem;
+        gap: 1.75rem;
+      }
+
+      & .banner__form {
+        flex-direction: row;
+        gap: 0;
+      }
+
+      & .banner__input__wrapper {
+        flex-direction: row;
+        gap: 0.5rem;
+        padding: 0.35rem 0.35rem 0.35rem 0.5rem;
+      }
+
+      & .banner__input {
+        padding: 0.875rem 1rem;
+      }
+
+      & .banner__button {
+        padding: 0.875rem 1.5rem;
+        flex-shrink: 0;
+      }
+
+      & .banner__input__wrapper {
+        background-color: {{ section.settings.input_bg }};
+      }
+
+      & .banner__input {
+        background-color: transparent;
+      }
+    }
+  }
+
+  @media screen and (width >= 64rem) {
+    #{{section.id}} {
+      min-height: 700px;
+
+      & .banner__card {
+        max-width: 700px;
+      }
+    }
+  }
+</style>
+
+<section id="{{section.id}}">
+  {% if section.settings.background_image != blank %}
+    <div class="banner__background"><div></div></div>
+  {% endif %}
+
+  <div class="section__banner__container container-sl">
+    <div class="banner__card">
+      {% if section.settings.subheading != blank %}
+        <p class="banner__subheading">
+          {{ section.settings.subheading }}
+        </p>
+      {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h2 class="banner__title">
+          {% assign title_with_accent = section.settings.title | replace: '{accent}', '<span class="banner__title--span">' | replace: '{/accent}', '</span>' %}
+          {{ title_with_accent }}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.subtitle != blank %}
+        <p class="banner__subtitle">
+          {% assign subtitle_with_accent = section.settings.subtitle | replace: '{accent}', '<span class="banner__subtitle--span">' | replace: '{/accent}', '</span>' %}
+          {{ subtitle_with_accent }}
+        </p>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <p class="banner__description">
+          {{ section.settings.description }}
+        </p>
+      {% endif %}
+
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'button' %}
+            {% if block.settings.button_text != blank %}
+              <div class="banner__button-wrapper" {{ block.shopify_attributes }}>
+                <a href="{{ block.settings.button_url }}" class="{{ block.settings.button_class | default: 'banner__button' }}">
+                  {{ block.settings.button_text }}
+                </a>
+                {% if block.settings.button_undertext != blank %}
+                  <p class="banner__button-undertext">{{ block.settings.button_undertext }}</p>
+                {% endif %}
+              </div>
+            {% endif %}
+        {% endcase %}
+      {% endfor %}
+
+      {% if section.settings.show_email_form %}
+        {% if section.settings.use_klaviyo_form %}
+          {%- comment -%} Klaviyo Form Embed {%- endcomment -%}
+          {% if section.settings.klaviyo_form_id != blank %}
+            <div class="klaviyo-form-{{ section.settings.klaviyo_form_id }}"></div>
+          {% endif %}
+        {% else %}
+          {%- comment -%} Built-in Shopify Form {%- endcomment -%}
+          {% form 'customer', class: 'banner__form' %}
+            <input type="hidden" name="contact[tags]" value="{{ section.settings.customer_tag }}">
+            <div class="banner__input__wrapper">
+              <input
+                type="email"
+                name="contact[email]"
+                class="banner__input"
+                placeholder="{{ section.settings.placeholder_text | default: 'Enter your email' }}"
+                required
+                autocomplete="email"
+              >
+              <button type="submit" class="banner__button">
+                {{ section.settings.button_text | default: 'Sign Up for First Look' }}
+              </button>
+            </div>
+          {% endform %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Banner Signup V2",
+  "tag": "section",
+  "class": "section section-banner-signup-v2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "BLOOD FLOW FIRST."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Something {accent}new{/accent} is coming...",
+      "info": "Use {accent}text{/accent} to highlight text in accent color"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Designed specifically for women navigating {accent}menopause{/accent} — built on Nitric-Oxide science.",
+      "info": "Use {accent}text{/accent} to highlight text in accent color"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "We've taken everything we know about women's health, blood flow, and hormonal changes to create something entirely new. <strong>Be the first to see it and get early access.</strong>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_email_form",
+      "label": "Show Email Form",
+      "default": true,
+      "info": "Enable to show the email signup form"
+    },
+    {
+      "type": "header",
+      "content": "Email Form"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_klaviyo_form",
+      "label": "Use Klaviyo Form",
+      "default": false,
+      "info": "Enable to use Klaviyo embedded form instead of built-in Shopify form"
+    },
+    {
+      "type": "text",
+      "id": "klaviyo_form_id",
+      "label": "Klaviyo Form ID",
+      "default": "Wre23A",
+      "info": "Enter your Klaviyo form ID (e.g., 'Wre23A'). Only used when 'Use Klaviyo Form' is enabled."
+    },
+    {
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Input Placeholder",
+      "default": "Enter your email",
+      "info": "Only for built-in form"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Sign Up for First Look",
+      "info": "Only for built-in form"
+    },
+    {
+      "type": "text",
+      "id": "customer_tag",
+      "label": "Customer Tag",
+      "default": "newsletter",
+      "info": "Tag applied to customers who sign up. Only for built-in form"
+    },
+    {
+      "type": "header",
+      "content": "Card Colors"
+    },
+    {
+      "type": "color_background",
+      "id": "card_bg",
+      "label": "Card Background",
+      "default": "linear-gradient(180deg, rgba(27, 28, 41, 0.50) 0%, rgba(27, 28, 41, 0.50) 100%)"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border Color",
+      "default": "#1B1C29"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading Color",
+      "default": "#00BED6"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#00B5B5"
+    },
+    {
+      "type": "header",
+      "content": "Form Colors"
+    },
+    {
+      "type": "color",
+      "id": "input_bg",
+      "label": "Input Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button Background",
+      "default": "#D44F2F"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Learn More"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button Link"
+        },
+        {
+          "type": "text",
+          "id": "button_class",
+          "label": "Button CSS Class",
+          "default": "banner__button",
+          "info": "CSS class for button styling"
+        },
+        {
+          "type": "text",
+          "id": "button_undertext",
+          "label": "Button Undertext",
+          "default": "Shipping not included · Super Age exclusive offer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Banner Signup V2"
+    }
+  ]
+}
+{% endschema %}

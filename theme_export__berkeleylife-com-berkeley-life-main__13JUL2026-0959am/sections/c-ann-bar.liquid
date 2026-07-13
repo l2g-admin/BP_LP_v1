@@ -1,0 +1,310 @@
+<style>
+  #{{ section.id }} {
+    --bg: {{ section.settings.bg_color }};
+    --text: {{ section.settings.text_color }};
+    --accent: {{ section.settings.accent_color }};
+
+    background-color: var(--bg);
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #{{ section.id }} .ann-bar__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  #{{ section.id }} .ann-bar__badge {
+    display: inline-block;
+    background-color: var(--accent);
+    color: #FFFFFF;
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  #{{ section.id }} .ann-bar__headline {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 700;
+    font-size: clamp(13px, 1.5vw, 17px);
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  #{{ section.id }} .ann-bar__headline .accent {
+    color: var(--accent);
+  }
+
+  #{{ section.id }} .ann-bar__cards {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+  }
+
+  #{{ section.id }} .ann-bar__card {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    background-color: {{ section.settings.card_bg_color }};
+    border: 1.5px solid {{ section.settings.card_border_color }};
+  }
+
+  #{{ section.id }} .ann-bar__card--accent {
+    border-color: var(--accent);
+  }
+
+  #{{ section.id }} .ann-bar__card-pct {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 700;
+    font-size: clamp(24px, 3.5vw, 40px);
+    line-height: 1;
+    color: var(--text);
+    margin: 0;
+  }
+
+  #{{ section.id }} .ann-bar__card--accent .ann-bar__card-pct {
+    color: var(--accent);
+  }
+
+  #{{ section.id }} .ann-bar__card-orders,
+  #{{ section.id }} .ann-bar__card-number {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin: 0;
+    text-align: left;
+    line-height: 1.45;
+  }
+
+  #{{ section.id }} .ann-bar__card-orders {
+    opacity: 0.5;
+  }
+
+  #{{ section.id }} .ann-bar__card-number {
+    opacity: 0.75;
+  }
+
+  @media (min-width: 768px) {
+
+    #{{ section.id }} .ann-bar__inner {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+      gap: 28px;
+    }
+
+    #{{ section.id }} .ann-bar__cards {
+      width: auto;
+      flex-shrink: 0;
+    }
+ 
+  }
+</style>
+
+{% assign headline_rendered = section.settings.headline
+  | replace: '{accent}', '<span class="accent">'
+  | replace: '{/accent}', '</span>'
+%}
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="ann-bar__inner">
+      {% if section.settings.badge_text != blank %}
+        <span class="ann-bar__badge">{{ section.settings.badge_text }}</span>
+      {% endif %}
+
+      {% if section.settings.headline != blank %}
+        <p class="ann-bar__headline">{{ headline_rendered }}</p>
+      {% endif %}
+
+      <div class="ann-bar__cards">
+        {% if section.settings.card1_percentage != blank %}
+          <div class="ann-bar__card">
+            <p class="ann-bar__card-pct">{{ section.settings.card1_percentage }}</p>
+            <div class="ann-bar__card-meta">
+              {% if section.settings.card1_orders != blank %}
+                <p class="ann-bar__card-orders">{{ section.settings.card1_orders }}</p>
+              {% endif %}
+              {% if section.settings.card1_number != blank %}
+                <p class="ann-bar__card-number">{{ section.settings.card1_number }}</p>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if section.settings.card2_percentage != blank %}
+          <div class="ann-bar__card ann-bar__card--accent">
+            <p class="ann-bar__card-pct">{{ section.settings.card2_percentage }}</p>
+            <div class="ann-bar__card-meta">
+              {% if section.settings.card2_orders != blank %}
+                <p class="ann-bar__card-orders">{{ section.settings.card2_orders }}</p>
+              {% endif %}
+              {% if section.settings.card2_number != blank %}
+                <p class="ann-bar__card-number">{{ section.settings.card2_number }}</p>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Ann Bar",
+  "tag": "section",
+  "class": "section-ann-bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#1B1C29"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background",
+      "default": "#2A2B3A"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card Border (neutral)",
+      "default": "#3D3E50"
+    },
+    {
+      "type": "header",
+      "content": "Badge"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "Men's Health Month"
+    },
+    {
+      "type": "header",
+      "content": "Headline"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "info": "Use {accent} and {/accent} to highlight words in accent color. E.g. Exclusive {accent}Wholesale Savings{/accent} No Code Needed",
+      "default": "Exclusive {accent}Wholesale Savings{/accent} No Code Needed"
+    },
+    {
+      "type": "header",
+      "content": "Card 1 (Neutral)"
+    },
+    {
+      "type": "text",
+      "id": "card1_percentage",
+      "label": "Percentage",
+      "default": "20%"
+    },
+    {
+      "type": "text",
+      "id": "card1_orders",
+      "label": "Orders text",
+      "default": "Orders Under"
+    },
+    {
+      "type": "text",
+      "id": "card1_number",
+      "label": "Amount",
+      "default": "$450"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Card 2 (Accent)"
+    },
+    {
+      "type": "text",
+      "id": "card2_percentage",
+      "label": "Percentage",
+      "default": "25%"
+    },
+    {
+      "type": "text",
+      "id": "card2_orders",
+      "label": "Orders text",
+      "default": "Orders"
+    },
+    {
+      "type": "text",
+      "id": "card2_number",
+      "label": "Amount",
+      "default": "$450+"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Ann Bar"
+    }
+  ]
+}
+{% endschema %}

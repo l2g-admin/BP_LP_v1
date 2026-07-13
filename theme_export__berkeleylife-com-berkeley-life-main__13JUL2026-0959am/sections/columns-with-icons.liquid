@@ -1,0 +1,310 @@
+{%- unless section.blocks.size == 0 -%}
+  <style>
+    .bg-cream{
+      --tw-bg-opacity: 0;
+    }
+    @media (max-width:768px) {
+      .padding-mobile{
+        padding: 1rem !important;
+      }
+    }
+  </style>
+  <div class="bg-cream">
+<div class="text-text {% unless section.settings.full_width %}max-w-screen-xl mx-auto md:px-8 px-4{% endunless %}" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#F9F8F8' }}">
+  <div class="p-12 py-8 md:py-16 bg-bg rounded-[46.058px] md:p-12 padding-mobile">
+    <div class="mx-auto {% if section.settings.small_width %} max-w-prose {% else %} max-w-screen-2xl{% endif %}">
+
+      {%- unless section.settings.title == blank -%}
+        <h2 class="mb-16 text-center h2 scroll-mt-20" id="{{ section.settings.title | handleize }}">
+          {{ section.settings.title | replace_first: "**", "<span class='text-brand h1 font-secondaryHeader'>" | replace: "**", "</span>" }}
+        </h2>
+      {%- endunless -%}
+
+      {%- comment -%}Calculate the justfication and inline-image based on the text alignment setting.{%- endcomment -%}
+      {%-liquid
+        if section.settings.text_align == 'text-center'
+          assign justify = 'justify-center items-center'
+          unless section.settings.images_inline
+            assign justify = 'flex-col justify-center items-center'
+          endunless
+        elsif section.settings.text_align == 'text-right'
+          assign justify = 'flex-row-reverse items-center'
+          unless section.settings.images_inline
+            assign justify = 'flex-col items-end'
+          endunless
+        else
+          assign justify = 'justify-start items-center'
+          unless section.settings.images_inline
+            assign justify = 'flex-col items-start'
+          endunless
+        endif
+      -%}
+      <style>
+        .list-gap{
+          gap:{{section.settings.gap}}em;
+          @media(min-width:769px){
+            gap:{{section.settings.gap | times: 2}}em;
+          }
+        }
+        .list-resp-grid{
+          @media(max-width:768px){
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+        .list-resp{
+          @media(max-width:768px){
+            flex-direction: column;
+          }
+        }
+      </style>
+      <ul data-parent class="list-gap flex items-start justify-center {% if section.settings.wrap %}flex-wrap {% else %} {%if section.settings.mobile_layout == "column" %} list-resp {% else %} list-resp-grid {% endif %} {% endif %} gap-y-16 {{ section.settings.text_align }}">
+        <style>
+            .border-card-2{
+              border: 1px solid;
+              padding:24px;
+              min-height: {%if section.settings.mobile_layout == "column"%}200px{% else %}180px{% endif %};
+              border-color: #D44F2F;
+              border-radius: 16px;
+              @media(max-width:768px){
+                padding: 12px;
+              }
+            }
+            .justify-items-center{
+              justify-items: center;
+            }
+          </style>  
+        {%- for block in section.blocks -%}  
+            <li data-pre="opacity-0 translate-y-1" data-post="opacity-100 translate-y-0" class="{% if block.settings.border_card %}border-card-2{% endif %} motion-safe:transition-all motion-safe:duration-700 w-full {% if section.blocks.size == 4 %}md:w-1/4{% elsif section.blocks.size > 4 %}md:w-1/5 {% else %} md:w-1/3{% endif %} shrink-0 md:px-4">
+              <div class="pb-4 mb-4 flex gap-4 {{ justify }}">
+
+                {%- if block.settings.svg != blank or block.settings.image != blank -%}
+                  <span class="{{ section.settings.image_size }} shrink-0 justify-items-center">
+                    {%- if block.settings.svg != blank -%}
+                      {{ block.settings.svg }}
+                    {%- elsif block.settings.image != blank -%}
+                      {% render 'image', image: block.settings.image, classes: 'object-contain' %}
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+
+                {%- unless block.settings.title == blank -%}
+                  <h3 class="w-3/4 font-bold subhead text-brand">
+                    {{ block.settings.title }}
+                  </h3>
+                {%- endunless -%}
+
+              {%- if block.settings.button_label != blank -%}
+                <div
+                  data-text="{{ block.settings.button_label }}"
+                  data-pre="opacity-0 translate-y-8"
+                  data-post="opacity-100 translate-y-0"
+                  class="{%if block.settings.mobile_hide %} hidden md:block {%endif%} {{ section.settings.text_align | default: 'text-left' }} motion-safe:transition-all motion-safe:duration-700">
+                  <a
+                    {%- if block.settings.button_link != blank %}
+                    href="{{ block.settings.button_link }}"
+                    {% endif %}
+                    class="{{ block.settings.button_style }} {% if block.settings.button_style == 'button--text' %} text-black {% else %} md:px-8  {% endif %} "
+                    {% if block.settings.button_link == blank %}
+                    aria-disabled="true"
+                    {% endif %}
+                    {{ block.shopify_attributes }}>
+                    {{ block.settings.button_label | escape }}
+                  </a>
+                </div>
+              {%- endif -%}
+                </div>
+              <div class="rte">{{ block.settings.text }}</div>
+            </li>
+        {%- endfor -%}
+      </ul>
+
+    </div>
+  </div>
+</div>
+</div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Columns w/ Icons",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type":"checkbox",
+      "id": "wrap",
+      "label": "Wrap?",
+      "default":true
+    },
+    {
+        "type": "range",
+        "id": "gap",
+        "label": "Cards Gap",
+        "min": 0,
+        "max": 5,
+        "step": 0.1,
+        "default": 0,
+        "unit": "em"
+      },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text Alignment",
+      "default": "text-left",
+      "options": [
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile Layout",
+      "default": "column",
+      "options": [
+        {
+          "value": "column",
+          "label": "Column"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_size",
+      "label": "Image Size",
+      "default": "w-24",
+      "options": [
+        {
+          "value": "w-16",
+          "label": "Small"
+        },
+        {
+          "value": "w-24",
+          "label": "Medium"
+        },
+        {
+          "value": "w-32",
+          "label": "Large"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "images_inline",
+      "label": "Place images inline with header?",
+      "default": false,
+      "info": "Otherwise, they will go above."
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width?",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "small_width",
+      "label": "Small Width?",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icon Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "border_card",
+          "label":"Border Card",
+          "default":false
+        },
+        {
+          "type": "html",
+          "id": "svg",
+          "label": "SVG Icon",
+          "info": "Paste in an svg here (with no width or height attributes). This overrides the image."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button Label",
+        "info": "Button text to display."
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      },
+      {
+        "type": "select",
+        "id": "button_style",
+        "label": "Button Style",
+        "default": "button button--primary",
+        "options": [
+          { "value": "button button--primary", "label": "Primary Button" },
+          { "value": "button button--secondary", "label": "Secondary Button" },
+          { "value": "button button--outline", "label": "Outline Button" },
+          { "value": "button button--tertiary", "label": "Tertiary Button" },
+          { "value": "button--text", "label": "Text Link" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "mobile_hide",
+        "label": "Hide on mobile",
+        "default": false
+      }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Columns w/ Icons"
+    }
+  ]
+}
+{% endschema %}

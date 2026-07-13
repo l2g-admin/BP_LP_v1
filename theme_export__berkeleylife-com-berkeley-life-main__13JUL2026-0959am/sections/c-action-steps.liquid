@@ -1,0 +1,446 @@
+{% comment %}
+  Shopify Section: C Action Steps
+  - Mobile: Single-column stacked layout.
+  - Desktop: Two-column grid layout for image and steps.
+  - Uses the specific block structure requested.
+{% endcomment %}
+
+<style>
+
+  .container{
+    background-color: #fff;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+
+  .science-steps-section {
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    justify-self:center;
+    display:flex;
+    padding: 50px 25px;
+    border-radius: 20px;
+  }
+
+  .science-steps__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .science-steps__heading {
+    max-width: 550px;
+    font-size: 40px;
+ 
+    line-height: 1.2;
+    margin: 0 0 15px 0;
+  }
+  
+  /* Style for the italic part set in the richtext editor */
+  .science-steps__heading em,
+  .science-steps__heading i {
+    font-family: "cormorant-garamond", serif;
+    color:#F8B8A9;
+    font-size: 48px;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  .science-steps__paragraph {
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 400;
+    margin: 0 auto 30px auto;
+  }
+  
+  .science-steps__paragraph em{
+    font-family: serif;
+    font-size: 22px;
+    line-height: 1.0;
+    font-weight: 500;
+    font-style: italic;
+  }
+  
+  .science-steps__main-content {
+    display: flex;
+    flex-direction: column; /* Mobile: stack image and steps */
+    align-items: center;
+    width: 100%;
+    gap: 30px;
+  }
+
+  .science-steps__image-wrapper img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+  }
+
+  .science-steps__steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 43px;
+    width: 100%;
+    max-width: 400px; /* Constrain width on mobile */
+    text-align: left;
+    position: relative;
+  }
+
+  .science-steps__step-item {
+    display: flex;
+    gap: 45px;
+    align-items: flex-end;
+    position: relative;
+    padding-left: 5px; /* Space for the dotted line */
+  }
+  
+  /* Dotted line connecting the steps */
+  .science-steps__step-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 30px;
+    top: 78px; /* Start below the number */
+    bottom: -42px; /* Extend to the next item's gap */
+    width: 1px;
+    border-left: 2px dotted {{ section.settings.text_color | color_modify: 'alpha', 0.5 }};
+  }
+
+  .science-steps__step-number {
+    font-family: "cormorant-garamond", serif;
+    font-size: 72px;
+    align-self: center;
+    font-style: italic;
+    line-height: 1;
+    font-weight: 500;
+    color: {{ section.settings.text_color }};
+    min-width: 40px;
+    margin-bottom: 2rem;
+  }
+
+  .science-steps__step-title {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 120%;
+    margin: 0 0 5px 0;
+  }
+
+  
+  .science-steps__special {
+    font-family: "cormorant-garamond", serif;
+    color:#F8B8A9;
+    font-weight: 400;
+    font-size: 40px;
+    font-style: italic;
+  }
+
+  .science-steps__step-description {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .science-steps__button-wrapper {
+    margin-top: 40px;
+  }
+
+  .science-steps__button {
+    background-color: {{ section.settings.button_bg_color }};
+    color: {{ section.settings.button_text_color }};
+    padding: 15px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    display: inline-block;
+    border: 2px solid transparent;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .science-steps__button:hover {
+    background-color: {{ section.settings.button_text_color }};
+    color: {{ section.settings.button_bg_color }};
+    border-color: {{ section.settings.button_bg_color }};
+  }
+
+  /* Desktop Styles */
+  @media screen and (min-width: 768px) {
+    .container{
+      width: 100%;
+      max-width: none;
+    }
+
+    .science-steps-section {
+      padding: 70px 40px;
+    }
+
+    .science-steps__main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* Two equal columns */
+      align-items: center;
+      gap: 50px;
+    }
+
+    .science-steps__steps-list {
+      max-width: none;
+      gap:120px;
+    }
+    
+    .science-steps__step-item:not(:last-child)::before {
+       left: 28px; /* Adjust line position for desktop */
+       top: 90px;
+       bottom: -100px;
+    }
+
+    .science-steps__heading {
+      max-width: 550px;
+      font-size: 54px;
+ 
+      line-height: 1.2;
+      margin: 0 0 15px 0;
+    }
+    
+    /* Style for the italic part set in the richtext editor */
+    .science-steps__heading em,
+    .science-steps__heading i {
+      font-family: "cormorant-garamond", serif;
+      color:#F8B8A9;
+      font-size: 64px;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .science-steps__paragraph {
+      font-size: 20px;
+      line-height: 1.5;
+      font-weight: 400;
+      margin: 0 auto 30px auto;
+    }
+    
+    .science-steps__paragraph em{
+      font-family: serif;
+      font-size: 24px;
+      line-height: 1.0;
+      font-weight: 500;
+      font-style: italic;
+    }
+
+    .science-steps__step-number {
+      margin-bottom: 0 !important;
+    }
+
+    .science-steps__step-item {
+      gap: 25px;
+    }
+  }
+</style>
+<div class="container">
+<section class="science-steps-section">
+  <div class="science-steps__container">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'heading' and block.settings.heading != blank -%}
+        <div class="science-steps__heading" {{ block.shopify_attributes }}>
+          {{ block.settings.heading }}
+        </div>
+      {%- endif -%}
+      {%- if block.type == 'paragraph' and block.settings.paragraph != blank -%}
+        <div class="science-steps__paragraph" {{ block.shopify_attributes }}>
+          {{ block.settings.paragraph }}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <div class="science-steps__main-content">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'image' and block.settings.image != blank -%}
+          <div class="science-steps__image-wrapper" {{ block.shopify_attributes }}>
+            {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy' }}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- liquid
+        assign step_blocks = section.blocks | where: "type", "step_item"
+      -%}
+      {%- if step_blocks.size > 0 -%}
+        <div class="science-steps__steps-list">
+          {%- for block in step_blocks -%}
+            <div class="science-steps__step-item" {{ block.shopify_attributes }}>
+              <span class="science-steps__step-number">{{ forloop.index | prepend: '0' }}</span>
+              <div class="science-steps__step-text">
+                {%- if block.settings.title != blank -%}
+                  <div class="science-steps__step-title">{{ block.settings.title | replace_first: "**", "<span class='science-steps__special'>" | replace_first: "**", "</span>"  }}</div>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <p class="science-steps__step-description">{{ block.settings.description | escape}}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'button' and block.settings.button_text != blank -%}
+        <div class="science-steps__button-wrapper" {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.button_link | default: '#' }}" class="science-steps__button">
+            {{ block.settings.button_text | escape }}
+          </a>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+</div>
+{% schema %}
+{
+  "name": "C Action Steps",
+  "tag": "section",
+  "class": "science-steps",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#C75B42"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background",
+      "default": "#191E3D"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<p>See the Science in Action <em>In Just 3 Steps</em></p>"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "paragraph",
+          "label": "Paragraph",
+          "default": "<p>Our test strips let you measure your Nitric Oxide levels: before and after. It's proof you can see for yourself.</p>"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "step_item",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step Title",
+          "default": "Test Your Levels"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Step Description",
+          "default": "Start with a simple saliva strip to measure your nitric oxide."
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "SHOP NO FOUNDATION"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Action Steps",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "paragraph"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "step_item",
+          "settings": {
+            "title": "Test Your Levels",
+            "description": "Start with a simple saliva strip to measure your nitric oxide."
+          }
+        },
+        {
+          "type": "step_item",
+          "settings": {
+            "title": "Take Two Capsules",
+            "description": "Daily support designed to restore nitric oxide naturally."
+          }
+        },
+        {
+          "type": "step_item",
+          "settings": {
+            "title": "Track Your Progress",
+            "description": "Retest and see your nitric oxide levels improve. Clear proof that it's working."
+          }
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

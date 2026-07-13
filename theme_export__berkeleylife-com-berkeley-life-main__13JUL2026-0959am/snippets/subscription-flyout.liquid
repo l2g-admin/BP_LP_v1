@@ -1,0 +1,150 @@
+<div id="subscription-flyout" class="fixed top-0 right-0 z-50 w-full h-screen max-w-md transition-transform md:border-l-2 duration-30 bg-cream hidden-flyout subscription-flyout border-navy">
+  <div class="relative p-6 subscription-flyout-content">
+    <!-- Close Button -->
+    <button class="absolute text-2xl subscription-flyout-close top-2 right-2">&times;</button>
+    
+    <div id="flyout-product-info"></div>
+    <!-- Product Form (with variant/selling plan pickers) -->
+    <product-form id="flyout-product-form" class="block">
+      <!-- Error Message Container -->
+      <div data-product-form-errors role="alert" hidden>
+        <span data-product-form-error-msg></span>
+      </div>
+      <form action="{{ routes.cart_add_url }}" method="post" id="product-form-flyout" class="form" novalidate data-type="add-to-cart-form">
+        <!-- Hidden Variant Input; its value will be updated by JS when a product is selected -->
+        <input type="hidden" name="id" id="SelectedVariantIdFlyout" value="">
+        <input type="hidden" name="selling_plan" id="SelectedSellingPlanId" value="">
+
+        <!-- Variant / Subscription Options Container -->
+        <variant-radios id="flyout-variant-radios" data-section="flyout" data-url="">
+          <fieldset class="mt-4 space-y-1 text-sm">
+            <legend class="block text-2xl"><span>Choose One:</span></legend>
+            <div id="variant-pickers-container" class="flex flex-wrap gap-3">
+              <!-- Placeholder content; JS will replace this with actual options -->
+              <p class="text-sm text-gray-500">Loading subscription options…</p>
+            </div>
+          </fieldset>
+        </variant-radios>
+        
+        <!-- Quantity Selector & Add to Cart Button -->
+        <div class="mt-4 product-form__buttons">
+          <div class="flex gap-2 mb-2">
+
+            <!-- Quantity Incrementor -->
+            <div class="product-form__quantity">
+              <label class="sr-only" for="Quantity-flyout">
+                Quantity
+              </label>
+              <quantity-input class="relative flex w-24 h-full">
+                <button class="flex w-8 text-xs border-none no-js-hidden shrink-0" name="minus" type="button">
+                  <span class="sr-only">Decrease quantity</span>
+                  <span class="w-3 m-auto opacity-50 pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" class="icon icon-minus" fill="none" viewBox="0 0 10 2">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M.5 1C.5.7.7.5 1 .5h8a.5.5 0 110 1H1A.5.5 0 01.5 1z" fill="currentColor"></path>
+                    </svg>
+                  </span>
+                </button>
+                <input class="w-full h-full p-1 text-base text-center bg-transparent border-none appearance-none grow" data-quantity="" type="number" name="quantity" id="Quantity-flyout" min="1" value="1" form="product-form-flyout">
+                <button class="flex w-8 text-sm border-none no-js-hidden shrink-0" name="plus" type="button">
+                  <span class="sr-only">Increase quantity</span>
+                  <span class="w-3 m-auto opacity-50 pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" fill="" viewBox="0 0 10 10">
+                      <path class="group-open:hidden open-hide" d="M4.71875 0.807861V9.70607" stroke="currentColor" stroke-width="0.808928" stroke-miterlimit="10"></path>
+                      <path d="M0.269531 5.25684H9.16774" stroke="currentColor" stroke-width="0.808928" stroke-miterlimit="10"></path>
+                    </svg>
+                  </span>
+                </button>
+              </quantity-input>
+            </div>
+
+            <!-- Add to Cart Button -->
+            <button type="submit" name="add" class="flyout-add-to-cart button button--full-width button--primary" style="pointer-events: all; opacity: 1;" id="flyout-add-to-cart">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- JSON for Product Variants -->
+      <script type="application/json" id="ProductVariantsData-flyout">
+        {}
+      </script>
+    </product-form>
+  </div>
+</div>
+
+<!-- Styles -->
+<style>
+  /* Flyout container styling */
+  .subscription-flyout {
+    transform: translateX(100%);
+    overflow: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .subscription-flyout::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+  }
+
+  .subscription-flyout.show {
+    transform: translateX(0);
+  }
+
+  .subscription-flyout {
+    transition: transform .3s ease-in-out;
+  }
+  
+  .option-container {
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .option-container.selected {
+    border-color: #1B1C29;
+    background-color: white;
+  }
+
+  /* Subscription List Icons */
+  .subscription-list li:nth-child(1)::before {
+    content: url('{{ "star.svg" | asset_url }}');
+    margin-right: .5rem;
+  }
+  .subscription-list li:nth-child(2)::before {
+    content: url('{{ "reocurring.svg" | asset_url }}');
+    margin-right: .5rem;
+  }
+  .subscription-list li:nth-child(3)::before {
+    content: url('{{ "x.svg" | asset_url }}');
+    margin-right: .5rem;
+  }
+
+  /* Custom Radio Buttons */
+  .variant-radios [type='checkbox']:checked, [type='radio']:checked {
+    border-color: transparent;
+    background-color: #D9D9D9;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  [type='checkbox'], [type='radio'] {
+    appearance: none;
+    padding: 0;
+    color-adjust: exact;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+    height: 18px;
+    width: 18px;
+    color: #F3F3F3 !important;
+    background-color: #F3F3F3 !important;
+    border: none !important;
+  }
+
+  [type=radio]:focus {
+    --tw-ring-color: none !important;
+  }
+
+  [type='radio']:checked {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='black' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='6'/%3e%3c/svg%3e") !important;
+  }
+</style>

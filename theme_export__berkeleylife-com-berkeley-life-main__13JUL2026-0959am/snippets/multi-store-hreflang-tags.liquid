@@ -1,0 +1,6 @@
+{% assign lines = content_for_header | newline_to_br | split: '<br />' %}
+    {% for line in lines %}
+    {% if line contains '<link rel="alternate" hreflang' %}
+    {% assign content_for_header = content_for_header | remove: line %}
+    {% endif %}
+    {% endfor %}

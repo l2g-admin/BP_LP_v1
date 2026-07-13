@@ -1,0 +1,321 @@
+{%- comment -%}
+  Section: FAQ Categories
+  Description: Interactive FAQ section with sidebar categories and subcategories.
+  sl-id: sl-section-faq-categories-v1
+  Figma: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=4138-17753&m=dev
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-faq-categories-v1'
+-%}
+
+{{ 'c-faq-categories.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'c-faq-categories.js' | asset_url }}" defer="defer"></script>
+
+{% style %}
+  #{{ section.id }} {
+    --sl-faq-bg: {{ section.settings.bg_color }};
+    --sl-faq-text: {{ section.settings.text_color }};
+    --sl-faq-accent: {{ section.settings.accent_color }};
+    --sl-faq-border: {{ section.settings.border_color }};
+    background-color: var(--sl-faq-bg);
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 768px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{% endstyle %}
+
+<section
+  id="{{ section.id }}"
+  class="c-faq-categories"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+>
+  <div class="c-faq-categories__container page-width">
+    {%- if section.settings.title != blank -%}
+      <div class="c-faq-categories__header">
+        <h2 class="c-faq-categories__title">{{ section.settings.title }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="c-faq-categories__content">
+      <!-- CATEGORY NAV -->
+      <div class="c-faq-categories__sidebar">
+        <ul class="c-faq-categories__nav" role="tablist">
+          {%- assign cat_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'category' -%}
+              {%- assign cat_index = cat_index | plus: 1 -%}
+
+              {%- assign cat_has_subcats = false -%}
+              {%- for peek_block in section.blocks offset: forloop.index -%}
+                {%- if peek_block.type == 'category' -%}{%- break -%}{%- endif -%}
+                {%- if peek_block.type == 'subcategory' -%}
+                  {%- assign cat_has_subcats = true -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              <li class="c-faq-categories__nav-item" role="presentation">
+                <button
+                  class="c-faq-categories__nav-btn {% if cat_has_subcats %}has-subcats{% endif %} {% if cat_index == 1 %}is-active{% endif %}"
+                  data-cat-target="cat-{{ section.id }}-{{ cat_index }}"
+                  role="tab"
+                  aria-selected="{% if cat_index == 1 %}true{% else %}false{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  <span class="c-faq-categories__nav-text">{{ block.settings.title }}</span>
+                </button>
+
+                {%- if cat_has_subcats -%}
+                  <ul class="c-faq-categories__subnav {% if cat_index == 1 %}is-visible{% endif %}" data-cat-subnav="cat-{{ section.id }}-{{ cat_index }}">
+                    {%- assign temp_subcat_idx = 0 -%}
+                    {%- for peek_block in section.blocks offset: forloop.index -%}
+                      {%- if peek_block.type == 'category' -%}{%- break -%}{%- endif -%}
+                      {%- if peek_block.type == 'subcategory' -%}
+                        {%- assign temp_subcat_idx = temp_subcat_idx | plus: 1 -%}
+                        <li class="c-faq-categories__subnav-item" role="presentation">
+                          <button
+                            class="c-faq-categories__subnav-btn"
+                            data-subcat-target="subcat-{{ section.id }}-{{ cat_index }}-{{ temp_subcat_idx }}"
+                            role="tab"
+                            aria-selected="false"
+                          >
+                            {{ peek_block.settings.title }}
+                          </button>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <!-- MAIN PANELS -->
+      <div class="c-faq-categories__main">
+        {%- assign current_cat = 0 -%}
+        {%- assign current_subcat = 0 -%}
+        {%- assign in_category = false -%}
+
+        {%- for block in section.blocks -%}
+          
+          {%- if block.type == 'category' -%}
+            {%- if in_category -%}
+                </div> <!-- close last subpanel -->
+                </div> <!-- close subpanels group -->
+              </div> <!-- close prev category panel -->
+            {%- endif -%}
+            
+            {%- assign current_cat = current_cat | plus: 1 -%}
+            {%- assign current_subcat = 0 -%}
+            {%- assign in_category = true -%}
+            
+            <div 
+              class="c-faq-categories__panel {% if current_cat == 1 %}is-active{% endif %}" 
+              id="cat-{{ section.id }}-{{ current_cat }}"
+              role="tabpanel"
+            >
+              {%- assign has_subcats = false -%}
+              <!-- Check for subcategories -->
+              {%- for peek_block in section.blocks offset: forloop.index -%}
+                {%- if peek_block.type == 'category' -%}{%- break -%}{%- endif -%}
+                {%- if peek_block.type == 'subcategory' -%}
+                  {%- assign has_subcats = true -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+
+
+              {%- assign cat_panel_title = block.settings.panel_title | default: block.settings.title -%}
+              <h3 class="c-faq-categories__panel-title" data-panel-title="cat-{{ section.id }}-{{ current_cat }}">{{ cat_panel_title }}</h3>
+
+              <div class="c-faq-categories__subpanels">
+                <!-- default subpanel for category-level questions -->
+                <div class="c-faq-categories__subpanel is-active" id="subcat-{{ section.id }}-{{ current_cat }}-0" data-panel-title-text="{{ cat_panel_title | escape }}" role="tabpanel">
+
+          {%- elsif block.type == 'subcategory' -%}
+              </div> <!-- close prev subpanel (default or previous subcategory) -->
+            {%- assign current_subcat = current_subcat | plus: 1 -%}
+            {%- assign subcat_panel_title = block.settings.panel_title | default: block.settings.title -%}
+            
+            <div 
+              class="c-faq-categories__subpanel" 
+              id="subcat-{{ section.id }}-{{ current_cat }}-{{ current_subcat }}"
+              data-panel-title-text="{{ subcat_panel_title | escape }}"
+              role="tabpanel"
+            >
+
+          {%- elsif block.type == 'question' -%}
+            <div class="c-faq-categories__item" {{ block.shopify_attributes }}>
+              <button class="c-faq-categories__question" aria-expanded="false">
+                <span class="c-faq-categories__question-text">{{ block.settings.title }}</span>
+                <span class="c-faq-categories__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+                    <path d="M20.8652 9.92774L13.0527 17.7402C12.9801 17.8129 12.894 17.8705 12.7991 17.9098C12.7043 17.9491 12.6026 17.9694 12.4999 17.9694C12.3973 17.9694 12.2956 17.9491 12.2008 17.9098C12.1059 17.8705 12.0198 17.8129 11.9472 17.7402L4.13471 9.92774C3.98812 9.78115 3.90576 9.58232 3.90576 9.37501C3.90576 9.16769 3.98812 8.96887 4.13471 8.82227C4.28131 8.67568 4.48013 8.59332 4.68745 8.59332C4.89476 8.59332 5.09359 8.67568 5.24018 8.82227L12.4999 16.083L19.7597 8.82227C19.8323 8.74969 19.9185 8.69211 20.0133 8.65282C20.1081 8.61354 20.2098 8.59332 20.3124 8.59332C20.4151 8.59332 20.5167 8.61354 20.6116 8.65282C20.7064 8.69211 20.7926 8.74969 20.8652 8.82227C20.9378 8.89486 20.9953 8.98103 21.0346 9.07587C21.0739 9.17071 21.0941 9.27235 21.0941 9.37501C21.0941 9.47766 21.0739 9.57931 21.0346 9.67414C20.9953 9.76898 20.9378 9.85516 20.8652 9.92774Z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="c-faq-categories__answer" aria-hidden="true" style="display: none;">
+                <div class="c-faq-categories__answer-inner">
+                  {{ block.settings.answer }}
+                </div>
+              </div>
+            </div>
+            
+          {%- endif -%}
+
+          {%- if forloop.last and in_category -%}
+              </div> <!-- close last subpanel -->
+              </div> <!-- close subpanels group -->
+            </div> <!-- close last category panel -->
+          {%- endif -%}
+          
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ Categories",
+  "tag": "section",
+  "class": "section-faq-categories",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "FAQ"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#F6F3F0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1B1C29"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#1B1C29"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category Name",
+          "default": "New Category"
+        },
+        {
+          "type": "text",
+          "id": "panel_title",
+          "label": "Panel Title Override",
+          "info": "Title shown above the questions. Defaults to the category name."
+        }
+      ]
+    },
+    {
+      "type": "subcategory",
+      "name": "Subcategory",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Subcategory Name",
+          "default": "New Subcategory"
+        },
+        {
+          "type": "text",
+          "id": "panel_title",
+          "label": "Panel Title Override",
+          "info": "Title shown above the questions. Defaults to the subcategory name."
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Question",
+          "default": "What is the answer to this question?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Categories",
+      "blocks": [
+        { "type": "category", "settings": { "title": "General Information" } },
+        { "type": "question" },
+        { "type": "question" },
+        { "type": "category", "settings": { "title": "Products & Dosage" } },
+        { "type": "subcategory", "settings": { "title": "Nitric Oxide Support" } },
+        { "type": "question" },
+        { "type": "subcategory", "settings": { "title": "Foundation Bundle" } },
+        { "type": "question" }
+      ]
+    }
+  ]
+}
+{% endschema %}

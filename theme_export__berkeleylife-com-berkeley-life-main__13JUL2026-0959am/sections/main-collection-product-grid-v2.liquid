@@ -1,0 +1,1181 @@
+<script src="{{ 'collection-layout.js' | asset_url }}" type="module"></script>
+
+{%- comment -%} Check if BF Badges block is present {%- endcomment -%}
+{%- assign show_bf_badges = false -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'bf_badges' -%}
+    {%- assign show_bf_badges = true -%}
+    {%- assign bf_badge_1_text = block.settings.badge_1_text -%}
+    {%- assign bf_badge_1_bg = block.settings.badge_1_bg_color -%}
+    {%- assign bf_badge_2_text = block.settings.badge_2_text -%}
+    {%- assign bf_badge_2_bg = block.settings.badge_2_bg_color -%}
+    {%- assign bf_special_badge_1_text = block.settings.special_badge_1_text -%}
+    {%- assign bf_special_badge_1_bg = block.settings.special_badge_1_bg_color -%}
+    {%- assign bf_special_badge_2_text = block.settings.special_badge_2_text -%}
+    {%- assign bf_special_badge_2_bg = block.settings.special_badge_2_bg_color -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} Check if Mothers Day Badge block is present {%- endcomment -%}
+{%- assign show_mothers_day_badge = false -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'mothers_day_badge' -%}
+    {%- assign show_mothers_day_badge = true -%}
+    {%- assign mothers_day_badge_bg = block.settings.badge_bg_color -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} Check if Prime Badge block is present {%- endcomment -%}
+{%- assign show_prime_badge = false -%}
+{%- assign prime_badge_image = blank -%}
+{%- assign prime_badge_alt = 'Prime badge' -%}
+{%- assign prime_badge_position = 'bottom-right' -%}
+{%- assign prime_badge_width = 64 -%}
+{%- assign prime_badge_offset = 8 -%}
+{%- assign prime_badge_force_all = false -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'prime_badge' -%}
+    {%- assign show_prime_badge = true -%}
+    {%- assign prime_badge_image = block.settings.image -%}
+    {%- assign prime_badge_alt = block.settings.alt | default: 'Prime badge' -%}
+    {%- assign prime_badge_position = block.settings.position | default: 'bottom-right' -%}
+    {%- assign prime_badge_width = block.settings.width | default: 64 -%}
+    {%- assign prime_badge_offset = block.settings.offset | default: 8 -%}
+    {%- assign prime_badge_force_all = block.settings.apply_to_all -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if section.settings.show_breadcrumbs -%}
+  {% render 'breadcrumbs' %}
+{%- endif -%}
+<style>
+  .max-w-screen-1280{
+    max-width: 1280px;
+  }
+</style>
+
+{%- liquid
+  assign collection_selector_count = 0
+  assign first_collection_handle = ''
+  assign active_concern_title = collection.title
+  for block in section.blocks
+    if block.type == 'collection_selector_item'
+      assign block_is_all = block.settings.is_all_products
+      if block_is_all or block.settings.collection != blank
+        assign collection_selector_count = collection_selector_count | plus: 1
+        if collection_selector_count == 1
+          if block_is_all
+            assign first_collection_handle = collection.handle
+            assign active_concern_title = block.settings.label | default: collection.title
+          else
+            assign first_collection_handle = block.settings.collection.handle
+            assign active_concern_title = block.settings.label | default: block.settings.collection.title
+          endif
+        endif
+      endif
+    endif
+  endfor
+-%}
+
+{%- if section.settings.show_collection_selector and collection_selector_count > 0 -%}
+  <div class="bg-cream">
+    <div class="max-w-screen-1280 mx-auto px-4 pb-0 md:px-8 md:pb-0">
+      <p class="bkl-concern-heading mb-4">
+        {{ section.settings.collection_selector_heading }}
+      </p>
+
+      <div class="hidden md:block">
+        <div class="overflow-x-auto overscroll-x-contain">
+          <ul class="bkl-concern-list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'collection_selector_item' -%}
+              {%- assign block_is_all = block.settings.is_all_products -%}
+              {%- if block_is_all or block.settings.collection != blank -%}
+                {%- if block_is_all -%}
+                  {%- assign effective_handle = collection.handle -%}
+                  {%- assign target_title = block.settings.label | default: collection.title -%}
+                {%- else -%}
+                  {%- assign effective_handle = block.settings.collection.handle -%}
+                  {%- assign target_title = block.settings.label | default: block.settings.collection.title -%}
+                {%- endif -%}
+                {%- assign is_active = false -%}
+                {%- if effective_handle == first_collection_handle -%}
+                  {%- assign is_active = true -%}
+                {%- endif -%}
+                <li class="bkl-concern-item" {{ block.shopify_attributes }}>
+                  <button
+                    type="button"
+                    data-collection-tab
+                    data-collection-handle="{{ effective_handle }}"
+                    class="bkl-concern-link {% if is_active %}is-active{% endif %}"
+                    aria-current="{% if is_active %}page{% else %}false{% endif %}"
+                    {%- if block.settings.hover_image != blank and is_active == false %}
+                      style="--hover-bg: url('{{ block.settings.hover_image | image_url: width: 400 }}')"
+                    {%- endif %}
+                  >
+                    <span>{{ target_title }}</span>
+                  </button>
+                </li>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          </ul>
+        </div>
+      </div>
+
+      <div class="md:hidden">
+        <details class="bkl-concern-mobile" data-concern-mobile>
+          <summary class="bkl-concern-mobile__toggle">
+            <span class="bkl-concern-mobile__toggle-label">{{ active_concern_title }}</span>
+            <span aria-hidden="true" class="bkl-concern-mobile__toggle-caret">
+              {% render 'icon-caret' %}
+            </span>
+          </summary>
+
+          <div class="bkl-concern-mobile__menu" role="list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'collection_selector_item' -%}
+                {%- assign block_is_all = block.settings.is_all_products -%}
+                {%- if block_is_all or block.settings.collection != blank -%}
+                  {%- if block_is_all -%}
+                    {%- assign effective_handle = collection.handle -%}
+                    {%- assign target_title = block.settings.label | default: collection.title -%}
+                  {%- else -%}
+                    {%- assign effective_handle = block.settings.collection.handle -%}
+                    {%- assign target_title = block.settings.label | default: block.settings.collection.title -%}
+                  {%- endif -%}
+                  {%- assign target_mobile_image = block.settings.mobile_image | default: block.settings.hover_image -%}
+                  <button
+                    type="button"
+                    data-collection-tab-mobile
+                    data-collection-handle="{{ effective_handle }}"
+                    data-collection-label="{{ target_title | escape }}"
+                    class="bkl-concern-mobile__item{% if effective_handle == first_collection_handle %} is-active-mobile{% endif %}"
+                    {% if target_mobile_image != blank %}style="--mobile-bg: url('{{ target_mobile_image | image_url: width: 800 }}')"{% endif %}
+                  >
+                    <span>{{ target_title }}</span>
+                  </button>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  {% if collection.metafields.custom.faq_schema.value != blank %}
+  <script type="application/ld+json">
+    {{ collection.metafields.custom.faq_schema.value }}
+  </script>
+{% endif %}
+
+  <style>
+    #shopify-section-{{ section.id }} .bkl-concern-heading {
+      color: #d54f2f;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-list {
+      display: flex;
+      align-items: stretch;
+      gap: 12px;
+      padding-bottom: 2px;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-item {
+      flex: 1 1 calc((100% - 12px * 6) / 7);
+      min-width: 0;
+      list-style: none;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-link {
+      align-items: center;
+      background: #fff;
+      /* border: 2px solid transparent; */
+      border-radius: 16px;
+      color: #1b1c29;
+      display: flex;
+      font-size: 18px;
+      font-weight: 500;
+      min-height: 62px;
+      height: 100%;
+      width: 100%;
+      justify-content: center;
+      line-height: 1.2;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      transition: border-color 450ms ease, color 450ms ease, background-color 450ms ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-link span {
+      word-break: break-word;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Hover background image via pseudo-element for smooth fade */
+    #shopify-section-{{ section.id }} .bkl-concern-link:not(.is-active)::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: var(--hover-bg, none);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity 450ms ease;
+      z-index: 0;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-link:not(.is-active):hover::before,
+    #shopify-section-{{ section.id }} .bkl-concern-link:not(.is-active):focus-visible::before {
+      opacity: 1;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-link.is-active {
+      background: #ffffff;
+      border-color: #d54f2f;
+      border: solid 2px;
+      color: #d54f2f;
+      outline: none;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-link.is-active:hover,
+    #shopify-section-{{ section.id }} .bkl-concern-link.is-active:focus-visible {
+      background: #d54f2f;
+      color: #fff;
+      border: none;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-link:not(.is-active):hover,
+    #shopify-section-{{ section.id }} .bkl-concern-link:not(.is-active):focus-visible {
+      color: #fff;
+      border: none;
+      outline: none;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-item:first-child .bkl-concern-link:not(.is-active):hover,
+    #shopify-section-{{ section.id }} .bkl-concern-item:first-child .bkl-concern-link:not(.is-active):focus-visible {
+      background: #d54f2f;
+      color: #fff;
+      border: none;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-item:first-child .bkl-concern-link:not(.is-active):hover::before,
+    #shopify-section-{{ section.id }} .bkl-concern-item:first-child .bkl-concern-link:not(.is-active):focus-visible::before {
+      opacity: 0;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile {
+      display: block;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile[open] {
+      padding-bottom: 8px;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__toggle {
+      align-items: center;
+      background: #fff;
+      border: 2px solid #d54f2f;
+      border-radius: 16px;
+      color: #d54f2f;
+      cursor: pointer;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      list-style: none;
+      min-height: 80px;
+      padding: 16px 24px;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__toggle::-webkit-details-marker {
+      display: none;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__toggle-label {
+      color: #d54f2f;
+      flex: 1 1 auto;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__toggle-caret {
+      color: #d54f2f;
+      display: inline-flex;
+      justify-content: center;
+      transition: transform 300ms ease;
+      width: 16px;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile[open] .bkl-concern-mobile__toggle-caret {
+      transform: rotate(180deg);
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__menu {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 8px;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__item {
+      align-items: center;
+      background-color: #1b1c29;
+      background-image: var(--mobile-bg, none);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      border-radius: 8px;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      min-height: 100px;
+      overflow: hidden;
+      padding: 8px 16px;
+      position: relative;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__item::before {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+      content: '';
+      inset: 0;
+      position: absolute;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__item span {
+      color: #fff;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.2;
+      position: relative;
+      z-index: 1;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__menu > .bkl-concern-mobile__item:first-child {
+      background-color: #fff;
+      background-image: none;
+      border: 2px solid #d54f2f;
+      color: #d54f2f;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__menu > .bkl-concern-mobile__item:first-child::before {
+      display: none;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__menu > .bkl-concern-mobile__item:first-child span {
+      color: #d54f2f;
+    }
+
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__item:focus-visible,
+    #shopify-section-{{ section.id }} .bkl-concern-mobile__toggle:focus-visible {
+      outline: 2px solid #d54f2f;
+      outline-offset: 2px;
+    }
+
+    #CollectionWrapper{
+      padding-top: 0 !important;
+    }
+
+    @media (min-width: 768px) and (max-width: 1024px) {
+      #shopify-section-{{ section.id }} .bkl-concern-list {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      #shopify-section-{{ section.id }} .bkl-concern-list::-webkit-scrollbar {
+        display: none;
+      }
+      #shopify-section-{{ section.id }} .bkl-concern-item {
+        flex: 0 0 auto;
+      }
+
+    }
+@media (min-width: 768px) and (max-width: 1023px) {
+    #main-collection-product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+    }
+  </style>
+
+  <script>
+    (() => {
+      const concernMobile = document.querySelector('#shopify-section-{{ section.id }} [data-concern-mobile]');
+      if (concernMobile && concernMobile.dataset.bound !== 'true') {
+        concernMobile.dataset.bound = 'true';
+        document.addEventListener('click', (event) => {
+          if (!concernMobile.open) return;
+          if (!concernMobile.contains(event.target)) concernMobile.removeAttribute('open');
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && concernMobile.open) concernMobile.removeAttribute('open');
+        });
+      }
+    })();
+  </script>
+{%- endif -%}
+
+
+
+<div id="CollectionWrapper" class="bg-cream grid grid-cols-1 items-start {% if section.settings.enable_filtering %} md:grid-cols-[minmax(auto,240px),minmax(0px,1fr) {% else %} md:grid-cols-1 {% endif %} grid-flow-row-dense py-8 md:py-12">
+<div class="mx-auto bg-cream max-w-screen-2xl">
+  <div class="z-10 md:sticky md:top-4">
+    {%- if section.settings.menu -%}
+      <div class="w-full overflow-x-auto overscroll-contain md:overflow-visible">
+        <nav id="QuickMenu" aria-label="Quick Menu">
+          <ul class="flex gap-2 px-4 w-max md:px-8 md:flex-col">
+            {%- for link in section.settings.menu.links -%}
+            <li>
+              <a href="{{ link.url }}" class="p-2 first:pl-0 {% if link.current %}underline{% endif %}">
+                {{ link.title }}
+              </a>
+            </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      </div>
+    {%- endif -%}
+    <div id="main-collection-filters" data-id="{{ section.id }}">
+      {% render 'facet-filters-v2',
+        results: collection,
+        enable_filtering: section.settings.enable_filtering,
+        enable_sorting: section.settings.enable_sorting
+      %}
+    </div>
+  </div>
+
+  <div id="CollectionProductGrid" class="relative w-full overflow-visible bg-cream" data-active-collection="{{ first_collection_handle | default: collection.handle }}" data-page-collection="{{ collection.handle }}">
+    {%- if section.settings.show_layout_options == true and section.settings.show_variants == false -%}
+      {%- render 'layout-options' -%}
+    {%- endif -%}
+
+    
+    <style>
+      .htmx-indicator {
+        opacity:0;
+        visibility: hidden;
+        transition: opacity 500ms ease-in;
+      }
+      .htmx-request .htmx-indicator{
+          visibility: visible;
+          opacity:1
+      }
+      .htmx-request.htmx-indicator{
+          visibility: visible;
+          opacity:1
+      }
+      .oke-sr-count{
+        text-decoration-line: none;
+      }
+      #CollectionProductGrid.is-loading::before {
+        content: '';
+        position: absolute;
+        inset: -2rem;
+        background: rgba(246, 243, 240, 0.75);
+        z-index: 20;
+        pointer-events: none;
+      }
+      #CollectionProductGrid.is-loading::after {
+        content: '';
+        position: absolute;
+        top: 160px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 48px;
+        height: 48px;
+        border: 4px solid rgba(0,0,0,0.1);
+        border-top-color: #d54f2f;
+        border-radius: 50%;
+        animation: collectionSpin 0.8s linear infinite;
+        z-index: 21;
+        pointer-events: none;
+      }
+      @keyframes collectionSpin {
+        to { transform: translateX(-50%) rotate(360deg); }
+      }
+      .bkl-concern-mobile__item.is-active-mobile { display: none; }
+    </style>
+    <span aria-hidden="true" class="absolute left-0 z-10 flex items-start justify-center w-full h-full pointer-events-none htmx-indicator top-40">
+      <svg aria-hidden="true" focusable="false" role="presentation" class="w-24 h-24 spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </span>
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      {%- if collection.products.size == 0 -%}
+        <div class="mx-auto space-y-4 text-center max-w-screen-2xl" id="main-collection-product-grid" data-id="{{ section.id }}">
+          <p class="opacity-75" role="status">
+            {%- if collection.products_count == collection.all_products_count -%}
+              {{ 'sections.collection_template.product_count_simple' | t: count: collection.products_count }}
+            {%- else -%}
+              {{ 'sections.collection_template.product_count' | t: product_count: collection.products_count, count: collection.all_products_count }}
+            {%- endif -%}
+          </p>
+          <div>
+            <h2>
+              {{ 'sections.collection_template.empty' | t }}<br>
+              {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}
+            </h2>
+          </div>
+        </div>
+      {%- else -%}
+      <div class="max-w-screen-xl mx-auto collection md:px-8 md:pr-0 md:pl-4">
+
+          {%- if section.settings.show_variants -%}
+            <ul id="main-collection-product-grid" data-id="{{ section.id }}" class="grid grid-cols-1 gap-8 md:gap-y-12">
+              {%- for product in collection.products -%}
+                {%- assign product_loop_first = forloop.first -%}
+                <li class="pt-6 pb-4 border-b border-gray-300 border-solid md:pt-8 md:pb-6 first-of-type:pt-0">
+                  <div class="mb-6 ml-4 md:mb-8">
+                    <a href="{{ product.url }}" class="flex flex-col md:flex-row md:items-center gap-y-2 gap-x-4">
+                      <h2 class="leading-4 h4">{{ product.title }}</h2>
+                      {%- assign product_options = product.options | join: '' -%}
+                      {%- unless product_options == "Title" -%}
+                        <span class="inline-flex items-center uppercase text-xs tracking-[0.1em] leading-4">
+                          <span class="mr-1">See all options by: </span>
+                          {%- for option in product.options_with_values -%}
+                            {%- unless forloop.first -%}
+                            ,&nbsp;<span> </span>
+                            {%- endunless -%}
+                            <span>{{ option.name }}</span>
+                            <span class="text-gray-600">({{ option.values.size }})</span>
+                          {%- endfor -%}
+                          <span class="w-3 h-3 -rotate-90">{% render 'icon-caret' %}</span>
+                        </span>
+                      {%- endunless -%}
+                    </a>
+                    {%- if product.metafields.descriptors.subtitle -%}
+                      <p class="mt-2">{{ product.metafields.descriptors.subtitle }}</p>
+                    {%- endif -%}
+                  </div>
+                  <div data-scroll-container="{{ section.id }}-{{ forloop.index }}" class="relative">
+                    <ul class="flex gap-8 pb-4 overflow-x-auto snap overscroll-x-contain">
+                      {%- liquid
+                        for variant in product.variants
+                          if variant.matched
+                            assign variant_loop_first = forloop.first
+                            assign first = false
+                            if product_loop_first and variant_loop_first
+                              assign first = true
+                            endif
+                            echo '<li class="w-[calc(100%-8rem)] md:w-80 snap-center shrink-0 first-of-type:ml-4 first-of-type:scroll-ml-4">'
+                            render 'variant-card', product_card_product: product, variant_card_variant: variant, image_ratio: section.settings.image_ratio, show_secondary_image: section.settings.show_secondary_image, eager: first, show_bf_badges: show_bf_badges, bf_badge_1_text: bf_badge_1_text, bf_badge_1_bg: bf_badge_1_bg, bf_badge_2_text: bf_badge_2_text, bf_badge_2_bg: bf_badge_2_bg, bf_special_badge_1_text: bf_special_badge_1_text, bf_special_badge_1_bg: bf_special_badge_1_bg, bf_special_badge_2_text: bf_special_badge_2_text, bf_special_badge_2_bg: bf_special_badge_2_bg, show_mothers_day_badge: show_mothers_day_badge, mothers_day_badge_bg: mothers_day_badge_bg, show_prime_badge: show_prime_badge, prime_badge_image: prime_badge_image, prime_badge_alt: prime_badge_alt, prime_badge_position: prime_badge_position, prime_badge_width: prime_badge_width, prime_badge_offset: prime_badge_offset, prime_badge_force_all: prime_badge_force_all
+                            echo '</li>'
+                          endif
+                        endfor
+                      -%}
+                      <div spacer aria-hidden="true" class="{% if product.variants.size > 1 %} w-px shrink-0{% else %}hidden{% endif %}">
+                      </div>
+                    </ul>
+                    {%- if product.variants.size > 1 -%}
+                      <div data-shadow-l aria-hidden="true" class="absolute top-0 left-0 w-24 h-full transition-opacity duration-500 opacity-0 pointer-events-none empty:block from-white bg-gradient-to-r md:w-64">
+                      </div>
+                      <button data-button-l type="button" class="absolute -translate-y-1/2 top-1/2 left-2 md:left-8 disabled:opacity-0 disabled:cursor-not-allowed" disabled>
+                        <span class="sr-only">Scroll Left</span>
+                        <span aria-hidden="true" class="block w-8 rotate-180">{% render 'icon-arrow' %}</span>
+                      </button>
+                      <div data-shadow-r aria-hidden="true" class="absolute top-0 right-0 w-24 h-full transition-opacity duration-500 pointer-events-none empty:block from-white bg-gradient-to-l md:w-64"></div>
+                      <button data-button-r type="button" class="absolute -translate-y-1/2 top-1/2 right-2 md:right-4 disabled:opacity-0 disabled:cursor-not-allowed">
+                        <span class="sr-only">Scroll Right</span>
+                        <span aria-hidden="true" class="block w-8">{% render 'icon-arrow' %}</span>
+                      </button>
+                      <script type="module">
+                        import { scrollContainer } from "{{ 'scrollContainer.js' | asset_url }}"
+                        const container = document.querySelector('[data-scroll-container="{{ section.id }}-{{ forloop.index }}"]')
+                        scrollContainer(container)
+                      </script>
+                    {%- endif -%}
+                  </div>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- else -%}
+            <ul id="main-collection-product-grid" data-id="{{ section.id }}" class="grid grid-cols-1 gap-4 pl-4 pr-4 md:grid-cols-3 md:gap-8">
+              {%- for product in collection.products -%}
+              <li class="button-navy">
+                  {% render 'product-card-v2',
+                    product_card_product: product,
+                    image_ratio: section.settings.image_ratio,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_vendor: section.settings.show_vendor,
+                    show_color_swatches: section.settings.show_color_swatches,
+                    quick_shop: section.settings.quick_shop,
+                    img_size: "(min-width: 750px) 33vw, 40vw",
+                    eager: forloop.first,
+                    learn_more: true,
+                    add_cart_button: true,
+                    show_price: true,
+                    show_reviews: true,
+                    show_callouts: true,
+                    show_subscription_pricing: section.settings.show_subscription_pricing,
+                    add_to_cart_as_subscription: section.settings.add_to_cart_as_subscription,
+                    show_sale_badge: section.settings.show_sale_badge,
+                    show_bf_badges: show_bf_badges,
+                    bf_badge_1_text: bf_badge_1_text,
+                    bf_badge_1_bg: bf_badge_1_bg,
+                    bf_badge_2_text: bf_badge_2_text,
+                    bf_badge_2_bg: bf_badge_2_bg,
+                    bf_special_badge_1_text: bf_special_badge_1_text,
+                    bf_special_badge_1_bg: bf_special_badge_1_bg,
+                    bf_special_badge_2_text: bf_special_badge_2_text,
+                    bf_special_badge_2_bg: bf_special_badge_2_bg,
+                    show_mothers_day_badge: show_mothers_day_badge,
+                    mothers_day_badge_bg: mothers_day_badge_bg,
+                    show_prime_badge: show_prime_badge,
+                    prime_badge_image: prime_badge_image,
+                    prime_badge_alt: prime_badge_alt,
+                    prime_badge_position: prime_badge_position,
+                    prime_badge_width: prime_badge_width,
+                    prime_badge_offset: prime_badge_offset,
+                    prime_badge_force_all: prime_badge_force_all
+                  %}
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- if paginate.pages > 1 -%}
+            {% render 'pagination', paginate: paginate, anchor: '' %}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+
+</div>
+</div>
+
+{%- comment -%} Collection descriptions (one per tab, toggled by JS) {%- endcomment -%}
+<div id="CollectionDescriptions" class="bg-cream">
+  <div class="max-w-screen-xl mx-auto px-4 md:px-8 py-8 md:py-12">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'collection_selector_item' -%}
+        {%- assign block_is_all = block.settings.is_all_products -%}
+        {%- if block_is_all or block.settings.collection != blank -%}
+          {%- if block_is_all -%}
+            {%- assign desc_handle = collection.handle -%}
+          {%- else -%}
+            {%- assign desc_handle = block.settings.collection.handle -%}
+          {%- endif -%}
+          {%- if block.settings.clamped_text != blank -%}
+            <div
+              class="collection-description-item{% unless desc_handle == first_collection_handle %} hidden{% endunless %}"
+              data-collection-description="{{ desc_handle }}"
+            >
+              <div class="text-lg truncate-text-container">
+                <input type="checkbox" id="toggle-read-more-{{ block.id }}" class="read-more-toggle">
+                <div class="truncate-text">
+                  {{ block.settings.clamped_text }}
+                </div>
+                <label for="toggle-read-more-{{ block.id }}" class="read-more-label"></label>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+<style>
+  #CollectionDescriptions .truncate-text-container {
+    position: relative;
+    text-align: center;
+  }
+  #CollectionDescriptions .truncate-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.3s ease-in-out;
+  }
+  #CollectionDescriptions .read-more-toggle {
+    display: none;
+  }
+  #CollectionDescriptions .read-more-toggle:checked ~ .truncate-text {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+  }
+  #CollectionDescriptions .read-more-label {
+    display: inline-block;
+    margin-top: 10px;
+    color: #1b1c29;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 1rem;
+  }
+  #CollectionDescriptions .read-more-toggle:checked ~ .read-more-label::after {
+    content: ' Read Less';
+  }
+  #CollectionDescriptions .read-more-label::after {
+    content: ' Read More';
+  }
+  #CollectionDescriptions .collection-description-item.hidden {
+    display: none;
+  }
+</style>
+
+<script>
+(() => {
+  const sectionEl = document.querySelector('#shopify-section-{{ section.id }}');
+  const grid = document.querySelector('#CollectionProductGrid');
+  if (!grid || grid.dataset.controllerBound) return;
+  grid.dataset.controllerBound = 'true';
+
+  const sectionId = '{{ section.id }}';
+
+  async function refreshGrid(opts) {
+    const handle = opts.collection || grid.dataset.activeCollection;
+    const sortSelect = document.querySelector('#SortBy');
+    const sort = opts.sort !== undefined ? opts.sort : (sortSelect ? sortSelect.value : '');
+
+    let url = '/collections/' + encodeURIComponent(handle);
+    const params = new URLSearchParams();
+    if (sort) params.set('sort_by', sort);
+    params.set('section_id', sectionId);
+    url += '?' + params.toString();
+
+    grid.classList.add('is-loading');
+    grid.style.minHeight = grid.offsetHeight + 'px';
+
+    try {
+      const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+      if (!res.ok) throw new Error('Network response ' + res.status);
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const newGrid = doc.querySelector('#CollectionProductGrid');
+      if (newGrid) {
+        grid.dataset.activeCollection = handle;
+        grid.innerHTML = newGrid.innerHTML;
+      }
+    } catch (err) {
+      console.error('[CollectionGrid] refresh failed:', err);
+    } finally {
+      grid.classList.remove('is-loading');
+      grid.style.minHeight = '';
+    }
+  }
+
+  /* Desktop collection tabs */
+  sectionEl.querySelectorAll('[data-collection-tab]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const handle = btn.dataset.collectionHandle;
+      if (!handle) return;
+      sectionEl.querySelectorAll('[data-collection-tab]').forEach(b => {
+        b.classList.toggle('is-active', b.dataset.collectionHandle === handle);
+        b.setAttribute('aria-current', b.dataset.collectionHandle === handle ? 'page' : 'false');
+      });
+      const mobileToggleLabel = sectionEl.querySelector('.bkl-concern-mobile__toggle-label');
+      const clickedMobileBtn = sectionEl.querySelector('[data-collection-tab-mobile][data-collection-handle="' + handle + '"]');
+      if (mobileToggleLabel && clickedMobileBtn) {
+        mobileToggleLabel.textContent = clickedMobileBtn.dataset.collectionLabel;
+      }
+      sectionEl.querySelectorAll('[data-collection-tab-mobile]').forEach(b => {
+        b.classList.toggle('is-active-mobile', b.dataset.collectionHandle === handle);
+      });
+      switchDescription(handle);
+      refreshGrid({ collection: handle });
+    });
+  });
+
+  /* Switch collection description */
+  function switchDescription(handle) {
+    const descContainer = document.querySelector('#CollectionDescriptions');
+    if (!descContainer) return;
+    descContainer.querySelectorAll('[data-collection-description]').forEach(el => {
+      el.classList.toggle('hidden', el.dataset.collectionDescription !== handle);
+      /* Reset the read-more checkbox when switching */
+      const toggle = el.querySelector('.read-more-toggle');
+      if (toggle) toggle.checked = false;
+    });
+  }
+
+  /* Mobile collection tabs */
+  const concernMobile = sectionEl.querySelector('[data-concern-mobile]');
+  sectionEl.querySelectorAll('[data-collection-tab-mobile]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const handle = btn.dataset.collectionHandle;
+      if (!handle) return;
+      if (concernMobile) concernMobile.removeAttribute('open');
+      const mobileToggleLabel = sectionEl.querySelector('.bkl-concern-mobile__toggle-label');
+      if (mobileToggleLabel) mobileToggleLabel.textContent = btn.dataset.collectionLabel;
+      sectionEl.querySelectorAll('[data-collection-tab-mobile]').forEach(b => {
+        b.classList.toggle('is-active-mobile', b.dataset.collectionHandle === handle);
+      });
+      sectionEl.querySelectorAll('[data-collection-tab]').forEach(b => {
+        b.classList.toggle('is-active', b.dataset.collectionHandle === handle);
+        b.setAttribute('aria-current', b.dataset.collectionHandle === handle ? 'page' : 'false');
+      });
+      switchDescription(handle);
+      refreshGrid({ collection: handle });
+    });
+  });
+
+  /* Sort select – override to use AJAX without query params */
+  const sortSelect = document.querySelector('#SortBy');
+  if (sortSelect) {
+    const newSort = sortSelect.cloneNode(true);
+    sortSelect.parentNode.replaceChild(newSort, sortSelect);
+    newSort.addEventListener('change', () => {
+      refreshGrid({ sort: newSort.value });
+    });
+  }
+
+  /* Expose for filters integration */
+  grid._refreshGrid = refreshGrid;
+
+  /* Auto-load the first tab's collection if it differs from the page collection */
+  const initialActive = grid.dataset.activeCollection;
+  const pageCollection = grid.dataset.pageCollection;
+  if (initialActive && pageCollection && initialActive !== pageCollection) {
+    refreshGrid({ collection: initialActive });
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Product Grid V2",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "default": 18,
+      "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs?",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sale_badge",
+      "label": "Show Sale badge on products",
+      "default": true,
+      "info": "When enabled, products with a Compare-at price higher than their current price will display a red Sale badge on the collection grid."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_selector",
+      "label": "Show collection selector",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "collection_selector_heading",
+      "label": "Collection selector heading",
+      "default": "Shop By Concern"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__3.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "aspect-[4/3]",
+          "label": "Wide"
+        },
+        {
+          "value": "aspect-[3/4]",
+          "label": "Portrait"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        }
+      ],
+      "default": "aspect-[3/4]",
+      "label": "Image Ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "quick_shop",
+      "default": false,
+      "label": "Enable quick shop?"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variants",
+      "default": false,
+      "label": "Show variants instead?"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_swatches",
+      "default": false,
+      "label": "Show color swatches",
+      "info": "Prefers a swatch image or color uploaded to the variant's metafields. Defaults to the variant's image.'"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_layout_options",
+      "default": true,
+      "label": "Show layout toggle",
+      "info": "Allow the customer to change the collection layout for desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subscription_pricing",
+      "default": true,
+      "label": "Show subscription pricing",
+      "info": "Display subscription price alongside regular price on product cards"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_to_cart_as_subscription",
+      "default": false,
+      "label": "Add to cart as subscription",
+      "info": "When enabled, the Add to Cart button on collection cards adds the cheapest subscription plan instead of the one-time purchase"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_filtering.label",
+      "info": "t:sections.main-collection-product-grid.settings.enable_filtering.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Side Menu"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_selector_item",
+      "name": "Collection Selector Item",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "is_all_products",
+          "label": "Use as All Products tab",
+          "default": false,
+          "info": "When checked, this tab shows the current page collection (all products). The collection picker below is ignored."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Custom label",
+          "info": "Optional. Defaults to the collection title."
+        },
+        {
+          "type": "image_picker",
+          "id": "hover_image",
+          "label": "Hover background image",
+          "info": "Shown as background on hover when this item is not the active collection."
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile list image",
+          "info": "Used for the mobile concern dropdown cards. Falls back to the hover image if empty."
+        },
+        {
+          "type": "richtext",
+          "id": "clamped_text",
+          "label": "Collection description",
+          "info": "Optional. Shown as a clamped (Read More / Read Less) text block below the product grid when this tab is active."
+        }
+      ]
+    },
+    {
+      "type": "bf_badges",
+      "name": "BF Badges",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Default Badges"
+        },
+        {
+          "type": "text",
+          "id": "badge_1_text",
+          "label": "Badge 1 Text",
+          "default": "BLACK FRIDAY SALE"
+        },
+        {
+          "type": "color",
+          "id": "badge_1_bg_color",
+          "label": "Badge 1 Background Color",
+          "default": "#000000"
+        },
+        {
+          "type": "text",
+          "id": "badge_2_text",
+          "label": "Badge 2 Text",
+          "default": "SAVE 20%"
+        },
+        {
+          "type": "color",
+          "id": "badge_2_bg_color",
+          "label": "Badge 2 Background Color",
+          "default": "#D44F2F"
+        },
+        {
+          "type": "header",
+          "content": "Special Badges (with callout metafield)"
+        },
+        {
+          "type": "text",
+          "id": "special_badge_1_text",
+          "label": "Special Badge 1 Text",
+          "default": "BEST SELLER"
+        },
+        {
+          "type": "color",
+          "id": "special_badge_1_bg_color",
+          "label": "Special Badge 1 Background Color",
+          "default": "#D44F2F"
+        },
+        {
+          "type": "text",
+          "id": "special_badge_2_text",
+          "label": "Special Badge 2 Text",
+          "default": "BUY 2 GET 1 FREE"
+        },
+        {
+          "type": "color",
+          "id": "special_badge_2_bg_color",
+          "label": "Special Badge 2 Background Color",
+          "default": "#000000"
+        }
+      ]
+    },
+    {
+      "type": "prime_badge",
+      "name": "Prime Badge",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Displays an image badge on product cards when the product has its 'custom.prime_badge' metafield set to true. If the metafield is false or missing, no badge is shown. Use the same badge artwork as the new PDP hero."
+        },
+        {
+          "type": "checkbox",
+          "id": "apply_to_all",
+          "label": "Apply to all products",
+          "default": false,
+          "info": "When enabled, the badge is shown on every product in the grid and the 'custom.prime_badge' metafield check is skipped."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Badge image",
+          "info": "Upload the prime badge image (PNG with transparency recommended)."
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt text",
+          "default": "Prime badge"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "top-left", "label": "Top left" },
+            { "value": "top-right", "label": "Top right" },
+            { "value": "bottom-left", "label": "Bottom left" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ],
+          "default": "bottom-right",
+          "info": "Where the badge sits on the product card image."
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "min": 32,
+          "max": 160,
+          "step": 4,
+          "unit": "px",
+          "label": "Width",
+          "default": 64
+        },
+        {
+          "type": "range",
+          "id": "offset",
+          "min": 0,
+          "max": 40,
+          "step": 2,
+          "unit": "px",
+          "label": "Offset from edge",
+          "default": 8
+        }
+      ]
+    },
+    {
+      "type": "mothers_day_badge",
+      "name": "Mothers Day Badge",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Displays an orange badge on product cards when the product has a value in the metafield custom.mothers_day_badge. The badge text is pulled from that metafield."
+        },
+        {
+          "type": "color",
+          "id": "badge_bg_color",
+          "label": "Badge Background Color",
+          "default": "#1b1c29"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

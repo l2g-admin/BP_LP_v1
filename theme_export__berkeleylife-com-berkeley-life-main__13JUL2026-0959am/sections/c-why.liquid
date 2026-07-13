@@ -1,0 +1,460 @@
+<style>
+
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    color: {{ section.settings.text_color }};
+    text-align: center;
+    overflow: hidden;
+
+    & .c-why__container {
+    }
+
+    /* --- HEADER --- */
+    & .c-why__header {
+      max-width: 800px;
+      margin: 0 auto 3.5rem auto;
+    }
+
+    & .c-why__title {
+      font-size: clamp(32px, 4vw, 48px);
+      line-height: 1.2;
+      color: {{ section.settings.title_color }};
+      margin: 0 0 1.25rem 0;
+
+      & span {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        color: {{ section.settings.accent_color }};
+        font-size: clamp(36px, 4.5vw, 54px);
+      }
+    }
+
+    & .c-why__subtitle {
+      font-size: clamp(18px, 1.5vw, 20px);
+      font-style: normal;
+        font-weight: 400;
+        line-height: 150%; 
+      color: {{ section.settings.text_color }};
+      margin: 0 auto;
+      max-width: 700px;
+    }
+
+    /* --- CARDS GRID --- */
+    & .c-why__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    & .c-why__card {
+      background-color: {{ section.settings.card_bg }};
+      border: 1px solid {{ section.settings.accent_color }};
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+ 
+    }
+
+    & .c-why__card-num {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: clamp(48px, 5vw, 52px);
+      line-height: 1;
+      color: {{ section.settings.accent_color }};
+      margin: 0 0 1.25rem 0;
+    }
+
+    & .c-why__card-text {
+      font-size: clamp(16px, 1.25vw, 18px);
+      font-style: normal;
+        font-weight: 400;
+        line-height: 150%; 
+      color: {{ section.settings.text_color }};
+      margin: 0;
+    }
+
+    /* --- BOTTOM ICONS ROW --- */
+    & .c-why__icons-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+    }
+
+    & .c-why__icon-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    & .c-why__icon-svg {
+      width: 20px;
+      height: 20px;
+      color: {{ section.settings.title_color }};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    }
+
+    & .c-why__icon-label {
+       font-size: clamp(14px, 1vw, 16px);
+        font-style: normal;
+        font-weight: 600;
+        line-height: 120%; /* 19.2px */
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+      color: {{ section.settings.title_color }};
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (max 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+
+
+      & .c-why__header {
+        margin-bottom: 2.5rem;
+      }
+
+      & .c-why__grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+      }
+
+      & .c-why__card {
+        padding: 2rem 1rem;
+      }
+
+      & .c-why__icons-row {
+        gap: 1.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    #{{ section.id }} {
+      & .c-why__grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem;
+      }
+
+      & .c-why__card {
+        padding: 32px;
+        text-align: left;
+        place-items: start;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="c-why__container">
+      <div class="c-why__header">
+        {% if section.settings.title != blank %}
+          <h2 class="c-why__title">{{ section.settings.title | newline_to_br }}</h2>
+        {% endif %}
+
+        {% if section.settings.subtitle != blank %}
+          <p class="c-why__subtitle">{{ section.settings.subtitle }}</p>
+        {% endif %}
+      </div>
+
+      <div class="c-why__grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'stat_card' %}
+            <div class="c-why__card" {{ block.shopify_attributes }}>
+              <p class="c-why__card-num{% if block.settings.animate %} c-why__card-num--animate{% endif %}" data-target="{{ block.settings.number | escape }}">{{ block.settings.number }}</p>
+              <p class="c-why__card-text">{{ block.settings.text }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="c-why__icons-row">
+        {% for block in section.blocks %}
+          {% if block.type == 'icon_text' %}
+            <div class="c-why__icon-item" {{ block.shopify_attributes }}>
+              <div class="c-why__icon-svg">
+                {% if block.settings.custom_svg != blank %}
+                  {{ block.settings.custom_svg }}
+                {% else %}
+                  <svg viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                {% endif %}
+              </div>
+              <span class="c-why__icon-label">{{ block.settings.label }}</span>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var section = document.getElementById('{{ section.id }}');
+    if (!section) return;
+    var nums = section.querySelectorAll('.c-why__card-num--animate');
+    if (!nums.length) return;
+
+    function animate(el) {
+      var raw = el.getAttribute('data-target') || '';
+      var match = raw.match(/-?\d+(\.\d+)?/);
+      if (!match) return;
+      var target = parseFloat(match[0]);
+      var prefix = raw.slice(0, match.index);
+      var suffix = raw.slice(match.index + match[0].length);
+      var duration = 1500;
+      var from = 1;
+      var start = null;
+      function step(now) {
+        if (start === null) start = now;
+        var t = Math.min(1, (now - start) / duration);
+        var eased = 1 - Math.pow(1 - t, 3);
+        var val = Math.round(from + (target - from) * eased);
+        el.textContent = prefix + val + suffix;
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      nums.forEach(animate);
+      return;
+    }
+
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animate(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    nums.forEach(function (n) { obs.observe(n); });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "C Why",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#fafafa"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title & Icons Color",
+      "default": "#1a1f4c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#555555"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d25435"
+    },
+    {
+      "type": "header",
+      "content": "Header Content"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Why <span>Nitric Oxide</span> Matter",
+      "info": "Wrap text in <span></span> to apply the italic serif font and accent color."
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "N.O. is a vital molecule your body produces for healthy blood flow. After age 40, levels can drop by 50% — but you can measure and support them."
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat_card",
+      "name": "Statistic Card",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Large Number",
+          "default": "300%"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description Text",
+          "default": "increase in energy capacity after 3 months*"
+        },
+        {
+          "type": "checkbox",
+          "id": "animate",
+          "label": "Animate number (count up)",
+          "default": false,
+          "info": "Counts from 1 up to the number when scrolled into view."
+        }
+      ]
+    },
+    {
+      "type": "icon_text",
+      "name": "Bottom Icon & Label",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "html",
+          "id": "custom_svg",
+          "label": "Custom SVG (Optional)",
+          "info": "Paste raw SVG code. Uses 'stroke' for line-art icons."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label Text",
+          "default": "HEART HEALTH"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Why",
+      "blocks": [
+        {
+          "type": "stat_card",
+          "settings": { "number": "300%", "text": "increase in energy capacity after 3 months*" }
+        },
+        { "type": "stat_card", "settings": { "number": "10%", "text": "reduction in blood pressure after 3 months*" } },
+        { "type": "stat_card", "settings": { "number": "28%", "text": "boost in blood flow after 3 months*" } },
+        { "type": "stat_card", "settings": { "number": "75%", "text": "increase in libido after 60 days*" } },
+        {
+          "type": "icon_text",
+          "settings": {
+            "label": "HEART HEALTH",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><path d=\"M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z\"></path></svg>"
+          }
+        },
+        {
+          "type": "icon_text",
+          "settings": {
+            "label": "ENERGY & STAMINA",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><polygon points=\"13 2 3 14 12 14 11 22 21 10 12 10 13 2\"></polygon></svg>"
+          }
+        },
+        {
+          "type": "icon_text",
+          "settings": {
+            "label": "SEXUAL WELLNESS",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 2c0 0-5 6.5-5 11a5 5 0 0 0 10 0c0-4.5-5-11-5-11z\"></path><path d=\"M12 17a2 2 0 0 1-2-2\"></path></svg>"
+          }
+        },
+        {
+          "type": "icon_text",
+          "settings": {
+            "label": "CIRCULATION",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z\"></path></svg>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

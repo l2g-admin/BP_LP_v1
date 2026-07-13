@@ -1,0 +1,466 @@
+{% comment %}
+  This section displays a dynamic grid of blog posts and testimonials.
+  - Desktop view uses a 3-column masonry layout.
+  - Mobile view uses a 2-column grid for posts and a single column for testimonials.
+  - Content ordering is handled via CSS to match the provided designs.
+{% endcomment %}
+<style>
+.crs-section-wrapper {
+  padding: 50px 0;
+  background-color: #fff;
+}
+
+.crs-page-width {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.crs-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.crs-main-heading {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+
+.crs-main-heading span {
+  color: #c95d43; /* Accent color for 'You Can Feel.' */
+}
+
+.crs-subheading {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.crs-grid-item {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  break-inside: avoid; /* Prevents items from breaking across columns */
+  margin-bottom: 20px; /* Gap for column layout */
+}
+
+.crs-grid-item--post {
+  position: relative;
+  color: #fff;
+  min-height: 250px;
+  justify-content: flex-end;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.crs-post-image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.crs-post-image,
+.crs-placeholder-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.crs-grid-item--post:hover .crs-post-image {
+  transform: scale(1.05);
+}
+
+.crs-post-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%);
+  z-index: 2;
+}
+
+.crs-post-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.crs-post-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  padding-right: 15px;
+}
+
+.crs-arrow-icon {
+  background-color: #f27b42;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.crs-arrow-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.crs-grid-item--testimonial {
+  background-color: #f9f6f1;
+  padding: 25px;
+  color: #333;
+}
+
+.crs-testimonial-stars {
+  display: flex;
+  margin-bottom: 15px;
+  color: #f27b42;
+}
+
+.crs-testimonial-stars svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 2px;
+}
+
+.crs-testimonial-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.crs-testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.crs-author-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.crs-author-name {
+  font-weight: 600;
+}
+
+
+/* --- Media Queries for Layouts --- */
+
+/* Mobile Layout (as per image 2) */
+@media (max-width: 767px) {
+  .crs-main-heading {
+    font-size: 2rem;
+  }
+  .crs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .crs-grid-item {
+    margin-bottom: 0; /* Remove margin as gap is used */
+  }
+  .crs-grid-item--testimonial {
+    grid-column: 1 / -1; /* Testimonials span full width */
+  }
+
+  /* Specific mobile ordering from Image 2 */
+  .crs-item-p1 { order: 1; }
+  .crs-item-p2 { order: 2; }
+  .crs-item-t1 { order: 3; }
+  .crs-item-p3 { order: 4; }
+  .crs-item-t2 { order: 5; }
+  .crs-item-p4 { order: 6; }
+  .crs-item-p5 { order: 7; }
+  .crs-item-t3 { order: 8; }
+}
+
+/* Desktop Layout (as per image 1) */
+@media (min-width: 768px) {
+  .crs-grid {
+    column-count: 3;
+    column-gap: 20px;
+  }
+
+  /* Specific desktop ordering from Image 1 */
+  .crs-item-p1 { order: 1; }
+  .crs-item-t1 { order: 2; }
+  .crs-item-p2 { order: 3; }
+  .crs-item-p3 { order: 4; }
+  .crs-item-p4 { order: 5; }
+  .crs-item-t2 { order: 6; }
+  .crs-item-p5 { order: 7; }
+  .crs-item-t3 { order: 8; }
+}
+</style>
+<div class="crs-section-wrapper">
+  <div class="crs-page-width">
+    <div class="crs-header">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'heading' -%}
+            <h2 class="crs-main-heading" {{ block.shopify_attributes }}>
+              {{ block.settings.heading | replace: 'You Can Feel.', '<span>You Can Feel.</span>' }}
+            </h2>
+          {%- when 'paragraph' -%}
+            <div class="crs-subheading" {{ block.shopify_attributes }}>
+              {{ block.settings.text }}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="crs-grid">
+      {%- comment -%}
+        Blog Post Items
+      {%- endcomment -%}
+      {%- for i in (1..5) -%}
+        {%- liquid
+          assign blog_post_setting = 'blog_post_' | append: i
+          assign article = articles[section.settings[blog_post_setting]]
+        -%}
+        {%- if article != blank -%}
+          <a href="{{ article.url }}" class="crs-grid-item crs-grid-item--post crs-item-p{{ i }}">
+            <div class="crs-post-image-wrapper">
+              {%- if article.image -%}
+                <img
+                  src="{{ article.image | image_url: width: 600 }}"
+                  alt="{{ article.image.alt | escape }}"
+                  class="crs-post-image"
+                  loading="lazy"
+                  width="600"
+                  height="{{ 600 | divided_by: article.image.aspect_ratio | round }}"
+                >
+              {%- else -%}
+                <div class="crs-placeholder-image">
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              {%- endif -%}
+            </div>
+            <div class="crs-post-content">
+              <h3 class="crs-post-title">{{ article.title }}</h3>
+              <div class="crs-arrow-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="currentColor"><path d="M6.53 1.47a.75.75 0 0 0-1.06 1.06L8.94 6l-3.47 3.47a.75.75 0 0 0 1.06 1.06l4-4a.75.75 0 0 0 0-1.06l-4-4Z"></path></svg>
+              </div>
+            </div>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%}
+        Testimonial Items
+      {%- endcomment -%}
+      {%- for i in (1..3) -%}
+        {%- liquid
+          assign text_setting = 'testimonial_text_' | append: i
+          assign rating_setting = 'testimonial_rating_' | append: i
+          assign image_setting = 'testimonial_image_' | append: i
+          assign author_setting = 'testimonial_author_' | append: i
+
+          assign testimonial_text = section.settings[text_setting]
+          assign testimonial_rating = section.settings[rating_setting]
+          assign testimonial_image = section.settings[image_setting]
+          assign testimonial_author = section.settings[author_setting]
+        -%}
+        {%- if testimonial_text != blank -%}
+          <div class="crs-grid-item crs-grid-item--testimonial crs-item-t{{ i }}">
+            <div class="crs-testimonial-stars">
+              {%- for star in (1..testimonial_rating) -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10.868 2.884c.321-.662 1.134-.662 1.456 0l1.86 3.842 4.238.616c.734.107 1.028.998.494 1.52l-3.068 2.99.724 4.22a1.2 1.2 0 0 1-1.741 1.265L10 15.347l-3.79 1.992a1.2 1.2 0 0 1-1.74-1.265l.723-4.22-3.068-2.99c-.534-.522-.24-1.413.495-1.52l4.238-.616 1.86-3.842Z" clip-rule="evenodd"></path></svg>
+              {%- endfor -%}
+            </div>
+            <div class="crs-testimonial-text">{{ testimonial_text }}</div>
+            <div class="crs-testimonial-author">
+              {%- if testimonial_image != blank -%}
+                <img
+                  src="{{ testimonial_image | image_url: width: 80 }}"
+                  alt="{{ testimonial_author | escape }}"
+                  class="crs-author-image"
+                  loading="lazy"
+                  width="40"
+                  height="40"
+                >
+              {%- endif -%}
+              <span class="crs-author-name">{{ testimonial_author }}</span>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "C Blog Posts",
+  "tag": "section",
+  "class": "shopify-section--results",
+  "max_blocks": 2,
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Science You Can Trust. Results You Can Feel."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Decades of nitric oxide research confirm its role in circulation, energy, and vitality. Berkeley Life builds on this foundation with clinically studied results.</p>"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Blog Posts (Content)"
+    },
+    {
+      "type": "article",
+      "id": "blog_post_1",
+      "label": "Blog Post 1"
+    },
+    {
+      "type": "article",
+      "id": "blog_post_2",
+      "label": "Blog Post 2"
+    },
+    {
+      "type": "article",
+      "id": "blog_post_3",
+      "label": "Blog Post 3"
+    },
+    {
+      "type": "article",
+      "id": "blog_post_4",
+      "label": "Blog Post 4"
+    },
+    {
+      "type": "article",
+      "id": "blog_post_5",
+      "label": "Blog Post 5"
+    },
+    {
+      "type": "header",
+      "content": "Testimonials (Content)"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_rating_1",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Testimonial 1: Rating",
+      "default": 5
+    },
+    {
+      "type": "richtext",
+      "id": "testimonial_text_1",
+      "label": "Testimonial 1: Text",
+      "default": "<p>Nitric Oxide support is critical for autoimmune patients. It maximizes diet and lifestyle changes through optimal circulation.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_image_1",
+      "label": "Testimonial 1: Author Image"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_author_1",
+      "label": "Testimonial 1: Author Name",
+      "default": "Dr. Terry Wahls"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_rating_2",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Testimonial 2: Rating",
+      "default": 5
+    },
+    {
+      "type": "richtext",
+      "id": "testimonial_text_2",
+      "label": "Testimonial 2: Text",
+      "default": "<p>We see a noticeable benefit when adding the Berkeley Life capsules into our procedures. Blood flow and healing are critical to the success of our treatments.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_image_2",
+      "label": "Testimonial 2: Author Image"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_author_2",
+      "label": "Testimonial 2: Author Name",
+      "default": "Dr. Richard Moore"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_rating_3",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Testimonial 3: Rating",
+      "default": 5
+    },
+    {
+      "type": "richtext",
+      "id": "testimonial_text_3",
+      "label": "Testimonial 3: Text",
+      "default": "<p>Berkeley Life is a company that has gained my respect for their commitment to the development of science-based products.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_image_3",
+      "label": "Testimonial 3: Author Image"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_author_3",
+      "label": "Testimonial 3: Author Name",
+      "default": "Dr. Jeffrey Bland"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Blog Posts"
+    }
+  ]
+}
+{% endschema %}

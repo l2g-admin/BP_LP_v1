@@ -1,0 +1,549 @@
+<style>
+
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    position: relative;
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    color: {{ section.settings.text_color }};
+    overflow: hidden;
+
+    /* Background Image & Overlay */
+    {% if section.settings.bg_image != blank %}
+      background-image: url('{{ section.settings.bg_image | image_url: width: 2000 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    {% endif %}
+
+    & .c-ben__overlay {
+      position: absolute;
+      inset: 0;
+      background-color: {{ section.settings.bg_color }};
+      opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+      z-index: 1;
+    }
+
+    & .c-ben__container {
+      position: relative;
+      z-index: 2;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- HEADER --- */
+    & .c-ben__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    & .c-ben__header-left {
+      flex: 1;
+      max-width: 600px;
+    }
+
+    & .c-ben__eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: {{ section.settings.accent_color }};
+      margin: 0 0 1rem 0;
+    }
+
+    & .c-ben__title {
+      font-size: clamp(36px, 4vw, 48px);
+      line-height: 1.15;
+      margin: 0;
+      color: {{ section.settings.title_color }};
+
+      /* Span special styling */
+      & span {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(40px, 4.5vw, 54px);
+        color: {{ section.settings.accent_color }};
+        font-style: italic;
+      }
+    }
+
+    & .c-ben__header-right {
+      flex: 1;
+      max-width: 500px;
+    }
+
+    & .c-ben__desc {
+      font-size: clamp(18px, 1.5vw, 20px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+      opacity: 0.9;
+    }
+
+    /* --- GRID --- */
+    & .c-ben__grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    /* --- CARDS --- */
+    & .c-ben__card {
+      background: {{ section.settings.card_bg }};
+      border: 1px solid {{ section.settings.card_border }};
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+      }
+    }
+
+    & .c-ben__card-icon {
+      width: 32px;
+      height: 32px;
+      color: {{ section.settings.accent_color }};
+      margin-bottom: 1.5rem;
+      flex-shrink: 0;
+
+      & svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+        stroke: currentColor;
+      }
+    }
+
+    & .c-ben__card-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    & .c-ben__card-title {
+      font-size: clamp(18px, 1.5vw, 24px);
+      color: {{ section.settings.title_color }};
+      margin: 0 0 0.75rem 0;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 120%;
+    }
+
+    & .c-ben__card-text {
+      font-size: clamp(14px, 1.5vw, 16px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%;
+      color: {{ section.settings.text_color }};
+      opacity: 0.8;
+      margin: 0;
+    }
+
+    /* --- ACTIONS (Buttons) --- */
+    & .c-ben__actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+
+    & .c-ben__btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: {{ section.settings.accent_color }};
+      color: #ffffff;
+      padding: 16px 36px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 15px;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+    }
+
+    & .c-ben__btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: {{ section.settings.accent_color }};
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 4px;
+      transition: opacity 0.3s ease;
+
+      &:hover {
+        opacity: 0.7;
+      }
+
+      & svg {
+        width: 14px;
+        height: 14px;
+        fill: none;
+        stroke: currentColor;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover svg {
+        transform: translateX(4px);
+      }
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (up to 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+      & .c-ben__container {
+
+      }
+
+      & .c-ben__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+
+      & .c-ben__title {
+        font-size: 36px;
+      }
+
+      & .c-ben__grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+      }
+
+      /* Card layout on mobile (Icon Left, Text Right) */
+      & .c-ben__card {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 1.25rem;
+        padding: 1.5rem;
+      }
+
+      & .c-ben__card-icon {
+        margin-bottom: 0;
+        width: 28px;
+        height: 28px;
+      }
+
+      & .c-ben__actions {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      & .c-ben__btn-primary {
+        width: 100%;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="c-ben__overlay"></div>
+  <div class="container-sl">
+    <div class="c-ben__container">
+      <div class="c-ben__header">
+        <div class="c-ben__header-left">
+          {% if section.settings.eyebrow != blank %}
+            <p class="c-ben__eyebrow">{{ section.settings.eyebrow }}</p>
+          {% endif %}
+          {% if section.settings.title != blank %}
+            <h2 class="c-ben__title">{{ section.settings.title | newline_to_br }}</h2>
+          {% endif %}
+        </div>
+        <div class="c-ben__header-right">
+          {% if section.settings.description != blank %}
+            <p class="c-ben__desc">{{ section.settings.description }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="c-ben__grid">
+        {% for block in section.blocks %}
+          <div class="c-ben__card" {{ block.shopify_attributes }}>
+            <div class="c-ben__card-icon">
+              {% if block.settings.custom_svg != blank %}
+                {{ block.settings.custom_svg }}
+              {% else %}
+                <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              {% endif %}
+            </div>
+            <div class="c-ben__card-content">
+              <h3 class="c-ben__card-title">{{ block.settings.title }}</h3>
+              <p class="c-ben__card-text">{{ block.settings.text }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="c-ben__actions">
+        {% if section.settings.btn_primary_text != blank %}
+          <a href="{{ section.settings.btn_primary_link }}" class="c-ben__btn-primary">
+            {{ section.settings.btn_primary_text }}
+          </a>
+        {% endif %}
+
+        {% if section.settings.btn_secondary_text != blank %}
+          <a href="{{ section.settings.btn_secondary_link }}" class="c-ben__btn-secondary">
+            {{ section.settings.btn_secondary_text }}
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Icon Blocks",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#2b2e35"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image (Texture)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 80,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "info": "Dims the background image."
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "General Text Color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d25435"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card Background",
+      "default": "rgba(255, 255, 255, 0.05)"
+    },
+    {
+      "type": "color",
+      "id": "card_border",
+      "label": "Card Border",
+      "default": "rgba(255, 255, 255, 0.15)"
+    },
+    {
+      "type": "header",
+      "content": "Header Texts"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "THE SOLUTION"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "One Molecule.\n<span>Total Health</span> For Men.",
+      "info": "Wrap text in <span></span> to apply the italic serif font and accent color."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Berkeley Life NO Support delivers the clinically effective dose your body needs to restore Nitric Oxide production naturally — so you can perform at your best at any age."
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "btn_primary_text",
+      "label": "Primary Button Text",
+      "default": "Shop Nitric Oxide Support"
+    },
+    {
+      "type": "url",
+      "id": "btn_primary_link",
+      "label": "Primary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "btn_secondary_text",
+      "label": "Secondary Link Text",
+      "default": "LEARN HOW IT WORKS"
+    },
+    {
+      "type": "url",
+      "id": "btn_secondary_link",
+      "label": "Secondary Link"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit Card",
+      "settings": [
+        {
+          "type": "html",
+          "id": "custom_svg",
+          "label": "SVG Icon (Raw HTML)",
+          "info": "Paste raw SVG code. Uses 'stroke' for colors."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Heart Health"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Maintains optimal blood flow and promotes healthy circulation — the foundation of male vitality."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Icon Blocks",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Heart Health",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z\"/><polyline points=\"4 12 8 12 10 8 14 16 16 12 20 12\"/></svg>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "All-Day Energy",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><polygon points=\"13 2 3 14 12 14 11 22 21 10 12 10 13 2\"/></svg>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Sexual Wellness",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><circle cx=\"10\" cy=\"10\" r=\"5\"/><line x1=\"13.5\" y1=\"6.5\" x2=\"19\" y2=\"1\"/><polyline points=\"15 1 19 1 19 5\"/><circle cx=\"14\" cy=\"14\" r=\"5\"/><line x1=\"14\" y1=\"19\" x2=\"14\" y2=\"23\"/><line x1=\"12\" y1=\"21\" x2=\"16\" y2=\"21\"/></svg>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Strength & Recovery",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><path d=\"M6.5 6.5h-4v11h4M17.5 6.5h4v11h-4M6.5 9.5h11v5h-11M3.5 8.5v7M20.5 8.5v7\"/></svg>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Hormone Balance",
+            "custom_svg": "<svg viewBox=\"0 0 24 24\"><polygon points=\"12 2 16.5 4.5 16.5 9.5 12 12 7.5 9.5 7.5 4.5\"/><polygon points=\"16.5 9.5 21 12 21 17 16.5 19.5 12 17 12 12\"/><polygon points=\"7.5 9.5 12 12 12 17 7.5 19.5 3 17 3 12\"/></svg>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

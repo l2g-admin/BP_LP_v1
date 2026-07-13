@@ -1,0 +1,8 @@
+{% comment %}
+This snippet renders the Recharge subscription widget.
+It must be included in a product context.
+{% endcomment %}
+
+<div data-recharge>
+    {{ product | recharge_subscription_widget }}
+</div>

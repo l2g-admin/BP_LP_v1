@@ -1,0 +1,191 @@
+{%- unless settings.gift_wrap_product == blank and settings.gift_bag_product == blank -%}
+
+{%-liquid
+  assign cart_variants = cart.items | map: 'variant_id'
+
+  assign gift_wrap_id = settings.gift_wrap_product.selected_or_first_available_variant.id
+  assign first_gift_bag_id = settings.gift_bag_product.selected_or_first_available_variant.id
+
+  assign gift_wrap_add_string = ''
+  assign gift_wrap_remove_string = ''
+  if gift_wrap_id
+    assign gift_wrap_add_string = "updates[" | append: gift_wrap_id | append: "]=1"
+    assign gift_wrap_remove_string = "updates[" | append: gift_wrap_id | append: "]=0"
+  endif
+
+  assign gift_bag_ids = settings.gift_bag_product.variants | map: 'id'
+  assign gift_bag_add_string = ''
+  if gift_bag_ids.size > 0
+    assign gift_bag_add_string = "updates[" | append: first_gift_bag_id | append: "]=1"
+  endif
+
+  assign gift_bag_remove_string = ''
+  for gift_bag_id in gift_bag_ids
+    assign this_string = "updates[" | append: gift_bag_id | append: "]=0"
+    assign gift_bag_remove_string = gift_bag_remove_string | append: this_string
+    unless forloop.last
+      assign gift_bag_remove_string = gift_bag_remove_string | append: '&'
+    endunless
+  endfor
+
+  assign gift_wrap_link = "/cart/update?" | append: gift_wrap_add_string | append: "&" | append: gift_bag_remove_string | append: "&attributes[gift_wrap]=whole"
+  if cart.attributes.gift_wrap == "whole"
+    assign gift_wrap_link = "/cart/update?" | append: gift_wrap_remove_string | append: "&attributes[gift_wrap]=none"
+  endif
+
+  assign gift_bag_link = "/cart/update?" | append: gift_bag_add_string | append: "&" | append: gift_wrap_remove_string | append: "&attributes[gift_wrap]=multiple"
+  if cart.attributes.gift_wrap == "multiple"
+    assign gift_bag_link = "/cart/update?" | append: gift_bag_remove_string | append: "&attributes[gift_wrap]=none"
+  endif
+
+-%}
+
+<cart-giftbag id="cart-gift-bag" class="{% if cart == empty %}hidden{% endif %}" data-variant-id="{{ gift_wrap_id }}">
+  <div class="md:px-12 max-w-screen-lg px-8 pt-8 mx-auto mt-8 border-t border-gray-200">
+    <h2 class="sr-only">Gift Options</h2>
+    <form class="space-y-6">
+      {%- for block in section.blocks -%}
+      {%- case block.type -%}
+      {%- when 'whole' -%}
+        {%- unless settings.gift_wrap_product == blank -%}
+        <div data-gift-container="{{ block.type }}">
+          <a href="{{ gift_wrap_link }}" class="block cursor-pointer" aria-labelledby="{{ block.type }}-{{ forloop.index }}">
+            <span class="flex items-center">
+              {%- if cart.attributes.gift_wrap == "whole" -%}
+                <span class="w-4 h-4 text-white bg-black border border-black border-solid" aria-hidden="true">
+                  {% render 'icon-checkmark' %}
+                </span>
+              {%- else -%}
+                <span class="text-text w-4 h-4 border border-black border-solid" aria-hidden="true"></span>
+              {%- endif -%}
+              <span class="ml-4" id="{{ block.type }}-{{ forloop.index }}">
+                {{ block.settings.label }}
+                {%- if cart.attributes.gift_wrap == "whole" -%}
+                  <span class="sr-only">( selected, click to remove )</span>
+                {%- endif -%}
+              </span>
+            </span>
+          </a>
+          <div data-more class="{% unless cart.attributes.gift_wrap == "whole" %}hidden{% endunless %} pl-8 py-4 grid grid-cols-2 gap-4">
+            <div class="col-span-full rte">{{ block.settings.instructions }}</div>
+            <div class="col-span-full text-warm-grey subhead">
+              Optional Message
+            </div>
+            <div>
+              <label for="attributes[from]" class="block mb-2 text-sm uppercase">From:</label>
+              <input type="text" name="attributes[from]" id="attributes[from]" value="{{ cart.attributes.from }}" class="border-warm-grey w-full">
+            </div>
+            <div>
+              <label for="attributes[to]" class="block mb-2 text-sm uppercase">To:</label>
+              <input type="text" name="attributes[to]" id="attributes[to]" value="{{ cart.attributes.to }}" class="border-warm-grey w-full">
+            </div>
+            <div class="col-span-full">
+              <label for="attributes[message]" class="block mb-2 text-sm uppercase">Message</label>
+              <textarea name="attributes[message]" id="attributes[message]" cols="30" rows="5" class="border-warm-grey w-full p-4 border">{{ cart.attributes.message }}</textarea>
+            </div>
+            <div class="hidden">
+              <label for="note" class="block mb-2 text-sm uppercase">Note</label>
+              <textarea name="note" id="note" cols="30" rows="5" class="border-warm-grey w-full p-4 border">{{ cart.note }}</textarea>
+            </div>
+            <div class="hidden">
+              <label for="attributes[gift_wrap]" class="block mb-2 text-sm uppercase">Gift?</label>
+              <input type="hidden" name="attributes[gift_wrap]" id="attributes[gift_wrap]" value="{{ cart.attributes.gift_wrap }}" class="border-warm-grey w-full p-4 border">
+            </div>
+          </div>
+        </div>
+        {%- endunless -%}
+      {%- when 'multiple' -%}
+        {%- unless settings.gift_bag_product == blank -%}
+        <div data-gift-container="{{ block.type }}">
+          <a href="{{ gift_bag_link }}" class="block cursor-pointer" aria-labelledby="{{ block.type }}-{{ forloop.index }}">
+            <span class="flex items-center">
+              {%- if cart.attributes.gift_wrap == "multiple" -%}
+                <span class="w-4 h-4 text-white bg-black border border-black border-solid" aria-hidden="true">
+                  {% render 'icon-checkmark' %}
+                </span>
+              {%- else -%}
+                <span class="text-text w-4 h-4 border border-black border-solid" aria-hidden="true"></span>
+              {%- endif -%}
+              <span class="ml-4" id="{{ block.type }}-{{ forloop.index }}">
+                {{ block.settings.label }}
+                {%- if cart.attributes.gift_wrap == "multiple" -%}
+                  <span class="sr-only">( selected, click to remove )</span>
+                {%- endif -%}
+              </span>
+            </span>
+          </a>
+          <div data-more class="{% unless cart.attributes.gift_wrap == "multiple" %}hidden{% endunless %} pl-8">
+            <div class="col-span-full rte">{{ block.settings.instructions }}</div>
+            <ul class="md:p-16 flex flex-wrap justify-center gap-8 p-8">
+            {%- for variant in settings.gift_bag_product.variants -%}
+                <li class="w-48 max-w-full space-y-2 text-center">
+                  <div>{{ settings.gift_bag_product.title }}</div>
+                  {%- unless variant.title contains "Default" -%}
+                    <div class="text-xs">{{ variant.title }}</div>
+                  {%- endunless -%}
+                  <div>
+                    {% render 'price', product: settings.gift_bag_product, use_variant: true, price_variant: variant, price_class: 'justify-center text-warm-grey text-opacity-50' %}
+                  </div>
+                  <a href="/cart/add/{{ variant.id }}" class="font-bold uppercase">Add {% if cart_variants contains variant.id %}More {% endif %}to Cart</a>
+                </li>
+            {%- endfor -%}
+            </ul>
+          </div>
+        </div>
+        {%- endunless -%}
+      {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</cart-giftbag>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Cart Gift Bags",
+  "templates": [
+    "cart"
+  ],
+  "settings": [
+
+  ],
+  "blocks": [
+    {
+      "type": "whole",
+      "name": "Whole Order",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "This order is a gift"
+        },
+        {
+          "type": "richtext",
+          "id": "instructions",
+          "label": "Instructions"
+        }
+      ]
+    },
+    {
+      "type": "multiple",
+      "name": "Multiple",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Give me multiple gift bags and I will gift myself."
+        },
+        {
+          "type": "richtext",
+          "id": "instructions",
+          "label": "Instructions"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

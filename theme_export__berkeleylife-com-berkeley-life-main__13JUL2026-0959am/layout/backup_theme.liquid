@@ -1,0 +1,306 @@
+<!doctype html>
+<html class=" no-js scroll-smooth" lang="{{ request.locale.iso_code }}">
+  <script src="https://cdn.userway.org/widget.js" data-account="NSrqCvE24x"></script>
+  <head>
+{% render 'replo-head' %}
+
+<script>
+    window.Shopify = window.Shopify || {theme: {id: {{ theme.id }}, role: '{{ theme.role }}' } };
+    window._template = {
+        directory: "{{ template.directory }}",
+        name: "{{ template.name }}",
+        suffix: "{{ template.suffix }}"
+    };
+  </script>
+      <script>
+    window._template = {
+        directory: "{{ template.directory }}",
+        name: "{{ template.name }}",
+        suffix: "{{ template.suffix }}"
+    }
+    window.Shopify = window.Shopify || {theme: {id: {{ theme.id }}, role: '{{ theme.role }}' } };
+  </script> 
+  <script type="module" blocking="render" fetchpriority="high" src="https://cdn.intelligems.io/esm/b8758d652b15/bundle.js" async></script>
+    
+{% include 'multi-store-hreflang-tags' %}
+
+    <meta charset="utf-8">
+    {%- if request.host contains 'smakk' -%}
+      <meta content="noindex" name="robots"/>
+    {%- endif -%}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.theme_color }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- if settings.favicon_emoji != blank -%}
+      <link rel="icon" type="image/svg+xml" href="https://fav.farm/{{ settings.favicon_emoji }}">
+      <link rel="mask-icon" href="https://fav.farm/{{ settings.favicon_emoji }}" color="{{ settings.colors_brand }}">
+    {%- endif -%}
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>{{ page_title | default: shop.name }}</title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {% render 'meta-tags' %}
+
+    {%- comment -%}ct.css to preview the head items{%- endcomment -%}
+    {%- if settings.ct_enable -%}
+      {{ 'ct.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
+
+    {%- comment -%}For viewing images that don't have alt text{%- endcomment -%}
+    {%- if settings.alt_text -%}
+      <style>
+        img:not([alt]), img[alt=""] {filter: blur(5px);}
+        video[data-lazy-video] {filter: blur(5px);}
+      </style>
+    {%- endif -%}
+
+    {%- comment -%}Global Javascript Resources{%- endcomment -%}
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'quickshop.js' | asset_url }}" type="module"></script>
+    <link rel=“stylesheet” href=“https://use.typekit.net/wbx3yzs.css”>
+
+
+    {%- render 'header-scripts.zipifypages', renderctx: 'thm', apprxhbl: zp_apprxhbl -%}{{ content_for_header }}
+
+    {%- comment -%}Theme Colors and Fonts {%- endcomment -%}
+          {% style %}
+        @font-face {
+        font-family: tt-commons-pro, sans-serif;
+        src:url("https://use.typekit.net/af/402a01/00000000000000007756f631/30/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff2"),url("https://use.typekit.net/af/402a01/00000000000000007756f631/30/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff"),url("https://use.typekit.net/af/402a01/00000000000000007756f631/30/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("opentype");
+        font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+        }
+
+      @font-face {
+      font-family:"cormorant-garamond";
+      src:url("https://use.typekit.net/af/656832/00000000000000007735b885/30/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i4&v=3") format("woff2"),url("https://use.typekit.net/af/656832/00000000000000007735b885/30/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i4&v=3") format("woff"),url("https://use.typekit.net/af/656832/00000000000000007735b885/30/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i4&v=3") format("opentype");
+      font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
+        }
+
+
+      :root {
+        --font-body-family:tt-commons-pro, sans-serif, "tt-commons-pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        --font-heading-family: "tt-commons-pro", serif, ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+        --color-brand: {{ settings.colors_brand }};
+        --color-text: {{ settings.colors_text }};
+        --color-bg: {{ settings.colors_bg }};
+      }
+      main {
+        --swiper-theme-color: var(--color-brand);
+        --swiper-navigation-size: 24px;
+        --swiper-pagination-bullet-size: 12px;
+      }
+
+    {% endstyle %}
+
+    {%- comment -%}Global CSS Resources{%- endcomment -%}
+    {%- comment -%}
+      This code snippet:
+      `media="print" onload="this.media='all'"`
+      is a trick for lazy-loading css files.
+    {%- endcomment -%}
+    <link rel="stylesheet" href="{{ 'swiper.css' | asset_url }}" media="all">
+    {{ 'global.css' | asset_url | stylesheet_tag }}
+
+    {%- comment -%}Just in case the user has no javascript{%- endcomment -%}
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+
+    {%- comment -%}A snippet for clarity, for easier installation/removal{%- endcomment -%}
+    {%- if settings.clarity_enable -%}
+      {% render 'clarity' %}
+    {%- endif -%}
+
+    {%- comment -%}Loading function for nice fade-in on images once they load{%- endcomment -%}
+    <script>
+      function loaded(img, remove, add) {
+        img.classList.remove(remove)
+        img.classList.add(add)
+      }
+      function imgLoaded(img, remove, add) {
+        if (img.complete) {
+          loaded(img, remove, add)
+        } else {
+          img.addEventListener('load', loaded)
+        }
+      }
+    </script>
+
+    {%- comment -%}Loading function for nice fade-in on videos once they load{%- endcomment -%}
+    <script>
+      function videoLoaded(img, remove, add) {
+        loaded(img, remove, add)
+      }
+    </script>
+
+    {%- comment -%}
+      Animations can be enabled in settings. Then you can compose animations with special attributes. This makes it flexible. Regardless, all animations respect `prefers-reduced-motion`.
+    {%- endcomment -%}
+    {%- if settings.use_animations -%}
+      {%- comment -%}
+        The `smakkload` module is for entrance animations. These are composable with Tailwind classes. View the js file for more details.
+      {%- endcomment -%}
+      <script type="module">
+        import { smakkload }  from '{{ "smakkload.js" | asset_url }}';
+        smakkload();
+      </script>
+      {%- comment -%}
+        The `smakkallax` module is for parallax or scroll-based animations. These are composable with attributes. View the js file for more details.
+      {%- endcomment -%}
+      <script type="module">
+        import { smakkallax }  from '{{ "smakkallax.js" | asset_url }}';
+        smakkallax();
+      </script>
+    {%- endif -%}
+
+
+        <!-- SlideRule Script Start -->
+        {% render 'sliderule-data' %}
+        <!-- SlideRule Script End -->
+      <script type="text/javascript"> (function(c,l,a,r,i,t,y){ c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}; t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i; y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y); })(window, document, "clarity", "script", "pg6py70vwb"); </script>
+      </head>
+  <body class="bg-cream font-body text-navy">
+    {% render 'subscription-flyout' %}
+    <a class="button sr-only focus:not-sr-only focus:!absolute focus:!p-4 focus:top-2 focus:left-2 focus:!z-50" href="#MainContent">
+      {{ "accessibility.skip_to_text" | t }}
+    </a>
+
+    {% section 'announcement-bar' %}
+    {% section 'b2b-announcement-bar' %}
+
+    {% section 'header' %}
+
+    <main id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'footer' %}
+
+    <ul hidden>
+      <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+      <li id="a11y-external-message">{{ 'accessibility.link_messages.external' | t }}</li>
+    </ul>
+
+    {%- if settings.klaviyo_key != blank -%}
+      {% render 'klaviyo' %}
+    {%- endif -%}
+
+    <script>
+      window.routes = {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}'
+      };
+
+      window.cartStrings = {
+        error: `{{ 'sections.cart.cart_error' | t }}`,
+        quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t }}`
+      }
+
+      window.variantStrings = {
+        addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+        soldOut: `{{ 'products.product.sold_out' | t }}`,
+        unavailable: `{{ 'products.product.unavailable' | t }}`,
+      }
+
+      window.sellingPlanStrings = {
+        addToCart: `{{ 'products.product.subscribe' | t }}`,
+      }
+
+      window.accessibilityStrings = {
+        shareSuccess: `{{ 'general.share.success_message' | t }}`,
+      }
+    </script>
+
+    {%- if settings.cart_drawer == true and request.page_type != 'cart' -%}
+      {% section 'cart-drawer' %}
+    {%- endif -%}
+
+    {% section 'app-optimization' %}
+
+    {% render 'schema' %}
+
+    {%- comment -%}
+      Don't need this really:
+      {% render 'subscription-theme-footer' %}
+    {%- endcomment -%}
+
+    <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
+    <script type="module">
+      import focusVisible from 'https://cdn.skypack.dev/focus-visible';
+    </script>
+
+
+<!--Gorgias Chat Widget Start-->
+{% comment %} <script id="gorgias-chat-widget-install-v3"
+    src="https://config.gorgias.chat/bundle-loader/01H70Q6T7HFAAFX4V84V2NEKH1?source=shopify1click">
+</script>
+<script id="gorgias-chat-shopify-install">!function(_){_.SHOPIFY_PERMANENT_DOMAIN="{{shop.permanent_domain}}",_.SHOPIFY_CUSTOMER_ID="{{customer.id}}",_.SHOPIFY_CUSTOMER_EMAIL="{{customer.email}}"}(window||{});
+</script> {% endcomment %}
+<!--Gorgias Chat Widget End-->
+{%- render 'page-footer.zipifypages', renderctx: 'thm', ocuapp: oneclickupsellapp -%}
+
+<!-- KMH Added to Cart Event Script -->
+
+{% if product %}
+<script>
+window.addEventListener('load', function() {
+var _learnq = window._learnq || [];
+function addedToCart() {
+  fetch(`${window.location.origin}/cart.js`)
+  .then(res => res.clone().json().then(data => {
+    var cart = {
+      total_price: data.total_price/100,
+      $value: data.total_price/100,
+      total_discount: data.total_discount,
+      original_total_price: data.original_total_price/100,
+      items: data.items
+    }
+    if (item !== 'undefined') {
+      cart = Object.assign(cart, item)
+    }
+    if (klAjax) {
+        _learnq.push(['track', 'Added to Cart', cart]);
+        klAjax = false;
+      }
+  }))
+};
+(function (ns, fetch) {
+  ns.fetch = function() {
+    const response = fetch.apply(this, arguments);
+    response.then(res => {
+      if (`${window.location.origin}/cart/add.js`
+      	.includes(res.url)) {
+        	addedToCart()
+      }
+    });
+    return response
+  }
+}(window, window.fetch));
+var klAjax = true;
+var atcButtons = document.querySelectorAll("form[action*='/cart/add'] button[type='submit']");
+for (var i = 0; i < atcButtons.length; i++) {
+    atcButtons[i].addEventListener("click", function() {
+      if (klAjax) {
+        _learnq.push(['track', 'Added to Cart', item]);
+        klAjax = false;
+      }
+    })
+}
+});
+</script>
+{% endif %}
+
+
+
+</body>
+</html>

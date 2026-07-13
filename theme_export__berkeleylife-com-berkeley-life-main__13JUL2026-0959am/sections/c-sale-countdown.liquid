@@ -1,0 +1,318 @@
+{%- comment -%}
+  Section: Sale Countdown
+  Description: Full-width countdown bar with title and live timer to a configurable end date
+  sl-id: sl-section-sale-countdown-v1
+  Figma Desktop: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=1621-2091&m=dev
+  Figma Mobile:  https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=1624-2441&m=dev
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-sale-countdown-v1'
+-%}
+
+<section
+  id="{{ section.id }}"
+  class="c-sale-countdown"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-sale-countdown"
+  {%- if section.settings.sl_anchor_id != blank %} data-anchor="{{ section.settings.sl_anchor_id }}"{% endif %}
+>
+  <div class="c-sale-countdown__inner">
+    {%- if section.settings.title != blank -%}
+      <h2 class="c-sale-countdown__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    <div
+      class="c-sale-countdown__timer"
+      data-end-date="{{ section.settings.end_date | escape }}"
+      aria-label="Countdown timer"
+    >
+      <div class="c-sale-countdown__unit" data-timer-unit="days">
+        <span class="c-sale-countdown__number" data-timer-number="days">00</span>
+        <span class="c-sale-countdown__label">Days</span>
+      </div>
+
+      <span class="c-sale-countdown__separator" aria-hidden="true">:</span>
+
+      <div class="c-sale-countdown__unit" data-timer-unit="hours">
+        <span class="c-sale-countdown__number" data-timer-number="hours">00</span>
+        <span class="c-sale-countdown__label">Hrs</span>
+      </div>
+
+      <span class="c-sale-countdown__separator" aria-hidden="true">:</span>
+
+      <div class="c-sale-countdown__unit" data-timer-unit="minutes">
+        <span class="c-sale-countdown__number" data-timer-number="minutes">00</span>
+        <span class="c-sale-countdown__label">Min</span>
+      </div>
+
+      <span class="c-sale-countdown__separator" aria-hidden="true">:</span>
+
+      <div class="c-sale-countdown__unit" data-timer-unit="seconds">
+        <span class="c-sale-countdown__number" data-timer-number="seconds">00</span>
+        <span class="c-sale-countdown__label">Sec</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- comment -%} ========== STYLES ========== {%- endcomment -%}
+<style>
+  #{{ section.id }} {
+    --sl-c-sale-countdown-bg: {{ section.settings.bg_color }};
+    --sl-c-sale-countdown-text: {{ section.settings.text_color }};
+    --sl-c-sale-countdown-pt: {{ section.settings.padding_top }}px;
+    --sl-c-sale-countdown-pb: {{ section.settings.padding_bottom }}px;
+    --sl-c-sale-countdown-title-size: 18px;
+    --sl-c-sale-countdown-title-lh: 1.4;
+    --sl-c-sale-countdown-number-size: 40px;
+    --sl-c-sale-countdown-number-lh: 1.2;
+    --sl-c-sale-countdown-label-size: 18px;
+    --sl-c-sale-countdown-label-lh: 1.5;
+    --sl-c-sale-countdown-label-ls: 0.03em;
+    --sl-c-sale-countdown-gap: 8px;
+    --sl-c-sale-countdown-unit-gap: 16px;
+
+    padding-top: var(--sl-c-sale-countdown-pt);
+    padding-bottom: var(--sl-c-sale-countdown-pb);
+    padding-left: 12px;
+    padding-right: 12px;
+    background-color: var(--sl-c-sale-countdown-bg);
+    color: var(--sl-c-sale-countdown-text);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  #{{ section.id }} .c-sale-countdown__inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sl-c-sale-countdown-gap);
+  }
+
+  #{{ section.id }} .c-sale-countdown__title {
+    margin: 0;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--sl-c-sale-countdown-text);
+    font-family: "TT Commons Pro", var(--font-heading-family), sans-serif;
+    font-size: var(--sl-c-sale-countdown-title-size);
+    font-weight: 600;
+    line-height: var(--sl-c-sale-countdown-title-lh);
+    letter-spacing: 0;
+  }
+
+  #{{ section.id }} .c-sale-countdown__timer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--sl-c-sale-countdown-unit-gap);
+  }
+
+  #{{ section.id }} .c-sale-countdown__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  #{{ section.id }} .c-sale-countdown__number {
+    margin: 0;
+    color: var(--sl-c-sale-countdown-text);
+    font-family: "TT Commons Pro", var(--font-heading-family), sans-serif;
+    font-size: var(--sl-c-sale-countdown-number-size);
+    font-weight: 500;
+    line-height: var(--sl-c-sale-countdown-number-lh);
+    letter-spacing: 0;
+  }
+
+  #{{ section.id }} .c-sale-countdown__label {
+    margin: 0;
+    color: var(--sl-c-sale-countdown-text);
+    font-family: "TT Commons Pro", var(--font-body-family), sans-serif;
+    font-size: var(--sl-c-sale-countdown-label-size);
+    font-weight: 500;
+    line-height: var(--sl-c-sale-countdown-label-lh);
+    letter-spacing: var(--sl-c-sale-countdown-label-ls);
+    text-transform: none;
+  }
+
+  #{{ section.id }} .c-sale-countdown__separator {
+    color: var(--sl-c-sale-countdown-text);
+    font-family: "TT Commons Pro", var(--font-heading-family), sans-serif;
+    font-size: var(--sl-c-sale-countdown-number-size);
+    line-height: var(--sl-c-sale-countdown-number-lh);
+    font-weight: 500;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} {
+      --sl-c-sale-countdown-title-size: 24px;
+      --sl-c-sale-countdown-number-size: 54px;
+      --sl-c-sale-countdown-number-lh: 1.1;
+      --sl-c-sale-countdown-gap: 16px;
+      --sl-c-sale-countdown-unit-gap: 16px;
+    }
+  }
+
+  @media (min-width: 978px) {
+    #{{ section.id }} .c-sale-countdown__unit {
+      min-width: 74px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    #{{ section.id }} {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  @media (min-width: 1980px) {
+    #{{ section.id }} .c-sale-countdown__inner {
+      max-width: 1400px;
+    }
+  }
+</style>
+
+{%- comment -%} ========== SCRIPT ========== {%- endcomment -%}
+<script>
+  (function () {
+    var sectionRoot = document.getElementById('{{ section.id }}');
+    if (!sectionRoot) return;
+
+    var timerEl = sectionRoot.querySelector('.c-sale-countdown__timer');
+    if (!timerEl) return;
+
+    var endDateRaw = timerEl.getAttribute('data-end-date') || '';
+    var parsedEndDate = Date.parse(endDateRaw);
+
+    var daysEl = timerEl.querySelector('[data-timer-number="days"]');
+    var hoursEl = timerEl.querySelector('[data-timer-number="hours"]');
+    var minutesEl = timerEl.querySelector('[data-timer-number="minutes"]');
+    var secondsEl = timerEl.querySelector('[data-timer-number="seconds"]');
+
+    function setValue(element, value) {
+      if (element) {
+        element.textContent = value;
+      }
+    }
+
+    function updateCountdown() {
+      if (Number.isNaN(parsedEndDate)) {
+        setValue(daysEl, '00');
+        setValue(hoursEl, '00');
+        setValue(minutesEl, '00');
+        setValue(secondsEl, '00');
+        return;
+      }
+
+      var now = Date.now();
+      var distance = Math.max(0, parsedEndDate - now);
+
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setValue(daysEl, String(days).padStart(2, '0'));
+      setValue(hoursEl, String(hours).padStart(2, '0'));
+      setValue(minutesEl, String(minutes).padStart(2, '0'));
+      setValue(secondsEl, String(seconds).padStart(2, '0'));
+    }
+
+    if (sectionRoot.__slCountdownTimer) {
+      clearInterval(sectionRoot.__slCountdownTimer);
+    }
+
+    updateCountdown();
+    sectionRoot.__slCountdownTimer = setInterval(updateCountdown, 1000);
+
+    document.addEventListener('shopify:section:unload', function onSectionUnload(event) {
+      if (event && event.detail && event.detail.sectionId === '{{ section.id }}') {
+        if (sectionRoot.__slCountdownTimer) {
+          clearInterval(sectionRoot.__slCountdownTimer);
+          sectionRoot.__slCountdownTimer = null;
+        }
+        document.removeEventListener('shopify:section:unload', onSectionUnload);
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "C Sale Countdown",
+  "tag": "section",
+  "class": "c-sale-countdown-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Biggest Sale of the Year Ends In"
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "End date",
+      "default": "2026-12-02T23:59:00-05:00",
+      "info": "Use ISO format, e.g. 2026-12-02T23:59:00-05:00"
+    },
+    {
+      "type": "header",
+      "content": "Styles"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#0B0B0B"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Sale Countdown"
+    }
+  ]
+}
+{% endschema %}

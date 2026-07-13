@@ -1,0 +1,354 @@
+{%- liquid
+  assign bg_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+  assign accent_color = section.settings.accent_color
+
+  assign pt_desktop = section.settings.padding_top_desktop | append: 'rem'
+  assign pb_desktop = section.settings.padding_bottom_desktop | append: 'rem'
+  assign pt_mobile = section.settings.padding_top_mobile | append: 'rem'
+  assign pb_mobile = section.settings.padding_bottom_mobile | append: 'rem'
+-%}
+
+<style>
+  #{{ section.id }} {
+    background-color: {{ bg_color }};
+    padding-top: {{ pt_mobile }};
+    padding-bottom: {{ pb_mobile }};
+    & * {
+      color: {{ text_color }};
+    }
+
+    & .section__ingredients__container {
+  
+      width: 100%;
+
+
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      & .ingredients__title {
+        font-size: clamp(32px, 6vw + 1rem, 54px);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin: 0;
+        line-height: 100%;
+      }
+
+      & .ingredients__title--top,
+      & .ingredients__title--bottom {
+     
+        margin: 0;
+      }
+
+      & .span__text {
+
+        font-style: italic;
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-weight: 500;
+        color: {{ accent_color }};
+      }
+
+      & .ingredients__subtitle {
+        margin: 0;
+        text-align: center;
+        margin-bottom: 1rem;
+        margin-inline: auto;
+        max-width: 600px;
+        font-size: clamp(18px, 2vw, 20px);
+        line-height: 150%;
+      }
+
+      & .ingredients__cards {
+        width: 100%;
+      }
+
+      & .ingredients__list {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        margin: 0;
+        padding: 0;
+      }
+
+      & .ingredient__item {
+        list-style: none;
+        width: 87%;
+        overflow: hidden;
+
+        &:nth-child(even) {
+          margin-left: auto;
+        }
+      }
+
+      & .ingredient__card__img__container {
+        width: 100%;
+        display: flex;
+      }
+
+      & .ingredient__card__img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      & .ingredient__card__texts {
+        padding-block: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      & .ingredient__card__name {
+        margin: 0;
+        font-size: clamp(30px, 4vw, 40px);
+        font-style: italic;
+        color: {{ accent_color }};
+        font-family: "Cormorant Garamond", serif;
+        line-height: 100%;
+      }
+
+      & .ingredient__card__description {
+        margin: 0;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  @media screen and (width >= 64rem) {
+    #{{ section.id }} {
+      padding-top: {{ pt_desktop }};
+      padding-bottom: {{ pb_desktop }};
+
+      & .section__ingredients__container {
+        & .ingredients__list {
+          flex-direction: row;
+          gap: 3rem;
+        }
+
+        & .ingredient__item {
+          width: 100%;
+
+          &:nth-child(2) {
+            margin-top: 5.5rem;
+          }
+
+          &:nth-child(3) {
+            margin-top: 11rem;
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="section__ingredients__container">
+      <!-- Header Section -->
+      {% if section.settings.title != blank or section.settings.subtitle != blank %}
+        <h2 class="ingredients__title">
+          {% if section.settings.title_top != blank %}
+            <span class="ingredients__title--top">{{ section.settings.title_top }}</span>
+          {% endif %}
+          {% if section.settings.title_bottom != blank %}
+            <span class="ingredients__title--bottom">{{ section.settings.title_bottom }}</span>
+          {% endif %}
+        </h2>
+        {% if section.settings.subtitle != blank %}
+          <p class="ingredients__subtitle">{{ section.settings.subtitle }}</p>
+        {% endif %}
+      {% endif %}
+
+      <!-- Ingredients Grid -->
+      {% if section.blocks.size > 0 %}
+        <div class="ingredients__cards">
+          <ul class="ingredients__list">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'ingredient' %}
+                  <li class="ingredient__item" {{ block.shopify_attributes }}>
+                    {% if block.settings.image != blank %}
+                      <div class="ingredient__card__img__container">
+                        {{
+                          block.settings.image
+                          | image_url: width: 600
+                          | image_tag: loading: 'lazy', class: 'ingredient__card__img', alt: block.settings.name
+                        }}
+                      </div>
+                    {% endif %}
+
+                    <div class="ingredient__card__texts">
+                      {% if block.settings.name != blank %}
+                        <h3 class="ingredient__card__name">{{ block.settings.name }}</h3>
+                      {% endif %}
+                      {% if block.settings.description != blank %}
+                        <p class="ingredient__card__description">{{ block.settings.description }}</p>
+                      {% endif %}
+                    </div>
+                  </li>
+              {% endcase %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Ingredients",
+  "tag": "section",
+  "class": "shopify-section-ingredients",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "title_top",
+      "label": "Title Top Line",
+      "default": "<p>Powerful <em>Ingredients.</em></p>"
+    },
+    {
+      "type": "textarea",
+      "id": "title_bottom",
+      "label": "Title Bottom Line",
+      "default": "<p>Clinically <em>Effective Results.</em></p>"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Section Subtitle",
+      "default": "Each capsule delivers a clinically studied blend of natural ingredients designed to restore nitric oxide, improve circulation, and boost daily vitality."
+    },
+    {
+      "type": "header",
+      "content": "Design Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#2C3E50"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Ingredient Names)",
+      "default": "#e46627"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Desktop Top Padding",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Desktop Bottom Padding",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile Top Padding",
+      "min": 0,
+      "max": 8,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile Bottom Padding",
+      "min": 0,
+      "max": 8,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Ingredient Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Ingredient Name",
+          "default": "Ingredient Name"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Ingredient Description",
+          "default": "Description of the ingredient and its benefits."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Ingredients",
+      "blocks": [
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Beetroot & Potassium Nitrate Blend",
+            "description": "Rich in dietary nitrates — equivalent to 7oz of beetroot — clinically proven to boost nitric oxide and support circulation."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vitamin C",
+            "description": "A potent antioxidant that helps convert nitrates into nitric oxide, while supporting immune and vascular health."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Magnesium",
+            "description": "A vital mineral that relaxes blood vessels and supports cardiovascular function, energy production, and overall balance."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

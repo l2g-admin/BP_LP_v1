@@ -1,0 +1,648 @@
+<style>
+
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    position: relative;
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    color: {{ section.settings.text_color }};
+    overflow: hidden;
+
+    & .c-comp-journey__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+
+    & .c-comp-journey__overlay {
+      position: absolute;
+      inset: 0;
+      background-color: {{ section.settings.overlay_color }};
+      opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+      z-index: 1;
+    }
+
+    & .c-comp-journey__container {
+      position: relative;
+      z-index: 2;
+    }
+
+    & .c-comp-journey__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4rem;
+      gap: 2rem;
+    }
+
+    & .c-comp-journey__header {
+      max-width: 700px;
+    }
+
+    & .c-comp-journey__eyebrow {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #ffffff;
+      margin: 0 0 1rem 0;
+      font-style: normal;
+        font-weight: 700;
+        line-height: 120%; /* 16.8px */
+        letter-spacing: 2.1px;
+        text-transform: uppercase;
+    }
+
+    & .c-comp-journey__title {
+      font-size: clamp(36px, 4vw, 48px);
+      line-height: 1.2;
+      margin: 0 0 1rem 0;
+      color: #ffffff;
+
+      & span {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(40px, 4.5vw, 54px);
+        color: #ffffff;
+        font-style: italic;
+      }
+    }
+
+    & .c-comp-journey__subtitle {
+      font-size: clamp(15px, 1.5vw, 17px);
+      line-height: 1.5;
+      margin: 0;
+      color: rgba(255,255,255,0.85);
+    }
+
+    & .c-comp-journey__btn-mobile {
+      display: none;
+    }
+
+    & .c-comp-journey__box {
+      position: relative;
+      width: 100%;
+    }
+
+    & .c-comp-journey__box-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 0;
+    }
+
+    & .c-comp-journey__grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      padding: 3rem 0;
+      border-radius:  24px;
+      background: rgba(27, 28, 41, 0.12);
+      border: 1px solid white;
+    }
+
+    & .c-comp-journey__highlight {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      border: 1.5px solid {{ section.settings.accent_color }};
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(210, 84, 53, 0.15) 0%, rgba(210, 84, 53, 0) 100%);
+      margin: -1.5rem 0;
+      z-index: -1;
+    }
+
+    & .c-comp-journey__cell {
+      display: flex;
+      align-items: center;
+      padding: 1.5rem 1rem;
+    }
+
+    & .c-comp-journey__cell--header {
+      padding-top: 0;
+      padding-bottom: 2rem;
+    }
+
+    & .c-comp-journey__cell--feature {
+      justify-content: flex-start;
+      padding-left: 3rem;
+      font-size: clamp(16px, 1.2vw, 20px);
+      color: #ffffff;
+      opacity: 0.9;
+    }
+
+    & .c-comp-journey__cell--brand1,
+    & .c-comp-journey__cell--brand2,
+    & .c-comp-journey__cell--brand3 {
+      justify-content: center;
+      text-align: center;
+    }
+
+    & .c-comp-journey__text-val {
+      font-size: clamp(14px, 1.2vw, 16px);
+      font-style: italic;
+      color: #ffffff;
+      opacity: 0.8;
+    }
+
+    & .c-comp-journey__header-brand1 {
+      font-size: clamp(20px, 2vw, 24px);
+      color: #ffffff;
+      margin: 0;
+    }
+
+    & .c-comp-journey__header-logo {
+      max-width: 100%;
+      max-height: 40px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    & .c-comp-journey__header-brand2,
+    & .c-comp-journey__header-brand3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+      margin: 0;
+      opacity: 0.9;
+      line-height: 1.4;
+    }
+
+    & .c-comp-journey__icon {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    & .c-comp-journey__icon svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (up to 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+      & .c-comp-journey__top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      & .c-comp-journey__title {
+        font-size: 36px;
+      }
+
+      & .c-comp-journey__btn-desktop {
+        display: none;
+      }
+
+      & .c-comp-journey__btn-mobile {
+        display: inline-flex;
+        margin-top: 3rem;
+        width: 100%;
+      }
+
+      & .c-comp-journey__grid {
+        grid-template-columns: 1.5fr 1fr 1fr;
+        padding: 2rem 0;
+      }
+
+      & .c-comp-journey__highlight {
+        margin: -1rem 0;
+      }
+
+      & .c-comp-journey__cell--brand3 {
+        display: none;
+      }
+
+      & .c-comp-journey__cell {
+        padding: 1.25rem 0.5rem;
+      }
+
+      & .c-comp-journey__cell--feature {
+        padding-left: 1.5rem;
+        font-size: 13px;
+        line-height: 1.3;
+      }
+
+      & .c-comp-journey__header-brand1 {
+        font-size: 18px;
+      }
+
+      & .c-comp-journey__header-logo {
+        max-height: 28px;
+      }
+
+      & .c-comp-journey__header-brand2 {
+        font-size: 10px;
+      }
+
+      & .c-comp-journey__icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="c-comp-journey__bg">
+    {% if section.settings.bg_image != blank %}
+      <img src="{{ section.settings.bg_image | image_url: width: 2000 }}" alt="" loading="lazy">
+    {% endif %}
+    <div class="c-comp-journey__overlay"></div>
+  </div>
+  <div class="container-sl">
+    <div class="c-comp-journey__container">
+      <div class="c-comp-journey__top">
+        <div class="c-comp-journey__header">
+          {% if section.settings.eyebrow != blank %}
+            <p class="c-comp-journey__eyebrow">{{ section.settings.eyebrow }}</p>
+          {% endif %}
+
+          {% if section.settings.title != blank %}
+            <h2 class="c-comp-journey__title">{{ section.settings.title }}</h2>
+          {% endif %}
+
+          {% if section.settings.subtitle != blank %}
+            <p class="c-comp-journey__subtitle">{{ section.settings.subtitle }}</p>
+          {% endif %}
+        </div>
+
+        {% if section.settings.btn_text != blank %}
+          {% render 'arrow-btn', link: section.settings.btn_link, text: section.settings.btn_text, bg_color: section.settings.accent_color, extra_class: 'c-comp-journey__btn-desktop' %}
+        {% endif %}
+      </div>
+
+      <div class="c-comp-journey__box">
+        <div class="c-comp-journey__box-bg"></div>
+
+        {% assign num_rows = section.blocks.size | plus: 1 %}
+        <div class="c-comp-journey__grid" style="grid-template-rows: repeat({{ num_rows }}, auto);">
+          <div class="c-comp-journey__highlight"></div>
+
+          <div class="c-comp-journey__cell c-comp-journey__cell--header c-comp-journey__cell--feature"></div>
+
+          <div class="c-comp-journey__cell c-comp-journey__cell--header c-comp-journey__cell--brand1">
+            {% if section.settings.brand1_logo != blank %}
+              <img
+                class="c-comp-journey__header-logo"
+                src="{{ section.settings.brand1_logo | image_url: width: 400 }}"
+                alt="{{ section.settings.brand1_title | escape }}"
+                loading="lazy"
+                width="{{ section.settings.brand1_logo.width }}"
+                height="{{ section.settings.brand1_logo.height }}"
+              >
+            {% else %}
+              <h3 class="c-comp-journey__header-brand1">{{ section.settings.brand1_title }}</h3>
+            {% endif %}
+          </div>
+
+          <div class="c-comp-journey__cell c-comp-journey__cell--header c-comp-journey__cell--brand2">
+            <h3 class="c-comp-journey__header-brand2">{{ section.settings.brand2_title }}</h3>
+          </div>
+
+          <div class="c-comp-journey__cell c-comp-journey__cell--header c-comp-journey__cell--brand3">
+            <h3 class="c-comp-journey__header-brand3">{{ section.settings.brand3_title }}</h3>
+          </div>
+
+          {% for block in section.blocks %}
+            <div class="c-comp-journey__cell c-comp-journey__cell--feature" {{ block.shopify_attributes }}>
+              {{ block.settings.title }}
+            </div>
+
+            <div class="c-comp-journey__cell c-comp-journey__cell--brand1">
+              {% assign val1 = block.settings.brand1_value | downcase %}
+              {% if val1 == 'check' %}
+                <div class="c-comp-journey__icon">
+                  {% render 'c-table-verified' %}
+                </div>
+              {% elsif val1 == 'x' %}
+                <div class="c-comp-journey__icon">
+                  {% render 'c-table-x' %}
+                </div>
+              {% else %}
+                <span class="c-comp-journey__text-val">{{ block.settings.brand1_value }}</span>
+              {% endif %}
+            </div>
+
+            <div class="c-comp-journey__cell c-comp-journey__cell--brand2">
+              {% assign val2 = block.settings.brand2_value | downcase %}
+              {% if val2 == 'check' %}
+                <div class="c-comp-journey__icon">
+                  {% render 'c-table-verified' %}
+                </div>
+              {% elsif val2 == 'x' %}
+                <div class="c-comp-journey__icon">
+                  {% render 'c-table-x' %}
+                </div>
+              {% else %}
+                <span class="c-comp-journey__text-val">{{ block.settings.brand2_value }}</span>
+              {% endif %}
+            </div>
+
+            <div class="c-comp-journey__cell c-comp-journey__cell--brand3">
+              {% assign val3 = block.settings.brand3_value | downcase %}
+              {% if val3 == 'check' %}
+                <div class="c-comp-journey__icon">
+                  {% render 'c-table-verified' %}
+                </div>
+              {% elsif val3 == 'x' %}
+                <div class="c-comp-journey__icon">
+                  {% render 'c-table-x' %}
+                </div>
+              {% else %}
+                <span class="c-comp-journey__text-val">{{ block.settings.brand3_value }}</span>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      {% if section.settings.btn_text != blank %}
+        {% render 'arrow-btn', link: section.settings.btn_link, text: section.settings.btn_text, bg_color: section.settings.accent_color, extra_class: 'c-comp-journey__btn-mobile' %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Comparison Journey",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#181a28"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 85,
+      "unit": "%",
+      "label": "Overlay Opacity"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d25435"
+    },
+    {
+      "type": "header",
+      "content": "Header Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "THE JOURNEY"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Berkeley Life vs. <span>The Rest</span>",
+      "info": "Wrap text in <span></span> to apply the italic serif font."
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Not all NO support is created equal. See how Berkeley Life stacks up."
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "Start Today"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Table Columns"
+    },
+    {
+      "type": "text",
+      "id": "brand1_title",
+      "label": "Brand 1 (Highlight)",
+      "default": "Berkeley Life"
+    },
+    {
+      "type": "image_picker",
+      "id": "brand1_logo",
+      "label": "Brand 1 Logo",
+      "info": "Optional. If set, replaces the Brand 1 text in the table header."
+    },
+    {
+      "type": "text",
+      "id": "brand2_title",
+      "label": "Brand 2",
+      "default": "GENERIC SUPPLEMENTS"
+    },
+    {
+      "type": "text",
+      "id": "brand3_title",
+      "label": "Brand 3 (Hidden on Mobile)",
+      "default": "BLUE PILL"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_row",
+      "name": "Feature Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Feature Name",
+          "default": "Natural, plant-based support"
+        },
+        {
+          "type": "text",
+          "id": "brand1_value",
+          "label": "Brand 1 Value",
+          "info": "Type 'check' for orange checkmark, 'x' for cross icon, or any text.",
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "brand2_value",
+          "label": "Brand 2 Value",
+          "info": "Type 'check', 'x', or any text.",
+          "default": "Varies"
+        },
+        {
+          "type": "text",
+          "id": "brand3_value",
+          "label": "Brand 3 Value",
+          "info": "Type 'check', 'x', or any text.",
+          "default": "x"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Comparison Journey",
+      "blocks": [
+        {
+          "type": "feature_row",
+          "settings": {
+            "title": "Natural, plant-based support",
+            "brand1_value": "check",
+            "brand2_value": "Varies",
+            "brand3_value": "x"
+          }
+        },
+        {
+          "type": "feature_row",
+          "settings": {
+            "title": "Clinically proven",
+            "brand1_value": "check",
+            "brand2_value": "x",
+            "brand3_value": "N/A"
+          }
+        },
+        {
+          "type": "feature_row",
+          "settings": {
+            "title": "Measurable results via test strips",
+            "brand1_value": "check",
+            "brand2_value": "x",
+            "brand3_value": "x"
+          }
+        },
+        {
+          "type": "feature_row",
+          "settings": {
+            "title": "Trusted by 3,000+ healthcare providers",
+            "brand1_value": "check",
+            "brand2_value": "x",
+            "brand3_value": "Varies"
+          }
+        },
+        {
+          "type": "feature_row",
+          "settings": {
+            "title": "No known side effects",
+            "brand1_value": "check",
+            "brand2_value": "Varies",
+            "brand3_value": "x"
+          }
+        },
+        {
+          "type": "feature_row",
+          "settings": {
+            "title": "30-day money-back guarantee",
+            "brand1_value": "check",
+            "brand2_value": "x",
+            "brand3_value": "x"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

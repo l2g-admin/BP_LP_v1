@@ -1,0 +1,527 @@
+<style>
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top_mobile }}rem;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}rem;
+    background-color: {{ section.settings.section_bg_color }};
+    font-family: inherit;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}rem;
+      padding-bottom: {{ section.settings.padding_bottom }}rem;
+    }
+  }
+
+  #{{ section.id }} .hero__fullwidth {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .hero__fullwidth {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    #{{ section.id }} .hero__fullwidth {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
+
+  #{{ section.id }} .hero__wrapper {
+    position: relative;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+
+  /* --- BACKGROUND & OVERLAY --- */
+  #{{ section.id }} .hero__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  #{{ section.id }} .hero__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    object-position: {{ section.settings.image_position }};
+  }
+
+  #{{ section.id }} .hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ section.settings.overlay_color }};
+    opacity: {{ section.settings.overlay_opacity }};
+    z-index: 2;
+  }
+
+  /* --- INNER CONTAINER --- */
+  #{{ section.id }} .hero__inner {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 1rem;
+    gap: 3rem;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .hero__inner {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5rem 4rem;
+    }
+  }
+
+  /* --- LEFT: TEXT CONTENT --- */
+  #{{ section.id }} .hero__content {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: {{ section.settings.text_color }};
+    max-width: 600px;
+  }
+
+  #{{ section.id }} .hero__subtitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 1rem 0;
+    opacity: 0.9;
+  }
+
+  #{{ section.id }} .hero__title {
+    margin: 0 0 1.5rem 0;
+    color: inherit;
+  }
+
+  #{{ section.id }} .hero__title-italic {
+    display: block;
+    font-weight: 400;
+  }
+
+  #{{ section.id }} .hero__description {
+    margin: 0 0 2rem 0;
+    opacity: 0.85;
+  }
+
+  {%- if section.settings.hide_description_mobile -%}
+    @media (max-width: 767px) {
+      #{{ section.id }} .hero__description {
+        display: none;
+      }
+    }
+  {%- endif -%}
+
+  #{{ section.id }} .hero__btn-main {
+    background-color: {{ section.settings.accent_color }};
+    color: #ffffff;
+    padding: 1rem 2.5rem;
+    border-radius: 3rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+  }
+
+  #{{ section.id }} .hero__btn-main:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  /* --- RIGHT: FLOATING PRODUCT CARD (GLASSMORPHISM) --- */
+  #{{ section.id }} .hero__product-card {
+    display: none;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .hero__product-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-self: end;
+      /* Glassmorphism Effect */
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 1rem;
+      padding: 3rem 2rem 2rem 2rem;
+      position: relative;
+      text-decoration: none;
+      color: {{ section.settings.text_color }};
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    #{{ section.id }} .hero__product-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.12);
+    }
+  }
+
+  /* Card Elements */
+  #{{ section.id }} .card__badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: {{ section.settings.accent_color }};
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    white-space: nowrap;
+  }
+
+  #{{ section.id }} .card__image {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+  }
+
+  #{{ section.id }} .card__title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    text-align: center;
+  }
+
+  #{{ section.id }} .card__link {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    opacity: 0.8;
+  }
+
+  #{{ section.id }} .card__link svg {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  /* --- FRONTROW HOMEPAGE BADGE --- */
+  #{{ section.id }} .hero__frontrow-badge {
+    margin-top: 1.25rem;
+  }
+</style>
+
+<section id="{{ section.id }}" class="c-hero-product">
+  <div class="{% if section.settings.use_container %}container-sl{% else %}hero__fullwidth{% endif %}">
+    <div class="hero__wrapper">
+    
+    <div class="hero__bg">
+      {%- if section.settings.bg_image != blank -%}
+        {{ section.settings.bg_image | image_url: width: 2000 | image_tag: loading: 'lazy' }}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+    <div class="hero__overlay"></div>
+
+    <div class="hero__inner">
+      
+      <div class="hero__content">
+        {%- if section.settings.subtitle != blank -%}
+          <p class="hero__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+
+        <h2 class="hero__title c-hero-title">
+          {{ section.settings.title_part_1 }}
+          {%- if section.settings.title_part_2_italic != blank -%}
+            <span class="hero__title-italic c-font-cormorant">{{ section.settings.title_part_2_italic }}</span>
+          {%- endif -%}
+        </h2>
+
+        {%- if section.settings.description != blank -%}
+          <p class="hero__description c-description">{{ section.settings.description }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.btn_label != blank -%}
+          <a href="{{ section.settings.btn_link | default: '#' }}" class="hero__btn-main">
+            {{ section.settings.btn_label }}
+          </a>
+        {%- endif -%}
+
+        <div class="hero__frontrow-badge">
+          {% render 'c-frontrow-homepage-banner' %}
+        </div>
+      </div>
+
+      {%- if section.settings.show_product_card -%}
+        {%- assign card_product = section.settings.card_product -%}
+        {%- assign card_url = section.settings.card_link_override | default: card_product.url | default: '#' -%}
+        {%- assign card_img = section.settings.card_image_override | default: card_product.featured_image -%}
+        {%- assign card_name = card_product.title -%}
+        <a href="{{ card_url }}" class="hero__product-card">
+
+          {%- if section.settings.card_badge != blank -%}
+            <div class="card__badge">{{ section.settings.card_badge }}</div>
+          {%- endif -%}
+
+          {%- if card_img != blank -%}
+            {{ card_img | image_url: width: 400 | image_tag: loading: 'lazy', class: 'card__image' }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'card__image' }}
+          {%- endif -%}
+
+          {%- if card_name != blank -%}
+            <h3 class="card__title">{{ card_name }}</h3>
+          {%- endif -%}
+
+          {%- if section.settings.card_link_text != blank -%}
+            <div class="card__link">
+              {{ section.settings.card_link_text }}
+              <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+          {%- endif -%}
+
+        </a>
+      {%- endif -%}
+
+    </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Border Hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_container",
+      "label": "Use container-sl",
+      "info": "If unchecked, the section becomes full width with 2rem side padding.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Background Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Position Focus",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "top", "label": "Top" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.1,
+      "default": 0.4
+    },
+
+    {
+      "type": "header",
+      "content": "Main Content (Left)"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "title_part_1",
+      "label": "Title Part 1 (Normal)"
+    },
+    {
+      "type": "text",
+      "id": "title_part_2_italic",
+      "label": "Title Part 2 (Italic Serif)"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_description_mobile",
+      "label": "Hide description on mobile",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Main Button Label"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Main Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Floating Product Card (Right - Desktop)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_card",
+      "label": "Show Floating Product Card",
+      "default": true
+    },
+    {
+      "type": "product",
+      "id": "card_product",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "card_badge",
+      "label": "Badge Text"
+    },
+    {
+      "type": "text",
+      "id": "card_link_text",
+      "label": "Link Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_image_override",
+      "label": "Image Override",
+      "info": "Optional. Overrides the product featured image if set."
+    },
+    {
+      "type": "url",
+      "id": "card_link_override",
+      "label": "Link Override",
+      "info": "Optional. Overrides the product URL if set."
+    },
+    {
+      "type": "header",
+      "content": "Global Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section Outer Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d15234"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top (Desktop)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom (Desktop)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 2,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 2,
+      "unit": "rem"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Border Hero"
+    }
+  ]
+}
+{% endschema %}

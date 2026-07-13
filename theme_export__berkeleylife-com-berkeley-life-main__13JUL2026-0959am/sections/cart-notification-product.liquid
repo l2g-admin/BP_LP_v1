@@ -1,0 +1,36 @@
+{%- if cart != empty -%}
+  {%- for item in cart.items -%}
+    <div id="cart-notification-product-{{ item.id }}" class="flex items-center gap-4">
+      {% if item.image %}
+        <img class=""
+          src="{{ item.image | image_url: width: 140 }}"
+          alt="{{ item.image.alt | escape }}"
+          width="70"
+          height="{{ 70 | divided_by: item.image.aspect_ratio | ceil }}"
+          loading="lazy"
+        >
+      {% endif %}
+      <div>
+        <h3 class="h5">{{ item.product.title | escape }}</h3>
+        {%- unless item.product.has_only_default_variant and item.selling_plan_allocation == nil -%}
+          <dl>
+            {%- unless item.product.has_only_default_variant -%}
+            {%- for option in item.options_with_values -%}
+            <div class="flex text-base">
+              <dt class="mr-1">{{ option.name }}: </dt>
+              <dd>{{ option.value }}</dd>
+            </div>
+            {%- endfor -%}
+            {%- endunless -%}
+            {%- unless item.selling_plan_allocation == nil -%}
+              <div class="flex text-base">
+                <dt class="sr-only">Subscribe: </dt>
+                <dd>{{ item.selling_plan_allocation.selling_plan.name }}</dd>
+              </div>
+            {%- endunless -%}
+          </dl>
+        {%- endunless -%}
+      </div>
+    </div>
+  {%- endfor -%}
+{%- endif -%}

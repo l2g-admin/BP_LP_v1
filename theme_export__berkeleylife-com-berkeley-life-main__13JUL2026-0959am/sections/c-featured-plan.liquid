@@ -1,0 +1,755 @@
+<style>
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    background-color: {{ section.settings.bg_color }};
+    font-family: inherit;
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .fp__container {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* --- HEADER --- */
+  #{{ section.id }} .fp__header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  #{{ section.id }} .fp__subtitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: {{ section.settings.accent_color }};
+    margin: 0;
+  }
+
+  #{{ section.id }} .fp__title {
+    margin: 0;
+    color: inherit;
+  }
+
+  #{{ section.id }} .fp__title-highlight {
+    color: {{ section.settings.accent_color }};
+  }
+
+  /* --- PRODUCT CARD --- */
+  #{{ section.id }} .fp__card {
+    position: relative;
+    background-color: {{ section.settings.card_bg_color }};
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .fp__card {
+      flex-direction: row;
+      padding: 2.5rem;
+      align-items: stretch;
+      gap: 3rem;
+    }
+  }
+
+  /* --- BEST SELLER BADGE --- */
+  #{{ section.id }} .fp__badge-top {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: {{ section.settings.accent_color }};
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.4rem 1rem;
+    border-radius: 0.25rem;
+    z-index: 10;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .fp__badge-top {
+      left: auto;
+      right: 3rem;
+      transform: none;
+    }
+  }
+
+  /* --- IMAGE SIDE --- */
+  #{{ section.id }} .fp__image-col {
+    flex: 1 1 40%;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #{{ section.id }} .fp__image-col img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.2));
+  }
+
+  /* --- CONTENT SIDE --- */
+  #{{ section.id }} .fp__content-col {
+    flex: 1 1 60%;
+    display: flex;
+    flex-direction: column;
+    color: {{ section.settings.card_text_color }};
+  }
+
+  #{{ section.id }} .fp__reviews {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  #{{ section.id }} .fp__product-title {
+    font-size: 1.75rem;
+    font-weight: 500;
+    margin: 0 0 1rem 0;
+    color: {{ section.settings.card_text_color }};
+  }
+
+  #{{ section.id }} .fp__product-desc {
+    margin: 0 0 2rem 0;
+    opacity: 0.85;
+  }
+
+  /* --- PLAN SELECTOR --- */
+  #{{ section.id }} .fp__form {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+  }
+
+  #{{ section.id }} .fp__plans-container {
+    border-radius: var(--radius-sm, 16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  #{{ section.id }} .fp__plan-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+
+  #{{ section.id }} .fp__plans-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .fp__plans-wrapper {
+      flex-direction: row;
+    }
+  }
+
+  #{{ section.id }} .fp__plan-box {
+    flex: 1;
+    position: relative;
+    background-color: {{ section.settings.plan_bg_color }};
+    border: 1px solid transparent;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  /* Active Plan State */
+  #{{ section.id }} .fp__plan-box.is-active {
+    background: {{section.settings.bg_active_color}};
+    border-color: {{ section.settings.accent_color }};
+  }
+
+  /* Plan Inner Texts */
+  #{{ section.id }} .plan__title {
+    font-size: 0.85rem;
+    margin: 0 0 0.5rem 0;
+    opacity: 0.9;
+  }
+
+  #{{ section.id }} .plan__price {
+    font-size: clamp(20px, 3.5vw, 32px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  #{{ section.id }} .plan__compare {
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-decoration: line-through;
+    opacity: 0.55;
+  }
+
+  #{{ section.id }} .plan__note {
+    font-size: 0.75rem;
+    margin: 0.5rem 0 0 0;
+    opacity: 0.7;
+  }
+
+  #{{ section.id }} .plan__per-mo {
+    font-size: 0.85rem;
+    font-weight: 400;
+    opacity: 0.7;
+  }
+
+  #{{ section.id }} .plan__billing {
+    font-size: 0.75rem;
+    margin: 0.5rem 0 0 0;
+    opacity: 0.7;
+  }
+
+  /* Plan Save Badge */
+  #{{ section.id }} .plan__badge {
+    position: absolute;
+    top: -12px;
+    background-color: {{ section.settings.accent_color }};
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.75rem;
+    border-radius: 2rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  #{{ section.id }} .fp__plan-box.is-active .plan__badge {
+    opacity: 1;
+  }
+
+  /* --- SUBMIT BUTTON --- */
+  #{{ section.id }} .fp__btn-submit {
+    width: 100%;
+    background-color: {{ section.settings.accent_color }};
+    color: #ffffff;
+    border: none;
+    padding: 1.1rem;
+    border-radius: 3rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  #{{ section.id }} .fp__btn-submit:hover {
+    opacity: 0.9;
+  }
+
+  #{{ section.id }} a.fp__btn-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+</style>
+
+{%- assign fp_product = section.settings.product -%}
+{%- assign fp_has_product = false -%}
+{%- if fp_product != blank -%}{%- assign fp_has_product = true -%}{%- endif -%}
+
+{%- assign fp_display_variant = blank -%}
+{%- assign fp_display_price = 0 -%}
+{%- assign fp_display_compare_at = 0 -%}
+{%- assign fp_has_sub = false -%}
+{%- assign fp_sub_price = 999999999 -%}
+{%- assign fp_sub_per_delivery = 0 -%}
+{%- assign fp_sub_plan_id = '' -%}
+{%- assign fp_sub_variant_id = '' -%}
+{%- assign fp_sub_savings = 0 -%}
+{%- assign fp_sub_savings_amount = 0 -%}
+{%- assign fp_sub_per_month = 0 -%}
+{%- assign fp_one_time_per_month = 0 -%}
+{%- assign fp_sub_months = 1 -%}
+{%- assign fp_sub_weeks = 4 -%}
+
+{%- if fp_has_product -%}
+  {%- assign fp_display_variant = fp_product.selected_or_first_available_variant -%}
+  {%- assign fp_variant_position = section.settings.variant_position | plus: 0 -%}
+
+  {%- if fp_variant_position > 0 and fp_variant_position <= fp_product.variants.size -%}
+    {%- assign fp_variant_index = fp_variant_position | minus: 1 -%}
+    {%- assign fp_display_variant = fp_product.variants[fp_variant_index] -%}
+  {%- else -%}
+    {%- for variant in fp_product.variants -%}
+      {%- if variant.metafields.custom.hide_variant == true -%}{%- continue -%}{%- endif -%}
+      {%- if variant.price > 0 -%}
+        {%- assign fp_display_variant = variant -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- assign fp_display_price = fp_display_variant.price -%}
+  {%- assign fp_display_compare_at = fp_display_variant.compare_at_price -%}
+
+  {%- assign fp_sub_variant = fp_display_variant -%}
+  {%- assign fp_sub_variant_position = section.settings.subscription_variant_position | plus: 0 -%}
+  {%- if fp_sub_variant_position > 0 and fp_sub_variant_position <= fp_product.variants.size -%}
+    {%- assign fp_sub_variant_index = fp_sub_variant_position | minus: 1 -%}
+    {%- assign fp_sub_variant = fp_product.variants[fp_sub_variant_index] -%}
+  {%- endif -%}
+  {%- assign fp_sub_variant_price = fp_sub_variant.price -%}
+
+  {%- assign fp_target_plan_id = section.settings.selling_plan_id | strip -%}
+
+  {%- if fp_sub_variant.selling_plan_allocations.size > 0 -%}
+    {%- if fp_target_plan_id != blank -%}
+      {%- for allocation in fp_sub_variant.selling_plan_allocations -%}
+        {%- assign fp_alloc_plan_id = allocation.selling_plan.id | append: '' -%}
+        {%- if fp_alloc_plan_id == fp_target_plan_id -%}
+          {%- assign fp_has_sub = true -%}
+          {%- assign fp_sub_price = allocation.price | plus: 0 -%}
+          {%- assign fp_sub_per_delivery = allocation.per_delivery_price | plus: 0 -%}
+          {%- assign fp_sub_plan_id = allocation.selling_plan.id -%}
+          {%- assign fp_sub_variant_id = fp_sub_variant.id -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- assign fp_first_alloc = fp_sub_variant.selling_plan_allocations.first -%}
+      {%- assign fp_has_sub = true -%}
+      {%- assign fp_sub_price = fp_first_alloc.price | plus: 0 -%}
+      {%- assign fp_sub_per_delivery = fp_first_alloc.per_delivery_price | plus: 0 -%}
+      {%- assign fp_sub_plan_id = fp_first_alloc.selling_plan.id -%}
+      {%- assign fp_sub_variant_id = fp_sub_variant.id -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if fp_has_sub -%}
+    {%- assign fp_display_months_char = fp_display_variant.title | slice: 0, 1 -%}
+    {%- assign fp_display_months = fp_display_months_char | plus: 0 -%}
+    {%- if fp_display_months < 1 -%}{%- assign fp_display_months = 1 -%}{%- endif -%}
+
+    {%- assign fp_sub_months_char = fp_sub_variant.title | slice: 0, 1 -%}
+    {%- assign fp_sub_months = fp_sub_months_char | plus: 0 -%}
+    {%- if fp_sub_months < 1 -%}{%- assign fp_sub_months = 1 -%}{%- endif -%}
+
+    {%- assign fp_one_time_per_month = fp_display_price | divided_by: fp_display_months -%}
+    {%- assign fp_sub_per_month = fp_sub_price | divided_by: fp_sub_months -%}
+    {%- assign fp_sub_weeks = fp_sub_months | times: 4 -%}
+
+    {%- if fp_one_time_per_month > 0 -%}
+      {%- assign fp_sub_savings_amount = fp_one_time_per_month | minus: fp_sub_per_month -%}
+      {%- assign fp_sub_savings = fp_sub_savings_amount | times: 100 | divided_by: fp_one_time_per_month -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+
+
+<section id="{{ section.id }}" class="c-featured-plan">
+  <div class="container-sl">
+    <div class="fp__container">
+    
+    <header class="fp__header">
+      {%- if section.settings.subtitle != blank -%}
+        <p class="fp__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+      <h2 class="fp__title c-title">
+        {{ section.settings.title_prefix }}
+        <span class="fp__title-highlight c-font-cormorant-title">{{ section.settings.title_highlight }}</span><br>
+        {{ section.settings.title_suffix }}
+      </h2>
+    </header>
+
+    <div class="fp__card">
+      
+      {%- if section.settings.top_badge != blank -%}
+        <div class="fp__badge-top">{{ section.settings.top_badge }}</div>
+      {%- endif -%}
+
+      <div class="fp__image-col">
+        {%- if fp_has_product and fp_product.featured_image != blank -%}
+          {{ fp_product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy' }}
+        {%- elsif section.settings.fallback_image != blank -%}
+          {{ section.settings.fallback_image | image_url: width: 600 | image_tag: loading: 'lazy' }}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag }}
+        {%- endif -%}
+      </div>
+
+      <div class="fp__content-col">
+
+        <div class="fp__reviews">
+          {%- if fp_has_product -%}
+            {% render 'okendo-reviews-product-rating-summary', product: fp_product %}
+          {%- endif -%}
+        </div>
+
+        <h3 class="fp__product-title">
+          {%- if fp_has_product -%}
+            {{ fp_product.title }}
+          {%- else -%}
+            {{ section.settings.fallback_title }}
+          {%- endif -%}
+        </h3>
+
+        <p class="fp__product-desc c-description">{{ section.settings.description }}</p>
+
+        {%- assign fp_form_id = 'product-form-' | append: section.id -%}
+        <product-form class="fp__product-form">
+          <div data-product-form-errors role="alert" hidden>
+            <span data-product-form-error-msg></span>
+          </div>
+
+          {%- form 'product',
+            fp_product,
+            id: fp_form_id,
+            class: 'fp__form',
+            novalidate: 'novalidate',
+            data-type: 'add-to-cart-form'
+          -%}
+
+            <input type="hidden" name="id" id="ProductId-{{ section.id }}" value="{{ fp_display_variant.id }}">
+            <input type="hidden" name="selling_plan" id="SellingPlan-{{ section.id }}" value="{{ fp_sub_plan_id }}">
+
+            <div class="fp__plans-container">
+
+            <span class="fp__plan-label">CHOOSE YOUR PLAN</span>
+
+            <div class="fp__plans-wrapper">
+
+              <div
+                class="fp__plan-box{% unless fp_has_sub %} is-active{% endunless %}"
+                data-plan="single"
+                data-variant-id="{{ fp_display_variant.id }}"
+                data-selling-plan=""
+                onclick="selectPlan('single', '{{ section.id }}')"
+              >
+                <p class="plan__title">{{ section.settings.plan_1_title }}</p>
+                <p class="plan__price">{{ fp_display_price | money }}</p>
+                {%- if section.settings.plan_1_note != blank -%}
+                  <p class="plan__note">{{ section.settings.plan_1_note }}</p>
+                {%- endif -%}
+              </div>
+
+              {%- if fp_has_sub -%}
+                <div
+                  class="fp__plan-box is-active"
+                  data-plan="subscribe"
+                  data-variant-id="{{ fp_sub_variant_id }}"
+                  data-selling-plan="{{ fp_sub_plan_id }}"
+                  onclick="selectPlan('subscribe', '{{ section.id }}')"
+                >
+                  {%- if section.settings.plan_2_badge_override != blank -%}
+                    <div class="plan__badge">{{ section.settings.plan_2_badge_override }}</div>
+                  {%- elsif fp_sub_savings > 0 -%}
+                    <div class="plan__badge">Save {{ fp_sub_savings }}%</div>
+                  {%- endif -%}
+                  <p class="plan__title">{{ section.settings.plan_2_title }}</p>
+                  <p class="plan__price">
+                    {{ fp_sub_per_month | money }}
+                    {%- if fp_one_time_per_month > fp_sub_per_month -%}
+                      <span class="plan__compare">{{ fp_one_time_per_month | money }}</span>
+                    {%- endif -%}
+                    <span class="plan__per-mo">/mo</span>
+                  </p>
+                  <p class="plan__billing">{{ fp_sub_per_delivery | money }} billed every {{ fp_sub_weeks }} weeks</p>
+                  {%- if section.settings.plan_2_note != blank -%}
+                    <p class="plan__note">{{ section.settings.plan_2_note }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+            </div>
+
+            </div>
+
+            {%- if section.settings.redirect_to_pdp -%}
+              <a
+                href="{% if fp_has_product %}{{ fp_product.url }}{% else %}#{% endif %}"
+                class="fp__btn-submit fp__btn-link"
+                {% unless fp_has_product %}aria-disabled="true"{% endunless %}
+              >
+                {{ section.settings.btn_label }}
+              </a>
+            {%- else -%}
+              <button
+                type="submit"
+                name="add"
+                class="fp__btn-submit product-form__submit"
+                data-product-handle="{{ fp_product.handle }}"
+                data-product-id="{{ fp_display_variant.id }}"
+                data-disableFlyout="true"
+                {% unless fp_has_product %}disabled{% endunless %}
+              >
+                {{ section.settings.btn_label }}
+              </button>
+            {%- endif -%}
+
+          {%- endform -%}
+        </product-form>
+
+      </div>
+    </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  function selectPlan(planType, sectionId) {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    const planBoxes = section.querySelectorAll('.fp__plan-box');
+    planBoxes.forEach(box => box.classList.remove('is-active'));
+
+    const selectedBox = section.querySelector(`.fp__plan-box[data-plan="${planType}"]`);
+    if (!selectedBox) return;
+    selectedBox.classList.add('is-active');
+
+    const idInput = section.querySelector(`#ProductId-${sectionId}`);
+    const planInput = section.querySelector(`#SellingPlan-${sectionId}`);
+    if (idInput) idInput.value = selectedBox.dataset.variantId || '';
+    if (planInput) planInput.value = selectedBox.dataset.sellingPlan || '';
+  }
+</script>
+
+{% schema %}
+{
+  "name": "C Featured Plan",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header Text"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "SHOP BESTSELLERS"
+    },
+    {
+      "type": "text",
+      "id": "title_prefix",
+      "label": "Title Prefix",
+      "default": "Start with the"
+    },
+    {
+      "type": "text",
+      "id": "title_highlight",
+      "label": "Title Highlight (Italic)",
+      "default": "Foundation."
+    },
+    {
+      "type": "text",
+      "id": "title_suffix",
+      "label": "Title Suffix",
+      "default": "Complete your system."
+    },
+    {
+      "type": "header",
+      "content": "Product Information"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select Product"
+    },
+    {
+      "type": "text",
+      "id": "variant_position",
+      "label": "Variant position to display",
+      "info": "Position (1, 2, 3...) of the variant to show. Leave empty to auto-pick the first visible variant."
+    },
+    {
+      "type": "text",
+      "id": "selling_plan_id",
+      "label": "Selling Plan ID (subscription)",
+      "info": "ID of the selling plan to show in the subscription option (e.g. 2275737763). Leave empty to use the first available plan of the selected variant."
+    },
+    {
+      "type": "text",
+      "id": "subscription_variant_position",
+      "label": "Subscription variant position",
+      "info": "Position (1, 2, 3...) of the variant to use for the subscription option. Leave empty to use the same variant as the single option."
+    },
+    {
+      "type": "text",
+      "id": "top_badge",
+      "label": "Top Floating Badge",
+      "default": "BEST SELLER"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Product Description",
+      "default": "The only Nitric Oxide supplement you can test and track with simple at-home saliva strips. Supports healthy blood flow, energy, heart health, and cognition daily."
+    },
+    {
+      "type": "header",
+      "content": "Fallback Fields (If no product selected)"
+    },
+    {
+      "type": "text",
+      "id": "fallback_title",
+      "label": "Fallback Title",
+      "default": "Nitric Oxide Support"
+    },
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Fallback Image"
+    },
+    {
+      "type": "header",
+      "content": "Plan Options"
+    },
+    {
+      "type": "text",
+      "id": "plan_1_title",
+      "label": "Plan 1 Title",
+      "default": "Single"
+    },
+    {
+      "type": "text",
+      "id": "plan_1_note",
+      "label": "Plan 1 Note"
+    },
+    {
+      "type": "text",
+      "id": "plan_2_title",
+      "label": "Plan 2 Title",
+      "default": "3-Month Sub"
+    },
+    {
+      "type": "text",
+      "id": "plan_2_note",
+      "label": "Plan 2 Note",
+      "default": "+ free 10ct test strips"
+    },
+    {
+      "type": "text",
+      "id": "plan_2_badge_override",
+      "label": "Plan 2 Badge Override",
+      "info": "Overrides the auto-calculated 'Save X%' badge. Leave empty to use the default."
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Submit Button Label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "checkbox",
+      "id": "redirect_to_pdp",
+      "label": "Redirect to product page",
+      "info": "If enabled, the button links to the product's PDP instead of adding to cart.",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_background",
+      "id": "bg_active_color",
+      "label": "Active Plan Background"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#f4efe9"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Header Text Color",
+      "default": "#2b2e38"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d15234"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Main Card Background",
+      "default": "#1b1e2a"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "plan_bg_color",
+      "label": "Inactive Plan Background",
+      "default": "#2a2c3a"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Featured Plan"
+    }
+  ]
+}
+{% endschema %}

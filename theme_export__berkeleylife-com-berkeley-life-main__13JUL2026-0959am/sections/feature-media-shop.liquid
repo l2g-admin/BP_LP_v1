@@ -1,0 +1,113 @@
+{%- comment -%}This section is for an image or video with a special "Shop Now" badge{%- endcomment -%}
+<div class="md:px-8 md:py-16 bg-bg text-text px-4 py-8 overflow-hidden" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#F9F8F8' }}">
+  <div class="max-w-screen-lg mx-auto">
+    {%- if section.settings.image or section.settings.video_file -%}
+      <div class="relative">
+        {%- if section.settings.badge_product -%}
+          <a aria-label="View Product, {{ section.settings.badge_product.title }}" href="{{ section.settings.badge_product.url }}" class="right-2 -top-8 md:-top-2 md:-right-2 md:w-32 md:h-32 hover:shadow-lg absolute z-10 flex items-center justify-center w-24 h-24 overflow-hidden transition-shadow bg-white border border-black border-solid rounded-full" data-parallax>
+            <div class="relative w-full h-full p-4">
+              <img width="80" height="80" class="left-1/2 top-1/2 md:w-20 md:h-20 absolute w-12 h-12 overflow-hidden -translate-x-1/2 -translate-y-1/2 rounded-full" src="{{ section.settings.badge_product.featured_image | image_url: width: 160 }}" loading="lazy" alt=""/>
+
+              <div class="absolute inset-0">
+                <svg class="motion-safe:animate-spin-slow w-full h-full" viewBox="0 0 200 200" fill="black" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+                  <defs>
+                    <path id="text_1_path" d="M199.5 100C199.5 154.952 154.952 199.5 100 199.5C45.0477 199.5 0.5 154.952 0.5 100C0.5 45.0477 45.0477 0.5 100 0.5C154.952 0.5 199.5 45.0477 199.5 100Z" stroke="none" stroke-miterlimit="10"/>
+                    <path id="text_2_path" d="M174.5 100C174.5 141.145 141.145 174.5 100 174.5C58.8548 174.5 25.5 141.145 25.5 100C25.5 58.8548 58.8548 25.5 100 25.5C141.145 25.5 174.5 58.8548 174.5 100Z" stroke="none" stroke-miterlimit="10"/>
+                  </defs>
+                  <use xlink:href="#text_2_path" stroke="black" fill="none"/>
+                  <g>
+                      <text text-anchor="start" class="tracking-widest uppercase">
+                          <textPath xlink:href="#text_2_path" startOffset="10%">Shop Now</textPath>
+                          <textPath xlink:href="#text_2_path" startOffset="43%">Shop Now</textPath>
+                          <textPath xlink:href="#text_2_path" startOffset="76%">Shop Now</textPath>
+                      </text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </a>
+        {%- endif -%}
+        <div class="rounded-t-[16vw] overflow-hidden">
+          <div class="aspect-video relative">
+            {%- if section.settings.video_file != blank -%}
+              {% render 'video-autoplay', id: section.id, video: section.settings.video_file, extra: 'rounded-t-[16vw]' %}
+            {%- else -%}
+              {% render 'image', image: section.settings.image, classes: 'h-full' %}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="md:grid-cols-3 gap-x-12 gap-y-4 grid grid-cols-1 pt-6 mt-6 border-t border-gray-400 border-solid">
+      {%- unless section.settings.title == blank -%}
+        <div class="max-w-prose text-left">
+          <h2 class="h3">{{ section.settings.title }}</h2>
+        </div>
+      {%- endunless -%}
+      {%- unless section.settings.link_url == blank -%}
+        <div class="col-span-2 space-y-4 text-left">
+          {%- if section.settings.text != blank -%}
+            {{ section.settings.text }}
+          {%- endif -%}
+          {%- if section.settings.link_url != blank -%}
+            <a class="decoration-1 underline-offset-2 hover:decoration-2 relative z-10 block text-sm font-bold tracking-widest underline uppercase transition-all" href="{{ section.settings.link_url }}">{{ section.settings.link_text | default: "Shop" }}</a>
+          {%- endif -%}
+        </div>
+      {%- endunless -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Media with Shop Badge",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "video_file",
+      "label": "Video file link",
+      "info": "This overrides the image."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Lorem Headline",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Optional Link"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Optional Link Text"
+    },
+    {
+      "type": "product",
+      "id": "badge_product",
+      "label": "Badge Product",
+      "info": "When this is filled in, the badge will show."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media with Shop Badge"
+    }
+  ]
+}
+{% endschema %}

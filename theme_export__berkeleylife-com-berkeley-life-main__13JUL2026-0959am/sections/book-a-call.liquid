@@ -1,0 +1,483 @@
+<section id="book-a-call-section" style="background-color: #f5f5f5; padding: 30px 20px; text-align: center; border-top: 6px solid #0a0e27;">
+
+  <div style="max-width: 650px; margin: 0 auto;">
+
+    <p style="color:#0a0e27; text-transform:uppercase; letter-spacing:2px; font-size:13px; margin-bottom:10px;font-family:'tt-commons-pro', serif, ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">{{ section.settings.subheading }}</p>
+
+    <h2 style="color:#0a0e27; font-size:48px; font-family:'tt-commons-pro', serif, ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif; margin-bottom:30px;">{{ section.settings.heading }}</h2>
+
+    <form id="book-a-call-form" style="text-align:left;">
+
+      <div style="display:flex; gap:15px; margin-bottom:15px;">
+
+        <div style="flex:1;">
+
+          <label style="display:block; font-size:13px; color:#0a0e27; margin-bottom:5px;">First Name *</label>
+
+          <input type="text" name="firstname" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; box-sizing:border-box;">
+
+        </div>
+
+        <div style="flex:1;">
+
+          <label style="display:block; font-size:13px; color:#0a0e27; margin-bottom:5px;">Last Name *</label>
+
+          <input type="text" name="lastname" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; box-sizing:border-box;">
+
+        </div>
+
+      </div>
+
+      <div style="margin-bottom:15px;">
+
+        <label style="display:block; font-size:13px; color:#0a0e27; margin-bottom:5px;">Email *</label>
+
+        <input type="email" name="email" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; box-sizing:border-box;">
+
+      </div>
+
+      <div style="margin-bottom:20px;">
+
+        <label style="display:block; font-size:13px; color:#0a0e27; margin-bottom:5px;">State *</label>
+
+        <select name="state_dropdown" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; box-sizing:border-box; background:#fff;">
+
+          <option value="">Please select your state</option>
+
+          <option>Alabama</option>
+
+          <option>Alaska</option>
+
+          <option>Arizona</option>
+
+          <option>Arkansas</option>
+
+          <option>California</option>
+
+          <option>Colorado</option>
+
+          <option>Connecticut</option>
+
+          <option>Delaware</option>
+
+          <option>District of Columbia</option>
+
+          <option>Florida</option>
+
+          <option>Georgia</option>
+
+          <option>Hawaii</option>
+
+          <option>Idaho</option>
+
+          <option>Illinois</option>
+
+          <option>Indiana</option>
+
+          <option>Iowa</option>
+
+          <option>Kansas</option>
+
+          <option>Kentucky</option>
+
+          <option>Louisiana</option>
+
+          <option>Maine</option>
+
+          <option>Manitoba</option>
+
+          <option>Maryland</option>
+
+          <option>Massachusetts</option>
+
+          <option>Michigan</option>
+
+          <option>Minnesota</option>
+
+          <option>Mississippi</option>
+
+          <option>Missouri</option>
+
+          <option>Montana</option>
+
+          <option>Nebraska</option>
+
+          <option>Nevada</option>
+
+          <option>New Hampshire</option>
+
+          <option>New Jersey</option>
+
+          <option>New Mexico</option>
+
+          <option>New York</option>
+
+          <option>North Carolina</option>
+
+          <option>North Dakota</option>
+
+          <option>Ohio</option>
+
+          <option>Oklahoma</option>
+
+          <option>Ontario</option>
+
+          <option>Oregon</option>
+
+          <option>Pennsylvania</option>
+
+          <option>Puerto Rico</option>
+
+          <option>Quebec</option>
+
+          <option>Rhode Island</option>
+
+          <option>South Carolina</option>
+
+          <option>South Dakota</option>
+
+          <option>Tennessee</option>
+
+          <option>Texas</option>
+
+          <option>Utah</option>
+
+          <option>Vermont</option>
+
+          <option>Virginia</option>
+
+          <option>Washington</option>
+
+          <option>West Virginia</option>
+
+          <option>Wisconsin</option>
+
+          <option>Wyoming</option>
+
+          <option>Alberta</option>
+
+          <option>British Columbia</option>
+
+        </select>
+
+      </div>
+
+      <div id="form-error" style="display:none; color:red; margin-bottom:15px; font-size:14px;"></div>
+
+      <button type="submit" style="width:100%; padding:14px; background-color:#0a0e27; color:#fff; border:none; border-radius:4px; font-size:16px; cursor:pointer; letter-spacing:1px;">SUBMIT</button>
+
+    </form>
+
+    <div id="form-success" style="display:none; text-align:center; padding:20px;">
+
+      <h3 style="color:#0a0e27;">Thank you! Redirecting you to book your call...</h3>
+
+    </div>
+
+    <script>
+
+      var stateToUrl = {
+
+        'Alaska': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Alberta': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Arkansas': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'British Columbia': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Connecticut': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Delaware': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Indiana': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Iowa': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Maine': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Manitoba': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Maryland': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Massachusetts': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Minnesota': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Montana': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Nebraska': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'New Hampshire': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'New Jersey': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'New York': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'North Dakota': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Ohio': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Ontario': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Pennsylvania': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Quebec': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Rhode Island': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'South Dakota': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Vermont': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Wyoming': 'https://meetings.hubspot.com/daniel-gomez-duran?uuid=5582d539-3044-4225-9de0-791aa64ed916',
+
+        'Alabama': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'District of Columbia': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'Florida': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'Georgia': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'Kentucky': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'Louisiana': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'Mississippi': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'North Carolina': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'Puerto Rico': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'South Carolina': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'Tennessee': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'Texas': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'Virginia': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'West Virginia': 'https://meetings.hubspot.com/steven839/stevens-booking-link-?uuid=9e90bde1-224b-46bc-af6a-84d0ae06fe5a',
+
+        'Arizona': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'California': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Colorado': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Hawaii': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Idaho': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Illinois': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Kansas': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Michigan': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Missouri': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Nevada': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'New Mexico': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Oklahoma': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Oregon': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Utah': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Washington': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d',
+
+        'Wisconsin': 'https://meetings.hubspot.com/lexus-chavez/book-a-call-with-lexus?uuid=da03784b-4803-4783-9348-03f7518d0e5d'
+
+      };
+
+      function generatePassword() {
+
+        return 'BL-' + Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 6).toUpperCase() + '!';
+
+      }
+
+      document.getElementById('book-a-call-form').addEventListener('submit', function(e) {
+
+        e.preventDefault();
+
+        var form = document.getElementById('book-a-call-form');
+
+        var errorDiv = document.getElementById('form-error');
+
+        var submitBtn = form.querySelector('button[type="submit"]');
+
+        var firstname = form.querySelector('[name="firstname"]').value.trim();
+
+        var lastname = form.querySelector('[name="lastname"]').value.trim();
+
+        var email = form.querySelector('[name="email"]').value.trim();
+
+        var stateValue = form.querySelector('[name="state_dropdown"]').value;
+
+        errorDiv.style.display = 'none';
+
+        if (!firstname || !lastname || !email || !stateValue) {
+
+          errorDiv.textContent = 'Please fill in all required fields.';
+
+          errorDiv.style.display = 'block';
+
+          return;
+
+        }
+
+        submitBtn.textContent = 'Submitting...';
+
+        submitBtn.disabled = true;
+
+        // Build redirect URL with pre-filled HubSpot meeting parameters
+
+        var baseUrl = stateToUrl[stateValue];
+
+        var redirectUrl = baseUrl
+
+          + '&firstname=' + encodeURIComponent(firstname)
+
+          + '&lastname=' + encodeURIComponent(lastname)
+
+          + '&email=' + encodeURIComponent(email);
+
+        var mutation = `
+          mutation customerCreate($input: CustomerCreateInput!) {
+            customerCreate(input: $input) {
+              customer {
+                id
+                email
+                firstName
+                lastName
+              }
+              customerUserErrors {
+                code
+                message
+              }
+            }
+          }
+        `;
+
+        var variables = {
+
+          input: {
+
+            firstName: firstname,
+
+            lastName: lastname,
+
+            email: email,
+
+            password: generatePassword(),
+
+            acceptsMarketing: true
+
+          }
+
+        };
+
+        // STEP 1: Create Shopify customer with keepalive so the request
+        // completes even if the page navigates away
+
+        fetch('https://berkeleylife.com/api/2024-10/graphql.json', {
+
+          method: 'POST',
+
+          headers: {
+
+            'Content-Type': 'application/json',
+
+            'X-Shopify-Storefront-Access-Token': '296004d6a1c7d6a783301d88c0458b21'
+
+          },
+
+          body: JSON.stringify({ query: mutation, variables: variables }),
+
+          keepalive: true
+
+        })
+
+        .catch(function() {
+
+          // Silently continue even if Shopify customer creation fails
+
+        })
+
+        // STEP 2: Redirect to HubSpot meeting link with pre-filled data
+
+        .then(function() {
+
+          document.getElementById('book-a-call-form').style.display = 'none';
+
+          document.getElementById('form-success').style.display = 'block';
+
+          setTimeout(function() {
+
+            window.location.href = redirectUrl;
+
+          }, 1500);
+
+        });
+
+      });
+
+    </script>
+
+  </div>
+
+</section>
+
+{% schema %}
+
+{
+
+  "name": "Book a Call",
+
+  "tag": "section",
+
+  "settings": [
+
+    {
+
+      "type": "text",
+
+      "id": "subheading",
+
+      "label": "Subheading",
+
+      "default": "SPEAK TO A SALES EXECUTIVE"
+
+    },
+
+    {
+
+      "type": "text",
+
+      "id": "heading",
+
+      "label": "Heading",
+
+      "default": "Book a Call"
+
+    }
+
+  ],
+
+  "presets": [
+
+    {
+
+      "name": "Book a Call"
+
+    }
+
+  ]
+
+}
+
+{% endschema %}

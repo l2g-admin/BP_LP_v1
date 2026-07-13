@@ -1,0 +1,393 @@
+<script src="{{ 'collection-layout.js' | asset_url }}" type="module"></script>
+
+{%- comment -%} Check if BF Badges block is present {%- endcomment -%}
+{%- assign show_bf_badges = false -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'bf_badges' -%}
+    {%- assign show_bf_badges = true -%}
+    {%- assign bf_badge_1_text = block.settings.badge_1_text -%}
+    {%- assign bf_badge_1_bg = block.settings.badge_1_bg_color -%}
+    {%- assign bf_badge_2_text = block.settings.badge_2_text -%}
+    {%- assign bf_badge_2_bg = block.settings.badge_2_bg_color -%}
+    {%- assign bf_special_badge_1_text = block.settings.special_badge_1_text -%}
+    {%- assign bf_special_badge_1_bg = block.settings.special_badge_1_bg_color -%}
+    {%- assign bf_special_badge_2_text = block.settings.special_badge_2_text -%}
+    {%- assign bf_special_badge_2_bg = block.settings.special_badge_2_bg_color -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if section.settings.show_breadcrumbs -%}
+  {% render 'breadcrumbs' %}
+{%- endif -%}
+
+<div id="CollectionWrapper" class="bg-cream grid grid-cols-1 items-start {% if section.settings.enable_filtering %} md:grid-cols-[minmax(auto,240px),minmax(0px,1fr) {% else %} md:grid-cols-1 {% endif %} grid-flow-row-dense py-8 md:py-12">
+<div class="mx-auto bg-cream max-w-screen-2xl">
+  <div class="z-10 md:sticky md:top-4">
+    {%- if section.settings.menu -%}
+      <div class="w-full overflow-x-auto overscroll-contain md:overflow-visible">
+        <nav id="QuickMenu" aria-label="Quick Menu">
+          <ul class="flex gap-2 px-4 w-max md:px-8 md:flex-col">
+            {%- for link in section.settings.menu.links -%}
+            <li>
+              <a href="{{ link.url }}" class="p-2 first:pl-0 {% if link.current %}underline{% endif %}">
+                {{ link.title }}
+              </a>
+            </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      </div>
+    {%- endif -%}
+    <div id="main-collection-filters" data-id="{{ section.id }}">
+      {% render 'facet-filters',
+        results: collection,
+        enable_filtering: section.settings.enable_filtering,
+        enable_sorting: section.settings.enable_sorting
+      %}
+    </div>
+  </div>
+
+  <div id="CollectionProductGrid" class="relative w-full overflow-visible bg-cream">
+    {%- if section.settings.show_layout_options == true and section.settings.show_variants == false -%}
+      {%- render 'layout-options' -%}
+    {%- endif -%}
+    <style>
+      .htmx-indicator {
+        opacity:0;
+        visibility: hidden;
+        transition: opacity 500ms ease-in;
+      }
+      .htmx-request .htmx-indicator{
+          visibility: visible;
+          opacity:1
+      }
+      .htmx-request.htmx-indicator{
+          visibility: visible;
+          opacity:1
+      }
+    </style>
+    <span aria-hidden="true" class="absolute left-0 z-10 flex items-start justify-center w-full h-full pointer-events-none htmx-indicator top-40">
+      <svg aria-hidden="true" focusable="false" role="presentation" class="w-24 h-24 spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </span>
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      {%- if collection.products.size == 0 -%}
+        <div class="mx-auto space-y-4 text-center max-w-screen-2xl" id="main-collection-product-grid" data-id="{{ section.id }}">
+          <p class="opacity-75" role="status">
+            {%- if collection.products_count == collection.all_products_count -%}
+              {{ 'sections.collection_template.product_count_simple' | t: count: collection.products_count }}
+            {%- else -%}
+              {{ 'sections.collection_template.product_count' | t: product_count: collection.products_count, count: collection.all_products_count }}
+            {%- endif -%}
+          </p>
+          <div>
+            <h2>
+              {{ 'sections.collection_template.empty' | t }}<br>
+              {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url, class: "underline" }}
+            </h2>
+          </div>
+        </div>
+      {%- else -%}
+      <div class="max-w-screen-xl mx-auto collection md:px-8 md:pr-0 md:pl-4">
+
+          {%- if section.settings.show_variants -%}
+            <ul id="main-collection-product-grid" data-id="{{ section.id }}" class="grid grid-cols-1 gap-8 md:gap-y-12">
+              {%- for product in collection.products -%}
+                {%- assign product_loop_first = forloop.first -%}
+                <li class="pt-6 pb-4 border-b border-gray-300 border-solid md:pt-8 md:pb-6 first-of-type:pt-0">
+                  <div class="mb-6 ml-4 md:mb-8">
+                    <a href="{{ product.url }}" class="flex flex-col md:flex-row md:items-center gap-y-2 gap-x-4">
+                      <h2 class="leading-4 h4">{{ product.title }}</h2>
+                      {%- assign product_options = product.options | join: '' -%}
+                      {%- unless product_options == "Title" -%}
+                        <span class="inline-flex items-center uppercase text-xs tracking-[0.1em] leading-4">
+                          <span class="mr-1">See all options by: </span>
+                          {%- for option in product.options_with_values -%}
+                            {%- unless forloop.first -%}
+                            ,&nbsp;<span> </span>
+                            {%- endunless -%}
+                            <span>{{ option.name }}</span>
+                            <span class="text-gray-600">({{ option.values.size }})</span>
+                          {%- endfor -%}
+                          <span class="w-3 h-3 -rotate-90">{% render 'icon-caret' %}</span>
+                        </span>
+                      {%- endunless -%}
+                    </a>
+                    {%- if product.metafields.descriptors.subtitle -%}
+                      <p class="mt-2">{{ product.metafields.descriptors.subtitle }}</p>
+                    {%- endif -%}
+                  </div>
+                  <div data-scroll-container="{{ section.id }}-{{ forloop.index }}" class="relative">
+                    <ul class="flex gap-8 pb-4 overflow-x-auto snap overscroll-x-contain">
+                      {%- liquid
+                        for variant in product.variants
+                          if variant.matched
+                            assign variant_loop_first = forloop.first
+                            assign first = false
+                            if product_loop_first and variant_loop_first
+                              assign first = true
+                            endif
+                            echo '<li class="w-[calc(100%-8rem)] md:w-80 snap-center shrink-0 first-of-type:ml-4 first-of-type:scroll-ml-4">'
+                            render 'variant-card', product_card_product: product, variant_card_variant: variant, image_ratio: section.settings.image_ratio, show_secondary_image: section.settings.show_secondary_image, eager: first, show_bf_badges: show_bf_badges, bf_badge_1_text: bf_badge_1_text, bf_badge_1_bg: bf_badge_1_bg, bf_badge_2_text: bf_badge_2_text, bf_badge_2_bg: bf_badge_2_bg, bf_special_badge_1_text: bf_special_badge_1_text, bf_special_badge_1_bg: bf_special_badge_1_bg, bf_special_badge_2_text: bf_special_badge_2_text, bf_special_badge_2_bg: bf_special_badge_2_bg
+                            echo '</li>'
+                          endif
+                        endfor
+                      -%}
+                      <div spacer aria-hidden="true" class="{% if product.variants.size > 1 %} w-px shrink-0{% else %}hidden{% endif %}">
+                      </div>
+                    </ul>
+                    {%- if product.variants.size > 1 -%}
+                      <div data-shadow-l aria-hidden="true" class="absolute top-0 left-0 w-24 h-full transition-opacity duration-500 opacity-0 pointer-events-none empty:block from-white bg-gradient-to-r md:w-64">
+                      </div>
+                      <button data-button-l type="button" class="absolute -translate-y-1/2 top-1/2 left-2 md:left-8 disabled:opacity-0 disabled:cursor-not-allowed" disabled>
+                        <span class="sr-only">Scroll Left</span>
+                        <span aria-hidden="true" class="block w-8 rotate-180">{% render 'icon-arrow' %}</span>
+                      </button>
+                      <div data-shadow-r aria-hidden="true" class="absolute top-0 right-0 w-24 h-full transition-opacity duration-500 pointer-events-none empty:block from-white bg-gradient-to-l md:w-64"></div>
+                      <button data-button-r type="button" class="absolute -translate-y-1/2 top-1/2 right-2 md:right-4 disabled:opacity-0 disabled:cursor-not-allowed">
+                        <span class="sr-only">Scroll Right</span>
+                        <span aria-hidden="true" class="block w-8">{% render 'icon-arrow' %}</span>
+                      </button>
+                      <script type="module">
+                        import { scrollContainer } from "{{ 'scrollContainer.js' | asset_url }}"
+                        const container = document.querySelector('[data-scroll-container="{{ section.id }}-{{ forloop.index }}"]')
+                        scrollContainer(container)
+                      </script>
+                    {%- endif -%}
+                  </div>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- else -%}
+            <ul id="main-collection-product-grid" data-id="{{ section.id }}" class="grid grid-cols-1 gap-4 pl-4 pr-4 md:grid-cols-3 md:gap-8">
+              {%- for product in collection.products -%}
+              <li class="button-navy">
+                  {% render 'product-card',
+                    product_card_product: product,
+                    image_ratio: section.settings.image_ratio,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_vendor: section.settings.show_vendor,
+                    show_color_swatches: section.settings.show_color_swatches,
+                    quick_shop: section.settings.quick_shop,
+                    img_size: "(min-width: 750px) 33vw, 40vw",
+                    eager: forloop.first,
+                    learn_more: true,
+                    add_cart_button: true,
+                    show_price: true,
+                    show_reviews: true,
+                    show_callouts: true,
+                    show_subscription_pricing: section.settings.show_subscription_pricing,
+                    show_sale_badge: section.settings.show_sale_badge,
+                    show_bf_badges: show_bf_badges,
+                    bf_badge_1_text: bf_badge_1_text,
+                    bf_badge_1_bg: bf_badge_1_bg,
+                    bf_badge_2_text: bf_badge_2_text,
+                    bf_badge_2_bg: bf_badge_2_bg,
+                    bf_special_badge_1_text: bf_special_badge_1_text,
+                    bf_special_badge_1_bg: bf_special_badge_1_bg,
+                    bf_special_badge_2_text: bf_special_badge_2_text,
+                    bf_special_badge_2_bg: bf_special_badge_2_bg
+                  %}
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- if paginate.pages > 1 -%}
+            {% render 'pagination', paginate: paginate, anchor: '' %}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+
+</div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-collection-product-grid.name",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "default": 18,
+      "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs?",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sale_badge",
+      "label": "Show Sale badge on products",
+      "default": true,
+      "info": "When enabled, products with a Compare-at price higher than their current price will display a red Sale badge on the collection grid."
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__3.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "aspect-[4/3]",
+          "label": "Wide"
+        },
+        {
+          "value": "aspect-[3/4]",
+          "label": "Portrait"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        }
+      ],
+      "default": "aspect-[3/4]",
+      "label": "Image Ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "quick_shop",
+      "default": false,
+      "label": "Enable quick shop?"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variants",
+      "default": false,
+      "label": "Show variants instead?"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_swatches",
+      "default": false,
+      "label": "Show color swatches",
+      "info": "Prefers a swatch image or color uploaded to the variant's metafields. Defaults to the variant's image.'"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_layout_options",
+      "default": true,
+      "label": "Show layout toggle",
+      "info": "Allow the customer to change the collection layout for desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subscription_pricing",
+      "default": true,
+      "label": "Show subscription pricing",
+      "info": "Display subscription price alongside regular price on product cards"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_filtering.label",
+      "info": "t:sections.main-collection-product-grid.settings.enable_filtering.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Side Menu"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bf_badges",
+      "name": "BF Badges",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Default Badges"
+        },
+        {
+          "type": "text",
+          "id": "badge_1_text",
+          "label": "Badge 1 Text",
+          "default": "BLACK FRIDAY SALE"
+        },
+        {
+          "type": "color",
+          "id": "badge_1_bg_color",
+          "label": "Badge 1 Background Color",
+          "default": "#000000"
+        },
+        {
+          "type": "text",
+          "id": "badge_2_text",
+          "label": "Badge 2 Text",
+          "default": "SAVE 20%"
+        },
+        {
+          "type": "color",
+          "id": "badge_2_bg_color",
+          "label": "Badge 2 Background Color",
+          "default": "#D44F2F"
+        },
+        {
+          "type": "header",
+          "content": "Special Badges (with callout metafield)"
+        },
+        {
+          "type": "text",
+          "id": "special_badge_1_text",
+          "label": "Special Badge 1 Text",
+          "default": "BEST SELLER"
+        },
+        {
+          "type": "color",
+          "id": "special_badge_1_bg_color",
+          "label": "Special Badge 1 Background Color",
+          "default": "#D44F2F"
+        },
+        {
+          "type": "text",
+          "id": "special_badge_2_text",
+          "label": "Special Badge 2 Text",
+          "default": "BUY 2 GET 1 FREE"
+        },
+        {
+          "type": "color",
+          "id": "special_badge_2_bg_color",
+          "label": "Special Badge 2 Background Color",
+          "default": "#000000"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

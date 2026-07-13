@@ -1,0 +1,78 @@
+<div id="FAQ-{{ section.id }}" class="bg-cream">
+  {% if customer.b2b? %}
+    {% if product.metafields.custom.wholesale_product_faqs.value != blank %}
+          {%- assign faqs = product.metafields.custom.wholesale_product_faqs.value -%}
+    {% else %}
+        {%- assign faqs = product.metafields.custom.product_faqs.value -%}
+    {% endif %}
+  {% else %}
+  {%- assign faqs = product.metafields.custom.product_faqs.value -%}
+  {% endif %}
+
+  {% if faqs and faqs != blank %}
+    <div class="max-w-screen-lg px-8 py-8 mx-auto" {% if section.settings.enable_page_schema %}itemscope itemtype="https://schema.org/FAQPage"{% endif %}>
+      <div>
+          <h1 class="mb-6 h2" role="heading" aria-level="2" data-uw-rm-heading="level">
+            Frequently Asked <span class="text-brand font-secondaryHeader">Questions</span>
+          </h1>
+          {%- for faq in faqs -%}
+            {%- assign question = faq.question -%}
+            {% if customer.b2b? %}
+              {%- assign answer_text = faq.answer -%}
+            {% else %}
+              {%- assign answer_text = faq.faqanswer -%}
+            {% endif %}
+
+  
+            <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <details class="group">
+                <summary class="border-b-2 border-text text-text">
+                  <div class="flex items-center justify-between gap-2 py-4">
+                    <h2 class="text-base tracking-widest uppercase group-open:text-brand" itemprop="name">
+                      {{ question }}
+                    </h2>
+                    <span class="transition-transform duration-150 origin-center text-text shrink-0">
+                      {% render 'icon-plus', classes: 'w-4' %}
+                    </span>
+                  </div>
+                </summary>
+                <div class="py-8 text-lg rte text-text" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                  <div itemprop="text" class="faqParagraph">
+                    {{ answer_text }}
+                  </div>
+                </div>
+              </details>
+            </div>
+  
+          {%- endfor -%}
+       
+      </div>
+    </div>
+     {% endif %}
+  </div>
+  {% schema %}
+  {
+    "name": "Product FAQ",
+    "templates": ["product"],
+    "settings": [
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_page_schema",
+        "label": "Enable page schema",
+        "default": false,
+        "info": "Only enable this once per page."
+      }
+    ],
+    "presets": [
+      {
+        "category": "Text",
+        "name": "Product FAQ"
+      }
+    ]
+  }
+  {% endschema %}

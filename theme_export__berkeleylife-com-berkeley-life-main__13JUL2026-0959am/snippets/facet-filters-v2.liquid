@@ -1,0 +1,727 @@
+{%- liquid
+  assign sort_by = results.sort_by | default: results.default_sort_by
+  assign total_active_values = 0
+  assign total_inactive_values = 0
+  if results.url
+    assign results_url = results.url
+  else
+    assign terms = results.terms | escape
+    assign results_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last&sort_by=' | append: sort_by
+  endif
+  for filter in results.filters
+    assign total_active_values = total_active_values | plus: filter.active_values.size
+    assign total_inactive_values = total_inactive_values | plus: filter.inactive_values.size
+  endfor
+-%}
+
+<style>
+  /* ---- Filter bar ---- */
+  .facet-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 32px;
+    width: 100%;
+  }
+  @media (max-width: 767px) {
+    .facet-bar {
+      justify-content: center;
+      padding: 32px 18px;
+    }
+  }
+  .facet-bar__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    padding: 8px 16px;
+    border: 1px solid rgba(11,11,11,0.2);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'TT Commons Pro', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #000;
+    white-space: nowrap;
+  }
+  .facet-bar__btn:hover {
+    border-color: rgba(11,11,11,0.5);
+  }
+  .facet-bar__btn svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .facet-bar__sort {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    height: 48px;
+    padding: 8px 16px;
+    border: 1px solid rgba(11,11,11,0.2);
+    border-radius: 999px;
+    background: transparent;
+    margin-left: auto;
+    position: relative;
+  }
+  @media (max-width: 767px) {
+    .facet-bar__sort {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+  .facet-bar__sort-label {
+    font-family: 'TT Commons Pro', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    color: rgba(0,0,0,0.4);
+    white-space: nowrap;
+  }
+  .facet-bar__sort select {
+    font-family: 'TT Commons Pro', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #000;
+    border: none;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 20px;
+    cursor: pointer;
+    outline: none;
+  }
+  .facet-bar__sort-caret {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ---- Filter Drawer (dialog – top layer) ---- */
+  dialog.filter-drawer {
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    overflow: hidden;
+    outline: none;
+  }
+  dialog.filter-drawer[open] {
+    display: flex;
+    justify-content: flex-start;
+  }
+  dialog.filter-drawer::backdrop {
+    background: rgba(0,0,0,0.4);
+  }
+  .filter-drawer__panel {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    height: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  dialog.filter-drawer.is-open .filter-drawer__panel {
+    transform: translateX(0);
+  }
+  @media (max-width: 600px) {
+    .filter-drawer__panel { max-width: 100%; }
+  }
+
+  .filter-drawer__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 24px 48px 0;
+  }
+  @media (max-width: 767px) {
+    .filter-drawer__header { padding: 20px 20px 0; }
+  }
+  .filter-drawer__title {
+    font-family: 'TT Commons Pro', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.2;
+    color: #1b1c29;
+    margin: 0;
+  }
+  .filter-drawer__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #1b1c29;
+  }
+  .filter-drawer__close svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .filter-drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  @media (max-width: 767px) {
+    .filter-drawer__body { padding: 24px 20px; }
+  }
+
+  /* Filter group */
+  .filter-group__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-top: 1px solid #dfdbd9;
+  }
+  .filter-group__label {
+    font-family: 'TT Commons Pro', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.2;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: #1b1c29;
+    margin: 0;
+  }
+  .filter-group__clear {
+    font-family: 'TT Commons Pro', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: #d54f2f;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .filter-group__clear:hover {
+    text-decoration: underline;
+  }
+
+  /* Search input */
+  .filter-search {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 48px;
+    padding: 8px 12px;
+    border: 1px solid #dfdbd9;
+    border-radius: 8px;
+    background: #fff;
+    width: 100%;
+  }
+  .filter-search svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: #1b1c29;
+  }
+  .filter-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'TT Commons Pro', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #1b1c29;
+  }
+  .filter-search input::placeholder {
+    color: rgba(35,31,32,0.5);
+  }
+
+  /* Checkbox list */
+  .filter-checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 8px 0;
+  }
+  .filter-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: 'TT Commons Pro', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #1b1c29;
+  }
+  .filter-checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #d54f2f;
+    border-radius: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .filter-checkbox-item input[type="checkbox"]:checked {
+    background: #d54f2f;
+    border-color: #d54f2f;
+  }
+  .filter-checkbox-item input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .filter-checkbox-item input[type="checkbox"]:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .filter-checkbox-item span.is-disabled {
+    opacity: 0.4;
+  }
+
+  /* Price range in drawer */
+  .filter-price-range {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto auto 1fr;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 0;
+  }
+  .filter-price-range input {
+    border: 1px solid #dfdbd9;
+    border-radius: 4px;
+    padding: 8px;
+    font-family: 'TT Commons Pro', sans-serif;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+  }
+  .filter-price-range input:focus {
+    border-color: #d54f2f;
+  }
+
+  /* Footer */
+  .filter-drawer__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 48px;
+    border-top: 1px solid #ccc;
+    flex-shrink: 0;
+  }
+  @media (max-width: 767px) {
+    .filter-drawer__footer { padding: 12px 20px; }
+  }
+  .filter-drawer__clear-all {
+    font-family: 'TT Commons Pro', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #d54f2f;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .filter-drawer__clear-all:hover {
+    text-decoration: underline;
+  }
+  .filter-drawer__apply {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    padding: 0 40px;
+    background: #d54f2f;
+    color: #f6f3f0;
+    border: none;
+    border-radius: 42px;
+    font-family: 'TT Commons Pro', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  .filter-drawer__apply:hover {
+    opacity: 0.9;
+  }
+
+  /* Prevent body scroll when drawer is open */
+  body.filter-drawer-open {
+    overflow: hidden;
+  }
+</style>
+
+<facet-filters-v2>
+  <form id="FacetFiltersForm-Collection" class="w-full">
+
+    {%- comment -%} ===== TOP BAR: Filters button + Sort By ===== {%- endcomment -%}
+    <div class="facet-bar">
+      {%- if enable_filtering -%}
+        <button type="button" class="facet-bar__btn" data-filter-drawer-open aria-label="Open filters">
+          <span>Filters</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M200,136a8,8,0,0,1-8,8H64a8,8,0,0,1,0-16H192A8,8,0,0,1,200,136ZM232,80H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-64,88H88a8,8,0,0,0,0,16h80a8,8,0,0,0,0-16Z"/>
+          </svg>
+          {%- if total_active_values > 0 -%}
+            <span style="background:#d54f2f;color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;line-height:1;">{{ total_active_values }}</span>
+          {%- endif -%}
+        </button>
+      {%- endif -%}
+
+      {%- if enable_sorting -%}
+        <div class="facet-bar__sort">
+          <span class="facet-bar__sort-label">Sort by</span>
+          <select name="sort_by" id="SortBy" aria-label="Sort by">
+            {%- for option in results.sort_options -%}
+              <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected="selected"{% endif %}>{{ option.name | escape }}</option>
+            {%- endfor -%}
+          </select>
+          <svg class="facet-bar__sort-caret" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/>
+          </svg>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ===== FILTER DRAWER ===== {%- endcomment -%}
+    {%- if enable_filtering -%}
+      <dialog class="filter-drawer" data-filter-drawer aria-label="Filters">
+        <div class="filter-drawer__panel">
+
+        {%- comment -%} Drawer Header {%- endcomment -%}
+        <div class="filter-drawer__header">
+          <h2 class="filter-drawer__title">Filters</h2>
+          <button type="button" class="filter-drawer__close" data-filter-drawer-close aria-label="Close filters">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/>
+            </svg>
+          </button>
+        </div>
+
+        {%- comment -%} Drawer Body with Scrollable Filters {%- endcomment -%}
+        <div class="filter-drawer__body">
+
+          {%- comment -%} Keyword Search {%- endcomment -%}
+          <div class="filter-group">
+            <div class="filter-group__header">
+              <p class="filter-group__label">Keyword Search</p>
+              <button type="button" class="filter-group__clear" data-clear-search>Clear</button>
+            </div>
+            <div class="filter-search">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+                <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>
+              </svg>
+              <input type="text" placeholder="Search" data-filter-search-input autocomplete="off">
+            </div>
+          </div>
+
+          {%- comment -%} Filter Groups {%- endcomment -%}
+          {%- for filter in results.filters -%}
+            {%- case filter.type -%}
+              {%- when 'boolean' -%}
+                <div class="filter-group" data-filter-group="{{ filter.label | escape }}">
+                  <div class="filter-group__header">
+                    <p class="filter-group__label">{{ filter.label | escape }}</p>
+                    {%- if filter.active_values.size > 0 -%}
+                      <button type="button" class="filter-group__clear" data-clear-group="{{ filter.label | escape }}">Clear</button>
+                    {%- endif -%}
+                  </div>
+                  <div class="filter-checkbox-list">
+                    {%- for value in filter.values -%}
+                      <label class="filter-checkbox-item" data-filter-item>
+                        <input type="checkbox"
+                          name="{{ value.param_name }}"
+                          value="{{ value.value }}"
+                          id="Filter-{{ filter.label | escape }}-{{ forloop.index }}"
+                          {% if value.active %}checked{% endif %}
+                          {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                        >
+                        <span {% if value.count == 0 and value.active == false %}class="is-disabled"{% endif %}>{{ filter.label }} ({{ value.count }})</span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </div>
+
+              {%- when 'list' -%}
+                <div class="filter-group" data-filter-group="{{ filter.label | escape }}">
+                  <div class="filter-group__header">
+                    <p class="filter-group__label">{{ filter.label | escape }}</p>
+                    {%- if filter.active_values.size > 0 -%}
+                      <button type="button" class="filter-group__clear" data-clear-group="{{ filter.label | escape }}">Clear</button>
+                    {%- endif -%}
+                  </div>
+                  <div class="filter-checkbox-list">
+                    {%- for value in filter.values -%}
+                      <label class="filter-checkbox-item" data-filter-item data-filter-label="{{ value.label | downcase | escape }}">
+                        <input type="checkbox"
+                          name="{{ value.param_name }}"
+                          value="{{ value.value }}"
+                          id="Filter-{{ filter.label | escape }}-{{ forloop.index }}"
+                          {% if value.active %}checked{% endif %}
+                          {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                        >
+                        <span {% if value.count == 0 and value.active == false %}class="is-disabled"{% endif %}>{{ value.label }} ({{ value.count }})</span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </div>
+
+              {%- when 'price_range' -%}
+                <div class="filter-group" data-filter-group="{{ filter.label | escape }}">
+                  <div class="filter-group__header">
+                    <p class="filter-group__label">{{ filter.label | escape }}</p>
+                    {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                      <button type="button" class="filter-group__clear" data-clear-group="{{ filter.label | escape }}">Clear</button>
+                    {%- endif -%}
+                  </div>
+                  <div class="filter-price-range">
+                    <label for="Filter-{{ filter.label | escape }}-GTE">From</label>
+                    <span>{{ cart.currency.symbol }}</span>
+                    <input
+                      name="{{ filter.min_value.param_name }}"
+                      id="Filter-{{ filter.label | escape }}-GTE"
+                      {%- if filter.min_value.value -%}
+                        {%- if uses_comma_decimals -%}value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                      {%- endif -%}
+                      type="number"
+                      placeholder="0"
+                      min="0"
+                      {%- if uses_comma_decimals -%}max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"{% endif %}
+                    >
+                    <label for="Filter-{{ filter.label | escape }}-LTE">To</label>
+                    <span>{{ cart.currency.symbol }}</span>
+                    <input
+                      name="{{ filter.max_value.param_name }}"
+                      id="Filter-{{ filter.label | escape }}-LTE"
+                      {%- if filter.max_value.value -%}{%- if uses_comma_decimals -%}value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                      {%- endif -%}
+                      type="number"
+                      min="0"
+                      {%- if uses_comma_decimals -%}
+                        placeholder="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                        max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                      {%- else -%}
+                        placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                        max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      {% endif %}
+                    >
+                  </div>
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} Drawer Footer {%- endcomment -%}
+        <div class="filter-drawer__footer">
+          <button type="button" class="filter-drawer__clear-all" data-clear-all>Clear All</button>
+          <button type="button" class="filter-drawer__apply" data-apply-filters>Apply Filters</button>
+        </div>
+
+        </div>
+      </dialog>
+    {%- endif -%}
+
+    <input type="submit" value="Submit" class="no-js block p-1" />
+  </form>
+</facet-filters-v2>
+
+<script>
+  if (!customElements.get('facet-filters-v2')) {
+    class FacetFiltersV2 extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.form = this.querySelector('form');
+        this.drawer = this.querySelector('[data-filter-drawer]');
+        this.sortSelect = this.querySelector('#SortBy');
+        this.searchInput = this.querySelector('[data-filter-search-input]');
+        this.resultsUrl = {{ results_url | json }};
+
+        this.bindEvents();
+        this.initHtmx();
+      }
+
+      async initHtmx() {
+        if (typeof htmx === 'undefined') {
+          await import('https://cdn.skypack.dev/htmx.org');
+        }
+      }
+
+      bindEvents() {
+        /* Open drawer */
+        this.querySelectorAll('[data-filter-drawer-open]').forEach(btn => {
+          btn.addEventListener('click', () => this.openDrawer());
+        });
+
+        /* Close drawer */
+        this.querySelectorAll('[data-filter-drawer-close]').forEach(btn => {
+          btn.addEventListener('click', () => this.closeDrawer());
+        });
+
+        /* Click outside panel → close */
+        if (this.drawer) {
+          this.drawer.addEventListener('click', (e) => {
+            if (e.target === this.drawer) this.closeDrawer();
+          });
+          /* Intercept native ESC to use animated close */
+          this.drawer.addEventListener('cancel', (e) => {
+            e.preventDefault();
+            this.closeDrawer();
+          });
+        }
+
+        /* Sort by change → use grid controller for AJAX (no URL change) */
+        if (this.sortSelect) {
+          this.sortSelect.addEventListener('change', () => {
+            const grid = document.querySelector('#CollectionProductGrid');
+            if (grid && grid._refreshGrid) {
+              grid._refreshGrid({ sort: this.sortSelect.value });
+            }
+          });
+        }
+
+        /* Apply filters button */
+        this.querySelectorAll('[data-apply-filters]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.applyFilters();
+            this.closeDrawer();
+          });
+        });
+
+        /* Clear all */
+        this.querySelectorAll('[data-clear-all]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.form.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            this.form.querySelectorAll('input[type="number"]').forEach(input => input.value = '');
+            if (this.searchInput) this.searchInput.value = '';
+          });
+        });
+
+        /* Clear individual group */
+        this.querySelectorAll('[data-clear-group]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const group = btn.closest('.filter-group');
+            if (group) {
+              group.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+              group.querySelectorAll('input[type="number"]').forEach(input => input.value = '');
+            }
+          });
+        });
+
+        /* Clear search */
+        this.querySelectorAll('[data-clear-search]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (this.searchInput) {
+              this.searchInput.value = '';
+              this.filterBySearch('');
+            }
+          });
+        });
+
+        /* Keyword search filtering (filters visible items in drawer) */
+        if (this.searchInput) {
+          this.searchInput.addEventListener('input', (e) => {
+            this.filterBySearch(e.target.value);
+          });
+        }
+      }
+
+      openDrawer() {
+        if (!this.drawer || this.drawer.open) return;
+        this.drawer.showModal();
+        requestAnimationFrame(() => this.drawer.classList.add('is-open'));
+        document.body.classList.add('filter-drawer-open');
+      }
+
+      closeDrawer() {
+        if (!this.drawer || !this.drawer.open) return;
+        this.drawer.classList.remove('is-open');
+        const onEnd = () => {
+          this.drawer.removeEventListener('transitionend', onEnd);
+          this.drawer.close();
+        };
+        this.drawer.addEventListener('transitionend', onEnd);
+        setTimeout(() => { if (this.drawer.open) this.drawer.close(); }, 400);
+        document.body.classList.remove('filter-drawer-open');
+      }
+
+      filterBySearch(query) {
+        const q = query.toLowerCase().trim();
+        this.querySelectorAll('[data-filter-item]').forEach(item => {
+          const label = (item.getAttribute('data-filter-label') || item.textContent).toLowerCase();
+          item.style.display = (!q || label.includes(q)) ? '' : 'none';
+        });
+      }
+
+      applyFilters() {
+        const formData = new FormData(this.form);
+        const params = new URLSearchParams();
+
+        for (const [key, value] of formData.entries()) {
+          if (key === 'submit' || !value) continue;
+          params.append(key, value);
+        }
+
+        /* Use the active collection handle if available */
+        const grid = document.querySelector('#CollectionProductGrid');
+        const activeCollection = grid ? grid.dataset.activeCollection : null;
+        const url = activeCollection
+          ? '/collections/' + encodeURIComponent(activeCollection)
+          : this.resultsUrl.split('?')[0];
+        const newUrl = url + (params.toString() ? '?' + params.toString() : '');
+
+        if (typeof htmx !== 'undefined') {
+          const target = document.querySelector('#CollectionProductGrid');
+          if (target) {
+            htmx.ajax('GET', newUrl, {
+              target: '#CollectionProductGrid',
+              select: '#CollectionProductGrid',
+              swap: 'outerHTML'
+            });
+          } else {
+            window.location.href = newUrl;
+          }
+        } else {
+          window.location.href = newUrl;
+        }
+      }
+    }
+
+    customElements.define('facet-filters-v2', FacetFiltersV2);
+  }
+</script>

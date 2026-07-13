@@ -1,0 +1,531 @@
+<style>
+  #{{section.id}} {
+      {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+      {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+    padding-top: {{ half_padding_top }}em;
+    padding-bottom: {{ half_padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+
+    & * {
+        color: {{ section.settings.text_color }};
+        position: relative;
+        z-index: 2;
+    }
+
+    & .section__balance__container {
+      padding-block: 2rem;
+ 
+
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      & .balance__hero__texts {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        margin-inline: auto;
+      }
+
+      & .balance__title {
+        font-size: clamp(32px, 6vw + 1rem, 54px);
+        max-width: 800px;
+        text-wrap: balance;
+        text-align: center;
+        line-height: normal;
+        margin: 0;
+
+      }
+
+      & .balance__title--span,
+      & .balance__description--span {
+        color: {{ section.settings.accent_color }};
+         font-family: "Cormorant Garamond";
+        font-style: italic;
+      }
+
+      & .balance__title--span {
+        font-weight: 300;
+        font-style: italic;
+      }
+
+      & .balance__description {
+        max-width: 650px;
+ 
+        text-align: center;
+        font-size: clamp(16px, 2.5dvw, 18px);
+        margin: 0;
+      }
+
+      & .balance__hero__info--desktop {
+        display: none;
+      }
+
+      & .balance__hero__info--mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      & .balance__img__container {
+        width: 90%;
+        max-width: 425px;
+        margin-inline: auto;
+        display: flex;
+      }
+
+      & .balance__img {
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+        height: auto;
+      }
+
+      & .balance__cards {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+      }
+
+      & .balance__card {
+        position: relative;
+        list-style: none;
+        border: 1px solid {{ section.settings.accent_color }};
+        border-radius: 1rem;
+        padding: min(0.75rem, 4dvw);
+      }
+
+      & .balance__card__content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      & .balance__card__header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      & .balance__card__img {
+        width: 1.5rem;
+        height: 1.5rem;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 50%;
+      }
+
+      & .balance__card__title {
+        font-size: clamp(20px, 2.5dvw, 24px);
+        line-height: 100%;
+        font-style: italic;
+        color: {{ section.settings.accent_color }};
+        font-family: "Cormorant Garamond";
+        margin: 0;
+      }
+
+      & .balance__card__text {
+        font-size: clamp(0.85rem, 2.5dvw, 1rem);
+        font-weight: 300;
+        margin: 0;
+        line-height: 150%;
+      }
+
+      & .btn__cta {
+        display: inline-block;
+        width: max-content;
+        padding: 1rem 1.75rem;
+        background-color: {{ section.settings.accent_color }};
+        border-radius: 1.5rem;
+        color: #fff;
+        font-size: 0.75rem;
+        text-decoration: none;
+        margin-inline: auto;
+ 
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+
+  @media screen and (width >= 48rem) {
+    #{{section.id}} {
+      padding-top: {{ section.settings.padding_top }}em;
+      padding-bottom: {{ section.settings.padding_bottom }}em;
+
+      .section__balance__container {
+        & .balance__hero__info--mobile {
+          & .balance__cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+          }
+
+          & .balance__card:last-child {
+            grid-column: 1 / span 2;
+            width: 45%;
+            margin-inline: auto;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (width >= 64rem) {
+    #{{section.id}} {
+      .section__balance__container {
+        & .balance__hero__info--mobile {
+          display: none;
+        }
+
+        & .balance__hero__info--desktop {
+          display: flex;
+        }
+
+        & .balance__cards {
+          gap: 1.5rem;
+          justify-content: center;
+        }
+
+        & .card__content {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+          display: flex;
+        }
+
+        & .balance__card {
+          padding: min(1.25rem, 4dvw);
+          width: 70%; /* Ancho de las cards */
+        }
+
+        & .card__line {
+          flex-grow: 1;
+          height: 50%;
+          border-top: 1px dashed {{ section.settings.accent_color }};
+          margin-top: auto;
+        }
+
+        & .balance__img__container {
+          width: 30%; /* Ancho de la img */
+          height: max-content;
+          margin: auto;
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+</style>
+
+<section id="{{section.id}}">
+  <div class="section__balance__container container-sl">
+    <div class="balance__hero__texts">
+        <h2 class="balance__title">
+          {% assign title_with_accent = section.settings.title | replace: '{accent}', '<span class="balance__title--span">' | replace: '{/accent}', '</span>' %}
+          {{ title_with_accent }}
+        </h2>
+        <p class="balance__description">
+          {% assign description_with_accent = section.settings.description | replace: '{accent}', '<span class="balance__description--span">' | replace: '{/accent}', '</span>' %}
+          {{ description_with_accent }}
+        </p>
+      </div>
+
+      <!-- Mobile Version -->
+      <div class="balance__hero__info--mobile">
+        {% if section.settings.product_image %}
+          <div class="balance__img__container">
+            {{ section.settings.product_image | image_url: width: 425 | image_tag: 
+               alt: section.settings.product_image.alt | default: 'Product',
+               class: 'balance__img',
+               width: 425,
+               height: 'auto' }}
+          </div>
+        {% endif %}
+        
+        {% if section.blocks.size > 0 %}
+          <ul class="balance__cards">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'feature_card' %}
+                  <li class="balance__card" {{ block.shopify_attributes }}>
+                    <div class="balance__card__content">
+                      <div class="balance__card__header">
+                        {% if block.settings.icon %}
+                          {{ block.settings.icon | image_url: width: 48 | image_tag: 
+                             alt: 'Icon',
+                             class: 'balance__card__img',
+                             width: 48,
+                             height: 48 }}
+                        {% endif %}
+                        <h3 class="balance__card__title">{{ block.settings.title }}</h3>
+                      </div>
+                      <p class="balance__card__text">{{ block.settings.description }}</p>
+                    </div>
+                  </li>
+              {% endcase %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <!-- Desktop Version -->
+      <div class="balance__hero__info--desktop">
+        {% if section.blocks.size > 0 %}
+          <!-- Left side - first half of blocks -->
+          <ul class="balance__cards balance__cards--left">
+            {% for block in section.blocks %}
+              {% assign block_index = forloop.index0 %}
+              {% assign half_count = section.blocks.size | divided_by: 2 | round %}
+              {% if block_index < half_count %}
+                {% case block.type %}
+                  {% when 'feature_card' %}
+                    <li class="card__content" {{ block.shopify_attributes }}>
+                      <div class="balance__card">
+                        <div class="balance__card__content">
+                          <div class="balance__card__header">
+                            {% if block.settings.icon %}
+                              {{ block.settings.icon | image_url: width: 48 | image_tag: 
+                                 alt: 'Icon',
+                                 class: 'balance__card__img',
+                                 width: 48,
+                                 height: 48 }}
+                            {% endif %}
+                            <h3 class="balance__card__title">{{ block.settings.title }}</h3>
+                          </div>
+                          <p class="balance__card__text">{{ block.settings.description }}</p>
+                        </div>
+                      </div>
+                      <span class="card__line"></span>
+                    </li>
+                {% endcase %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if section.settings.product_image %}
+          <div class="balance__img__container">
+            {{ section.settings.product_image | image_url: width: 500 | image_tag: 
+               alt: section.settings.product_image.alt | default: 'Product',
+               class: 'balance__img',
+               width: 500,
+               height: 'auto' }}
+          </div>
+        {% endif %}
+
+        {% if section.blocks.size > 0 %}
+          <!-- Right side - second half of blocks -->
+          <ul class="balance__cards balance__cards--right">
+            {% for block in section.blocks %}
+              {% assign block_index = forloop.index0 %}
+              {% assign half_count = section.blocks.size | divided_by: 2 | round %}
+              {% if block_index >= half_count %}
+                {% case block.type %}
+                  {% when 'feature_card' %}
+                    <li class="card__content" {{ block.shopify_attributes }}>
+                      <span class="card__line"></span>
+                      <div class="balance__card">
+                        <div class="balance__card__content">
+                          <div class="balance__card__header">
+                            {% if block.settings.icon %}
+                              {{ block.settings.icon | image_url: width: 48 | image_tag: 
+                                 alt: 'Icon',
+                                 class: 'balance__card__img',
+                                 width: 48,
+                                 height: 48 }}
+                            {% endif %}
+                            <h3 class="balance__card__title">{{ block.settings.title }}</h3>
+                          </div>
+                          <p class="balance__card__text">{{ block.settings.description }}</p>
+                        </div>
+                      </div>
+                    </li>
+                {% endcase %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      {% if section.settings.cta_text != blank and section.settings.cta_link != blank %}
+        <a href="{{ section.settings.cta_link }}" class="btn__cta">{{ section.settings.cta_text }}</a>
+      {% endif %}
+    </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Body Balance",
+  "tag": "section",
+  "class": "section section-body-balance",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Clean, functional {accent}ingredients{/accent} that work with your body."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Each piece of Balance Gum combines {accent}clinically studied nutrients{/accent} and prebiotic dietary nitrates to restore your oral microbiome and naturally boost Nitric Oxide — the molecule behind energy, blood flow, and vitality."
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product Image"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "SHOP BALANCE GUM"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#d2691e"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 2
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_card",
+      "name": "Feature Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Feature description goes here"
+        },
+        {
+          "type": "select",
+          "id": "desktop_position",
+          "label": "Desktop Position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left",
+          "info": "Position of the card on desktop layout (cards appear in order on mobile)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Body Balance",
+      "blocks": [
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Potassium Nitrate (121 mg)",
+            "description": "Fuels beneficial oral bacteria that convert nitrates into Nitric Oxide — supporting better circulation and energy from the inside out",
+            "desktop_position": "left"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Probiotic Blend (4.5B CFUs)",
+            "description": "Restores healthy oral microbiome balance to promote fresh breath, reduce plaque, and enhance Nitric Oxide pathways.",
+            "desktop_position": "left"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Vitamin C (22% DV)",
+            "description": "Protects Nitric Oxide molecules and supports gum health with antioxidant power.",
+            "desktop_position": "right"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Zinc (9% DV)",
+            "description": "Helps maintain healthy blood pressure and promotes optimal circulation.",
+            "desktop_position": "right"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Sugar-Free Sweeteners",
+            "description": "Naturally sweetened with gentle, nonsugar ingredients that protect teeth and support oral microbiome health.",
+            "desktop_position": "right"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

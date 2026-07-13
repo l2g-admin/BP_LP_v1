@@ -1,0 +1,135 @@
+<script src="{{ 'search.js' | asset_url }}" type="module"></script>
+<div class="max-w-screen-lg p-4 mx-auto space-y-8">
+  <h1 class="h2 text-center">
+    {%- if search.performed -%}
+      {{ 'templates.search.title' | t }}
+    {%- else -%}
+      {{ 'general.search.search' | t }}
+    {%- endif -%}
+  </h1>
+  <dynamic-search class="block space-y-8">
+    <form id="SearchPageForm" hx-params="*" hx-get="{{ routes.search_url }}" hx-target="#SearchPageResults" hx-select="#SearchPageResults" hx-trigger="input delay:300ms" class="w-full" hx-swap="outerHTML" hx-indicator=".htmx-indicator" hx-push-url="true">
+      <div class="relative max-w-md mx-auto">
+        <label class="sr-only">Search</label>
+        <input type="search" name="q" value="{{ search.terms | escape }}" class="w-full" />
+        <button type="submit" class="absolute inset-y-0 right-0 w-12 h-full p-2" aria-label="{{ 'general.search.search' | t }}">
+          <svg class="icon icon-search w-full h-full">
+            <use xlink:href="#icon-search"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+    <div class="relative">
+      <style>
+        .htmx-indicator {
+          opacity:0;
+          visibility: hidden;
+          transition: opacity 500ms ease-in;
+        }
+        .htmx-request .htmx-indicator{
+            visibility: visible;
+            opacity:1
+        }
+        .htmx-request.htmx-indicator{
+            visibility: visible;
+            opacity:1
+        }
+      </style>
+      <span aria-hidden="true" class="htmx-indicator absolute left-0 z-10 flex items-start justify-center w-full h-full pointer-events-none">
+        <svg aria-hidden="true" focusable="false" role="presentation" class="spinner w-24 h-24" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+          <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+        </svg>
+      </span>
+      <div id="SearchPageResults">
+        {%- if search.performed -%}
+          {%- if search.results_count > 0 -%}
+            <p role="status" class="sr-only">{{ 'templates.search.results_with_count_and_term' | t: terms: search.terms, count: search.results_count }}</p>
+          {%- endif -%}
+          {%- if search.results_count == 0 -%}
+            <p role="status">{{ 'templates.search.no_results' | t: terms: search.terms }}</p>
+          {%- endif -%}
+        {%- endif -%}
+        {% if search.results.size > 0 %}
+          <ul class="md:grid-cols-3 grid grid-cols-2 gap-4">
+          {%- for item in search.results -%}
+            <li>
+            {%- case item.object_type -%}
+              {%- when 'product' -%}
+                {% render 'product-card', product_card_product: item %}
+              {%- when 'article' -%}
+                {% render 'article-card', article: item, show_image: true, show_date: true %}
+              {%- when 'page' -%}
+                {% render 'page-card', page: item, show_image: false, show_date: true %}
+              {%- else -%}
+            {%- endcase -%}
+            </li>
+          {%- endfor -%}
+          </ul>
+        {% endif %}
+      </div>
+    </div>
+  </dynamic-search>
+
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-search.name",
+  "tag": "section",
+  "class": "spaced-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.main-search.settings.header__1.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "aspect-[4/3]",
+          "label": "Wide"
+        },
+        {
+          "value": "aspect-[3/4]",
+          "label": "Portrait"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        }
+      ],
+      "default": "aspect-square",
+      "label": "t:sections.main-search.settings.image_ratio.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "t:sections.main-search.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.main-search.settings.show_vendor.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-search.settings.header__2.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "article_show_date",
+      "default": true,
+      "label": "t:sections.main-search.settings.article_show_date.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "article_show_author",
+      "default": false,
+      "label": "t:sections.main-search.settings.article_show_author.label"
+    }
+  ]
+}
+{% endschema %}

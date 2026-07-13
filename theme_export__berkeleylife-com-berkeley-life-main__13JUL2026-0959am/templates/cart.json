@@ -1,0 +1,114 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "section#CartPage",
+  "sections": {
+    "cart-header": {
+      "type": "cart-header",
+      "settings": {}
+    },
+    "cart-free-shipping": {
+      "type": "cart-free-shipping",
+      "disabled": true,
+      "settings": {}
+    },
+    "cart-items": {
+      "type": "main-cart-items",
+      "settings": {
+        "show_vendor": false,
+        "enable_selector": true
+      }
+    },
+    "cart-footer": {
+      "type": "main-cart-footer",
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "subtotal",
+        "buttons"
+      ],
+      "settings": {
+        "show_cart_note": false
+      }
+    },
+    "cart-gift-bag": {
+      "type": "cart-gift-bag",
+      "blocks": {
+        "6683814e-acef-459a-a945-7d11312d18c4": {
+          "type": "whole",
+          "settings": {
+            "label": "Add Gift Wrap & Gift Message",
+            "instructions": "<p>ALL ITEMS in your order will be wrapped in a reusable drawstring cotton Gift Bag along with a cheerful gift envelope that includes your gift message. LIMIT 1 Gift Bag per order.</p>"
+          }
+        },
+        "9cc36939-2af5-4e8e-ad11-a1db9836ebc4": {
+          "type": "multiple",
+          "disabled": true,
+          "settings": {
+            "label": "Add multiple Gift Bags",
+            "instructions": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, facere molestiae! Sint obcaecati deserunt a cupiditate adipisci ea cum unde, facere accusantium, in dolor. Nobis possimus cupiditate distinctio sequi consequatur.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "6683814e-acef-459a-a945-7d11312d18c4",
+        "9cc36939-2af5-4e8e-ad11-a1db9836ebc4"
+      ],
+      "settings": {}
+    },
+    "featured-products": {
+      "type": "featured-collection",
+      "settings": {
+        "text_color": "",
+        "title": "Shop Best Sellers",
+        "subheading": "",
+        "text_align": "text-center",
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "collection": "shop-all",
+        "products_to_show": 3,
+        "show_view_all": true,
+        "button_text": "Shop All",
+        "non_b2b_button_text": "Login to see wholesale pricing",
+        "non_b2b_button_link": "",
+        "button_style": "button button--primary",
+        "swipe_on_mobile": true,
+        "image_ratio": "aspect-[3/4]",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "quick_shop": true,
+        "gated_b2b": false
+      }
+    },
+    "1750344811a0e76926": {
+      "type": "apps",
+      "settings": {}
+    }
+  },
+  "order": [
+    "cart-header",
+    "cart-free-shipping",
+    "cart-items",
+    "cart-footer",
+    "cart-gift-bag",
+    "featured-products",
+    "1750344811a0e76926"
+  ]
+}

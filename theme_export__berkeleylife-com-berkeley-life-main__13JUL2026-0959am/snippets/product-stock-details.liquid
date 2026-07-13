@@ -1,0 +1,30 @@
+<div id="StockDetails-{{ id }}" class="text-gray-200 pb-4 flex gap-2">
+  {% if product.selected_or_first_available_variant.inventory_quantity == 0 and block.settings.low_stock_quantity == 'no_quantity' %}
+    <p class="italic text-red-500" {{ block.shopify_attributes }}>
+      {{ 'products.product.stock.sold_out_quantity' | t: stock: product.selected_or_first_available_variant.inventory_quantity | escape }}
+    </p>
+  {% elsif product.selected_or_first_available_variant.inventory_quantity == 0 and block.settings.low_stock_quantity == 'quantity' %}
+    <p class="italic text-red-500" {{ block.shopify_attributes }}>
+      {{ 'products.product.stock.sold_out' | t: stock: product.selected_or_first_available_variant.inventory_quantity | escape }}
+    </p>
+  {% elsif product.selected_or_first_available_variant.inventory_quantity <= 10 and block.settings.low_stock_quantity == 'no_quantity' %}
+    <p class="italic text-red-500" {{ block.shopify_attributes }}>
+      {{ 'products.product.stock.low_stock' | t }}
+    </p>
+  {% elsif product.selected_or_first_available_variant.inventory_quantity <= 10 and block.settings.low_stock_quantity == 'quantity' %}
+    <p class="italic text-red-500" {{ block.shopify_attributes }}>
+      {{ 'products.product.stock.low_stock_quantity' | t: stock: product.selected_or_first_available_variant.inventory_quantity | escape }}
+    </p>
+  {% else %}
+    {% if block.settings.show_in_stock %}
+      <p class="italic text-green-600" {{ block.shopify_attributes }}>
+        {{ 'products.product.stock.in_stock' | t }}
+      </p>
+    {% endif %}
+  {% endif %}
+  {% unless product.selected_or_first_available_variant.available %}
+    <div class="text-black">
+      <a class="klaviyo-bis-trigger notify-me button--text" href="#">NOTIFY ME</a>
+    </div>
+  {% endunless %}
+</div>

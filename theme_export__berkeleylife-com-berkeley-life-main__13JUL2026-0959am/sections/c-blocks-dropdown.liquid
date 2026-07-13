@@ -1,0 +1,578 @@
+<style>
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    background-color: {{ section.settings.bg_color }};
+    font-family: inherit;
+    overflow: hidden;
+
+    & .mol__container {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    & .mol__header {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 992px) {
+      & .mol__header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+
+    & .mol__title {
+      flex: 1;
+      color: {{ section.settings.heading_color }};
+      margin: 0;
+    }
+
+    & .mol__title-highlight {
+      display: block;
+      color: {{ section.settings.highlight_color }};
+    }
+
+    & .mol__subtext {
+      flex: 1;
+      color: {{ section.settings.text_color }};
+      margin: 0;
+      opacity: 0.85;
+    }
+
+    @media (min-width: 992px) {
+      & .mol__subtext {
+        text-align: right;
+        max-width: 450px;
+      }
+    }
+
+    & .mol__main {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    @media (min-width: 992px) {
+      & .mol__main {
+        flex-direction: row;
+        align-items: center;
+        gap: 5%;
+      }
+    }
+
+    & .mol__image-col {
+      flex: 1 1 45%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    & .mol__image-wrapper {
+      width: 100%;
+      max-width: 500px;
+      position: relative;
+    }
+
+    & .mol__image-wrapper img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+    }
+
+    & .mol__cards-col {
+      flex: 1 1 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    & .mol__card {
+      background-color: {{ section.settings.card_bg_color }};
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    & .mol__card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      background: none;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    & .mol__card-title,
+    & .mol__card-title * {
+      font-size: clamp(16px, 2vw, 18px);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: {{ section.settings.card_title_color }};
+      margin: 0;
+    }
+
+    & .mol__card-subtitle,
+    & .mol__card-subtitle * {
+      font-size: clamp(16px, 2vw, 18px);
+      font-weight: 500;
+      color: {{ section.settings.card_text_color }};
+      margin: 0.35rem 0 0;
+      opacity: 0.8;
+    }
+
+    & .mol__card-icon {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: {{ section.settings.card_text_color }};
+      stroke-width: 2;
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+    
+    & .mol__card-icon .vertical-line {
+      transition: opacity 0.3s ease;
+      transform-origin: center;
+    }
+
+    & .mol__card.is-open .mol__card-icon .vertical-line {
+      opacity: 0;
+    }
+
+    & .mol__card-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.3s ease;
+    }
+
+    & .mol__card.is-open .mol__card-content {
+      grid-template-rows: 1fr;
+    }
+
+    & .mol__card-content-inner {
+      overflow: hidden;
+    }
+
+    & .mol__card-text,
+    & .mol__card-text * {
+      color: {{ section.settings.card_text_color }};
+      font-size: 14px;
+      margin: 0;
+      padding: 0 1.5rem 1.25rem 1.5rem;
+    }
+
+    & .mol__card-text * {
+      padding: 0;
+    }
+
+    & .mol__card-text strong {
+      display: inline-block;
+      color: {{ section.settings.card_title_color }};
+      font-family: "TT Commons", inherit;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 120%;
+      letter-spacing: 2.1px;
+      text-transform: uppercase;
+    }
+
+    & .mol__card[data-cormorant="true"] .mol__card-text strong {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(24px, 2.5vw, 28px);
+      letter-spacing: normal;
+      text-transform: none;
+    }
+
+    & .mol__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      & .mol__actions {
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 2rem;
+      }
+    }
+
+    & .mol__btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-radius: 3rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    @media (min-width: 768px) {
+      & .mol__btn {
+        width: auto;
+        min-width: 200px;
+      }
+    }
+
+    & .mol__btn--primary {
+      background-color: {{ section.settings.btn_primary_bg }};
+      color: {{ section.settings.btn_primary_text }};
+      border: 1px solid {{ section.settings.btn_primary_bg }};
+    }
+
+    & .mol__btn--primary:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    & .mol__btn--secondary {
+      background-color: transparent;
+      color: {{ section.settings.btn_secondary_text }};
+      border: 1px solid {{ section.settings.btn_secondary_border }};
+    }
+
+    & .mol__btn--secondary:hover {
+      background-color: {{ section.settings.btn_secondary_border }};
+      color: {{ section.settings.bg_color }};
+    }
+  }
+</style>
+
+<section id="{{ section.id }}" class="c-molecule-systems">
+  <div class="container-sl">
+    <div class="mol__container">
+    
+    <div class="mol__header">
+      <h2 class="mol__title c-hero-title">
+        {{ section.settings.heading_1 }}
+        <span class="mol__title-highlight c-font-cormorant-title">{{ section.settings.heading_2_highlight }}</span>
+      </h2>
+
+      {%- if section.settings.subtext != blank -%}
+        <p class="mol__subtext c-description">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="mol__main">
+      
+      <div class="mol__image-col">
+        <div class="mol__image-wrapper">
+          {%- if section.settings.image != blank -%}
+            {{ section.settings.image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="mol__cards-col">
+        {%- for block in section.blocks -%}
+          <div class="mol__card" data-cormorant="{{ block.settings.use_cormorant_strong }}" {{ block.shopify_attributes }}>
+            <button class="mol__card-header" aria-expanded="false">
+              <div class="mol__card-heading">
+                <h3 class="mol__card-title">{{ block.settings.title }}</h3>
+                {%- if block.settings.subtitle != blank -%}
+                  <p class="mol__card-subtitle">{{ block.settings.subtitle }}</p>
+                {%- endif -%}
+              </div>
+              <svg class="mol__card-icon" viewBox="0 0 24 24">
+                <line class="vertical-line" x1="12" y1="5" x2="12" y2="19"></line>
+                <line class="horizontal-line" x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+            <div class="mol__card-content">
+              <div class="mol__card-content-inner">
+                <div class="mol__card-text c-description">{{ block.settings.description }}</div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+    </div>
+
+    <div class="mol__actions">
+      {%- if section.settings.primary_btn_label != blank -%}
+        <a href="{{ section.settings.primary_btn_link | default: '#' }}" class="mol__btn mol__btn--primary">
+          {{ section.settings.primary_btn_label }}
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.secondary_btn_label != blank -%}
+        <a href="{{ section.settings.secondary_btn_link | default: '#' }}" class="mol__btn mol__btn--secondary">
+          {{ section.settings.secondary_btn_label }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.getElementById('{{ section.id }}');
+    if (!section) return;
+
+    const cards = section.querySelectorAll('.mol__card-header');
+    
+    cards.forEach(header => {
+      header.addEventListener('click', () => {
+        const card = header.closest('.mol__card');
+        const isOpen = card.classList.contains('is-open');
+
+        section.querySelectorAll('.mol__card.is-open').forEach(openCard => {
+          if (openCard !== card) {
+            openCard.classList.remove('is-open');
+            const openHeader = openCard.querySelector('.mol__card-header');
+            if (openHeader) openHeader.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        if (isOpen) {
+          card.classList.remove('is-open');
+          header.setAttribute('aria-expanded', 'false');
+        } else {
+          card.classList.add('is-open');
+          header.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Blocks Dropdown",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "type": "text",
+      "id": "heading_1",
+      "label": "Heading Part 1",
+      "default": "One Molecule."
+    },
+    {
+      "type": "text",
+      "id": "heading_2_highlight",
+      "label": "Heading Part 2 (Italic/Highlight)",
+      "default": "Five Systems."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Right Subtext",
+      "default": "Two capsules a day. Clinically validated Nitric Oxide support for the systems that drive how you feel, perform, and age."
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Product Image"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_btn_label",
+      "label": "Primary Button Label",
+      "default": "Shop Nitric Oxide Support"
+    },
+    {
+      "type": "url",
+      "id": "primary_btn_link",
+      "label": "Primary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_btn_label",
+      "label": "Secondary Button Label",
+      "default": "Learn How It Works"
+    },
+    {
+      "type": "url",
+      "id": "secondary_btn_link",
+      "label": "Secondary Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Global Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#1b1b24"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlight Text Color (Orange)",
+      "default": "#d95c3c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Body Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Card Colors"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background",
+      "default": "#f6f5f3"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card Title Color (Orange)",
+      "default": "#d95c3c"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card Text & Icon Color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Button Colors"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_bg",
+      "label": "Primary Button Background",
+      "default": "#d95c3c"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_text",
+      "label": "Primary Button Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_secondary_border",
+      "label": "Secondary Button Border",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_secondary_text",
+      "label": "Secondary Button Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "unit": "rem"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "system_card",
+      "name": "System Card",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "CARDIOVASCULAR HEALTH"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Supports healthy blood pressure, circulation & arterial flexibility</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_cormorant_strong",
+          "label": "Use Cormorant Garamond italic for <strong> text?",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Blocks Dropdown",
+      "blocks": [
+        { "type": "system_card", "settings": { "title": "CARDIOVASCULAR HEALTH", "description": "<p>Supports healthy blood pressure, circulation & arterial flexibility</p>" } },
+        { "type": "system_card", "settings": { "title": "ENERGY & ENDURANCE", "description": "<p>Boosts oxygen delivery to muscles for lasting stamina and faster recovery</p>" } },
+        { "type": "system_card", "settings": { "title": "COGNITIVE FUNCTION", "description": "<p>Promotes cerebral blood flow for mental clarity, focus and mood</p>" } },
+        { "type": "system_card", "settings": { "title": "SEXUAL HEALTH", "description": "<p>Supports libido, arousal and performance for men and women</p>" } },
+        { "type": "system_card", "settings": { "title": "ACTIVE AGING", "description": "<p>Counteracts the age-related NO decline that drives cardiovascular and metabolic risk</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,127 @@
+<div class="bg-bg text-text" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#f7f7f7' }}">
+  <div class="max-w-screen-xl px-8 py-12 mx-auto md:px-12 md:py-24">
+    {%- unless section.settings.heading == blank -%}
+      <div class="max-w-4xl mx-auto mb-12 space-y-4 text-center">
+        <h2 class="h2">{{ section.settings.heading | escape }}</h2>
+        {% if section.settings.description != blank %}
+          <p> {{ section.settings.description }}</p>
+        {% endif %}
+      </div>
+    {%- endunless -%}
+    {%- if section.settings.blog != blank and section.settings.blog.articles_count > 0 -%}
+      <div>
+        <ul data-parent class="md:grid-cols-3 md:grid grid-cols-1 gap-8 {% if section.settings.mobile_scroll %} flex overflow-x-auto overscroll-x-contain snap-x snap-mandatory scroll-p-8 {% endif %}" role="list">
+          {%- for article in section.settings.blog.articles limit: section.settings.post_limit -%}
+            <li data-pre="opacity-0 translate-y-8" data-post="opacity-100 translate-y-0" class="motion-safe:transition-all motion-safe:duration-700 snap-start shrink-0  w-[calc(100%-8rem)] md:w-full">
+              {% render 'article-card', blog: section.settings.blog, article: article, show_image: section.settings.show_image, show_date: section.settings.show_date, show_author: section.settings.show_author, text_brand: true %}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      {%- if section.settings.show_view_all and section.settings.post_limit < section.settings.blog.articles_count -%}
+        <div class="mt-12 text-center">
+          <a href="{{ section.settings.blog.url }}" class="button--text">
+            {{ 'sections.featured_blog.view_all' | t }}
+          </a>
+        </div>
+      {%- endif -%}
+
+    {%- else -%}
+      <div class="blog-placeholder">
+        <div class="relative placeholder aspect-video">
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+        <div class="blog-placeholder__content">
+          <h2>
+            {{ 'sections.featured_blog.onboarding_title' | t }}
+          </h2>
+          <p class="rte-width">
+            {{ 'sections.featured_blog.onboarding_content' | t }}
+          </p>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Blog",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },{
+      "type": "text",
+      "id": "heading",
+      "default": "Blog posts",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 3,
+      "label": "Limit"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": true,
+      "label": "Show image?"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": false,
+      "label": "Show date?"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": false,
+      "label": "Show author?"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Show all?"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_scroll",
+      "default": true,
+      "label": "Scroll on mobile"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Blog",
+      "settings": {
+        "blog": "News"
+      }
+    }
+  ]
+}
+{% endschema %}

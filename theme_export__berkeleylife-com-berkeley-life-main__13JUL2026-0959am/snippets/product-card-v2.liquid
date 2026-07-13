@@ -1,0 +1,387 @@
+{% comment %}
+    Renders a product card
+
+    Accepts:
+    - product_card_product: {Object} Product Liquid object (optional)
+    - image_ratio: {String} Size of the product image card in tailwind classes. Default is "aspect-square" (optional)
+    - show_secondary_image: {Boolean} Show the secondary image on hover. Default: false (optional)
+    - show_vendor: {Boolean} Show the product vendor. Default: false
+    - quick_shop: {Boolean} Show the quickshop button and enable this feature. Default: false (optional)
+    - eager: {Boolean} This is used in the context of a for loop -- whether to make this image eager loaded (optional)
+    - show_color_swatches: {Boolean} Whether to show the swatches and convert the card into a swiper (optional)
+
+    Usage:
+    {% render 'product-card-v2', product_card_product: product, show_vendor: section.settings.show_vendor %}
+{% endcomment %}
+
+<style>
+  .product-title{
+    font-size: 30px;
+  }
+
+  @media(min-width:768px){
+    .product-title{
+      font-size: 32px;
+    }
+  }
+</style>
+
+{%- assign img_size = img_size | default: "(min-width: 750px) 33vw, 100vw" -%}
+
+{%- liquid
+  comment
+    Mirror price-v2.liquid (use_variant: false) to pick the SAME variant that the
+    price snippet ends up rendering, so the cart adds what the user sees.
+  endcomment
+  assign display_variant = product_card_product.selected_or_first_available_variant
+  assign display_price = product_card_product.price | default: 1999
+
+  if display_price == 0 or product_card_product.metafields.custom.hide_variant == true
+    for variant in product_card_product.variants
+      if variant.metafields.custom.hide_variant == true
+        continue
+      endif
+      if variant.price > 0
+        assign display_variant = variant
+        assign display_price = variant.price
+        break
+      endif
+    endfor
+  endif
+
+  unless show_subscription_pricing == false
+    assign card_show_subscription_pricing = true
+  endunless
+
+  assign cheapest_selling_plan_id = blank
+  if card_show_subscription_pricing
+    assign lowest_subscription_price = 999999999
+    for variant in product_card_product.variants
+      if variant.metafields.custom.hide_variant == true
+        continue
+      endif
+      if variant.selling_plan_allocations.size > 0
+        for allocation in variant.selling_plan_allocations
+          assign current_sub_price = allocation.price_adjustments.first.price | plus: 0
+          if current_sub_price > 0 and current_sub_price < lowest_subscription_price
+            assign lowest_subscription_price = current_sub_price
+            assign display_variant = variant
+            assign cheapest_selling_plan_id = allocation.selling_plan.id
+          endif
+        endfor
+      endif
+    endfor
+  endif
+-%}
+
+<div class="h-full p-4 md:6 rounded-3xl bg-[#EBE8E5] relative flex flex-col">
+  {% comment %} Only show original callout badge if BF badges are not active {% endcomment %}
+  {% if show_callouts and product_card_product.metafields.custom.product_callout_ != blank and show_bf_badges == false %}
+    <span class="absolute z-10 p-2 px-4 text-xs font-bold tracking-widest text-center uppercase rounded-full -top-2 left-10 bg-brand text-cream"> {{ product_card_product.metafields.custom.product_callout_.value }} </span>
+  {% endif %}
+  
+  {% comment %} BF Badges - only show when block is present and product is available {% endcomment %}
+  {% if show_bf_badges and product_card_product.available %}
+    <div class="absolute bf-badges-container flex flex-col gap-1" style="top: 1.5rem; left: 1.5rem;">
+      {% comment %} If product has callout metafield, use special colors and text {% endcomment %}
+      {% if product_card_product.metafields.custom.product_callout_ != blank %}
+        {% if bf_special_badge_1_text != blank %}
+          <span class="text-xs font-bold text-white uppercase" style="padding: 8px; background-color: {{ bf_special_badge_1_bg | default: '#D44F2F' }}; border-radius: 4px; line-height: normal; display: inline-flex; align-items: center; width: max-content;">
+            {{ bf_special_badge_1_text }}
+          </span>
+        {% endif %}
+        {% if bf_special_badge_2_text != blank %}
+          <span class="text-xs font-bold text-white uppercase" style="padding: 8px; background-color: {{ bf_special_badge_2_bg | default: '#000000' }}; border-radius: 4px; width: max-content; line-height: normal; display: inline-flex; align-items: center;">
+            {{ bf_special_badge_2_text }}
+          </span>
+        {% endif %}
+      {% else %}
+        {% comment %} Default BF badges {% endcomment %}
+        {% if bf_badge_1_text != blank %}
+          <span class="text-xs font-bold text-white uppercase" style="padding: 8px; background-color: {{ bf_badge_1_bg | default: '#000000' }}; border-radius: 4px; line-height: normal; display: inline-flex; align-items: center; width: max-content;">
+            {{ bf_badge_1_text }}
+          </span>
+        {% endif %}
+        {% if bf_badge_2_text != blank %}
+          <span class="text-xs font-bold text-white uppercase" style="padding: 8px; background-color: {{ bf_badge_2_bg | default: '#D44F2F' }}; border-radius: 4px; width: max-content; line-height: normal; display: inline-flex; align-items: center; width: max-content;">
+            {{ bf_badge_2_text }}
+          </span>
+        {% endif %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% comment %} Mothers Day Badge - only show when block is present and product has the metafield {% endcomment %}
+  {% if show_mothers_day_badge and product_card_product.available and product_card_product.metafields.custom.mothers_day_badge != blank %}
+    <div class="absolute mothers-day-badge-container flex flex-col gap-1" style="top: 4rem; left: 1.5rem;">
+      <span class="text-xs font-bold text-white uppercase" style="font-size: 0.5rem; padding: 8px; background-color: {{ mothers_day_badge_bg | default: '#1b1c29' }}; border-radius: 4px; line-height: normal; display: inline-flex; align-items: center; width: max-content;">
+        {{ product_card_product.metafields.custom.mothers_day_badge.value }}
+      </span>
+    </div>
+  {% endif %}
+  <div class="top-4  right-4 absolute z-[3]">
+    {%- if product_card_product.available -%}
+    {%- assign product_form_id = 'product-form-' | append: product_card_product.id -%}
+        <product-form class="block mb-4 product-form">
+          <div
+            data-product-form-errors
+            role="alert"
+            hidden>
+            <span data-product-form-error-msg></span>
+          </div>
+          {%- form 'product', product_card_product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input
+              type="hidden"
+              name="id"
+              value="{{ display_variant.id }}">
+            {%- if add_to_cart_as_subscription and cheapest_selling_plan_id != blank -%}
+              <input
+                type="hidden"
+                name="selling_plan"
+                value="{{ cheapest_selling_plan_id }}">
+            {%- endif -%}
+          {%- endform -%}
+        </product-form>
+      {% endif %}
+  </div>
+  <div class="relative group">
+    
+    {%- if show_swatches %}
+      {%- render 'image-with-swatches', product_card_product: product_card_product, img_size: "(min-width: 750px) 33vw, 40vw", eager: eager -%}
+    {%- else -%}
+      <a aria-label="View Product, {{ product_card_product.title }}" href="{{ product_card_product.url | within: collection | default: '#' }}" class="relative block peer">
+        {%- if product_card_product.featured_media -%}
+          <div class="{{ image_ratio }} relative overflow-hidden product-image-container">
+            {% render 'image', image: product_card_product.featured_media, img_size: img_size, eager: eager, decorative: true, classes: 'h-full w-full primary-product-image' %}
+            {%- if product_card_product.media[1] != nil and show_secondary_image -%}
+              <div class="secondary-hover-image-bg" aria-hidden="true"></div>
+              {% render 'image', image: product_card_product.media[1], classes: 'transition-all object-cover opacity-0 md:group-hover:opacity-100  group-focus:opacity-100 absolute inset-0 h-full duration-500 secondary-hover-image', fade_in: false, img_size: img_size, decorative: true %}
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          <h2 class="h3 font-header">{{ product_card_product.title }}</h2>
+        {%- endif -%}
+
+      </a>
+    {%- endif -%}
+    <div class="absolute sale-badge-container flex flex-wrap gap-2 mr-12 left-2 top-2">
+      {%- if product_card_product.available == false -%}
+        <span class="px-2 py-1 text-sm text-white bg-gray-500 rounded-full" aria-hidden="true">{{ 'products.product.sold_out' | t }}</span>
+      {%- elsif show_sale_badge != false and product_card_product.compare_at_price > product_card_product.price and product_card_product.available -%}
+        <span class="px-2 py-1 text-sm text-white bg-red-600 rounded-full" aria-hidden="true">{{ 'products.product.on_sale' | t }}</span>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Prime Badge - only shows when block is added and the product's custom.prime_badge metafield is true (or force-all is on) {%- endcomment -%}
+    {%- render 'c-prime-badge',
+      product: product_card_product,
+      show_prime_badge: show_prime_badge,
+      prime_badge_image: prime_badge_image,
+      prime_badge_alt: prime_badge_alt,
+      prime_badge_position: prime_badge_position,
+      prime_badge_width: prime_badge_width,
+      prime_badge_offset: prime_badge_offset,
+      prime_badge_force_all: prime_badge_force_all
+    -%}
+    {%- if quick_shop == true and show_swatches == false -%}
+      {% render 'quickshop', product_card_product: product_card_product %}
+    {%- endif -%}
+  </div>
+
+  <div class="pt-2 text-left flex-1" style="display:flex;gap: 24px;flex-direction: column">
+    {%- if show_vendor -%}
+      <span class="sr-only">{{ 'accessibility.vendor' | t }}</span>
+      <div class="subhead opacity-80">{{- product_card_product.vendor -}}</div>
+    {%- endif -%}
+    {% if show_reviews %}
+      <a href="{{ product_card_product.url | append: '#product-reviews' }}" aria-label="go to product reviews">
+      {% render 'okendo-reviews-product-rating-summary', product: product_card_product %}
+      </a>
+    {% endif %}
+    {%- if product_card_product.featured_media -%}
+      <a aria-hidden="true" tabindex="-1" href="{{ product_card_product.url | within: collection | default: '#' }}"   class="flex justify-between gap-4 mb-4 h3 product-title">
+        {{- product_card_product.title | escape -}}
+        {% if show_price %}
+          {% if gated_info %}
+            {% if customer.b2b? %}
+              <div class="text-brand !tracking-normal">
+                {%- render 'price-v2', product:product_card_product, use_variant:false, price_class: "text-2xl", show_subscription_pricing: false -%}
+              </div>
+            {% endif %}
+          {% else %}
+            <div class="text-brand !tracking-normal">
+              {%- render 'price-v2', product:product_card_product, use_variant:false, price_class: "text-2xl", show_subscription_pricing: show_subscription_pricing -%}
+            </div>
+          {% endif %}
+        {% endif %}
+      </a>
+    {%- endif -%}
+    <!-- Variant Picker -->
+    {% if add_cart_button %}
+    {%- endif -%}
+
+
+    <div class="mb-2"> {{ product_card_product.description | truncatewords: 20 }}</div> 
+
+    
+  </div>
+  <div class="mt-auto pt-8">
+    {% unless customer.b2b? %}
+    {% if add_cart_button %}
+      {%- if product_card_product.available -%}
+        {%- assign product_form_id = 'product-form-' | append: product_card_product.id -%}
+            <product-form class="block mb-4 product-form">
+              <div
+                data-product-form-errors
+                role="alert"
+                hidden>
+                <span data-product-form-error-msg></span>
+              </div>
+              {%- form 'product', product_card_product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                <input
+                  type="hidden"
+                  name="id"
+                  value="{{ display_variant.id }}">
+                {%- if add_to_cart_as_subscription and cheapest_selling_plan_id != blank -%}
+                  <input
+                    type="hidden"
+                    name="selling_plan"
+                    value="{{ cheapest_selling_plan_id }}">
+                {%- endif -%}
+                <div class="product-form__buttons">
+                  <div class="flex gap-2 mt-2 mb-2">
+                    {% capture product_rating %}
+                      {% render 'okendo-reviews-product-rating-summary', product: product_card_product %}
+                    {% endcapture %}
+                    <button
+                      aria-label="Add to cart"
+                      type="submit"
+                      name="add"
+                      class="!w-full mx-auto button--primary button"
+                      >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              {%- endform -%}
+            </product-form>
+          {% endif %}
+    {% endif %}
+  {% endunless %}
+  {% if gated_info %}
+    {% if customer.b2b? %}
+        <a aria-label="View Product, {{ product_card_product.title }}" href="{{ product_card_product.url | within: collection | default: '#' }}" class="relative block  peer  {% if learn_more %} !text-brand button--text w-fit mx-auto {% else %}!w-full button button--shop {% endif %}">
+          {% if learn_more %}
+            Learn more
+          {% else %}
+            Shop Now
+          {% endif %}
+        </a>
+      {% endif %}
+      {% else %}
+          <a aria-label="View Product, {{ product_card_product.title }}" href="{{ product_card_product.url | within: collection | default: '#' }}" class="relative block  peer  {% if learn_more %} !text-brand button--text w-fit mx-auto {% else %}!w-full button button--shop {% endif %}">
+          {% if learn_more %}
+            Learn more
+          {% else %}
+            Shop Now
+          {% endif %}
+        </a>
+    {% endif %}  
+  </div>
+</div>
+
+<style>
+.bf-badges-container {
+  z-index: 7 !important;
+}
+
+.mothers-day-badge-container {
+  z-index: 8 !important;
+}
+
+.sale-badge-container {
+  z-index: 1 !important;
+}
+
+.variant-picker-item {
+  font-family: 'tt-commons-pro';
+  font-weight: 700;
+  font-size: 12.283px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 14.586px;
+  letter-spacing: 2.334px;
+  text-transform: uppercase;
+}
+
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Ensure this runs after the DOM is fully loaded
+    document.querySelectorAll('.product-form').forEach((form) => {
+      const productCard = form.closest('.h-full'); // Adjust selector if necessary
+  
+      if (!productCard) return; // Ensure product card exists
+  
+      // Find all variant pickers within the same product card
+      const variantPickers = productCard.querySelectorAll('a.variant-picker-item'); // Adjust class if needed
+  
+      // Attach an event listener to each variant picker
+      variantPickers.forEach((picker) => {
+        picker.addEventListener('click', (event) => {
+          event.preventDefault(); // Prevent default link behavior
+  
+          // Get the selected variant ID
+          const selectedVariantId = picker.dataset.variantId;
+  
+          // Update all hidden inputs across all forms within the product card
+          productCard.querySelectorAll('.product-form').forEach((form) => {
+            const hiddenInput = form.querySelector('input[name="id"]');
+            if (hiddenInput) {
+              hiddenInput.value = selectedVariantId;
+            }
+          });
+  
+          // Update UI for active variant
+          variantPickers.forEach((item) => {
+            if (item.dataset.variantId === selectedVariantId) {
+              item.classList.add('underline', 'opacity-100');
+              item.classList.remove('opacity-30');
+            } else {
+              item.classList.remove('underline', 'opacity-100');
+              item.classList.add('opacity-30');
+            }
+          });
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  .secondary-hover-image-bg {
+    position: absolute;
+    inset: 0;
+    background-color: #f6f3f0;
+    opacity: 0;
+    transition: opacity 500ms;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .secondary-hover-image {
+    z-index: 2;
+  }
+  .product-image-container .primary-product-image {
+    transition: opacity 500ms;
+  }
+  @media (min-width: 768px) {
+    .group:hover .secondary-hover-image-bg,
+    .group:focus-within .secondary-hover-image-bg {
+      opacity: 1;
+    }
+    .group:hover .product-image-container .primary-product-image,
+    .group:focus-within .product-image-container .primary-product-image {
+      opacity: 0;
+    }
+  }
+</style>

@@ -1,0 +1,540 @@
+{% comment %}
+  C Super Collection Tabs (Stacked)
+  Fixed version:
+  - Mobile: vertical stacked tabs (one open, others collapsed)
+  - Desktop: horizontal layout (collapsed vertical strips)
+  - Hidden navigation buttons on mobile
+{% endcomment %}
+
+{% liquid
+  assign section_title = section.settings.title
+  assign section_id = section.id
+  assign bg_color = section.settings.background_color | default: '#131313'
+  assign padding_mobile = section.settings.padding_mobile | default: '64px 20px'
+  assign padding_tablet = section.settings.padding_tablet | default: '64px 64px'
+  assign padding_laptop = section.settings.padding_laptop | default: '64px 64px'
+  assign padding_desktop = section.settings.padding_desktop | default: '64px 64px 72px'
+  assign padding_tv = section.settings.padding_tv | default: '64px 64px 72px'
+%}
+
+<style>
+
+    
+
+  #{{ section.id }} .c-super-collection-tabs-stacked {
+    {% if section.settings.only_mobile %}
+      display: none;
+      @media (max-width: 969px) {
+        display: flex;
+      }
+    {% else %}
+      display: flex;
+    {% endif %}
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 32px 20px;
+    background: linear-gradient(245deg, #F5F0FE 1.6%, #F5EEF4 25.7%, #F6ECEB 59.09%, #F6E8D8 82.87%);
+  }
+
+  #{{ section.id }} .c-super-tabs__title-wrapper {
+    text-align: center;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-super-tabs__title > h2 {
+    color: var(--Neutral-Darker-Gray, #3D4347);
+    text-align: center;
+    font-family: "Founders Grotesk";
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; /* 43.2px */
+    margin: 0;
+  }
+
+  /* MOBILE vertical layout */
+  #{{ section.id }} .c-super-tabs__tabs-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  #{{ section.id }} .c-super-collection-stacked {
+    transition: all 0.4s ease;
+    overflow: hidden;
+    flex: 0 0 auto;
+  }
+
+  #{{ section.id }} .c-cta__text {
+    font-family: var(--extra-family) !important;
+  }
+
+  #{{ section.id }} .c-super-collection-stacked.is-closed {
+    max-height: 140px;
+    opacity: 0.85;
+    cursor: pointer;
+  }
+
+  #{{ section.id }} .c-super-collection-stacked.is-open {
+    max-height: 2000px; /* just big enough to fit contents */
+  }
+
+  /* Hide text until transition done */
+  #{{ section.id }} .c-super-tab__text-wrapper,
+  #{{ section.id }} .c-super-tab__review-tag-wrapper {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  #{{ section.id }} .c-super-tab__text-wrapper.is-visible,
+  #{{ section.id }} .c-super-tab__review-tag-wrapper.is-visible {
+    opacity: 1;
+  }
+
+  /* Hide nav buttons on mobile */
+  @media (max-width: 977px) {
+    #{{ section.id }} .c-super-tabs__navigation {
+      display: none;
+    }
+  }
+
+  @media (width >= 768px) {
+    #{{ section.id }} .c-super-tabs__title > h2 {
+      color: var(--Neutral-Darker-Gray, #3D4347);
+      text-align: center;
+      font-family: "Founders Grotesk";
+      font-size: var(--Text-Sizes-Heading-1, 56px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%; /* 67.2px */
+    }
+  }
+
+  /* DESKTOP: horizontal collapsable tabs */
+  @media (width >= 978px) {    
+    #{{ section.id }} .c-super-collection-stacked {
+      padding: 64px;
+    }
+
+    #{{ section.id }} .c-super-tabs__tabs-wrapper {
+      flex-direction: row;
+      gap: 12px;
+    }
+
+    #{{ section.id }} .c-super-collection-stacked {
+      flex: 0 0 100px;
+      transition: flex 0.5s ease;
+    }
+
+    #{{ section.id }} .c-super-collection-stacked.is-open {
+      flex: 1;
+    }
+
+    #{{ section.id }} .c-super-collection-stacked.is-closed {
+      flex: 0 0 100px;
+      cursor: pointer;
+    }
+
+    #{{ section.id }} .c-super-tabs__navigation {
+      display: flex;
+      justify-content: flex-end;
+      align-self: end;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+     #{{ section.id }} .c-super-tabs__nav-button.prev,
+     #{{ section.id }} .c-super-tabs__nav-button.next  {
+      display: flex;
+      width: 42px;
+      height: 42px;
+      padding: 10px !important;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      aspect-ratio: 1/1;
+      border-radius: 100px;
+      border: none;
+    }
+
+    #{{ section.id }} .c-super-tabs__nav-button.next {
+      background: #606664;
+    }
+
+    #{{ section.id }} .c-super-tabs__nav-button.prev {
+      background: var(--Neutral-Lightest-Gray, #E3E6E5);
+    }
+  }
+
+  #{{ section.id }} .trust_badges {
+    display: flex;
+    overflow: hidden;
+    background: var(--Main-Navy, #1B1C29); 
+    padding: 16px 0;
+    white-space: nowrap;
+    position: relative;
+    {% if section.settings.only_mobile %}
+      display: none; 
+      @media (max-width: 977px) {
+        display: flex;
+      }
+    {% endif %}
+  }
+
+  /* The moving track */
+  #{{ section.id }} .marquee-track {
+    display: flex;
+    align-items: center;
+    gap: 40px; /* Space between items */
+    animation: marquee 30s linear infinite;
+    width: max-content;
+  }
+
+  #{{ section.id }} .footer-item-wrapper {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0 20px;
+    border-bottom: none; /* Removed border for marquee look */ 
+  }
+
+  #{{ section.id }} .footer-item {
+    display: flex;
+    align-items: center; 
+    gap: 8px; 
+  }
+
+  /* Keyframe for movement */
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Pause on hover for accessibility */
+  #{{ section.id }} .trust_badges:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  #{{ section.id }} .footer-icon {
+    display: flex;
+    width: 24px;
+    height: 24px;
+  }
+
+  #{{ section.id }} .footer-text {
+    color: var(--Main-Cream, #F6F3F0);
+    /* font-family: "TT Commons Pro"; */
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%; /* 19.2px */
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+  }
+</style>
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="c-super-collection-tabs-stacked">
+    {% if section_title != blank %}
+      <div class="c-super-tabs__title-wrapper">
+        <div class="c-super-tabs__title">{{ section_title }}</div>
+      </div>
+    {% endif %}
+
+    <div class="c-super-tabs__tabs-wrapper" data-tabs-container="{{ section_id }}">
+      {% comment %} Filter specifically for super_tab blocks to find the last one {% endcomment %}
+      {% assign super_tabs = section.blocks | where: "type", "super_tab" %}
+      
+      {% comment %} Find which tab should be open - first one with checkbox checked, or last one as fallback {% endcomment %}
+      {%- liquid
+        assign default_open_tab_id = nil
+        for tab in super_tabs
+          if tab.settings.is_default_open
+            assign default_open_tab_id = tab.id
+            break
+          endif
+        endfor
+        if default_open_tab_id == nil
+          assign default_open_tab_id = super_tabs.last.id
+        endif
+      -%}
+
+      {% for block in section.blocks %}
+        {% if block.type == 'super_tab' %}
+        {%- liquid 
+          assign is_open_default = false
+          if block.id == default_open_tab_id
+            assign is_open_default = true
+          endif
+        -%}
+        {% render 'c-super-collection-stacked',
+          collection: block.settings.collection,
+          tab_background_color: block.settings.tab_background_color,
+          tag_title: block.settings.tag_title,
+          cta_text: block.settings.cta_text,
+          cta_url: block.settings.cta_url,
+          background_image: block.settings.background_image,
+          tab_img: block.settings.tab_img,
+          tab_img_url: block.settings.tab_img_url,
+          title: block.settings.title,
+          description: block.settings.description,
+          review_text: block.settings.review_text,
+          avatar_image: block.settings.avatar_image,
+          author_name: block.settings.author_name,
+          author_extra_text: block.settings.author_extra_text,
+          tag_title_1: block.settings.tag_title_1,
+          tag_description_1: block.settings.tag_description_1,
+          tag_title_2: block.settings.tag_title_2,
+          tag_description_2: block.settings.tag_description_2,
+          tag_title_3: block.settings.tag_title_3,
+          tag_description_3: block.settings.tag_description_3,
+          collapsed_icon: block.settings.collapsed_icon,
+          tab_id: block.id,
+          is_open: is_open_default,
+          section_id: section_id
+        %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Navigation (hidden on mobile) -->
+    <div class="c-super-tabs__navigation" data-nav-container="{{ section_id }}">
+      <button
+        class="c-super-tabs__nav-button prev"
+        aria-label="Previous tab"
+        data-prev-tab="{{ section_id }}"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="12" viewBox="0 0 17 12" fill="none">
+          <path d="M15.75 4.77295C16.1642 4.77295 16.5 5.10874 16.5 5.52295C16.5 5.93716 16.1642 6.27295 15.75 6.27295V5.52295V4.77295ZM0.219669 6.05328C-0.0732241 5.76039 -0.0732241 5.28551 0.219669 4.99262L4.99264 0.219648C5.28553 -0.073245 5.76041 -0.073245 6.0533 0.219648C6.34619 0.512542 6.34619 0.987415 6.0533 1.28031L1.81066 5.52295L6.0533 9.76559C6.34619 10.0585 6.34619 10.5334 6.0533 10.8263C5.76041 11.1191 5.28553 11.1191 4.99264 10.8263L0.219669 6.05328ZM15.75 5.52295V6.27295H0.749999V5.52295V4.77295H15.75V5.52295Z" fill="#606664"/>
+        </svg>
+      </button>
+
+      <button
+        class="c-super-tabs__nav-button next"
+        aria-label="Next tab"
+        data-next-tab="{{ section_id }}"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="12" viewBox="0 0 17 12" fill="none">
+          <path d="M0.75 4.77295C0.335786 4.77295 0 5.10874 0 5.52295C0 5.93716 0.335786 6.27295 0.75 6.27295V5.52295V4.77295ZM16.2803 6.05328C16.5732 5.76039 16.5732 5.28551 16.2803 4.99262L11.5074 0.219648C11.2145 -0.073245 10.7396 -0.073245 10.4467 0.219648C10.1538 0.512542 10.1538 0.987415 10.4467 1.28031L14.6893 5.52295L10.4467 9.76559C10.1538 10.0585 10.1538 10.5334 10.4467 10.8263C10.7396 11.1191 11.2145 11.1191 11.5074 10.8263L16.2803 6.05328ZM0.75 5.52295V6.27295H15.75V5.52295V4.77295H0.75V5.52295Z" fill="#E3E6E5"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="trust_badges">      
+    <div class="marquee-track">
+      {% comment %} 
+        We loop twice to create enough content for a seamless horizontal scroll 
+      {% endcomment %}
+      {% for i in (1..3) %}
+        {% for block in section.blocks %}
+          {% if block.type == 'footer_banner_item' %}
+            <div class="footer-item-wrapper" {{ block.shopify_attributes }}>
+              <div class="footer-item">
+                <div class="footer-icon">{{ block.settings.icon_svg }}</div>
+                <span class="footer-text">{{ block.settings.text }}</span> 
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    const sectionId = '{{ section_id }}';
+
+    function initStackedTabs() {
+      const container = document.querySelector(`[data-tabs-container="${sectionId}"]`);
+      if (!container) return;
+      const tabs = Array.from(container.querySelectorAll('[data-super-tab]'));
+      let currentIndex = tabs.findIndex(tab => tab.classList.contains('is-open'));
+      if (currentIndex === -1) currentIndex = 0;
+
+      // Ensure first tab shows content immediately
+      const initialTab = tabs[currentIndex];
+      if (initialTab) {
+        const tw = initialTab.querySelector('.c-super-tab__text-wrapper');
+        const rw = initialTab.querySelector('.c-super-tab__review-tag-wrapper');
+        const iw = initialTab.querySelector('.c-super-tab__section-bottom');
+        if (tw) tw.classList.add('is-visible');
+        if (rw) rw.classList.add('is-visible');
+        if (iw) iw.classList.add('is-visible');
+      }
+
+      // Function to open a tab
+      function openTab(index) {
+        const isDesktop = window.matchMedia('(min-width: 978px)').matches;
+
+        tabs.forEach((tab, i) => {
+          const textWrapper = tab.querySelector('.c-super-tab__text-wrapper');
+          const reviewWrapper = tab.querySelector('.c-super-tab__review-tag-wrapper');
+          const imgWrapper = tab.querySelector('.c-super-tab__section-bottom');
+          const isActive = i === index;
+
+          if (isActive) {
+            tab.classList.add('is-open');
+            tab.classList.remove('is-closed');
+            tab.setAttribute('aria-expanded', 'true');
+
+            // Hide content while transition runs
+            if (textWrapper) textWrapper.classList.remove('is-visible');
+            if (reviewWrapper) reviewWrapper.classList.remove('is-visible');
+            if (imgWrapper) imgWrapper.classList.remove('is-visible');
+
+            // Show content after transition
+            const reveal = () => {
+              if (textWrapper) textWrapper.classList.add('is-visible');
+              if (reviewWrapper) reviewWrapper.classList.add('is-visible');
+              if (imgWrapper) imgWrapper.classList.add('is-visible');
+              tab.removeEventListener('transitionend', reveal);
+            };
+            tab.addEventListener('transitionend', reveal);
+
+            // Fallback for mobile (no transitionend on max-height)
+            if (!isDesktop) {
+              setTimeout(() => {
+                if (textWrapper && !textWrapper.classList.contains('is-visible'))
+                  textWrapper.classList.add('is-visible');
+                if (reviewWrapper && !reviewWrapper.classList.contains('is-visible'))
+                  reviewWrapper.classList.add('is-visible');
+                 if (imgWrapper && !imgWrapper.classList.contains('is-visible'))
+                  imgWrapper.classList.add('is-visible');
+              }, 500);
+            }
+          } else {
+            tab.classList.remove('is-open');
+            tab.classList.add('is-closed');
+            tab.setAttribute('aria-expanded', 'false');
+            if (textWrapper) textWrapper.classList.remove('is-visible');
+            if (reviewWrapper) reviewWrapper.classList.remove('is-visible');
+            if (imgWrapper) imgWrapper.classList.remove('is-visible');
+          }
+        });
+
+        currentIndex = index;
+      }
+
+      // Click handler for cards
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+          if (tab.classList.contains('is-closed')) openTab(index);
+        });
+        tab.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (tab.classList.contains('is-closed')) openTab(index);
+          }
+        });
+      });
+
+      // Navigation buttons (no scrollIntoView!)
+      const prevBtn = document.querySelector(`[data-prev-tab="${sectionId}"]`);
+      const nextBtn = document.querySelector(`[data-next-tab="${sectionId}"]`);
+
+      if (prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', e => {
+          e.preventDefault(); // prevent focus scroll
+          const newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+          openTab(newIndex);
+        });
+
+        nextBtn.addEventListener('click', e => {
+          e.preventDefault();
+          const newIndex = (currentIndex + 1) % tabs.length;
+          openTab(newIndex);
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initStackedTabs);
+    } else {
+      initStackedTabs();
+    }
+  })();
+</script>
+
+
+
+{% schema %}
+{
+  "name": "C Tabs Stacked",
+  "tag": "section",
+  "class": "c-super-collection-tabs-stacked",
+  "settings": [
+    { "type": "checkbox", "id": "only_mobile", "label": "Only Mobile?", "default": true },
+    { "type": "richtext", "id": "title", "label": "Section Title", "default": "<p>Our Wellness Collections</p>" },
+    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#131313" },
+    { "type": "header", "content": "Padding Settings" },
+    { "type": "text", "id": "padding_mobile", "label": "Padding Mobile", "default": "64px 20px" },
+    { "type": "text", "id": "padding_tablet", "label": "Padding Tablet (≥768px)", "default": "64px 64px" },
+    { "type": "text", "id": "padding_laptop", "label": "Padding Laptop (≥978px)", "default": "64px 64px" },
+    { "type": "text", "id": "padding_desktop", "label": "Padding Desktop (≥1200px)", "default": "64px 64px 72px" },
+    { "type": "text", "id": "padding_tv", "label": "Padding TV (≥1980px)", "default": "64px 64px 72px" }
+  ],
+  "blocks": [
+    {
+      "type": "super_tab",
+      "name": "Super Collection Tab",
+      "settings": [
+        { "type": "checkbox", "id": "is_default_open", "label": "Open by Default?", "default": false, "info": "If multiple tabs are checked, only the first one will be open. If none are checked, the last tab will be open." },
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "color", "id": "tab_background_color", "label": "Tab Background Color", "default": "#BFAEE3" },
+        { "type": "richtext", "id": "tag_title", "label": "Tag Title" },
+        { "type": "text", "id": "cta_text", "label": "CTA Button Text", "default": "Shop Category" },
+        { "type": "url", "id": "cta_url", "label": "CTA Custom URL", "info": "Optional custom URL for the CTA button. If not set, will use the collection URL." },
+        { "type": "image_picker", "id": "background_image", "label": "Background Image" },
+        { "type": "image_picker", "id": "tab_img", "label": "Tab Image" },
+        { "type": "url", "id": "tab_img_url", "label": "Tab Image Link", "info": "Optional URL for the tab image. If not set, the image won't be clickable." },
+        { "type": "richtext", "id": "title", "label": "Custom Title" },
+        { "type": "richtext", "id": "description", "label": "Custom Description" },
+        { "type": "header", "content": "Review Section" },
+        { "type": "richtext", "id": "review_text", "label": "Review Text" },
+        { "type": "image_picker", "id": "avatar_image", "label": "Avatar Image" },
+        { "type": "text", "id": "author_name", "label": "Author Name" },
+        { "type": "text", "id": "author_extra_text", "label": "Author Extra Text" },
+        { "type": "header", "content": "Benefit Tags" },
+        { "type": "richtext", "id": "tag_title_1", "label": "Tag 1 Title" },
+        { "type": "richtext", "id": "tag_description_1", "label": "Tag 1 Description" },
+        { "type": "richtext", "id": "tag_title_2", "label": "Tag 2 Title" },
+        { "type": "richtext", "id": "tag_description_2", "label": "Tag 2 Description" },
+        { "type": "richtext", "id": "tag_title_3", "label": "Tag 3 Title" },
+        { "type": "richtext", "id": "tag_description_3", "label": "Tag 3 Description" },
+        { "type": "checkbox", "id": "collapsed_icon", "label": "Collapsed Icon", "default": true }
+      ]
+    },
+    {
+      "type":"footer_banner_item",
+      "name":"Footer Banner Item",
+      "settings":[
+        {
+          "type":"html",
+          "id":"icon_svg",
+          "label":"Icon SVG",
+        },
+        {
+          "type":"text",
+          "id":"text",
+          "label":"Text",
+          "default":"Free Shipping on orders over $50"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Tabs Stacked",
+      "blocks": [
+        { "type": "super_tab" },
+        { "type": "super_tab" },
+        { "type": "super_tab" }
+      ]
+    }
+  ]
+}
+{% endschema %}

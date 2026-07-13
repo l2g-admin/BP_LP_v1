@@ -1,0 +1,791 @@
+<style>
+  #{{ section.id }} {
+    font-size: 16px;
+    padding-top: {{ section.settings.padding_top }}em;
+    padding-bottom: {{ section.settings.padding_bottom }}em;
+    overflow: hidden;
+
+    {% if section.settings.background_image %}
+      background-image: url("{{ section.settings.background_image | image_url }}");
+      background-size: cover;
+      background-position: center;
+      background-color: rgba(0, 0, 0, 0.4);
+      background-blend-mode: darken;
+      background-repeat: no-repeat;
+    {% else %}
+      background-color: {{ section.settings.bg_color }};
+    {% endif %}
+ 
+
+        & *:not(.block-heading) {
+        color: {{ section.settings.text_color }};
+    }
+
+    & .chart__button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background-color: {{ section.settings.accent_color }};
+      border-radius: 9999px;
+      color: #ffffff;
+      font-size: clamp(14px, 2vw, 16px);
+      text-decoration: none;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      font-weight: 400;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 2px solid {{ section.settings.accent_color }};
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    & .c-section-top {
+      {% if section.settings.section_top_alignment == "flex-start" %}
+        width: 100%;
+      {% endif %}
+      align-items: {{ section.settings.section_top_alignment }};
+      text-align: {{ section.settings.text_alignment }};
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+
+      & .c-section-top-heading {
+        font-size: clamp(28px, 5vw + 1rem, 48px);
+        
+        margin: 0;
+        &  span {
+          font-style: italic;
+          font-weight: 300;
+           font-size: clamp(28px, 5vw, 48px);
+          font-family: "Cormorant Garamond";
+          color: {{ section.settings.accent_color }};
+        }
+      }
+
+      & .c-section-top-subheading {
+        color: {{ section.settings.text_color }};
+        margin: 0;
+      }
+
+      & .c-section-top-para {
+        width: 65%;
+      }
+
+      & .c-section-top-para * {
+        color: {{ section.settings.text_color }};
+        margin: 0;
+        font-size: clamp(18px, 2.5vw, 20px);
+        
+      }
+    }
+
+    & .c-b-grid {
+      display: grid;
+      grid-template-columns: {% for i in (1..section.settings.columns) %} 1fr{% endfor %};
+      gap: 24px;
+
+      & .c-b-item {
+        display: flex;
+        
+        {% if section.settings.blocks_direction == "vertical" %}
+          flex-direction: column;
+        {% endif %}
+        {% if section.settings.blocks_alignment == "left" %}
+          align-items: flex-start;
+          text-align: left;
+        {% elsif section.settings.blocks_alignment == "center" %}
+          align-items: center;
+          text-align: center;
+        {% else %}
+          align-items: flex-end;
+          text-align: right;
+        {% endif %}
+        background: {{ section.settings.card_background }};
+        color: {{ section.settings.card_text_color }} !important;
+        gap: 1em;
+        padding: 24px 18px;
+        border: 1px solid {{ section.settings.accent_color }};
+        border-radius: 16px;
+
+        {% if section.settings.use_separator_boder == true %}
+          border-right: 1px solid rgba(0, 0, 0, 0.1);
+          padding-right: 1em;
+
+          &:last-child {
+            border-right: none;
+            padding-right: 0;
+          }
+        {% endif %}
+
+        & .c-b-item-image-div {
+          display: flex;
+
+          & .c-b-item-icon {
+            width: {{ section.settings.icon_width }}em;
+            min-width: {{ section.settings.icon_width }}em;
+          }
+
+          & .c-b-item-image {
+            width: 100%;
+          }
+        }
+
+        & .c-b-item-content {
+          display: flex;
+          flex-direction: column;
+ 
+          height: 100%;
+          gap: 0.5rem;
+
+          & .block-heading {
+            color: {{ section.settings.accent_color }} !important;
+
+            margin: 0;
+
+            font-size: clamp(20px, 2.5vw, 24px);
+ 
+          font-weight: 300;
+            line-height: 100%;
+          }
+
+          & *,
+          & .c-b-item-para * {
+            color: {{ section.settings.card_text_color }} !important;
+            font-size: clamp(16px, 2.5vw, 18px);
+           font-style: normal;
+            font-weight: 400;
+            line-height: 150%;
+          }
+        }
+      }
+    }
+
+    & .container-footer-text {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      text-align: center;
+    }
+
+    & .swiper-pagination-bullet {
+      background-color: {{ section.settings.accent_color }};
+      opacity: 0.4;
+    }
+
+    & .swiper-pagination-bullet-active {
+      background-color: {{ section.settings.accent_color }};
+      opacity: 1;
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+    {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+    #{{ section.id }} {
+      padding-top: {{ half_padding_top }}em;
+      padding-bottom: {{ half_padding_bottom }}em;
+      
+      {% if section.settings.background_image %}
+        background-size: cover;
+      {% endif %}
+
+      & .c-section-top-para  {
+        width: 100% !important;
+      }
+
+
+      & .c-b-grid {
+        grid-template-columns: {% for i in (1..section.settings.mobile_columns) %} 1fr{% endfor %};
+      }
+
+      {% if section.settings.use_separator_boder == true %}
+        & .c-b-item {
+          border-right: none;
+          padding-right: 0;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          padding-bottom: 1em;
+
+          &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+          }
+        }
+      {% endif %}
+    }
+  }
+
+</style>
+
+<section id="{{ section.id }}" class="c-section">
+  <div class="container-sl">
+    <div class="c-section-top">
+      {%- if section.settings.section_top_subheading != empty -%}
+        <p class="c-section-top-subheading">{{ section.settings.section_top_subheading }}</p>
+      {%- endif -%}
+      {%- if section.settings.section_top_heading != empty -%}
+        <h2 class="c-section-top-heading">{{ section.settings.section_top_heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.section_top_paragraph != empty -%}
+        <div class="c-section-top-para">{{ section.settings.section_top_paragraph }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_text != empty and section.settings.button_to_bottom == false -%}
+        <div class="c-buttons-div">
+          <a class="{{ section.settings.button_style }}" href="{{ section.settings.button_url }}">
+            {{- section.settings.button_text -}}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="c-b-grid desktop-grid">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'Item' %}
+            <div class="c-b-item" {{ block.shopify_attributes }}{% if block.settings.block_border_color != blank %} style="border-color: {{ block.settings.block_border_color }};"{% endif %}>
+              {% if block.settings.block_image or block.settings.block_icon %}
+              <div class="c-b-item-image-div">
+                {% if block.settings.block_image %}
+                  {{
+                    block.settings.block_image
+                    | image_url: width: 750
+                    | image_tag: loading: 'lazy', height: 'auto', class: 'c-b-item-image'
+                  }}
+                {% endif %}
+                {% if block.settings.block_icon %}
+                  {{
+                    block.settings.block_icon
+                    | image_url: width: 500
+                    | image_tag: loading: 'lazy', height: 'auto', class: 'c-b-item-icon'
+                  }}
+                {% endif %}
+              </div>
+              {% endif %}
+              <div class="c-b-item-content">
+                {% if block.settings.block_subheading != blank %}
+                  <p class="block-subheading">{{ block.settings.block_subheading }}</p>
+                {% endif %}
+                {% if block.settings.block_heading != blank %}
+                  <h3 class="block-heading" style="{% if block.settings.heading_use_font_family %}font-family: 'Cormorant Garamond'; font-style: italic; {% endif %}{% if block.settings.block_heading_color != blank %}color: {{ block.settings.block_heading_color }} !important;{% endif %}">{{ block.settings.block_heading }}</h3>
+                {% endif %}
+                {% if block.settings.block_heading %}
+                  <div class="c-b-item-para">{{ block.settings.block_paragraph }}</div>
+                {% endif %}
+                {%- if block.settings.button_text != empty -%}
+                  <div class="c-buttons-div">
+                    <a class="{{ block.settings.button_style }}" href="{{ block.settings.button_url }}">
+                      {{- block.settings.button_text -}}
+                    </a>
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+    {% if section.settings.enable_mobile_slider %}
+      <div class="c-b-grid swiper-container mobile-grid" style="display: none;">
+        <div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'Item' %}
+                <div class="c-b-item swiper-slide" {{ block.shopify_attributes }}{% if block.settings.block_border_color != blank %} style="border-color: {{ block.settings.block_border_color }};"{% endif %}>
+                  <div class="c-b-item-image-div">
+                    {% if block.settings.block_image %}
+                      {{
+                        block.settings.block_image
+                        | image_url: width: 750
+                        | image_tag: loading: 'lazy', height: 'auto', class: 'c-b-item-image'
+                      }}
+                    {% endif %}
+                    {% if block.settings.block_icon %}
+                      {{
+                        block.settings.block_icon
+                        | image_url: width: 500
+                        | image_tag: loading: 'lazy', height: 'auto', class: 'c-b-item-icon'
+                      }}
+                    {% endif %}
+                  </div>
+                  <div class="c-b-item-content">
+                    {% if block.settings.block_subheading != blank %}
+                      <p class="block-subheading">{{ block.settings.block_subheading }}</p>
+                    {% endif %}
+                    {% if block.settings.block_heading != blank %}
+                      <h3 class="block-heading" style="{% if block.settings.heading_use_font_family %}font-family: 'Cormorant Garamond'; font-style: italic; {% endif %}{% if block.settings.block_heading_color != blank %}color: {{ block.settings.block_heading_color }} !important;{% endif %}">{{ block.settings.block_heading }}</h3>
+                    {% endif %}
+                    {% if block.settings.block_heading %}
+                      <div class="c-b-item-para">{{ block.settings.block_paragraph }}</div>
+                    {% endif %}
+                    {%- if block.settings.button_text != empty -%}
+                      <div class="c-buttons-div">
+                        <a class="{{ block.settings.button_style }}" href="{{ block.settings.button_url }}">
+                          {{- block.settings.button_text -}}
+                        </a>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+        {% if section.settings.enable_swiper_pagination %}
+          <div class="swiper-pagination"></div>
+        {% endif %}
+      </div>
+    {%- endif -%}
+    {%- if section.settings.button_text != empty and section.settings.button_to_bottom -%}
+      <div class="c-buttons-div" style="display: flex; justify-content: center; margin-top: 2rem;">
+        <a class="{{ section.settings.button_style }}" href="{{ section.settings.button_url }}">
+          {{- section.settings.button_text -}}
+        </a>
+      </div>
+    {%- endif -%}
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'footer-text' %}
+          <div class="container-footer-text">
+            <div style="color: {{ block.settings.footer-color }}; font-size: 14px;">
+              {{ block.settings.footer_text }}
+            </div>
+          </div>
+      {% endcase %}
+    {% endfor %}
+  </div>
+</section>
+{% if section.settings.enable_mobile_slider %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const mobileBreakpoint = 768;
+      let swiperInstances = {};
+
+      function initSlider(sectionId) {
+        const container = document.querySelector(`#${sectionId} .swiper-container`);
+        if (!container) return;
+
+        if (swiperInstances[sectionId]) {
+          swiperInstances[sectionId].destroy();
+        }
+
+        swiperInstances[sectionId] = new Swiper(container, {
+          slidesPerView: 1.1,
+          spaceBetween: 20,
+          centeredSlides: true,
+          pagination: {
+            el: container.querySelector('.swiper-pagination'),
+            clickable: true,
+          },
+          navigation: {
+            nextEl: container.querySelector('.swiper-button-next'),
+            prevEl: container.querySelector('.swiper-button-prev'),
+          },
+        });
+      }
+
+      function handleResponsive(sectionId) {
+        const isMobile = window.innerWidth <= mobileBreakpoint;
+        const desktopGrid = document.querySelector(`#${sectionId} .desktop-grid`);
+        const mobileGrid = document.querySelector(`#${sectionId} .mobile-grid`);
+
+        if (isMobile) {
+          if (desktopGrid) desktopGrid.style.display = 'none';
+          if (mobileGrid) {
+            mobileGrid.style.display = 'block';
+            initSlider(sectionId);
+          }
+        } else {
+          if (desktopGrid) desktopGrid.style.display = 'grid';
+          if (mobileGrid) {
+            mobileGrid.style.display = 'none';
+            if (swiperInstances[sectionId]) {
+              swiperInstances[sectionId].destroy();
+              delete swiperInstances[sectionId];
+            }
+          }
+        }
+      }
+
+      const currentSectionId = '{{ section.id }}';
+
+      handleResponsive(currentSectionId);
+
+      window.addEventListener('resize', function () {
+        handleResponsive(currentSectionId);
+      });
+      if (!window.sectionSliders) {
+        window.sectionSliders = {
+          instances: {},
+          init: function (sectionId) {
+            if (!this.instances[sectionId]) {
+              this.instances[sectionId] = true;
+              handleResponsive(sectionId);
+            }
+          },
+        };
+      }
+
+      window.sectionSliders.init(currentSectionId);
+    });
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "C Original Blocks",
+  "blocks": [
+    {
+      "name": "Item",
+      "type": "Item",
+      "limit": 50,
+      "settings": [
+        {
+          "type": "text",
+          "id": "block_subheading",
+          "label": "Block SubHeading"
+        },
+        {
+          "type": "textarea",
+          "id": "block_heading",
+          "label": "Heading",
+          "default": "My heading"
+        },
+        {
+          "type": "richtext",
+          "id": "block_paragraph",
+          "label": "Paragraph",
+          "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "block_image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "block_icon",
+          "label": "Icon"
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_use_font_family",
+          "label": "Use Cormorant Garamond font family",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "block_heading_color",
+          "label": "Heading color",
+          "info": "Leave blank to use the section accent color"
+        },
+        {
+          "type": "color",
+          "id": "block_border_color",
+          "label": "Border color",
+          "info": "Leave blank to use the section accent color"
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Read more >"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button Link"
+        },
+        {
+          "type": "text",
+          "id": "button_style",
+          "label": "Button style"
+        }
+      ]
+    },
+    {
+      "name": "Footer Text",
+      "type": "footer-text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "footer_text",
+          "label": "Footer Text"
+        },
+        {
+          "type": "color",
+          "id": "footer-color",
+          "label": "Footer Text Color",
+          "default": "#000"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_slider",
+      "label": "Enable mobile slider (Swiper)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_swiper_pagination",
+      "label": "Enable Swiper Pagination",
+      "default": false,
+      "info": "Only works if 'Enable mobile slider (Swiper)' is enabled"
+    },
+    {
+      "type": "select",
+      "id": "blocks_direction",
+      "label": "Blocks direction",
+      "default": "vertical",
+      "options": [
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        },
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "blocks_alignment",
+      "label": "Blocks alignment",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "icon_width",
+      "label": "Icon width",
+      "min": 0.4,
+      "max": 10,
+      "step": 0.2,
+      "default": 3,
+      "unit": "rem"
+    },
+    {
+      "type": "select",
+      "id": "section_container",
+      "label": "Section container",
+      "default": "page-width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Normal"
+        },
+        {
+          "value": "",
+          "label": "None"
+        },
+        {
+          "value": "page-width2",
+          "label": "Smaller"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_separator_boder",
+      "label": "Use separator border",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "mobile_columns",
+      "label": "Mobile Columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_to_bottom",
+      "label": "Move Button to Bottom",
+      "default": false,
+      "info": "Button will appear above the footer text"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Buy Now"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "button_style",
+      "label": "Button style",
+      "default": "c-b1"
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#5d3be4"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background color"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card text color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000"
+    },
+    {
+      "type": "header",
+      "content": "Section Top"
+    },
+    {
+      "type": "text",
+      "id": "section_top_subheading",
+      "label": "Subheading",
+      "default": "subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "section_top_heading",
+      "label": "Heading",
+      "default": "My heading"
+    },
+    {
+      "type": "richtext",
+      "id": "section_top_paragraph",
+      "label": "Paragraph",
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>"
+    },
+    {
+      "type": "select",
+      "id": "section_top_alignment",
+      "label": "Section Top Alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Original Blocks"
+    }
+  ]
+}
+{% endschema %}

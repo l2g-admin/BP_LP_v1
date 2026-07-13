@@ -1,0 +1,756 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "sticky_product_pKfVLz": {
+      "type": "sticky-product",
+      "disabled": true,
+      "settings": {
+        "product": "nitric-oxide-support",
+        "redirect_on_add": false,
+        "redirect_url": ""
+      }
+    },
+    "c_hero_signup_jtqVkP": {
+      "type": "c-hero-signup",
+      "blocks": {
+        "stars_JpThGW": {
+          "type": "stars",
+          "settings": {
+            "star_rating": 5,
+            "trusted_text": "4.7 | 1300+ Trusted Reviews"
+          }
+        },
+        "button_VFLDmn": {
+          "type": "button",
+          "settings": {
+            "button_text": "Set Up Your Account",
+            "button_url": "https://berkeleylife.com/pages/wholesale-signup",
+            "use_scroll_down": false,
+            "scroll_target": "",
+            "button_style": "chart__button"
+          }
+        }
+      },
+      "block_order": [
+        "stars_JpThGW",
+        "button_VFLDmn"
+      ],
+      "name": "C Hero Signup",
+      "settings": {
+        "subheading": "Trusted by 3,000+ Healthcare Providers",
+        "heading": "Bring {accent}Nitric Oxide {/accent} Into Your Practice",
+        "description": "Support better patient outcomes through clinically proven Nitric Oxide solutions—designed to improve blood flow, heart health, energy, menopause symptoms, and long-term wellness.",
+        "product_image": "shopify://shop_images/hcp-hero-img.webp",
+        "product_image_link": "",
+        "product_video_url": "",
+        "video_click_controls": false,
+        "mobile_layout": "column-reverse",
+        "padding_top": 4,
+        "padding_bottom": 4,
+        "background_color": "#f6f3f0",
+        "text_color": "#1b1c29",
+        "subheading_color": "#080b2b",
+        "accent_color": "#d44f2f",
+        "email_box_bg": "#ebe8e6",
+        "email_box_text_color": "#1b1c29",
+        "email_button_bg": "#d54f2f",
+        "email_button_text": "#ffffff"
+      }
+    },
+    "c_logos_RGzxzB": {
+      "type": "c-logos",
+      "blocks": {
+        "logo_Gghgm8": {
+          "type": "Logo",
+          "settings": {
+            "text": "Hormonal Balance",
+            "para": ""
+          }
+        },
+        "logo_V3FTMK": {
+          "type": "Logo",
+          "settings": {
+            "text": "Blood Flow",
+            "para": ""
+          }
+        },
+        "logo_jRtCQB": {
+          "type": "Logo",
+          "settings": {
+            "text": "Blood Pressure",
+            "para": ""
+          }
+        },
+        "logo_FqELUA": {
+          "type": "Logo",
+          "settings": {
+            "text": "Circulation",
+            "para": ""
+          }
+        },
+        "logo_9ydFXR": {
+          "type": "Logo",
+          "settings": {
+            "text": "Sexual Health",
+            "para": ""
+          }
+        },
+        "logo_MttzdR": {
+          "type": "Logo",
+          "settings": {
+            "text": "Energy",
+            "para": ""
+          }
+        },
+        "logo_fhFAzt": {
+          "type": "Logo",
+          "settings": {
+            "text": "Menopause",
+            "para": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_Gghgm8",
+        "logo_V3FTMK",
+        "logo_jRtCQB",
+        "logo_FqELUA",
+        "logo_9ydFXR",
+        "logo_MttzdR",
+        "logo_fhFAzt"
+      ],
+      "name": "C Logos",
+      "settings": {
+        "show_middle": true,
+        "show_separators": true,
+        "heading": "ESSENTIAL FOR",
+        "image_height": 1,
+        "image_gap": 2.4,
+        "image_gap_mobile": 3.1,
+        "container_width": 19,
+        "marquee_speed": 45,
+        "marquee_padding_top": 1,
+        "marquee_padding_bottom": 1,
+        "direction": "-100%",
+        "toggle_pause_on_hover": false,
+        "full_width": true,
+        "grayscale_logo_colors": false,
+        "invert_logo_colors": false,
+        "bg_middle_color": "#1b1c29",
+        "bg_color": "#1b1c29",
+        "text_color": "#ffffff",
+        "section_top_subheading": "",
+        "section_top_heading": "",
+        "section_top_paragraph": "",
+        "section_top_alignment": "center",
+        "text_alignment": "center",
+        "padding_top": 1,
+        "padding_bottom": 1
+      }
+    },
+    "c_timeline_expect_kkWteA": {
+      "type": "c-timeline-expect",
+      "blocks": {
+        "info_card_Piiw84": {
+          "type": "info_card",
+          "settings": {
+            "card_bg_color": "#f6f3f0",
+            "card_text_color": "#1b1c29",
+            "card_title": "A naturally occurring signaling molecule—and one your patients are likely deficient in.",
+            "card_text": "NO production declines significantly with age, sedentary lifestyle, and poor diet—putting cardiovascular health, energy, and metabolic function at increasing risk after 40."
+          }
+        },
+        "timeline_step_7enFQz": {
+          "type": "timeline_step",
+          "settings": {
+            "step_title": "Vasodilation & Blood Flow",
+            "step_text": "Nitric Oxide signals smooth muscle in blood vessel walls to relax, improving circulation to the heart, brain, muscles, and vital organs—directly impacting cardiovascular outcomes."
+          }
+        },
+        "timeline_step_k7nMt6": {
+          "type": "timeline_step",
+          "settings": {
+            "step_title": "Blood Pressure Regulation",
+            "step_text": "Adequate Nitric Oxide production supports healthy endothelial function, a primary driver of blood pressure management and reduced arterial stiffness in hypertensive patients."
+          }
+        },
+        "timeline_step_9cxWGJ": {
+          "type": "timeline_step",
+          "settings": {
+            "step_title": "Mitochondrial & Cellular Energy",
+            "step_text": "Nitric Oxide influences mitochondrial biogenesis and oxygen utilization directly tied to energy, cognitive function, and recovery capacity in aging patients."
+          }
+        },
+        "timeline_step_jqJt9a": {
+          "type": "timeline_step",
+          "settings": {
+            "step_title": "Hormone & Sexual Health",
+            "step_text": "Nitric Oxide is the physiological trigger for arousal response in both men and women—declining levels are directly linked to sexual dysfunction and hormonal imbalances."
+          }
+        }
+      },
+      "block_order": [
+        "info_card_Piiw84",
+        "timeline_step_7enFQz",
+        "timeline_step_k7nMt6",
+        "timeline_step_9cxWGJ",
+        "timeline_step_jqJt9a"
+      ],
+      "name": "C Timeline Expect",
+      "settings": {
+        "bg_color": "#ffffff",
+        "text_color": "#1b1c29",
+        "accent_color": "#d54f2f",
+        "title": "The \"Master Molecule\" of {accent}Cardiovascular Health",
+        "text": "Discovered in 1998, a Nobel Prize-winning breakthrough, Nitric Oxide regulates blood pressure dilation, blood pressure, and cellular energy.",
+        "btn_text": "Set Up Account",
+        "btn_link": "https://berkeleylife.com/pages/wholesale-signup",
+        "btn_bg_color": "#d54f2f",
+        "btn_text_color": "#ffffff",
+        "btn_show_icon": false,
+        "timeline_line_color": "#d54f2f",
+        "main_image": "shopify://shop_images/New_Benefits.webp",
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 80,
+        "padding_top_mobile": 50,
+        "padding_bottom_mobile": 50
+      }
+    },
+    "c_three_columns_JYUTa4": {
+      "type": "c-three-columns",
+      "blocks": {
+        "card_K4FTqe": {
+          "type": "card",
+          "settings": {
+            "icon_image": "shopify://shop_images/heart_b9dd8259-abd0-4c2f-b7ca-85d6dde105ea.svg",
+            "svg_icon": "",
+            "title": "Cardiovascular Health & Hypertension",
+            "text": "Nitric Oxide is the primary endogenous regulator of vascular tone. Restoring Nitric Oxide levels supports blood pressure management and reduces arterial stiffness in hypertensive patients."
+          }
+        },
+        "card_dyHPzU": {
+          "type": "card",
+          "settings": {
+            "icon_image": "shopify://shop_images/menopause.svg",
+            "svg_icon": "",
+            "title": "Menopause & Women's Hormonal Health",
+            "text": "Estrogen normally stimulates eNOS activity. Post-menopausal estrogen decline directly reduces Nitric Oxide production, contributing to hot flashes, fatigue, and cardiovascular risk."
+          }
+        },
+        "card_fgfDPf": {
+          "type": "card",
+          "settings": {
+            "icon_image": "shopify://shop_images/sex-wellness.svg",
+            "svg_icon": "",
+            "title": "Sexual Health",
+            "text": "Nitric Oxide is the physiological trigger for vasodilation and arousal response. Restoring Nitric Oxide levels offers a natural approach to erectile dysfunction and female sexual health."
+          }
+        },
+        "card_mwyaNc": {
+          "type": "card",
+          "settings": {
+            "icon_image": "shopify://shop_images/energy_545831a1-c7d9-4ea7-872c-17ed5295d03c.svg",
+            "svg_icon": "",
+            "title": "Fatigue, Energy & Performance",
+            "text": "Mitochondrial function is directly influenced by Nitric Oxide availability. Low Nitric Oxide is linked to chronic fatigue, brain fog, and poor exercise recovery—common patient complaints."
+          }
+        },
+        "card_fQcNgR": {
+          "type": "card",
+          "settings": {
+            "icon_image": "shopify://shop_images/chemistry.svg",
+            "svg_icon": "",
+            "title": "Metabolic Syndrome & Insulin Sensitivity",
+            "text": "NO improves glucose uptake in skeletal muscle and has anti-inflammatory effects that complement metabolic health protocols."
+          }
+        },
+        "card_YhrT7k": {
+          "type": "card",
+          "settings": {
+            "icon_image": "shopify://shop_images/think.svg",
+            "svg_icon": "",
+            "title": "Cognitive Health & Brain Circulation",
+            "text": "Cerebrovascular blood flow is NO-dependent. Optimizing NO supports memory, focus, and long-term neuroprotective goals—especially in aging populations."
+          }
+        }
+      },
+      "block_order": [
+        "card_K4FTqe",
+        "card_dyHPzU",
+        "card_fgfDPf",
+        "card_mwyaNc",
+        "card_fQcNgR",
+        "card_YhrT7k"
+      ],
+      "name": "C Three Columns",
+      "settings": {
+        "bg_color": "#f0f1f1",
+        "bg_image": "shopify://shop_images/c_three_column.webp",
+        "card_bg_color": "#f6f3f0",
+        "title_color": "#1a1f4c",
+        "text_color": "#333333",
+        "accent_color": "#d54f2f",
+        "eyebrow": "CLINICAL APPLICATIONS",
+        "title": "Conditions Your Patients <span>present to you daily.</span>",
+        "subtitle": "Berkeley Life's Nitric Oxide solutions are designed to complement your existing protocols across a broad range of patient needs.",
+        "btn_text": "Set Up Account",
+        "btn_link": "https://berkeleylife.com/pages/wholesale-signup",
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 80,
+        "padding_top_mobile": 50,
+        "padding_bottom_mobile": 50
+      }
+    },
+    "c_new_slider_product_9nz9M8": {
+      "type": "c-new-slider-product",
+      "blocks": {
+        "product_card_gReX9H": {
+          "type": "product_card",
+          "settings": {
+            "product": "nitric-oxide-support",
+            "badge_text": "BEST SELLER",
+            "custom_title": "Nitric Oxide Support",
+            "custom_desc": "Clinically proven to improve blood flow, energy, sexual health, and full-body wellness. Two capsules daily for measurable, lasting results."
+          }
+        },
+        "product_card_REUdkG": {
+          "type": "product_card",
+          "settings": {
+            "product": "menopause-and-heart-health-support",
+            "badge_text": "NEW",
+            "custom_title": "Menopause and Heart Health Support",
+            "custom_desc": "Dual-action formula for women 45+. Combines a clinically researched pollen complex with NO-supporting nutrients to relieve menopause symptoms and protect cardiovascular health.\nDual-action, non-hormonal formula for women 45+"
+          }
+        },
+        "product_card_tXDVxa": {
+          "type": "product_card",
+          "settings": {
+            "product": "prebiotic-nitrate-gum",
+            "badge_text": "NEW FORMULA",
+            "custom_title": "Balance Prebiotic Nitrate Gum",
+            "custom_desc": "First-of-its-kind functional gum that restores beneficial oral bacteria to optimize NO production optimize NO production and enhance oral health."
+          }
+        },
+        "product_card_bDCxFG": {
+          "type": "product_card",
+          "settings": {
+            "product": "nitric-oxide-test-strips",
+            "badge_text": "BEST SELLER",
+            "custom_title": "",
+            "custom_desc": "Clinically proven to improve blood flow, energy, sexual health, and full-body wellness. Two capsules daily for measurable, lasting results."
+          }
+        }
+      },
+      "block_order": [
+        "product_card_gReX9H",
+        "product_card_REUdkG",
+        "product_card_tXDVxa",
+        "product_card_bDCxFG"
+      ],
+      "name": "C New Slider Product",
+      "settings": {
+        "bg_color": "#f6f3f0",
+        "card_bg_color": "#ebe8e6",
+        "accent_color": "#d54f2f",
+        "btn_bg_color": "#1b1c29",
+        "btn_text_color": "#ffffff",
+        "eyebrow": "THE PRODUCT LINE",
+        "title": "Clinically Proven <span>Foundational  Solutions</span>\nfor Your Patients",
+        "subtitle": "Log in or set up your provider account to access wholesale pricing.",
+        "btn_text": "Set Up Account to Order",
+        "learn_text": "LEARN MORE",
+        "footer_text": "Provider accounts unlock wholesale pricing, clinical resources, and dedicated support.",
+        "footer_link_text": "SET UP YOUR ACCOUNT",
+        "footer_link_url": "",
+        "slides_desktop": 4,
+        "slides_tablet": 2.2,
+        "slides_mobile": 1.1,
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 80,
+        "padding_top_mobile": 50,
+        "padding_bottom_mobile": 50
+      }
+    },
+    "c_new_testimonial_slider_AJnHjA": {
+      "type": "c-new-testimonial-slider",
+      "blocks": {
+        "testimonial_G9gbCz": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "\"Blood flow and healing are critical to the success of our treatments, and the integration of Nitric Oxide has really helped. We continue to promote Berkeley Life's N.O. for all of our body procedures as well as men presenting to our men's clinic—our patients are loving the results.\"",
+            "author_image": "shopify://shop_images/RichardMoore.png",
+            "author_name": "Dr. Richard Moore"
+          }
+        },
+        "testimonial_aeWqP7": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Nitric Oxide support is a critical addition to the daily wellness protocol of the autoimmune patient. Diet and lifestyle changes are maximized through optimal circulation – and supporting Nitric Oxide is the best way to ensure blood is flowing.I suggest adding Berkeley Life’s Nitric Oxide support for your health journey. It's fundamental to improving circulation and supports and improves the effectiveness of everything else in my protocol.",
+            "author_image": "shopify://shop_images/doctor2-upscaled.png",
+            "author_name": "Dr.  Terry Wahls"
+          }
+        },
+        "testimonial_zfDMRc": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Berkeley Life is a company that has gained my respect for their commitment to the development of science-based products that modulate Nitric Oxide status and function. Their commitment to scientific rigor and innovative solutions makes them a powerful ally in the pursuit of functional health.",
+            "author_image": "shopify://shop_images/doctor1-upscaled.png",
+            "author_name": "Dr. Jeffrey Bland"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_G9gbCz",
+        "testimonial_aeWqP7",
+        "testimonial_zfDMRc"
+      ],
+      "name": "C New Testimonial Slider",
+      "settings": {
+        "bg_color": "#cf452a",
+        "bg_image": "shopify://shop_images/bg-testimonial-hc.webp",
+        "eyebrow_color": "#ffffff",
+        "title_color": "#ffffff",
+        "card_bg": "rgba(255, 255, 255, 0.90)",
+        "card_text": "#333333",
+        "accent_color": "#d25435",
+        "pagination_color": "rgba(235, 227, 218, 0.30)",
+        "pagination_active_color": "#FFF",
+        "eyebrow": "CLINICALLY DRIVEN. PRACTITIONER TRUSTED.",
+        "title": "Why Practitioners Choose\nBerkeley Life",
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 80,
+        "padding_top_mobile": 50,
+        "padding_bottom_mobile": 50
+      }
+    },
+    "c_faq_tabs_xx8Ahm": {
+      "type": "c-faq-tabs",
+      "blocks": {
+        "faq_tab_KiT3gi": {
+          "type": "faq_tab",
+          "settings": {
+            "tab_id": "medications",
+            "label": "Medications"
+          }
+        },
+        "faq_tab_etakFe": {
+          "type": "faq_tab",
+          "settings": {
+            "tab_id": "safety",
+            "label": "Safety"
+          }
+        },
+        "faq_tab_MYKAeV": {
+          "type": "faq_tab",
+          "settings": {
+            "tab_id": "dosage",
+            "label": "Dosage"
+          }
+        },
+        "faq_tab_meebRQ": {
+          "type": "faq_tab",
+          "settings": {
+            "tab_id": "shipping",
+            "label": "Shipping"
+          }
+        },
+        "faq_item_WLYpJt": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "medications",
+            "question": "Can Berkeley Life be taken with blood pressure or ED medications?",
+            "answer": "<p>Yes. Berkeley Life is safe and well-tolerated with no known contraindications. </p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_Jq8UMr": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "medications",
+            "question": "Are there any contraindication to using Berkeley Life?",
+            "answer": "<p>There are no known contraindications or reported adverse events. A good rule of thumb: if you can eat a leafy green salad, you can take Berkeley Life.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_ALFx3G": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "medications",
+            "question": "Is it safe for people with oxalate sensitivities?",
+            "answer": "<p>Yes. The oxalate content is extremely low—less than a single spinach leaf. Even individuals with sensitivities generally tolerate it well.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_xcBFPr": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "safety",
+            "question": "Is Berkeley Life safe for daily use?",
+            "answer": "<p>Yes. Berkeley Life is manufactured in the United States under FDA-registered, GMP-certified facilities, and undergoes rigorous internal and third-party testing to ensure safety and potency.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_DeG7X4": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "safety",
+            "question": "What quality standards do you follow?",
+            "answer": "<p>Every ingredient is tested for identity, potency, and microbiological safety before use. Finished products undergo comprehensive quality checks and third-party testing before being released.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_QctQnH": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "safety",
+            "question": "Can I validate that Berkeley Life is working for me?",
+            "answer": "<p>Yes. You can use the Nitric Oxide Test Strips before and 90 minutes after taking the supplement to confirm effectiveness.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_QjPgkr": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "safety",
+            "question": "Where is Berkeley Life made?",
+            "answer": "<p>Supplements are manufactured in the USA, and test strips are produced in Europe.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_aNRGdk": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "dosage",
+            "question": "How much should I take daily?",
+            "answer": "<p>Take two capsules daily with water, preferably after a meal.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_gCKxeV": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "dosage",
+            "question": "How long do I need to take Berkeley Life before I see results?",
+            "answer": "<p>Results vary, some notice a difference right away, while others see benefits after about a month. Consistency is key, and test strips can validate improvements quickly.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_KAmrV7": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "dosage",
+            "question": "How long should I continue taking Nitric Oxide Support?",
+            "answer": "<p>Since natural Nitric Oxide production declines with age, ongoing daily support through diet or supplementation is recommended.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_CCyhPB": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "dosage",
+            "question": "What if the test strip doesn’t change color?",
+            "answer": "<p>If you recently ate or drank, saliva may be diluted, causing a false negative. In rare cases, low oral bacteria levels may impact conversion. </p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_JXpr3L": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "shipping",
+            "question": "How long will it take to get my order?",
+            "answer": "<p>Orders placed before 2 PM EST ship the same day and typically arrive in 3–7 business days within the US. Canadian orders may take 7–16 days.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_xBjmM8": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "shipping",
+            "question": "Do you ship internationally?",
+            "answer": "<p>We currently ship to the US and Canada. Customers in the UK and Europe can purchase Berkeley Life through our trusted partner, Healf.</p>",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq_tab_KiT3gi",
+        "faq_tab_etakFe",
+        "faq_tab_MYKAeV",
+        "faq_tab_meebRQ",
+        "faq_item_WLYpJt",
+        "faq_item_Jq8UMr",
+        "faq_item_ALFx3G",
+        "faq_item_xcBFPr",
+        "faq_item_DeG7X4",
+        "faq_item_QctQnH",
+        "faq_item_QjPgkr",
+        "faq_item_aNRGdk",
+        "faq_item_gCKxeV",
+        "faq_item_KAmrV7",
+        "faq_item_CCyhPB",
+        "faq_item_JXpr3L",
+        "faq_item_xBjmM8"
+      ],
+      "custom_css": [],
+      "name": "C FAQ Tabs",
+      "settings": {
+        "default_active_tab": "medications",
+        "faq_subheading": "",
+        "faq_title": "**Have Questions?**<br>We’ve Got Answers.",
+        "faq_subtitle": "We know trying a new supplement can raise doubts. That’s why we’ve grouped the most common questions about medications, safety, dosage, and shipping, so you get clear answers and feel confident becoming a Berkeley Life Partner.",
+        "bg_color": "#ffffff",
+        "faq_accent": "#d44f2f",
+        "faq_border": "#eaeaea",
+        "faq_text": "#0b0b0b",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "book_a_call_KyJrTj": {
+      "type": "book-a-call",
+      "disabled": true,
+      "name": "Book a Call",
+      "settings": {
+        "subheading": "SPEAK TO A SALES EXECUTIVE",
+        "heading": "Book a Call"
+      }
+    },
+    "c_features_TwefdK": {
+      "type": "c-features",
+      "blocks": {
+        "feature_pmmKAi": {
+          "type": "feature",
+          "settings": {
+            "custom_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\">\n  <path d=\"M21.1744 9.63937C20.8209 9.27 20.4553 8.88938 20.3175 8.55469C20.19 8.24813 20.1825 7.74 20.175 7.24781C20.1609 6.33281 20.1459 5.29594 19.425 4.575C18.7041 3.85406 17.6672 3.83906 16.7522 3.825C16.26 3.8175 15.7519 3.81 15.4453 3.6825C15.1116 3.54469 14.73 3.17906 14.3606 2.82562C13.7137 2.20406 12.9788 1.5 12 1.5C11.0212 1.5 10.2872 2.20406 9.63937 2.82562C9.27 3.17906 8.88938 3.54469 8.55469 3.6825C8.25 3.81 7.74 3.8175 7.24781 3.825C6.33281 3.83906 5.29594 3.85406 4.575 4.575C3.85406 5.29594 3.84375 6.33281 3.825 7.24781C3.8175 7.74 3.81 8.24813 3.6825 8.55469C3.54469 8.88844 3.17906 9.27 2.82562 9.63937C2.20406 10.2863 1.5 11.0212 1.5 12C1.5 12.9788 2.20406 13.7128 2.82562 14.3606C3.17906 14.73 3.54469 15.1106 3.6825 15.4453C3.81 15.7519 3.8175 16.26 3.825 16.7522C3.83906 17.6672 3.85406 18.7041 4.575 19.425C5.29594 20.1459 6.33281 20.1609 7.24781 20.175C7.74 20.1825 8.24813 20.19 8.55469 20.3175C8.88844 20.4553 9.27 20.8209 9.63937 21.1744C10.2863 21.7959 11.0212 22.5 12 22.5C12.9788 22.5 13.7128 21.7959 14.3606 21.1744C14.73 20.8209 15.1106 20.4553 15.4453 20.3175C15.7519 20.19 16.26 20.1825 16.7522 20.175C17.6672 20.1609 18.7041 20.1459 19.425 19.425C20.1459 18.7041 20.1609 17.6672 20.175 16.7522C20.1825 16.26 20.19 15.7519 20.3175 15.4453C20.4553 15.1116 20.8209 14.73 21.1744 14.3606C21.7959 13.7137 22.5 12.9788 22.5 12C22.5 11.0212 21.7959 10.2872 21.1744 9.63937ZM16.2806 10.2806L11.0306 15.5306C10.961 15.6004 10.8783 15.6557 10.7872 15.6934C10.6962 15.7312 10.5986 15.7506 10.5 15.7506C10.4014 15.7506 10.3038 15.7312 10.2128 15.6934C10.1217 15.6557 10.039 15.6004 9.96937 15.5306L7.71937 13.2806C7.57864 13.1399 7.49958 12.949 7.49958 12.75C7.49958 12.551 7.57864 12.3601 7.71937 12.2194C7.86011 12.0786 8.05098 11.9996 8.25 11.9996C8.44902 11.9996 8.63989 12.0786 8.78063 12.2194L10.5 13.9397L15.2194 9.21937C15.2891 9.14969 15.3718 9.09442 15.4628 9.0567C15.5539 9.01899 15.6515 8.99958 15.75 8.99958C15.8485 8.99958 15.9461 9.01899 16.0372 9.0567C16.1282 9.09442 16.2109 9.14969 16.2806 9.21937C16.3503 9.28906 16.4056 9.37178 16.4433 9.46283C16.481 9.55387 16.5004 9.65145 16.5004 9.75C16.5004 9.84855 16.481 9.94613 16.4433 10.0372C16.4056 10.1282 16.3503 10.2109 16.2806 10.2806Z\" fill=\"#D54F2F\"></path>\n</svg>",
+            "title": "20% off",
+            "text": "first order"
+          }
+        },
+        "feature_j3Mb3r": {
+          "type": "feature",
+          "settings": {
+            "custom_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\">\n  <path d=\"M21.1744 9.63937C20.8209 9.27 20.4553 8.88938 20.3175 8.55469C20.19 8.24813 20.1825 7.74 20.175 7.24781C20.1609 6.33281 20.1459 5.29594 19.425 4.575C18.7041 3.85406 17.6672 3.83906 16.7522 3.825C16.26 3.8175 15.7519 3.81 15.4453 3.6825C15.1116 3.54469 14.73 3.17906 14.3606 2.82562C13.7137 2.20406 12.9788 1.5 12 1.5C11.0212 1.5 10.2872 2.20406 9.63937 2.82562C9.27 3.17906 8.88938 3.54469 8.55469 3.6825C8.25 3.81 7.74 3.8175 7.24781 3.825C6.33281 3.83906 5.29594 3.85406 4.575 4.575C3.85406 5.29594 3.84375 6.33281 3.825 7.24781C3.8175 7.74 3.81 8.24813 3.6825 8.55469C3.54469 8.88844 3.17906 9.27 2.82562 9.63937C2.20406 10.2863 1.5 11.0212 1.5 12C1.5 12.9788 2.20406 13.7128 2.82562 14.3606C3.17906 14.73 3.54469 15.1106 3.6825 15.4453C3.81 15.7519 3.8175 16.26 3.825 16.7522C3.83906 17.6672 3.85406 18.7041 4.575 19.425C5.29594 20.1459 6.33281 20.1609 7.24781 20.175C7.74 20.1825 8.24813 20.19 8.55469 20.3175C8.88844 20.4553 9.27 20.8209 9.63937 21.1744C10.2863 21.7959 11.0212 22.5 12 22.5C12.9788 22.5 13.7128 21.7959 14.3606 21.1744C14.73 20.8209 15.1106 20.4553 15.4453 20.3175C15.7519 20.19 16.26 20.1825 16.7522 20.175C17.6672 20.1609 18.7041 20.1459 19.425 19.425C20.1459 18.7041 20.1609 17.6672 20.175 16.7522C20.1825 16.26 20.19 15.7519 20.3175 15.4453C20.4553 15.1116 20.8209 14.73 21.1744 14.3606C21.7959 13.7137 22.5 12.9788 22.5 12C22.5 11.0212 21.7959 10.2872 21.1744 9.63937ZM16.2806 10.2806L11.0306 15.5306C10.961 15.6004 10.8783 15.6557 10.7872 15.6934C10.6962 15.7312 10.5986 15.7506 10.5 15.7506C10.4014 15.7506 10.3038 15.7312 10.2128 15.6934C10.1217 15.6557 10.039 15.6004 9.96937 15.5306L7.71937 13.2806C7.57864 13.1399 7.49958 12.949 7.49958 12.75C7.49958 12.551 7.57864 12.3601 7.71937 12.2194C7.86011 12.0786 8.05098 11.9996 8.25 11.9996C8.44902 11.9996 8.63989 12.0786 8.78063 12.2194L10.5 13.9397L15.2194 9.21937C15.2891 9.14969 15.3718 9.09442 15.4628 9.0567C15.5539 9.01899 15.6515 8.99958 15.75 8.99958C15.8485 8.99958 15.9461 9.01899 16.0372 9.0567C16.1282 9.09442 16.2109 9.14969 16.2806 9.21937C16.3503 9.28906 16.4056 9.37178 16.4433 9.46283C16.481 9.55387 16.5004 9.65145 16.5004 9.75C16.5004 9.84855 16.481 9.94613 16.4433 10.0372C16.4056 10.1282 16.3503 10.2109 16.2806 10.2806Z\" fill=\"#D54F2F\"></path>\n</svg>",
+            "title": "Wholesale",
+            "text": "pricing"
+          }
+        },
+        "feature_fyUTdR": {
+          "type": "feature",
+          "settings": {
+            "custom_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\">\n  <path d=\"M21.1744 9.63937C20.8209 9.27 20.4553 8.88938 20.3175 8.55469C20.19 8.24813 20.1825 7.74 20.175 7.24781C20.1609 6.33281 20.1459 5.29594 19.425 4.575C18.7041 3.85406 17.6672 3.83906 16.7522 3.825C16.26 3.8175 15.7519 3.81 15.4453 3.6825C15.1116 3.54469 14.73 3.17906 14.3606 2.82562C13.7137 2.20406 12.9788 1.5 12 1.5C11.0212 1.5 10.2872 2.20406 9.63937 2.82562C9.27 3.17906 8.88938 3.54469 8.55469 3.6825C8.25 3.81 7.74 3.8175 7.24781 3.825C6.33281 3.83906 5.29594 3.85406 4.575 4.575C3.85406 5.29594 3.84375 6.33281 3.825 7.24781C3.8175 7.74 3.81 8.24813 3.6825 8.55469C3.54469 8.88844 3.17906 9.27 2.82562 9.63937C2.20406 10.2863 1.5 11.0212 1.5 12C1.5 12.9788 2.20406 13.7128 2.82562 14.3606C3.17906 14.73 3.54469 15.1106 3.6825 15.4453C3.81 15.7519 3.8175 16.26 3.825 16.7522C3.83906 17.6672 3.85406 18.7041 4.575 19.425C5.29594 20.1459 6.33281 20.1609 7.24781 20.175C7.74 20.1825 8.24813 20.19 8.55469 20.3175C8.88844 20.4553 9.27 20.8209 9.63937 21.1744C10.2863 21.7959 11.0212 22.5 12 22.5C12.9788 22.5 13.7128 21.7959 14.3606 21.1744C14.73 20.8209 15.1106 20.4553 15.4453 20.3175C15.7519 20.19 16.26 20.1825 16.7522 20.175C17.6672 20.1609 18.7041 20.1459 19.425 19.425C20.1459 18.7041 20.1609 17.6672 20.175 16.7522C20.1825 16.26 20.19 15.7519 20.3175 15.4453C20.4553 15.1116 20.8209 14.73 21.1744 14.3606C21.7959 13.7137 22.5 12.9788 22.5 12C22.5 11.0212 21.7959 10.2872 21.1744 9.63937ZM16.2806 10.2806L11.0306 15.5306C10.961 15.6004 10.8783 15.6557 10.7872 15.6934C10.6962 15.7312 10.5986 15.7506 10.5 15.7506C10.4014 15.7506 10.3038 15.7312 10.2128 15.6934C10.1217 15.6557 10.039 15.6004 9.96937 15.5306L7.71937 13.2806C7.57864 13.1399 7.49958 12.949 7.49958 12.75C7.49958 12.551 7.57864 12.3601 7.71937 12.2194C7.86011 12.0786 8.05098 11.9996 8.25 11.9996C8.44902 11.9996 8.63989 12.0786 8.78063 12.2194L10.5 13.9397L15.2194 9.21937C15.2891 9.14969 15.3718 9.09442 15.4628 9.0567C15.5539 9.01899 15.6515 8.99958 15.75 8.99958C15.8485 8.99958 15.9461 9.01899 16.0372 9.0567C16.1282 9.09442 16.2109 9.14969 16.2806 9.21937C16.3503 9.28906 16.4056 9.37178 16.4433 9.46283C16.481 9.55387 16.5004 9.65145 16.5004 9.75C16.5004 9.84855 16.481 9.94613 16.4433 10.0372C16.4056 10.1282 16.3503 10.2109 16.2806 10.2806Z\" fill=\"#D54F2F\"></path>\n</svg>",
+            "title": "Clinical resources",
+            "text": "included"
+          }
+        },
+        "feature_k6MD7x": {
+          "type": "feature",
+          "settings": {
+            "custom_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\">\n  <path d=\"M21.1744 9.63937C20.8209 9.27 20.4553 8.88938 20.3175 8.55469C20.19 8.24813 20.1825 7.74 20.175 7.24781C20.1609 6.33281 20.1459 5.29594 19.425 4.575C18.7041 3.85406 17.6672 3.83906 16.7522 3.825C16.26 3.8175 15.7519 3.81 15.4453 3.6825C15.1116 3.54469 14.73 3.17906 14.3606 2.82562C13.7137 2.20406 12.9788 1.5 12 1.5C11.0212 1.5 10.2872 2.20406 9.63937 2.82562C9.27 3.17906 8.88938 3.54469 8.55469 3.6825C8.25 3.81 7.74 3.8175 7.24781 3.825C6.33281 3.83906 5.29594 3.85406 4.575 4.575C3.85406 5.29594 3.84375 6.33281 3.825 7.24781C3.8175 7.74 3.81 8.24813 3.6825 8.55469C3.54469 8.88844 3.17906 9.27 2.82562 9.63937C2.20406 10.2863 1.5 11.0212 1.5 12C1.5 12.9788 2.20406 13.7128 2.82562 14.3606C3.17906 14.73 3.54469 15.1106 3.6825 15.4453C3.81 15.7519 3.8175 16.26 3.825 16.7522C3.83906 17.6672 3.85406 18.7041 4.575 19.425C5.29594 20.1459 6.33281 20.1609 7.24781 20.175C7.74 20.1825 8.24813 20.19 8.55469 20.3175C8.88844 20.4553 9.27 20.8209 9.63937 21.1744C10.2863 21.7959 11.0212 22.5 12 22.5C12.9788 22.5 13.7128 21.7959 14.3606 21.1744C14.73 20.8209 15.1106 20.4553 15.4453 20.3175C15.7519 20.19 16.26 20.1825 16.7522 20.175C17.6672 20.1609 18.7041 20.1459 19.425 19.425C20.1459 18.7041 20.1609 17.6672 20.175 16.7522C20.1825 16.26 20.19 15.7519 20.3175 15.4453C20.4553 15.1116 20.8209 14.73 21.1744 14.3606C21.7959 13.7137 22.5 12.9788 22.5 12C22.5 11.0212 21.7959 10.2872 21.1744 9.63937ZM16.2806 10.2806L11.0306 15.5306C10.961 15.6004 10.8783 15.6557 10.7872 15.6934C10.6962 15.7312 10.5986 15.7506 10.5 15.7506C10.4014 15.7506 10.3038 15.7312 10.2128 15.6934C10.1217 15.6557 10.039 15.6004 9.96937 15.5306L7.71937 13.2806C7.57864 13.1399 7.49958 12.949 7.49958 12.75C7.49958 12.551 7.57864 12.3601 7.71937 12.2194C7.86011 12.0786 8.05098 11.9996 8.25 11.9996C8.44902 11.9996 8.63989 12.0786 8.78063 12.2194L10.5 13.9397L15.2194 9.21937C15.2891 9.14969 15.3718 9.09442 15.4628 9.0567C15.5539 9.01899 15.6515 8.99958 15.75 8.99958C15.8485 8.99958 15.9461 9.01899 16.0372 9.0567C16.1282 9.09442 16.2109 9.14969 16.2806 9.21937C16.3503 9.28906 16.4056 9.37178 16.4433 9.46283C16.481 9.55387 16.5004 9.65145 16.5004 9.75C16.5004 9.84855 16.481 9.94613 16.4433 10.0372C16.4056 10.1282 16.3503 10.2109 16.2806 10.2806Z\" fill=\"#D54F2F\"></path>\n</svg>",
+            "title": "GMP certified",
+            "text": "products"
+          }
+        }
+      },
+      "block_order": [
+        "feature_pmmKAi",
+        "feature_j3Mb3r",
+        "feature_fyUTdR",
+        "feature_k6MD7x"
+      ],
+      "name": "C Features",
+      "settings": {
+        "bg_color": "#1b1c29",
+        "title_color": "#ffffff",
+        "text_color": "#ffffff",
+        "accent_color": "#d54f2f",
+        "card_bg": "#23242c",
+        "card_border": "#3d3e48",
+        "title": "Make Blood Flow the\nFoundation of <span>Your Practice</span>",
+        "subtitle": "Berkeley Life gives you the science, the products, and the clinical support to help your patients see and feel real results—measurable in seconds with at-home test strips.",
+        "btn_text": "Set Up Your Account",
+        "btn_link": "",
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 80,
+        "padding_top_mobile": 50,
+        "padding_bottom_mobile": 50
+      }
+    },
+    "c_hcp_form_C9xkrd": {
+      "type": "c-hcp-form",
+      "blocks": {
+        "privacy_note_BwNPBR": {
+          "type": "privacy_note",
+          "settings": {
+            "text": "We respect your privacy. Unsubscribe at any time."
+          }
+        }
+      },
+      "block_order": [
+        "privacy_note_BwNPBR"
+      ],
+      "name": "C HCP Promo Form",
+      "settings": {
+        "form_type": "embed",
+        "embed_code": "<div class=\"klaviyo-form-RYEYna\"></div>",
+        "bg_image": "shopify://shop_images/Modal-Pop-Up_1.png",
+        "overlay_color": "#b85434",
+        "overlay_opacity": 0.6,
+        "bg_color": "#d54f2f",
+        "text_color": "#ffffff",
+        "badge_text": "LIMITED EVENT OFFER",
+        "badge_bg": "#4a3b36",
+        "badge_color": "#ffffff",
+        "accent_color": "#1b1c29",
+        "title": "Take <em>20% OFF</em><br>your first order",
+        "subtitle": "Enter your information below and get 20% OFF your first order.",
+        "btn_text": "Submit",
+        "btn_bg": "#1a202c",
+        "btn_color": "#ffffff",
+        "privacy_text": "We respect your privacy. Unsubscribe at any time.",
+        "padding_top": 6,
+        "padding_bottom": 6
+      }
+    },
+    "hide_navigations_fJ4kdL": {
+      "type": "hide-navigations",
+      "name": "Hide Navigations",
+      "settings": {
+        "hide_header": false,
+        "hide_nav": true,
+        "hide_search": true,
+        "hide_account": true,
+        "mobile_logo_only": false,
+        "hide_layout_headers": true,
+        "hide_cart": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "sticky_product_pKfVLz",
+    "c_hero_signup_jtqVkP",
+    "c_logos_RGzxzB",
+    "c_timeline_expect_kkWteA",
+    "c_three_columns_JYUTa4",
+    "c_new_slider_product_9nz9M8",
+    "c_new_testimonial_slider_AJnHjA",
+    "c_faq_tabs_xx8Ahm",
+    "book_a_call_KyJrTj",
+    "c_features_TwefdK",
+    "c_hcp_form_C9xkrd",
+    "hide_navigations_fJ4kdL"
+  ]
+}

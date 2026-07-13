@@ -1,0 +1,46 @@
+{% comment %}
+    Renders an article card for a given blog with settings to either show the image or not.
+
+    Accepts:
+    - article: {Object} Article object
+    - show_image: {String} The setting either show the article image or not. If it's not included it will show the image by default
+    - show_date: {String} The setting either show the article date or not. If it's not included it will not show the image by default
+    - show_author: {String} The setting either show the article author or not. If it's not included it will not show the author by default
+
+    Usage:
+    {% render 'page-card' blog: blog, article: article, show_image: section.settings.show_image %}
+{% endcomment %}
+
+<article>
+  <a href="{{ page.url }}" class="group block" aria-labelledby="Page-{{ page.id }}">
+    {%- if show_image == true -%}
+      <div class="aspect-video w-full overflow-hidden" aria-hidden="true">
+        {% render 'image_file', handle: page.handle, type: 'page', classes: 'h-full' %}
+      </div>
+    {%- endif -%}
+
+    <div class="py-8 space-y-4">
+      <header>
+        <h2 class="h5" id="Page-{{ page.id }}">
+          {{ page.title | escape }}
+        </h2>
+        {%- if show_date -%}
+          <span>
+            {{- page.published_at | time_tag: format: 'month_year' -}}
+          </span>
+        {%- endif -%}
+        {%- if show_author -%}
+          <span>{{ page.author -}}</span>
+        {%- endif -%}
+      </header>
+      {%- if page.content.size > 0 -%}
+        <p class="rte">
+          {{ page.content | strip_html | truncatewords: 24 }}
+        </p>
+      {%- endif -%}
+      <div aria-hidden="true">
+        <span class="uppercase text-sm font-bold tracking-widest relative after:absolute after:left-0 after:bottom-0 after:w-full after:content-[''] after:bg-black after:h-px after:scale-x-90 group-hover:after:scale-x-50 after:transition-transform">Read More</span>
+      </div>
+    </div>
+  </a>
+</article>

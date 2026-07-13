@@ -1,0 +1,679 @@
+<style>
+
+
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    color: {{ section.settings.text_color }};
+    overflow: hidden;
+    position: relative;
+
+    {% if section.settings.bg_image != blank %}
+      background-image: url('{{ section.settings.bg_image | image_url: width: 2000 }}');
+      background-size: cover;
+      background-position: center;
+    {% endif %}
+
+    & .c-sp__container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* --- HEADER --- */
+    & .c-sp__header {
+      text-align: center;
+      max-width: 700px;
+      margin-bottom: 3.5rem;
+    }
+
+    & .c-sp__title {
+      font-size: clamp(36px, 4vw, 48px);
+      line-height: 1.2;
+      margin: 0 0 1rem 0;
+      color: {{ section.settings.title_color }};
+
+      & span {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(40px, 4.5vw, 54px);
+        color: {{ section.settings.accent_color }};
+        font-style: italic;
+      }
+    }
+
+    & .c-sp__subtitle {
+      font-size: clamp(16px, 1.5vw, 20px);
+      line-height: 1.5;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+      opacity: 0.9;
+    }
+
+    /* --- GRID / MASONRY (Desktop) --- */
+    & .c-sp__grid {
+      width: 100%;
+      margin-bottom: 3.5rem;
+    }
+
+    & .swiper-wrapper {
+      display: block;
+      column-count: 3;
+      column-gap: 24px;
+    }
+
+    & .swiper-slide {
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 24px;
+      break-inside: avoid;
+    }
+
+    /* --- CARDS --- */
+    & .c-sp-card {
+      border-radius: 12px;
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Video Card */
+    & .c-sp-card--video {
+      background-color: #000;
+      aspect-ratio: 4 / 7;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    & .c-sp-card__video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    & .c-sp-card__video-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 40%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    & .c-sp-card__play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+
+      & svg {
+        width: 20px;
+        height: 20px;
+        fill: #ffffff;
+        margin-left: 4px;
+      }
+    }
+
+    & .c-sp-card--video.is-playing .c-sp-card__play {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    & .c-sp-card__video-info {
+      position: relative;
+      z-index: 3;
+      padding: 1.5rem;
+      pointer-events: none;
+    }
+
+    & .c-sp-card__author-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    & .c-sp-card__check {
+      width: 16px;
+      height: 16px;
+      fill: {{ section.settings.accent_color }};
+    }
+
+    & .c-sp-card__author {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 20px;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    & .c-sp-card__job {
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* Text Card */
+    & .c-sp-card--text {
+      border-radius: 16px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      min-height: var(--c-sp-text-card-min-height, auto);
+    }
+
+    & .c-sp-card__stars {
+      display: flex;
+      gap: 2px;
+      color: {{ section.settings.accent_color }};
+      margin-bottom: 1.25rem;
+
+      & svg {
+        width: 14px;
+        height: 14px;
+        fill: currentColor;
+      }
+    }
+
+    & .c-sp-card__quote {
+      font-size: clamp(16px, 4vw, 18px);
+      font-style: normal;
+    font-weight: 500;
+    line-height: 150%;
+      color: {{ section.settings.text_color }};
+      margin: 0 0 2rem 0;
+    }
+
+    & .c-sp-card__text-info {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    & .c-sp-card__text-author {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 24px;
+      color: {{ section.settings.text_color }};
+      margin: 0;
+    }
+
+    & .c-sp-card__demo {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: {{ section.settings.text_color }};
+      opacity: 0.7;
+      margin: 0;
+    }
+
+    /* --- CTA BUTTON --- */
+    & .c-sp__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: {{ section.settings.accent_color }};
+      color: #ffffff;
+      padding: 16px 36px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 15px;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        opacity: 0.85;
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (max 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+      & .c-sp__container {
+        padding: 0;
+      }
+
+      & .c-sp__header {
+        padding: 0 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+
+      & .c-sp__title {
+        font-size: 32px;
+      }
+
+      & .swiper-wrapper {
+        display: flex;
+        column-count: auto;
+        column-gap: normal;
+      }
+
+      & .swiper-slide {
+        display: flex;
+        margin-bottom: 0;
+      }
+
+      & .swiper-slide {
+        height: auto;
+      }
+
+      & .c-sp-card {
+        height: 100%;
+      }
+
+      & .c-sp-card--video {
+        aspect-ratio: 9 / 16;
+      }
+
+      & .c-sp-card--text {
+        justify-content: center;
+      }
+
+      & .c-sp-card__text-info {
+        margin-top: 0;
+   
+      }
+
+      & .c-sp__btn {
+        margin-top: 1rem;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="c-sp__container">
+    <div class="c-sp__header">
+      {% if section.settings.title != blank %}
+        <h2 class="c-sp__title">{{ section.settings.title | newline_to_br }}</h2>
+      {% endif %}
+
+      {% if section.settings.subtitle != blank %}
+        <p class="c-sp__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+    <div class="container-sl">
+      <div class="c-sp__grid swiper js-sp-swiper-{{ section.id }}">
+        <div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            <div class="swiper-slide" {{ block.shopify_attributes }}>
+              {% if block.type == 'video_card' %}
+                <div class="c-sp-card c-sp-card--video js-sp-video">
+                  {% if block.settings.video != blank %}
+                    <video
+                      class="c-sp-card__video js-video-el"
+                      playsinline
+                      loop
+                      {% if block.settings.poster_image != blank %}
+                        poster="{{ block.settings.poster_image | image_url: width: 600 }}"
+                      {% endif %}
+                    >
+                      {% for source in block.settings.video.sources %}
+                        <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                      {% endfor %}
+                    </video>
+                  {% else %}
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'c-sp-card__video' }}
+                  {% endif %}
+
+                  <div class="c-sp-card__video-overlay"></div>
+
+                  <div class="c-sp-card__play">
+                    {% render 'c-play-slider' %}
+                  </div>
+
+                  <div class="c-sp-card__video-info">
+                    <div class="c-sp-card__author-wrap">
+                       {% render 'c-verified' %}
+                      <p class="c-sp-card__author">{{ block.settings.author }}</p>
+                    </div>
+                    {% if block.settings.job != blank %}
+                      <p class="c-sp-card__job">{{ block.settings.job }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+
+              {% elsif block.type == 'text_card' %}
+                <div class="c-sp-card c-sp-card--text">
+                  <div class="c-sp-card__stars">
+                    {% for i in (1..5) %}
+                       {% render 'c-orange-star' %}
+                    {% endfor %}
+                  </div>
+
+                  <p class="c-sp-card__quote">{{ block.settings.quote }}</p>
+
+                  <div class="c-sp-card__text-info">
+                    <p class="c-sp-card__text-author">{{ block.settings.author }}</p>
+                    {% if block.settings.demographics != blank %}
+                      <p class="c-sp-card__demo">{{ block.settings.demographics }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    {% if section.settings.btn_text != blank %}
+      <a href="{{ section.settings.btn_link }}" class="c-sp__btn">
+        {{ section.settings.btn_text }}
+      </a>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const section = document.querySelector('#{{ section.id }}');
+    if (!section) return;
+
+    function bindVideoEvents() {
+      section.querySelectorAll('.js-sp-video').forEach((card) => {
+        if (card._bound) return;
+        card._bound = true;
+        const video = card.querySelector('.js-video-el');
+        if (!video) return;
+
+        card.addEventListener('click', function () {
+          if (video.paused) {
+            video.muted = false;
+            video.play();
+            card.classList.add('is-playing');
+          } else {
+            video.pause();
+            card.classList.remove('is-playing');
+          }
+        });
+      });
+    }
+
+    function equalizeTextCardHeights() {
+      const textCards = Array.from(section.querySelectorAll('.c-sp-card--text'));
+      if (!textCards.length) return;
+
+      textCards.forEach((card) => {
+        card.style.setProperty('--c-sp-text-card-min-height', 'auto');
+      });
+
+      if (window.innerWidth < 992) {
+        return;
+      }
+
+      const maxHeight = Math.max(...textCards.map((card) => card.offsetHeight));
+      textCards.forEach((card) => {
+        card.style.setProperty('--c-sp-text-card-min-height', `${maxHeight}px`);
+      });
+    }
+
+    bindVideoEvents();
+    equalizeTextCardHeights();
+
+    let spSwiper;
+    const swiperSelector = '.js-sp-swiper-{{ section.id }}';
+    const wrapper = section.querySelector('.swiper-wrapper');
+    const originalHTML = wrapper.innerHTML;
+
+    const initOrDestroySwiper = () => {
+      if (window.innerWidth < 992) {
+        if (!spSwiper) {
+          wrapper.innerHTML = originalHTML;
+          bindVideoEvents();
+          equalizeTextCardHeights();
+          spSwiper = new Swiper(swiperSelector, {
+            slidesPerView: 1.1,
+            spaceBetween: 16,
+            grabCursor: true,
+            on: {
+              slideChange: function () {
+                section.querySelectorAll('.js-sp-video').forEach((card) => {
+                  const video = card.querySelector('.js-video-el');
+                  if (video && !video.paused) {
+                    video.pause();
+                    card.classList.remove('is-playing');
+                  }
+                });
+              },
+            },
+          });
+        }
+      } else {
+        if (spSwiper) {
+          spSwiper.destroy(true, true);
+          spSwiper = null;
+          wrapper.innerHTML = originalHTML;
+          bindVideoEvents();
+          equalizeTextCardHeights();
+        }
+
+        equalizeTextCardHeights();
+      }
+    };
+
+    initOrDestroySwiper();
+    window.addEventListener('resize', initOrDestroySwiper);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Grid Slider",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#1c1e26"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Texture Image (Optional)"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "General Text Color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d25435"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Text Card Background",
+      "default": "#34363f"
+    },
+    {
+      "type": "header",
+      "content": "Header Text"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Real Experiences.\nReal <span>Results.</span>",
+      "info": "Wrap text in <span></span> to apply the italic serif font and accent color."
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Real feedback from men who've experienced improved performance, confidence, and vitality."
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "Shop Nitric Oxide Support"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_card",
+      "name": "Video Card",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Review Video"
+        },
+        {
+          "type": "image_picker",
+          "id": "poster_image",
+          "label": "Poster Image (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "Greg Mckettrick"
+        },
+        {
+          "type": "text",
+          "id": "job",
+          "label": "Job / Title",
+          "default": "Compounding Pharmacist and Men's Health Specialist"
+        }
+      ]
+    },
+    {
+      "type": "text_card",
+      "name": "Text Card",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Review Quote",
+          "default": "Fun and amazing. The moment my kit arrived I was like a kid in a candy store..."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "Theressa D."
+        },
+        {
+          "type": "text",
+          "id": "demographics",
+          "label": "Demographics",
+          "default": "MALE - 45-54"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Grid Slider",
+      "blocks": [
+        { "type": "video_card" },
+        { "type": "text_card" },
+        { "type": "text_card" },
+        { "type": "video_card" },
+        { "type": "video_card" },
+        { "type": "text_card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

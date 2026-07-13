@@ -1,0 +1,746 @@
+{%- comment -%}
+  Section: C Trusted Experts
+  Description: Two-column quote section with a synced quote slider and portrait image panel.
+  sl-id: sl-section-trusted-experts-v1
+  Figma: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5805-9227&m=dev
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-trusted-experts-v1'
+  assign section_anchor_id = section.settings.sl_anchor_id | default: section.id
+  assign quote_blocks = section.blocks | where: 'type', 'quote_block'
+  assign cta_block = section.blocks | where: 'type', 'cta' | first
+-%}
+
+<section
+  id="{{ section_anchor_id }}"
+  class="c-trusted-experts"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-trusted-experts"
+>
+  <div class="c-trusted-experts__container page-width">
+    <div class="c-trusted-experts__heading-container">
+      {%- if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank -%}
+        <h2 class="c-trusted-experts__heading">
+          {%- if section.settings.heading_line_1 != blank -%}
+            <span>{{ section.settings.heading_line_1 }}</span>
+          {%- endif -%}
+          {%- if section.settings.heading_line_2 != blank -%}
+            <span class="c-trusted-experts__heading-accent">{{ section.settings.heading_line_2 }}</span>
+          {%- endif -%}
+        </h2>
+      {%- endif -%}
+    </div>
+
+    {%- if quote_blocks.size > 0 -%}
+      <div class="c-trusted-experts__quotes-container">
+        <div class="c-trusted-experts__quote-swiper" aria-label="Expert quotes slider">
+          {%- for block in quote_blocks -%}
+            <article
+              class="c-trusted-experts__quote-slide{% if forloop.first %} is-active{% endif %}"
+              data-slide-index="{{ forloop.index0 }}"
+              {% unless forloop.first %}
+                hidden
+              {% endunless %}
+              {{ block.shopify_attributes }}
+            >
+              <div class="c-trusted-experts__quote-content">
+                {%- if block.settings.quote_text != blank -%}
+                  <p class="c-trusted-experts__quote-text">{{ block.settings.quote_text }}</p>
+                {%- endif -%}
+
+                <div class="c-trusted-experts__quote-meta">
+                  {%- if block.settings.stars_count > 0 -%}
+                    <div class="c-trusted-experts__stars" aria-hidden="true">
+                      {%- for i in (1..block.settings.stars_count) -%}
+                        {% render 'c-orange-star' %}
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.author_name != blank -%}
+                    <p class="c-trusted-experts__author">{{ block.settings.author_name }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            </article>
+          {%- endfor -%}
+
+          <div class="c-trusted-experts__controls" aria-label="Quote controls">
+            <button
+              type="button"
+              class="c-trusted-experts__arrow c-trusted-experts__arrow--prev"
+              data-slide-prev
+              aria-label="Previous quote"
+            >
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <path d="M14.5 6L8.5 12L14.5 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+
+            <div class="c-trusted-experts__indicators" role="tablist" aria-label="Select quote">
+              {%- for block in quote_blocks -%}
+                <button
+                  type="button"
+                  class="c-trusted-experts__indicator{% if forloop.first %} is-active{% endif %}"
+                  data-slide-to="{{ forloop.index0 }}"
+                  role="tab"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-label="Show quote {{ forloop.index }}"
+                ></button>
+              {%- endfor -%}
+            </div>
+
+            <button
+              type="button"
+              class="c-trusted-experts__arrow c-trusted-experts__arrow--next"
+              data-slide-next
+              aria-label="Next quote"
+            >
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <path d="M9.5 6L15.5 12L9.5 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="c-trusted-experts__images" aria-live="polite">
+          {%- for block in quote_blocks -%}
+            <figure
+              class="c-trusted-experts__image-slide{% if forloop.first %} is-active{% endif %}"
+              data-image-index="{{ forloop.index0 }}"
+              {% unless forloop.first %}
+                hidden
+              {% endunless %}
+            >
+              {%- if block.settings.author_image != blank -%}
+                {{
+                  block.settings.author_image
+                  | image_url: width: 1200
+                  | image_tag:
+                    class: 'c-trusted-experts__image',
+                    loading: 'lazy',
+                    widths: '480, 768, 960, 1200',
+                    alt: block.settings.author_name | default: 'Quote author' | escape
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'c-trusted-experts__image c-trusted-experts__image--placeholder' }}
+              {%- endif -%}
+            </figure>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if cta_block != blank and cta_block.settings.cta_label != blank and cta_block.settings.cta_link != blank -%}
+      <div class="c-trusted-experts__cta-wrap" {{ cta_block.shopify_attributes }}>
+        <a
+          class="c-trusted-experts__cta"
+          href="{{ cta_block.settings.cta_link }}"
+          {% if cta_block.settings.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+        >
+          <span class="c-trusted-experts__cta-label">{{ cta_block.settings.cta_label }}</span>
+          <span class="c-trusted-experts__cta-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .c-trusted-experts {
+    --sl-c-trusted-experts-bg: {{ section.settings.background_color }};
+    --sl-c-trusted-experts-heading: {{ section.settings.heading_color }};
+    --sl-c-trusted-experts-heading-accent: {{ section.settings.heading_accent_color }};
+    --sl-c-trusted-experts-card-bg: {{ section.settings.card_background_color }};
+    --sl-c-trusted-experts-card-text: {{ section.settings.card_text_color }};
+    --sl-c-trusted-experts-accent: {{ section.settings.accent_color }};
+    --sl-c-trusted-experts-control-base: {{ section.settings.control_base_color }};
+    background: var(--sl-c-trusted-experts-bg);
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__container {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 1760px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__heading-container {
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__heading {
+    color: var(--sl-c-trusted-experts-heading);
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-size: clamp(34px, 7vw, 48px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__heading-accent {
+    color: var(--sl-c-trusted-experts-heading-accent);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 7.4vw, 52px);
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__quotes-container {
+    display: grid;
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__quote-swiper,
+  #shopify-section-{{ section.id }} .c-trusted-experts__images {
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__quote-swiper {
+    background: var(--sl-c-trusted-experts-card-bg);
+    border-radius: 24px;
+    color: var(--sl-c-trusted-experts-card-text);
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    padding: 32px 24px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__quote-slide {
+    flex: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__quote-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: 100%;
+    justify-content: space-between;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__quote-text {
+    color: var(--sl-c-trusted-experts-card-text);
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__quote-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__stars {
+    align-items: center;
+    display: flex;
+    gap: 2px;
+    line-height: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__stars svg {
+    display: block;
+    height: 18px;
+    width: 18px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__author {
+    color: var(--sl-c-trusted-experts-card-text);
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    line-height: 1.2;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__controls {
+    align-items: center;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: auto 1fr auto;
+    margin-top: 22px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__arrow {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: var(--sl-c-trusted-experts-accent);
+    cursor: pointer;
+    display: inline-flex;
+    height: 40px;
+    justify-content: center;
+    padding: 0;
+    transition: opacity 0.2s ease;
+    width: 40px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__arrow:hover {
+    opacity: 0.75;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__arrow svg {
+    height: 24px;
+    width: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__indicators {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__indicator {
+    background: var(--sl-c-trusted-experts-control-base);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    height: 3px;
+    padding: 0;
+    transition: background-color 0.2s ease;
+    width: 72px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__indicator.is-active {
+    background: var(--sl-c-trusted-experts-accent);
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__images {
+    border-radius: 24px;
+    min-height: 420px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__image-slide {
+    height: 100%;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__image {
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__image--placeholder {
+    background: #ececec;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__cta-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__cta {
+    align-items: center;
+    background: var(--sl-c-trusted-experts-accent);
+    border-radius: 42px;
+    color: #f6f3f0;
+    column-gap: 8px;
+    display: inline-flex;
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    line-height: 1.2;
+    min-height: 56px;
+    padding: 16px 40px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__cta:hover {
+    opacity: 0.88;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__cta:focus-visible {
+    outline: 2px solid #080b2b;
+    outline-offset: 3px;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__cta-label {
+    display: inline-block;
+  }
+
+  #shopify-section-{{ section.id }} .c-trusted-experts__cta-arrow {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  @media (min-width: 768px) {
+    #shopify-section-{{ section.id }} .c-trusted-experts__container {
+      padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+      padding-top: {{ section.settings.padding_top_desktop }}px;
+    }
+
+    #shopify-section-{{ section.id }} .c-trusted-experts__quote-swiper {
+      border-radius: 32px;
+      min-height: 560px;
+      padding: 54px 44px 30px;
+    }
+
+    #shopify-section-{{ section.id }} .c-trusted-experts__images {
+      border-radius: 32px;
+      min-height: 560px;
+    }
+
+    #shopify-section-{{ section.id }} .c-trusted-experts__indicator {
+      width: 96px;
+    }
+
+    #shopify-section-{{ section.id }} .c-trusted-experts__cta-wrap {
+      margin-top: 48px;
+    }
+  }
+
+  @media (min-width: 978px) {
+    #shopify-section-{{ section.id }} .c-trusted-experts__quotes-container {
+      align-items: stretch;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      margin-top: 48px;
+    }
+
+    #shopify-section-{{ section.id }} .c-trusted-experts__quote-swiper,
+    #shopify-section-{{ section.id }} .c-trusted-experts__images {
+      min-height: 632px;
+    }
+
+    #shopify-section-{{ section.id }} .c-trusted-experts__controls {
+      margin-top: 36px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    #shopify-section-{{ section.id }} .c-trusted-experts__container {
+      padding-inline: 80px;
+    }
+  }
+
+  @media (min-width: 1980px) {
+    #shopify-section-{{ section.id }} .c-trusted-experts__container {
+      max-width: 1920px;
+    }
+  }
+{% endstyle %}
+
+<script>
+  (function() {
+    const sectionSelector = '[data-section-id="{{ section.id }}"][data-section-type="c-trusted-experts"]';
+
+    function initTrustedExperts(root) {
+      if (!root) {
+        return;
+      }
+
+      const slides = Array.from(root.querySelectorAll('.c-trusted-experts__quote-slide'));
+      const imageSlides = Array.from(root.querySelectorAll('.c-trusted-experts__image-slide'));
+      const indicators = Array.from(root.querySelectorAll('.c-trusted-experts__indicator'));
+      const prevButton = root.querySelector('[data-slide-prev]');
+      const nextButton = root.querySelector('[data-slide-next]');
+
+      if (!slides.length) {
+        return;
+      }
+
+      let activeIndex = 0;
+
+      const setActive = function(nextIndex) {
+        activeIndex = (nextIndex + slides.length) % slides.length;
+
+        slides.forEach(function(slide, index) {
+          const isActive = index === activeIndex;
+          slide.classList.toggle('is-active', isActive);
+          slide.hidden = !isActive;
+        });
+
+        imageSlides.forEach(function(slide, index) {
+          const isActive = index === activeIndex;
+          slide.classList.toggle('is-active', isActive);
+          slide.hidden = !isActive;
+        });
+
+        indicators.forEach(function(indicator, index) {
+          const isActive = index === activeIndex;
+          indicator.classList.toggle('is-active', isActive);
+          indicator.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+      };
+
+      if (prevButton) {
+        prevButton.addEventListener('click', function() {
+          setActive(activeIndex - 1);
+        });
+      }
+
+      if (nextButton) {
+        nextButton.addEventListener('click', function() {
+          setActive(activeIndex + 1);
+        });
+      }
+
+      indicators.forEach(function(indicator) {
+        indicator.addEventListener('click', function() {
+          const nextIndex = Number(indicator.getAttribute('data-slide-to'));
+          if (!Number.isNaN(nextIndex)) {
+            setActive(nextIndex);
+          }
+        });
+      });
+
+      setActive(0);
+    }
+
+    const sectionRoot = document.querySelector(sectionSelector);
+    if (sectionRoot) {
+      initTrustedExperts(sectionRoot);
+    }
+
+    document.addEventListener('shopify:section:load', function(event) {
+      if (!event.detail || event.detail.sectionId !== '{{ section.id }}') {
+        return;
+      }
+
+      const loadedRoot = document.querySelector(sectionSelector);
+      initTrustedExperts(loadedRoot);
+    });
+
+    document.addEventListener('shopify:block:select', function(event) {
+      if (!event.target || !event.target.closest(sectionSelector)) {
+        return;
+      }
+
+      const selectedSlide = event.target.closest('.c-trusted-experts__quote-slide');
+      if (!selectedSlide) {
+        return;
+      }
+
+      const sectionRootEl = document.querySelector(sectionSelector);
+      const indicators = sectionRootEl ? Array.from(sectionRootEl.querySelectorAll('.c-trusted-experts__indicator')) : [];
+      const nextIndex = Number(selectedSlide.getAttribute('data-slide-index'));
+
+      if (Number.isNaN(nextIndex) || !indicators[nextIndex]) {
+        return;
+      }
+
+      indicators[nextIndex].click();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "C Trusted Experts",
+  "tag": "section",
+  "class": "c-trusted-experts-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading line 1",
+      "default": "Trusted By Top"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading line 2",
+      "default": "Experts Everywhere"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Desktop padding top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 128
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Desktop padding bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 128
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#dfdbd9"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#0b0b0b"
+    },
+    {
+      "type": "color",
+      "id": "heading_accent_color",
+      "label": "Heading accent color",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Quote card background",
+      "default": "#593750"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Quote card text color",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "control_base_color",
+      "label": "Controls base color",
+      "default": "#fdfeff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "quote_block",
+      "name": "Quote",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote_text",
+          "label": "Quote text",
+          "default": "This will be absolutely transformative for the millions of women who are currently suffering through this transition with limited solutions, outside of HRT."
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author name",
+          "default": "Dr. Mariza Synder"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author photo"
+        },
+        {
+          "type": "range",
+          "id": "stars_count",
+          "label": "Stars",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "CTA",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label",
+          "default": "Unlock my free sample kit"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_in_new_tab",
+          "label": "Open in new tab",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "max_blocks": 9,
+  "presets": [
+    {
+      "name": "C Trusted Experts",
+      "blocks": [
+        {
+          "type": "quote_block"
+        },
+        {
+          "type": "quote_block"
+        },
+        {
+          "type": "quote_block"
+        },
+        {
+          "type": "cta"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

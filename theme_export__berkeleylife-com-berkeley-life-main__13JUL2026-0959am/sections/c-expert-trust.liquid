@@ -1,0 +1,488 @@
+<style>
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    background-color: {{ section.settings.bg_color }};
+    font-family: inherit;
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .et__container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* --- HEADER --- */
+  #{{ section.id }} .et__header {
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  #{{ section.id }} .et__title {
+    margin: 0;
+    color: inherit;
+  }
+
+  #{{ section.id }} .et__title-highlight {
+    color: {{ section.settings.accent_color }};
+  }
+
+  /* --- MAIN SPLIT (CARDS) --- */
+  #{{ section.id }} .et__split {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .et__split {
+      flex-direction: row;
+      align-items: stretch;
+      gap: 2rem;
+    }
+  }
+
+  /* Left: Text Slider */
+  #{{ section.id }} .et__text-col {
+    flex: 1 1 50%;
+    background-color: {{ section.settings.card_bg_color }};
+    color: {{ section.settings.card_text_color }};
+    border-radius: 1rem;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    min-height: 480px;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .et__text-col {
+      padding: 4rem 3rem;
+      min-height: 560px;
+    }
+  }
+
+  #{{ section.id }} .swiper-et-text {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #{{ section.id }} .swiper-wrapper {
+    flex-grow: 1;
+  }
+
+  #{{ section.id }} .et__slide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    height: auto;
+  }
+
+  #{{ section.id }} .et__quote {
+    font-size: clamp(1.1rem, 2vw, 1.2rem);
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 400;
+    opacity: 0.95;
+  }
+
+  #{{ section.id }} .et__author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  #{{ section.id }} .et__stars {
+    display: flex;
+    gap: 0.2rem;
+  }
+
+  #{{ section.id }} .et__stars svg {
+    width: 16px;
+    height: 16px;
+    fill: {{ section.settings.accent_color }};
+  }
+
+  #{{ section.id }} .et__author {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* Swiper Controls */
+  #{{ section.id }} .et__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 3rem;
+    width: 100%;
+  }
+
+  @media (max-width: 991px) {
+    #{{ section.id }} .et__controls {
+      justify-content: center;
+    }
+
+    #{{ section.id }} .et__controls .swiper-button-prev,
+    #{{ section.id }} .et__controls .swiper-button-next {
+      display: none;
+    }
+  }
+
+  #{{ section.id }} .swiper-button-prev,
+  #{{ section.id }} .swiper-button-next {
+    position: static;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    color: {{ section.settings.card_text_color }};
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease, color 0.3s ease;
+  }
+
+  #{{ section.id }} .swiper-button-prev::after,
+  #{{ section.id }} .swiper-button-next::after {
+    display: none;
+  }
+
+  #{{ section.id }} .swiper-button-prev svg,
+  #{{ section.id }} .swiper-button-next svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  #{{ section.id }} .swiper-button-disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  /* Custom Pagination (Lines) */
+  #{{ section.id }} .swiper-pagination {
+    --swiper-pagination-bullet-inactive-color: {{ section.settings.pagination_color }};
+    --swiper-pagination-color: {{ section.settings.pagination_active_color }};
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: auto;
+  }
+
+  #{{ section.id }} .swiper-pagination-bullet {
+    width: 40px;
+    height: 2px;
+    border-radius: 0;
+    background: {{ section.settings.pagination_color }} !important;
+    opacity: 0.3;
+    margin: 0 !important;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+  }
+
+  #{{ section.id }} .swiper-pagination-bullet-active {
+    opacity: 1 !important;
+    background: {{ section.settings.pagination_active_color }} !important;
+  }
+
+  /* Right: Images Gallery */
+  #{{ section.id }} .et__image-col {
+    flex: 1 1 50%;
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+    background-color: #e0e0e0;
+    min-height: 480px;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .et__image-col {
+      min-height: 560px;
+    }
+  }
+
+  #{{ section.id }} .et__image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease-in-out, visibility 0.6s;
+  }
+
+  #{{ section.id }} .et__image-wrapper.is-active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+  }
+
+  #{{ section.id }} .et__image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(100%);
+  }
+
+  /* --- FRONTROW HOMEPAGE WIDGET --- */
+  #{{ section.id }} .et__frontrow-homepage {
+    margin-top: 2rem;
+  }
+</style>
+
+<section id="{{ section.id }}" class="c-expert-trust">
+  <div class="container-sl">
+    <div class="et__container">
+      <header class="et__header">
+        <h2 class="et__title c-title">
+          {{ section.settings.title_prefix }}
+          <span class="et__title-highlight c-font-cormorant-title">{{ section.settings.title_highlight }}</span>
+        </h2>
+      </header>
+
+      <div class="et__split">
+        <div class="et__text-col">
+          <div class="swiper swiper-et-text">
+            <div class="swiper-wrapper">
+              {%- for block in section.blocks -%}
+                <div class="swiper-slide et__slide" {{ block.shopify_attributes }}>
+                  <p class="et__quote">{{ block.settings.quote }}</p>
+                  <div class="et__author-info">
+                    <div class="et__stars">
+                      {%- for i in (1..5) -%}
+                        {% render 'c-orange-star' %}
+                      {%- endfor -%}
+                    </div>
+                    <span class="et__author">{{ block.settings.author }}</span>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+
+            <div class="et__controls">
+              <div class="swiper-button-prev">
+                <svg viewBox="0 0 24 24">
+                  <path d="M15 18l-6-6 6-6"/>
+                </svg>
+              </div>
+              <div class="swiper-pagination"></div>
+              <div class="swiper-button-next">
+                <svg viewBox="0 0 24 24">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="et__image-col">
+          {%- for block in section.blocks -%}
+            <div class="et__image-wrapper {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.index0 }}">
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="et__frontrow-homepage">
+        {% render 'c-frontrow-homepage' %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script type="module">
+  import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const sectionId = '{{ section.id }}';
+    const sectionEl = document.getElementById(sectionId);
+    if (!sectionEl) return;
+
+    const swiperEl = sectionEl.querySelector('.swiper-et-text');
+    const imageWrappers = sectionEl.querySelectorAll('.et__image-wrapper');
+
+    if (swiperEl) {
+      new Swiper(swiperEl, {
+        loop: false,
+        slidesPerView: 1,
+        spaceBetween: 30,
+        effect: 'fade',
+        fadeEffect: {
+          crossFade: true,
+        },
+        navigation: {
+          nextEl: sectionEl.querySelector('.swiper-button-next'),
+          prevEl: sectionEl.querySelector('.swiper-button-prev'),
+        },
+        pagination: {
+          el: sectionEl.querySelector('.swiper-pagination'),
+          clickable: true,
+        },
+        on: {
+          slideChange: function () {
+            const activeIndex = this.activeIndex;
+            imageWrappers.forEach((wrapper, index) => {
+              if (index === activeIndex) {
+                wrapper.classList.add('is-active');
+              } else {
+                wrapper.classList.remove('is-active');
+              }
+            });
+          },
+        },
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Expert Trust",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header Text"
+    },
+    {
+      "type": "text",
+      "id": "title_prefix",
+      "label": "Title Prefix",
+      "default": "Trusted By Top"
+    },
+    {
+      "type": "text",
+      "id": "title_highlight",
+      "label": "Title Highlight (Italic)",
+      "default": "Experts Everywhere"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#f4efe9"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "General Text Color",
+      "default": "#2b2e38"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d15234"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Testimonial Card Background",
+      "default": "#1b1e2a"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Testimonial Card Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "pagination_color",
+      "label": "Pagination Bullet Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "pagination_active_color",
+      "label": "Pagination Active Bullet Color",
+      "default": "#d15234"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Expert Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "This will be absolutely transformative for the millions of women who are currently suffering through this transition with limited solutions, outside of HRT."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "DR. MARIZA SYNDER"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Author Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Expert Trust",
+      "blocks": [
+        { "type": "testimonial" },
+        {
+          "type": "testimonial",
+          "settings": { "author": "DR. JANE DOE", "quote": "An unparalleled approach to wellness." }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

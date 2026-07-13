@@ -1,0 +1,1030 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "image_with_text_ceR3qw": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_HAre6Q": {
+          "type": "heading",
+          "settings": {
+            "heading": "Support Your Patients’ Health With **Blood Flow**",
+            "cursive_color": "text-brand",
+            "heading_level": "h1",
+            "heading_style": "h2"
+          }
+        },
+        "text_ckdnfa": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Berkeley Life offers science-backed Nitric Oxide support to help your patients improve circulation, cardiovascular health, energy, and more—through a solution that's simple, measurable, and effective.</p>",
+            "columns": false
+          }
+        },
+        "button_efjJwY": {
+          "type": "button",
+          "settings": {
+            "button_label": "Create Account",
+            "b2b_button_label": "Shop Now",
+            "button_link": "shopify://pages/wholesale-signup",
+            "b2b_button_link": "shopify://collections/shop-all",
+            "button_style": "button button--tertiary",
+            "mobile_hide": false
+          }
+        },
+        "button_PH4icC": {
+          "type": "button",
+          "settings": {
+            "button_label": "Log In",
+            "b2b_button_label": "",
+            "button_link": "https://account.berkeleylife.com",
+            "b2b_button_link": "",
+            "button_style": "button button--primary",
+            "mobile_hide": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_HAre6Q",
+        "text_ckdnfa",
+        "button_efjJwY",
+        "button_PH4icC"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/StillLife1_dc154c8a-33d3-42e0-bbfb-d81bf5ce0fce.png",
+        "eager": true,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-cover",
+        "layout": "text_first",
+        "split": "md:grid-cols-2",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "text_align": "text-center md:text-left",
+        "justify_top": false,
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "full_width": true,
+        "border": false,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "submenu_nHymeJ": {
+      "type": "submenu",
+      "blocks": {
+        "submenu_CJDM8i": {
+          "type": "submenu",
+          "settings": {
+            "label": "Our Products",
+            "link": "#shopify-section-template--19627306254499__featured_collection_NEAcYw"
+          }
+        },
+        "submenu_wC9wgL": {
+          "type": "submenu",
+          "settings": {
+            "label": "Why Partner With Berkeley Life?",
+            "link": "#shopify-section-template--19627306254499__image_with_text_cJQRDi"
+          }
+        },
+        "submenu_Y3c9hj": {
+          "type": "submenu",
+          "settings": {
+            "label": "Program Benefits",
+            "link": "#shopify-section-template--19627306254499__columns_with_icons_Tbe4Gq"
+          }
+        },
+        "submenu_KFwJqy": {
+          "type": "submenu",
+          "settings": {
+            "label": "Meet Our Experts",
+            "link": "#shopify-section-template--19627306254499__testimonials_qCRKt3"
+          }
+        },
+        "submenu_k8EVRr": {
+          "type": "submenu",
+          "settings": {
+            "label": "Our Research",
+            "link": "#shopify-section-template--19627306254499__clinical_studies_nCfj7R"
+          }
+        }
+      },
+      "block_order": [
+        "submenu_CJDM8i",
+        "submenu_wC9wgL",
+        "submenu_Y3c9hj",
+        "submenu_KFwJqy",
+        "submenu_k8EVRr"
+      ],
+      "name": "Submenu",
+      "settings": {
+        "bg_color": "#f6f3f0",
+        "text_color": "#090909"
+      }
+    },
+    "video_file_L3T8qa": {
+      "type": "video-file",
+      "blocks": {
+        "heading_CrrU4i": {
+          "type": "heading",
+          "settings": {
+            "heading": "How Nitric Oxide Helps Your Patients Thrive",
+            "heading_style": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_CrrU4i"
+      ],
+      "name": "Video from File",
+      "settings": {
+        "image": "shopify://shop_images/Screenshot_2025-08-06_at_8.23.19_PM.png",
+        "video_file": "https://cdn.shopify.com/videos/c/o/v/b75e177d2e1740feb54669683d5e269d.mp4",
+        "autoplay": false,
+        "image_ratio": "aspect-video",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "text_align": "text-center",
+        "full_width": false
+      }
+    },
+    "featured_collection_NEAcYw": {
+      "type": "featured-collection",
+      "blocks": {
+        "bf_badges_cQrBf9": {
+          "type": "bf_badges",
+          "settings": {
+            "badge_1_text": "BLACK FRIDAY SALE",
+            "badge_1_bg_color": "#000000",
+            "badge_2_text": "SAVE 25%",
+            "badge_2_bg_color": "#d44f2f"
+          }
+        }
+      },
+      "block_order": [
+        "bf_badges_cQrBf9"
+      ],
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "text_color": "#080b2b",
+        "title": "See Our Products ",
+        "subheading": "Log In or Create An Account To View Wholesale Pricing",
+        "text_align": "text-center",
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "collection": "shop-all",
+        "products_to_show": 6,
+        "show_view_all": true,
+        "button_text": "Shop All",
+        "non_b2b_button_text": "create an account",
+        "non_b2b_button_link": "shopify://pages/wholesale-signup",
+        "button_style": "button--text",
+        "swipe_on_mobile": true,
+        "image_ratio": "aspect-[3/4]",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "quick_shop": false,
+        "gated_b2b": true
+      }
+    },
+    "image_with_text_cJQRDi": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_aK7rXk": {
+          "type": "heading",
+          "settings": {
+            "heading": "**Why** Partner With Berkeley Life?",
+            "cursive_color": "text-brand",
+            "heading_level": "h2",
+            "heading_style": "h2"
+          }
+        },
+        "text_gNUtkp": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Join 3,000+ healthcare providers who are helping patients take control of their health—naturally.</p><ul><li><strong>Clinically Studied Ingredients</strong> – Rooted in 8+ years of research </li><li><strong>At-Home Test Strips</strong> – Real-time Nitric Oxide monitoring for patients</li><li><strong>Simple Compliance</strong> – Just two capsules a day</li><li><strong>Proven Results</strong> – Measurable support for circulation, energy, and overall wellness</li><li><strong>Grow Your Practice</strong> – Leverage an innovative solution that delivers visible, feelable results</li></ul>",
+            "columns": false
+          }
+        },
+        "button_XkDW7a": {
+          "type": "button",
+          "settings": {
+            "button_label": "Create An Account",
+            "b2b_button_label": "Shop Now",
+            "button_link": "shopify://pages/wholesale-signup",
+            "b2b_button_link": "shopify://collections/shop-all",
+            "button_style": "button button--tertiary",
+            "mobile_hide": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_aK7rXk",
+        "text_gNUtkp",
+        "button_XkDW7a"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Test_hero_pic_HOME_PAge.webp",
+        "eager": false,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-contain",
+        "layout": "image_first",
+        "split": "md:grid-cols-2",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "text_align": "text-center md:text-left",
+        "justify_top": false,
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "full_width": true,
+        "border": false,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "columns_with_icons_Tbe4Gq": {
+      "type": "columns-with-icons",
+      "blocks": {
+        "column_aYXEpM": {
+          "type": "column",
+          "settings": {
+            "border_card": false,
+            "svg": "",
+            "title": "Receive wholesale pricing",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "button button--primary",
+            "mobile_hide": false
+          }
+        },
+        "column_LrpLUK": {
+          "type": "column",
+          "settings": {
+            "border_card": false,
+            "svg": "",
+            "title": "Access to Professional and Clinic Resources",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "button button--primary",
+            "mobile_hide": false
+          }
+        },
+        "column_HeYV9C": {
+          "type": "column",
+          "settings": {
+            "border_card": false,
+            "svg": "",
+            "title": "Tap in to the latest education and science",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "button button--primary",
+            "mobile_hide": false
+          }
+        },
+        "column_mijciw": {
+          "type": "column",
+          "settings": {
+            "border_card": false,
+            "svg": "",
+            "title": "Schedule consultations with our clinical team",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "button button--primary",
+            "mobile_hide": false
+          }
+        }
+      },
+      "block_order": [
+        "column_aYXEpM",
+        "column_LrpLUK",
+        "column_HeYV9C",
+        "column_mijciw"
+      ],
+      "name": "Columns w/ Icons",
+      "settings": {
+        "title": "Benefits Of Our Program",
+        "wrap": true,
+        "gap": 0,
+        "text_align": "text-center",
+        "mobile_layout": "column",
+        "image_size": "w-24",
+        "images_inline": false,
+        "full_width": true,
+        "small_width": false,
+        "bg_color": "#f6f3f0",
+        "text_color": "#090909"
+      }
+    },
+    "testimonials_alt_KfMCHU": {
+      "type": "testimonials-alt",
+      "blocks": {
+        "testimonial_Qrf8FW": {
+          "type": "testimonial",
+          "settings": {
+            "title": "",
+            "name": "Dr. Richard Moore",
+            "stars": 5,
+            "quote": "<p>We saw a noticeable benefit when adding the Berkeley Life capsules into our procedures. Blood flow and healing are critical to the success of our treatments, and the integration of Nitric Oxide has really helped. We continue to promote Berkeley’s N.O. for all of our body procedures as well as men presenting to our men’s clinic – our patients are loving the results.</p>",
+            "image": "shopify://shop_images/RichardMoore.png"
+          }
+        },
+        "testimonial_xCeaVQ": {
+          "type": "testimonial",
+          "settings": {
+            "title": "",
+            "name": "Dr. Jeremy Gray",
+            "stars": 5,
+            "quote": "<p>We encourage all of our patients using GAINSWave for Erectile Dysfunction to use Berkeley Life Nitric Oxide Supplements with treatment. It seems to be the missing link to finding successful improvements with many of our patients.</p>"
+          }
+        },
+        "testimonial_6YUzDt": {
+          "type": "testimonial",
+          "settings": {
+            "title": "",
+            "name": "Dr. Joy Kong",
+            "stars": 5,
+            "quote": "<p>My staff and I are very happy that getting our patients to use nitric oxide supplement has become very easy. I send them info and link, and don’t have to worry about the rest. This helps reduce the burden at the clinic, and I like getting the report when patients make the purchase. Thank you for helping patients and helping us!</p>"
+          }
+        },
+        "testimonial_PfPBYB": {
+          "type": "testimonial",
+          "settings": {
+            "title": "",
+            "name": "Shane Clarambeau",
+            "stars": 5,
+            "quote": "<p>I sell a lot of Nitric Oxide. By personally experiencing the benefits of Nitric Oxide it is easy to enthusiastically recommend the product to improve my patients health and life</p>"
+          }
+        },
+        "testimonial_JhBrrW": {
+          "type": "testimonial",
+          "settings": {
+            "title": "",
+            "name": "Dr. Kurt Waples",
+            "stars": 5,
+            "quote": "<p>Heart health, vascular health and dealing with excessive amounts of inflammation in the body have become a normal in nutritional medicine lately. In many of these cases it is an absolute must to support Nitric Oxide (NO) production as a pivotal part of the exercise, diet, nutritional and emotional plan. Berkeley has a great product that goes beyond the typical Arginine NO support.</p>"
+          }
+        },
+        "testimonial_yFFVtB": {
+          "type": "testimonial",
+          "settings": {
+            "title": "",
+            "name": "Jim Frost",
+            "stars": 5,
+            "quote": "<p>Once patients try this product, they keep coming back for it. This is particularly the case for our E.D. patients. When it comes to E.D., the results speak for themselves!</p>"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_Qrf8FW",
+        "testimonial_xCeaVQ",
+        "testimonial_6YUzDt",
+        "testimonial_PfPBYB",
+        "testimonial_JhBrrW",
+        "testimonial_yFFVtB"
+      ],
+      "name": "Testimonials Alt",
+      "settings": {
+        "title": "Trusted by over 3,000 providers",
+        "subhead": "recommended by over 2500 HCPS",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b"
+      }
+    },
+    "testimonials_qCRKt3": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_3igPEi": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/image_-_2025-07-28T195906.540.png",
+            "name": "",
+            "stars": 1,
+            "title": "Dr. Mario Siervo",
+            "quote": "<p>Professor Siervo is a clinical academic specialized in clinical nutrition and metabolic medicine. He has been awarded prestigious prices for his contribution to nutrition research by the Italian Nutrition Society (2008), British Nutrition Foundation (2013) and by the UK Nutrition Society. </p>"
+          }
+        },
+        "testimonial_TYjidU": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/image_5ead7ebd-81aa-4d26-ad00-6cacd3059f63.png",
+            "name": "",
+            "stars": 1,
+            "title": "Chris Easton, PHD",
+            "quote": "<p>Dr. Chris Easton has led research studies in the fields of applied exercise physiology, physical activity, and health for over ten years. He led the design, measurement and analysis of physical activity and fitness data in 17,000 children across eight different European countries when working on an integrated project funded by the European Commission (www.idefics.eu) to investigate the causes and possible interventions for the rising childhood obesity epidemic in Europe. </p>"
+          }
+        },
+        "testimonial_AjwpzM": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/image-2.png",
+            "name": "",
+            "stars": 1,
+            "title": "Greg McKettrick, RPh",
+            "quote": "<p>Greg McKettrick is a Compounding Pharmacist, Regional Director & Therapeutic Line Specialist for Revelation Pharma Corp. Greg is a graduate of Wayne State University in Detroit, Michigan and has over 30 years of experience as a pharmacist. His experience working in Men’s Health and Sexual Wellness led him to develop his Penile Rehabilitation Protocol — a comprehensive treatment plan for men with sexual dysfunction. His Penile Rehabilitation Protocol is currently featured in a five-article series in the International Journal of Pharmaceutical Compounding.</p>"
+          }
+        },
+        "testimonial_mPynFx": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/image-1.png",
+            "name": "",
+            "stars": 1,
+            "title": "Dr. Haroldo Magarinos",
+            "quote": "<p>Dr. Haroldo Magarinos, a Chilean dentist and patient-focused medical professional, holds expertise in Periodontics, Oral Medicine, and Surgical Implantology and has garnered extensive experience in preventive cures and naturopathy, with a specialization in Oral-GUT health and the human microbiome.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_3igPEi",
+        "testimonial_TYjidU",
+        "testimonial_AjwpzM",
+        "testimonial_mPynFx"
+      ],
+      "settings": {
+        "title": "Meet Our Scientific and Medical Advisory Board",
+        "subhead": "recommended by over 3000 HCPS",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b"
+      }
+    },
+    "image_with_text_TejREc": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_gmPgjN": {
+          "type": "heading",
+          "settings": {
+            "heading": "Backed by Science, Built for **Real Life**",
+            "cursive_color": "text-brand",
+            "heading_level": "h2",
+            "heading_style": "h2"
+          }
+        },
+        "text_kHFmRU": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Our formulations are based on cutting-edge Nitric Oxide research and optimized for daily use. Designed to complement your protocols, our products support heart health, energy, blood pressure, sexual wellness, and more through one powerful mechanism: better blood flow.</p><p><strong>A go-to in practices dedicated to:</strong></p><ul><li>Cardiovascular health</li><li>Hormonal support & menopause</li><li>Brain & cognitive function</li><li>Energy & metabolic health</li><li>Men’s & women’s vitality</li></ul>",
+            "columns": false
+          }
+        },
+        "button_Apm6NQ": {
+          "type": "button",
+          "settings": {
+            "button_label": "Create An Account",
+            "b2b_button_label": "Learn More",
+            "button_link": "shopify://pages/wholesale-signup",
+            "b2b_button_link": "https://berkeleylife.com/pages/wholesale#clinicalTrials",
+            "button_style": "button button--tertiary",
+            "mobile_hide": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_gmPgjN",
+        "text_kHFmRU",
+        "button_Apm6NQ"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/image_-_2025-07-24T154559.270.png",
+        "eager": false,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-contain",
+        "layout": "image_first",
+        "split": "md:grid-cols-2",
+        "bg_color": "#ffffff",
+        "text_color": "#080b2b",
+        "text_align": "text-center md:text-left",
+        "justify_top": false,
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "full_width": false,
+        "border": false,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "rich_text_AHggRE": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_kCbaGT": {
+          "type": "heading",
+          "settings": {
+            "heading": "Nitric Oxide **Decreases** <br>Naturally as We Age",
+            "heading_level": "h2",
+            "heading_style": "h2"
+          }
+        },
+        "text_HQhFDb": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Nitric Oxide production rapidly declines after age 40, and continues to decline. However, dietary nitrates found in foods like beets and leafy greens, and in supplements like Berkeley Life, can help optimize Nitric Oxide production as we age. Read more on our blog about the role of Nitric Oxide in the body and how to best support it.</p>",
+            "columns": false,
+            "text_style": "p"
+          }
+        },
+        "button_G8rNNn": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "button_label": "Speak To Our Practitioner Team",
+            "b2b_button_label": "Explore Solutions",
+            "button_link": "shopify://pages/practitioner-contact",
+            "b2b_button_link": "shopify://collections/shop-all",
+            "button_style": "button button--tertiary"
+          }
+        }
+      },
+      "block_order": [
+        "heading_kCbaGT",
+        "text_HQhFDb",
+        "button_G8rNNn"
+      ],
+      "name": "Rich Text",
+      "settings": {
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "full_width": true,
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 0,
+        "mobile_spacing_bottom": 0,
+        "hover_state": false,
+        "show_hover_product": false,
+        "product": ""
+      }
+    },
+    "interactive_graph_E4gmAB": {
+      "type": "interactive-graph",
+      "settings": {
+        "title": "",
+        "paragraph": "",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b"
+      }
+    },
+    "rich_text_Fh7iHn": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_krE6Eb": {
+          "type": "heading",
+          "settings": {
+            "heading": "Healthcare Provider **Resources**",
+            "heading_level": "h2",
+            "heading_style": "h2"
+          }
+        },
+        "text_xMeAht": {
+          "type": "text",
+          "settings": {
+            "text": "<p>As a registered Berkeley Life provider, you’ll gain exclusive access to our library of professionally designed resources, all created to make it easy to introduce Nitric Oxide health into your practice.</p>",
+            "columns": false,
+            "text_style": "p"
+          }
+        },
+        "button_hJ9eG4": {
+          "type": "button",
+          "settings": {
+            "button_label": "Sign Up to Access Resources",
+            "b2b_button_label": "View Resources",
+            "button_link": "shopify://pages/wholesale-signup",
+            "b2b_button_link": "shopify://blogs/healthcare-provider-resources",
+            "button_style": "button button--tertiary"
+          }
+        }
+      },
+      "block_order": [
+        "heading_krE6Eb",
+        "text_xMeAht",
+        "button_hJ9eG4"
+      ],
+      "name": "Rich Text",
+      "settings": {
+        "bg_color": "#080b2b",
+        "text_color": "#f6f3f0",
+        "full_width": true,
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "hover_state": false,
+        "show_hover_product": false,
+        "product": ""
+      }
+    },
+    "clinical_studies_nCfj7R": {
+      "type": "clinical-studies",
+      "blocks": {
+        "collapsible_tab_My8jUE": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Effect of a plant-based bioequivalent inorganic nitrate (NO3-) complex with vitamins, antioxidants and phytophenol rich food extracts in hypertensive individuals",
+            "content": "",
+            "date": "2020",
+            "image": "shopify://shop_images/clnesp_1_1.png",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://www.clinicalnutritionespen.com/article/S2405-4577(20)30176-5/abstract",
+            "new_tab": true,
+            "open_load": true
+          }
+        },
+        "collapsible_tab_8mzCHT": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "The Pharmacokinetics of Saliva and Plasma N-Oxides Following a Single Administration of a Plant-Based Bioequivalent Inorganic Nitrate Oral Supplement",
+            "content": "",
+            "date": "2024",
+            "image": "shopify://shop_images/mdpi-pub-logo-black-small1.svg",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://www.mdpi.com/2077-0383/14/13/4581",
+            "new_tab": true,
+            "open_load": true
+          }
+        },
+        "collapsible_tab_yYWmRK": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "The Impact of Dietary Nitrate Supplementation on Female Sexual Function: A Pilot Study",
+            "content": "",
+            "date": "COMING SOON",
+            "button_label": "READ FULL REPORT",
+            "button_link": "",
+            "new_tab": true,
+            "open_load": false
+          }
+        },
+        "collapsible_tab_gWKTW6": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Heart Health Bifold",
+            "content": "<p>It all starts in the heart.<br/>We all know that the heart plays a<br/>critical role in the body; using the<br/>blood as a vehicle, the heart<br/>pumps critical oxygen and<br/>nutrients to every organ, system<br/>and cell in the body.<br/></p>",
+            "date": "Ongoing",
+            "image": "shopify://shop_images/Logo.png",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://cdn.shopify.com/s/files/1/0664/2774/8515/files/Heart-health_bifold.pdf?v=1752494328",
+            "new_tab": true,
+            "open_load": false
+          }
+        },
+        "collapsible_tab_UfTLNe": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Influence of Nitric oxide on Microcirculation",
+            "content": "",
+            "date": "Ongoing",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://cdn.shopify.com/s/files/1/0664/2774/8515/files/Heart-health_bifold.pdf?v=1752494328",
+            "new_tab": true,
+            "open_load": false
+          }
+        },
+        "collapsible_tab_gMPTxr": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Critical Role of Nitric Ocide in Microvasculature Health",
+            "content": "",
+            "date": "Ongoing",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://cdn.shopify.com/s/files/1/0664/2774/8515/files/NOE-WP_CriticalRoleNOinMicrovasculatureHealth_p1.pdf?v=1752494505",
+            "new_tab": true,
+            "open_load": false
+          }
+        },
+        "collapsible_tab_3D7Gmt": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Nitric oxide & E.d. Whitepaper",
+            "content": "",
+            "date": "Ongoing",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://cdn.shopify.com/s/files/1/0664/2774/8515/files/NOE-WP_CriticalRoleNOinMicrovasculatureHealth_p1.pdf?v=1752494505",
+            "new_tab": true,
+            "open_load": false
+          }
+        },
+        "collapsible_tab_98dzQd": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Nitric Oxide & Female Sexual Health Whitepaper",
+            "content": "",
+            "date": "Ongoing",
+            "button_label": "READ FULL REPORT",
+            "button_link": "",
+            "new_tab": true,
+            "open_load": false
+          }
+        },
+        "collapsible_tab_PLQmzw": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Nitric Oxide & Fertility Whitepaper",
+            "content": "",
+            "date": "Ongoing",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://cdn.shopify.com/s/files/1/0664/2774/8515/files/WP_NOFertility_3.pdf?v=1752494681",
+            "new_tab": true,
+            "open_load": false
+          }
+        },
+        "collapsible_tab_FBtfGH": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Nitric oxide & Cognitive Health Whitepaper",
+            "content": "",
+            "date": "Ongoing",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://cdn.shopify.com/s/files/1/0664/2774/8515/files/NOE-WP_CriticalRoleNOinMicrovasculatureHealth_p1.pdf?v=1752494505",
+            "new_tab": true,
+            "open_load": false
+          }
+        },
+        "collapsible_tab_ia4rED": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Nitric Oxide & Mental Health Whitepaper",
+            "content": "",
+            "date": "Ongoing",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://cdn.shopify.com/s/files/1/0664/2774/8515/files/Microcirculation-Research-Published_Reduced_2022-1.pdf?v=1752498244",
+            "new_tab": true,
+            "open_load": false
+          }
+        },
+        "collapsible_tab_UDJx7j": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Berkeley life Clinical Date Whitepaper",
+            "content": "",
+            "date": "Ongoing",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://cdn.shopify.com/s/files/1/0664/2774/8515/files/NOE-WP_CriticalRoleNOinMicrovasculatureHealth_p1_1.pdf?v=1752498296",
+            "new_tab": true,
+            "open_load": false
+          }
+        },
+        "collapsible_tab_ahb4kV": {
+          "type": "collapsible_tab",
+          "disabled": true,
+          "settings": {
+            "heading": "Importance of Oral Microbiome in Nitric Oxide Production",
+            "content": "",
+            "date": "Ongoing",
+            "button_label": "READ FULL REPORT",
+            "button_link": "https://cdn.shopify.com/s/files/1/0664/2774/8515/files/NOE-WP_ImportanceofOralMicrobiome_p1.pdf?v=1752498373",
+            "new_tab": true,
+            "open_load": false
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_tab_My8jUE",
+        "collapsible_tab_8mzCHT",
+        "collapsible_tab_yYWmRK",
+        "collapsible_tab_gWKTW6",
+        "collapsible_tab_UfTLNe",
+        "collapsible_tab_gMPTxr",
+        "collapsible_tab_3D7Gmt",
+        "collapsible_tab_98dzQd",
+        "collapsible_tab_PLQmzw",
+        "collapsible_tab_FBtfGH",
+        "collapsible_tab_ia4rED",
+        "collapsible_tab_UDJx7j",
+        "collapsible_tab_ahb4kV"
+      ],
+      "name": "Clinical Studies",
+      "settings": {
+        "heading": "View Our Research",
+        "header_color": "#080b2b",
+        "bg_color": "#ffffff",
+        "text_color": "#080b2b"
+      }
+    },
+    "rich_text_YQ7YwE": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_hmYaQA": {
+          "type": "heading",
+          "settings": {
+            "heading": "Get Started **Today**",
+            "heading_level": "h2",
+            "heading_style": "h2"
+          }
+        },
+        "text_dzE483": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Join thousands of healthcare providers who trust Berkeley Life to support their patients’ total health through better circulation and vitality.</p>",
+            "columns": false,
+            "text_style": "p"
+          }
+        },
+        "button_jz4AHq": {
+          "type": "button",
+          "settings": {
+            "button_label": "Speak to our practitioner team",
+            "b2b_button_label": "",
+            "button_link": "shopify://pages/practitioner-contact",
+            "b2b_button_link": "",
+            "button_style": "button button--tertiary"
+          }
+        },
+        "button_qMVwtB": {
+          "type": "button",
+          "settings": {
+            "button_label": "Sign Up",
+            "b2b_button_label": "",
+            "button_link": "shopify://pages/wholesale-signup",
+            "b2b_button_link": "",
+            "button_style": "button button--tertiary"
+          }
+        }
+      },
+      "block_order": [
+        "heading_hmYaQA",
+        "text_dzE483",
+        "button_jz4AHq",
+        "button_qMVwtB"
+      ],
+      "name": "Rich Text",
+      "settings": {
+        "bg_color": "#d54f2f",
+        "text_color": "#f6f3f0",
+        "full_width": true,
+        "bg_image": "shopify://shop_images/DTS_Micro_Mouthwash_Studios_Photos_ID4054_3.png",
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "hover_state": false,
+        "show_hover_product": false,
+        "product": ""
+      }
+    },
+    "wholesale_newsletter_nQBcUE": {
+      "type": "wholesale-newsletter",
+      "blocks": {
+        "paragraph_VcDfDd": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>STAY UPDATED</p>"
+          }
+        },
+        "heading_FFLEmi": {
+          "type": "heading",
+          "settings": {
+            "heading": "**Sign up **to get emails",
+            "heading_style": "h2"
+          }
+        },
+        "forms_inline_DicjHj": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "575794",
+            "text_color": "#080b2b",
+            "button_background_color": "#00bed6",
+            "button_label_color": "#ffffff",
+            "links_color": "#1878b9",
+            "errors_color": "#e02229",
+            "text_alignment": "left",
+            "form_alignment": "flex-start",
+            "padding_top": 24,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        },
+        "email_form_jwRNUa": {
+          "type": "email_form",
+          "disabled": true,
+          "settings": {
+            "button_style": "button button--secondary"
+          }
+        }
+      },
+      "block_order": [
+        "paragraph_VcDfDd",
+        "heading_FFLEmi",
+        "forms_inline_DicjHj",
+        "email_form_jwRNUa"
+      ],
+      "name": "t:sections.newsletter.presets.name",
+      "settings": {
+        "bg_color": "#d54f2f",
+        "text_color": "#080b2b"
+      }
+    },
+    "wholesale_newsletter_wtNtPx": {
+      "type": "wholesale-newsletter",
+      "blocks": {
+        "paragraph_cHqdJF": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>REGISTER AS A DISTRIBUTING PROVIDER</p>"
+          }
+        },
+        "heading_UbiDty": {
+          "type": "heading",
+          "settings": {
+            "heading": "Wholesale **Sign up **",
+            "heading_style": "h2"
+          }
+        },
+        "forms_inline_b38zP7": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "575862",
+            "text_color": "#080b2b",
+            "button_background_color": "#00bed6",
+            "button_label_color": "#ffffff",
+            "links_color": "#1878b9",
+            "errors_color": "#e02229",
+            "text_alignment": "left",
+            "form_alignment": "center",
+            "padding_top": 8,
+            "padding_bottom": 8,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        },
+        "email_form_cr7hKT": {
+          "type": "email_form",
+          "disabled": true,
+          "settings": {
+            "button_style": "button button--secondary"
+          }
+        }
+      },
+      "block_order": [
+        "paragraph_cHqdJF",
+        "heading_UbiDty",
+        "forms_inline_b38zP7",
+        "email_form_cr7hKT"
+      ],
+      "disabled": true,
+      "name": "t:sections.newsletter.presets.name",
+      "settings": {
+        "bg_color": "#d54f2f",
+        "text_color": "#080b2b",
+        "image": "shopify://shop_images/Group_20600.png"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_with_text_ceR3qw",
+    "submenu_nHymeJ",
+    "video_file_L3T8qa",
+    "featured_collection_NEAcYw",
+    "image_with_text_cJQRDi",
+    "columns_with_icons_Tbe4Gq",
+    "testimonials_alt_KfMCHU",
+    "testimonials_qCRKt3",
+    "image_with_text_TejREc",
+    "rich_text_AHggRE",
+    "interactive_graph_E4gmAB",
+    "rich_text_Fh7iHn",
+    "clinical_studies_nCfj7R",
+    "rich_text_YQ7YwE",
+    "wholesale_newsletter_nQBcUE",
+    "wholesale_newsletter_wtNtPx"
+  ]
+}

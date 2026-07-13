@@ -1,0 +1,123 @@
+<div class="py-8 pb-0 bg-white">
+  <div class="max-w-screen-xl mx-auto md:flex collapsible-section">
+    <!-- Left Image -->
+    <div class="w-full md:w-2/3 collapsible-image">
+      {%- for block in section.blocks -%}
+          <div  class="relative w-full mx-auto mb-8 md:w-4/5 tab-image" id="image-{{ forloop.index }}" {% unless forloop.first %}style="display: none;" {% endunless %}>
+              <div class="absolute z-10 w-full md:w-1/2 text-4xl md:text-6xl px-4 md:px-8 top-5 left-0 {% if forloop.index == 3 %} text-navy {% else %} text-cream {% endif %}"> {{ block.settings.image_heading | replace_first: "**", "<span class='font-secondaryHeader !tracking-[-1.744px] text-[50px] md:text-[60px]'>" | replace: "**", "</span>" }}</div>
+              {% render 'image', image:block.settings.image, eager: true %}
+          </div>
+      {%- endfor -%}
+    </div>
+
+  <!-- Collapsible Tabs -->
+  <div class="flex flex-col justify-center w-full p-4 md:pr-12 md:w-1/3 collapsible-tabs">
+    {%- for block in section.blocks -%}
+        <div class="py-4 border-t-2 {% if forloop.last %} border-b-2 {% endif %} md:py-8 tab border-navy">
+            <button class="flex items-center justify-between w-full text-left tab-title h3 !tracking-[-1.02px]" onclick="showContent({{ forloop.index }})">{{block.settings.heading}} <span class="w-8">{% render 'icon-plus', classes:"w-4" %}</span></button>
+            <div class="hidden space-y-2 md:space-y-4 tab-content">
+              <p> {{ block.settings.text }}</p>
+              <div class="text-aqua">
+                 <a href="{{ block.settings.button_link }}" aria-label="learn-more" class="button--text text-aqua">{{ block.settings.button_label}}</a>
+              </div>
+            </div>
+        </div>
+    {% endfor %}
+  </div>
+</div>
+</div>
+
+<style>
+.collapsible-image .tab-image {
+  transition: opacity 0.1s ease;
+}
+</style>
+
+<script>
+    function showContent(tabIndex) {
+      document.querySelectorAll('.tab-image').forEach((image) => {
+        image.style.display = 'none';
+      });
+    
+      document.getElementById('image-' + tabIndex).style.display = 'block';
+    
+      document.querySelectorAll('.tab').forEach((tab) => {
+        tab.querySelector('.tab-title').classList.remove('text-brand');
+        tab.querySelector('.open-hide').classList.remove('hidden');
+
+        const content = tab.querySelector('.tab-content');
+        if (content) {
+          content.style.display = 'none';
+
+        }
+      });
+    
+      const selectedTab = document.querySelectorAll('.tab')[tabIndex - 1];
+      selectedTab.querySelector('.tab-title').classList.add('text-brand');
+      selectedTab.querySelector(".open-hide").classList.add("hidden");
+      
+      const selectedContent = selectedTab.querySelector('.tab-content');
+      if (selectedContent) {
+        selectedContent.style.display = 'block';
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        showContent(1);
+    });
+    </script>
+    
+
+{% schema %}
+{
+  "name": "Collapsible Tabs",
+  "settings": [
+  ],
+    "blocks": [
+        {
+          "type": "tab",
+          "name": "Tab",
+          "settings": [
+            {
+              "type": "text",
+              "id": "heading",
+              "default": "Image with text",
+              "label": "t:sections.image-with-text.blocks.heading.settings.heading.label"
+            },{
+                "type": "richtext",
+                "id": "text",
+                "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+                "label": "t:sections.image-with-text.blocks.text.settings.text.label"
+              },
+              {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+              },
+              {
+                "type": "text",
+                "id": "image_heading",
+                "default": "Image with text",
+                "label": "Image Heading"
+              },
+              {
+                "type": "text",
+                "id": "button_label",
+                "label": "t:sections.image-with-text.blocks.button.settings.button_label.label",
+                "info": "t:sections.image-with-text.blocks.button.settings.button_label.info"
+              },
+              {
+                "type": "url",
+                "id": "button_link",
+                "label": "t:sections.image-with-text.blocks.button.settings.button_link.label"
+              }
+            ]
+        }
+    ],
+  "presets": [
+    {
+      "name": "Collapsible Tabs"
+    }
+  ]
+}
+{% endschema %}

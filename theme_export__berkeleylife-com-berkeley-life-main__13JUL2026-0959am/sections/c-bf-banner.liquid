@@ -1,0 +1,811 @@
+<style>
+  #{{section.id}} {
+    background-color: {{ section.settings.background_color }};
+    position: relative;
+    overflow: hidden;
+
+    /* Background image */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('{{ section.settings.mobile_bg_image | default: section.settings.desktop_bg_image | image_url: width: 1000 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 1;
+    }
+
+    /* Overlay */
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: {{ section.settings.overlay_color }};
+      opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+      z-index: 2;
+    }
+
+    & .bf-banner__container {
+      padding-block: {{ section.settings.padding_top }}rem {{ section.settings.padding_bottom }}rem;
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      min-height: 100dvh;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    & .bf-banner__content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    & .bf-banner__stars {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 14px;
+    }
+
+    & .stars-wrapper {
+      display: flex;
+      color: {{ section.settings.accent_color }};
+    }
+
+    & .trusted-text {
+      color: {{ section.settings.text_color }};
+      font-size: clamp(14px, 3vw, 20px);
+      font-weight: 300;
+    }
+
+    & .bf-banner__title {
+      font-size: clamp(32px, 8vw, 64px);
+      font-weight: 400;
+      line-height: 110%;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+      width: 100%;
+    }
+
+    & .bf-banner__title--accent {
+      color: {{ section.settings.accent_color }};
+      font-style: italic;
+      font-family: "Cormorant Garamond";
+    }
+
+    & .bf-banner__description {
+      font-size: clamp(16px, 4vw, 18px);
+      line-height: 150%;
+      font-weight: 300;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+      width: 100%;
+    }
+
+    & .bf-banner__buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    & .bf-banner__button {
+      padding: 24px 40px;
+      border-radius: 9999px;
+      text-decoration: none;
+      text-align: center;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: normal;
+    }
+
+    & .bf-banner__button--primary {
+      background-color: {{ section.settings.primary_button_bg }};
+      color: {{ section.settings.primary_button_text }};
+      border: 2px solid {{ section.settings.primary_button_bg }};
+    }
+
+    & .bf-banner__button--primary:hover {
+      background-color: {{ section.settings.primary_button_bg | color_darken: 10 }};
+      border-color: {{ section.settings.primary_button_bg | color_darken: 10 }};
+    }
+
+    & .bf-banner__button--secondary {
+      background-color: transparent;
+      color: {{ section.settings.accent_color }};
+      border: 2px solid {{ section.settings.accent_color }};
+    }
+
+    & .bf-banner__button--secondary:hover {
+      background-color: {{ section.settings.accent_color }};
+      color: {{ section.settings.text_color }};
+    }
+
+    & .bf-banner__guarantees {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    & .guarantee-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: clamp(14px, 3.5vw, 16px);
+      font-style: italic;
+      color: {{ section.settings.text_color }};
+    }
+
+    & .guarantee-item svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    & .bf-banner__product-image {
+  
+      width: 100%;
+
+
+    }
+
+    & .bf-banner__product-image img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    /* Timer styles */
+    & .bf-timer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(135deg, {{ section.settings.timer_bg_color }}, {{ section.settings.timer_bg_color | color_darken: 20 }});
+      color: {{ section.settings.timer_text_color }};
+      padding: 12px 0;
+      text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    & .bf-timer__content {
+      width: 100%;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    & .bf-timer__title {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+      color: {{ section.settings.timer_text_color }};
+    }
+
+    & .bf-timer__countdown {
+      display: flex;
+      gap: 8px;
+
+    }
+
+    & .bf-timer__unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+
+    & .bf-timer__number {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+      margin: 0;
+      color: {{ section.settings.timer_text_color }};
+    }
+
+    & .bf-timer__label {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+      color: {{ section.settings.timer_text_color }};
+    }
+
+    & .bf-timer__separator {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+      color: {{ section.settings.timer_text_color }};
+    }
+
+    /* Desktop styles */
+    @media (min-width: 768px) {
+      &::before {
+        background-image: url('{{ section.settings.desktop_bg_image | image_url: width: 1800 }}');
+      }
+
+      & .bf-banner__container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      & .bf-banner__content {
+        width: 60%;
+      }
+
+      & .bf-banner__title {
+        font-size: clamp(48px, 8vw, 64px);
+      }
+
+      & .bf-banner__stars {
+        font-size: 24px;
+      }
+
+      & .trusted-text {
+        font-size: 20px;
+      }
+
+      & .bf-banner__description {
+        font-size: 18px;
+      }
+
+      & .bf-banner__buttons {
+        flex-direction: row;
+        gap: 1.5rem;
+      }
+
+      & .bf-banner__button {
+        width: auto;
+        min-width: 200px;
+      }
+
+      & .bf-banner__guarantees {
+        flex-direction: row;
+        gap: 2rem;
+      }
+
+      & .guarantee-item {
+        font-size: 16px;
+      }
+
+      & .bf-banner__product-image {
+        display: block;
+        position: relative;
+        right: 0;
+        top: 0;
+        transform: none;
+        width: 35%;
+        & .container__image {
+            background: rgba(2, 171, 196, 0);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); /* For Safari */
+            border-radius: 71px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            height: 400px;
+            display: flex;
+        }
+      }
+
+      & .bf-timer {
+        padding: 16px 0;
+      }
+
+
+      & .bf-timer__title {
+        font-size: 24px;
+      }
+
+      & .bf-timer__countdown {
+        gap: 12px;
+      }
+
+      & .bf-timer__unit {
+        flex: 1;
+      }
+
+      & .bf-timer__number {
+        font-size: 64px;
+      }
+
+      & .bf-timer__label {
+        font-size: 16px;
+        margin-top: 8px;
+      }
+
+      & .bf-timer__separator {
+        font-size: 64px;
+      }
+    }
+  }
+</style>
+
+<section id="{{section.id}}">
+  <div class="bf-banner__container container-sl">
+    <div class="bf-banner__content">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'stars' %}
+            <div class="bf-banner__stars" {{ block.shopify_attributes }}>
+              <div class="stars-wrapper">
+                {% for i in (1..5) %}
+                  {% if i <= block.settings.star_rating %}
+                    <span>&#9733;</span>
+                  {% else %}
+                    <span>&#9734;</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <span class="trusted-text">{{ block.settings.trusted_text }}</span>
+            </div>
+
+          {% when 'heading' %}
+            <h1 class="bf-banner__title" {{ block.shopify_attributes }}>
+              {% assign title_with_accent = block.settings.heading
+                | replace: '{accent}', '<span class="bf-banner__title--accent">'
+                | replace: '{/accent}', '</span>'
+              %}
+              {{ title_with_accent }}
+            </h1>
+
+          {% when 'description' %}
+            <p class="bf-banner__description" {{ block.shopify_attributes }}>
+              {{ block.settings.description }}
+            </p>
+
+          {% when 'buttons' %}
+            <div class="bf-banner__buttons" {{ block.shopify_attributes }}>
+              {% if block.settings.button_1_label != blank %}
+                <a href="{{ block.settings.button_1_link }}" class="bf-banner__button bf-banner__button--primary">
+                  {{ block.settings.button_1_label }}
+                </a>
+              {% endif %}
+              {% if block.settings.button_2_label != blank %}
+                <a href="{{ block.settings.button_2_link }}" class="bf-banner__button bf-banner__button--secondary">
+                  {{ block.settings.button_2_label }}
+                </a>
+              {% endif %}
+            </div>
+
+          {% when 'guarantees' %}
+            <div class="bf-banner__guarantees" {{ block.shopify_attributes }}>
+              {% if block.settings.guarantee_1 != blank %}
+                <div class="guarantee-item">
+                  {{ block.settings.guarantee_icon_1 }}
+                  <span>{{ block.settings.guarantee_1 }}</span>
+                </div>
+              {% endif %}
+              {% if block.settings.guarantee_2 != blank %}
+                <div class="guarantee-item">
+                  {{ block.settings.guarantee_icon_2 }}
+                  <span>{{ block.settings.guarantee_2 }}</span>
+                </div>
+              {% endif %}
+              {% if block.settings.guarantee_3 != blank %}
+                <div class="guarantee-item">
+                  {{ block.settings.guarantee_icon_3 }}
+                  <span>{{ block.settings.guarantee_3 }}</span>
+                </div>
+              {% endif %}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+
+    {% if section.settings.product_image != blank %}
+      <div class="bf-banner__product-image">
+        {% if section.settings.product_image_link != blank %}
+          <a href="{{ section.settings.product_image_link }}" class="container__image">
+            <img
+              src="{{ section.settings.product_image | image_url: width: 1200 }}"
+              alt="{{ section.settings.product_image.alt | escape }}"
+              width="1200"
+              height="auto"
+              loading="lazy"
+            >
+          </a>
+        {% else %}
+          <div class="container__image">
+            <img
+              src="{{ section.settings.product_image | image_url: width: 1200 }}"
+              alt="{{ section.settings.product_image.alt | escape }}"
+              width="1200"
+              height="auto"
+              loading="lazy"
+            >
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Timer blocks outside the content wrapper -->
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'bf_timer' %}
+        <div
+          class="bf-timer"
+          style="background-color: {{ block.settings.timer_bg_color }}; color: {{ block.settings.timer_text_color }};"
+          {{ block.shopify_attributes }}
+        >
+          <div class="bf-timer__content">
+            <h3 class="bf-timer__title" style="color: {{ block.settings.timer_text_color }};">
+              {{ block.settings.timer_title }}
+            </h3>
+            <div class="bf-timer__countdown">
+              <div class="bf-timer__unit">
+                <div
+                  class="bf-timer__number"
+                  id="days-{{ block.id }}"
+                  style="color: {{ block.settings.timer_text_color }};"
+                >
+                  00
+                </div>
+                <div class="bf-timer__label" style="color: {{ block.settings.timer_text_color }};">Days</div>
+              </div>
+              <div class="bf-timer__separator" style="color: {{ block.settings.timer_text_color }};">：</div>
+              <div class="bf-timer__unit">
+                <div
+                  class="bf-timer__number"
+                  id="hours-{{ block.id }}"
+                  style="color: {{ block.settings.timer_text_color }};"
+                >
+                  00
+                </div>
+                <div class="bf-timer__label" style="color: {{ block.settings.timer_text_color }};">Hrs</div>
+              </div>
+              <div class="bf-timer__separator" style="color: {{ block.settings.timer_text_color }};">：</div>
+              <div class="bf-timer__unit">
+                <div
+                  class="bf-timer__number"
+                  id="minutes-{{ block.id }}"
+                  style="color: {{ block.settings.timer_text_color }};"
+                >
+                  00
+                </div>
+                <div class="bf-timer__label" style="color: {{ block.settings.timer_text_color }};">Min</div>
+              </div>
+              <div class="bf-timer__separator" style="color: {{ block.settings.timer_text_color }};">：</div>
+              <div class="bf-timer__unit">
+                <div
+                  class="bf-timer__number"
+                  id="seconds-{{ block.id }}"
+                  style="color: {{ block.settings.timer_text_color }};"
+                >
+                  00
+                </div>
+                <div class="bf-timer__label" style="color: {{ block.settings.timer_text_color }};">Sec</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          var countDownDate{{ block.id }} = new Date("{{ block.settings.target_date }}").getTime();
+
+          // Update the count down every 1 second
+          var timer{{ block.id }} = setInterval(function() {
+
+            var now = new Date().getTime();
+            var distance = countDownDate{{ block.id }} - now;
+
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days-{{ block.id }}").innerHTML = days.toString().padStart(2, '0');
+            document.getElementById("hours-{{ block.id }}").innerHTML = hours.toString().padStart(2, '0');
+            document.getElementById("minutes-{{ block.id }}").innerHTML = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds-{{ block.id }}").innerHTML = seconds.toString().padStart(2, '0');
+
+            // If the count down is finished, write some text
+            if (distance < 0) {
+              clearInterval(timer{{ block.id }});
+              document.getElementById("days-{{ block.id }}").innerHTML = "00";
+              document.getElementById("hours-{{ block.id }}").innerHTML = "00";
+              document.getElementById("minutes-{{ block.id }}").innerHTML = "00";
+              document.getElementById("seconds-{{ block.id }}").innerHTML = "00";
+            }
+          }, 1000);
+        </script>
+    {% endcase %}
+  {% endfor %}
+</section>
+
+{% schema %}
+{
+  "name": "C BF Banner",
+  "tag": "section",
+  "class": "section section-bf-banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_bg_image",
+      "label": "Desktop Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_bg_image",
+      "label": "Mobile Background Image (optional)"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Fallback Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Product Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product Image"
+    },
+    {
+      "type": "url",
+      "id": "product_image_link",
+      "label": "Product Image Link",
+      "info": "Optional link for the product image. Leave empty if no link is needed."
+    },
+    {
+      "type": "header",
+      "content": "Spacing Settings"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Top padding",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Bottom padding",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D44F2F"
+    },
+    {
+      "type": "color",
+      "id": "primary_button_bg",
+      "label": "Primary Button Background",
+      "default": "#D44F2F"
+    },
+    {
+      "type": "color",
+      "id": "primary_button_text",
+      "label": "Primary Button Text",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stars",
+      "name": "Stars Rating",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "star_rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Star Rating",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "trusted_text",
+          "label": "Trusted Text",
+          "default": "Trusted by 3,000+ healthcare providers"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Black Friday Starts Now — {accent}Boost Circulation, Save Big{/accent}"
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Get your first month FREE with a 3-Month supply of NO Foundation. That's 33% off our clinically proven Nitric Oxide support supplement."
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_1_label",
+          "label": "Primary Button Label",
+          "default": "SHOP THE 3-MONTH OFFER"
+        },
+        {
+          "type": "url",
+          "id": "button_1_link",
+          "label": "Primary Button Link"
+        },
+        {
+          "type": "text",
+          "id": "button_2_label",
+          "label": "Secondary Button Label",
+          "default": "EXPLORE ALL DEALS"
+        },
+        {
+          "type": "url",
+          "id": "button_2_link",
+          "label": "Secondary Button Link"
+        }
+      ]
+    },
+    {
+      "type": "guarantees",
+      "name": "Guarantees",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "html",
+          "id": "guarantee_icon_1",
+          "label": "Guarantee Icon 1"
+        },
+        {
+          "type": "text",
+          "id": "guarantee_1",
+          "label": "Guarantee 1",
+          "default": "Clinically Backed"
+        },
+        {
+          "type": "html",
+          "id": "guarantee_icon_2",
+          "label": "Guarantee Icon 2"
+        },
+        {
+          "type": "text",
+          "id": "guarantee_2",
+          "label": "Guarantee 2",
+          "default": "Money Back Guarantee"
+        },
+        {
+          "type": "html",
+          "id": "guarantee_icon_3",
+          "label": "Guarantee Icon 3"
+        },
+        {
+          "type": "text",
+          "id": "guarantee_3",
+          "label": "Guarantee 3",
+          "default": "Free Shipping"
+        }
+      ]
+    },
+    {
+      "type": "bf_timer",
+      "name": "Black Friday Timer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "timer_title",
+          "label": "Timer Title",
+          "default": "BLACK FRIDAY OFFER ENDS IN:"
+        },
+        {
+          "type": "text",
+          "id": "target_date",
+          "label": "Target Date & Time",
+          "default": "December 1, 2024 23:59:59",
+          "info": "Format: Month Day, Year HH:MM:SS (e.g., 'December 1, 2024 23:59:59' or 'Dec 1 2024 11:59 PM')"
+        },
+        {
+          "type": "color",
+          "id": "timer_bg_color",
+          "label": "Timer Background Color",
+          "default": "#1a1a1a"
+        },
+        {
+          "type": "color",
+          "id": "timer_text_color",
+          "label": "Timer Text Color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C BF Banner",
+      "blocks": [
+        { "type": "stars" },
+        { "type": "heading" },
+        { "type": "description" },
+        { "type": "buttons" },
+        { "type": "guarantees" },
+        { "type": "bf_timer" }
+      ]
+    }
+  ]
+}
+{% endschema %}

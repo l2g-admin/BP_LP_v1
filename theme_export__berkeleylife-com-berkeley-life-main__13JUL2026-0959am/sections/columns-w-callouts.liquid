@@ -1,0 +1,94 @@
+<div class="bg-bg" style="--color-text: {{ section.settings.text_color | default: '#090909' }}; --color-bg: {{ section.settings.bg_color | default: '#F6F3F0' }};">
+    <div class="grid m-4 md:m-12 md:mx-auto text-center md:text-left items-center max-w-screen-xl md:px-20 bg-white rounded-[40px] grid-cols-1 px-8 py-12 gap-x-20 md:grid-cols-2 md:py-20 bg-bg text-text">
+        <div>
+            <h2 class="mb-8 h2">
+                {{ section.settings.heading | replace_first: "**", "<span class='text-brand font-secondaryHeader'>" | replace: "**", "</span>" }}
+            </h2>
+            <div class="text-lg">
+                <div>
+                    {{ section.settings.text }}
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-8 mt-8 gap-x-4 md:mt-0">
+            {% for block in section.blocks %}
+                {% case block.type %}
+                {%- when 'image' -%}
+                    <div class="col-span-2 mb-4 md:col-span-1">
+                        {% render 'image', image:block.settings.image, classes: "w-full" %}
+                    </div>
+                {%- when 'callout' -%}
+                    <div class="col-span-8 my-2 subhead text-brand">
+                        {{ block.settings.title }}
+                    </div>
+                {% endcase %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% schema %}
+    {
+      "name": "Columns with Callouts",
+      "settings": [
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Image with text",
+          "label": "t:sections.image-with-text.blocks.heading.settings.heading.label"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+          "label": "t:sections.image-with-text.blocks.text.settings.text.label"
+         },
+        ],
+    "blocks": [
+        {
+        "type": "callout",
+        "name": "Callout",
+        "settings": [
+           
+            {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+            }
+        ]
+        },{
+            "type": "image",
+            "name": "Logo",
+            "settings": [
+                {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Icon Image"
+                },
+                {
+                "type": "html",
+                "id": "svg",
+                "label": "SVG Icon",
+                "info": "Paste in an svg here (with no width or height attributes). This overrides the image."
+                }
+            ]
+        }
+  ],
+  "presets": [
+    {
+      "name": "Columns with Callouts",
+    }
+  ]
+    }
+    {% endschema %}
+    

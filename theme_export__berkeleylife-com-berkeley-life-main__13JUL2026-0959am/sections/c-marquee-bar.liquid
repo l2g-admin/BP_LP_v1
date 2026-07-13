@@ -1,0 +1,317 @@
+<style>
+  #{{ section.id }} {
+    --bg: {{ section.settings.bg_color }};
+    --text: {{ section.settings.text_color }};
+
+    background-color: var(--bg);
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    overflow: hidden;
+  }
+
+  #{{ section.id }} .marquee-bar__inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-inline: 24px;
+  }
+
+  #{{ section.id }} .marquee-bar__eyebrow {
+    flex: 0 0 auto;
+    margin: 0;
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0.75;
+    white-space: nowrap;
+  }
+
+  #{{ section.id }} .marquee-bar__scroller {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    {% if section.settings.fade_edges %}
+      mask-image: linear-gradient(90deg, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
+    {% endif %}
+  }
+
+  #{{ section.id }} .marquee-bar__track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: marquee-bar-scroll {{ section.settings.speed }}s linear infinite;
+    animation-direction: {% if section.settings.direction == 'right' %}reverse{% else %}normal{% endif %};
+    will-change: transform;
+  }
+
+  {% if section.settings.pause_on_hover %}
+  #{{ section.id }} .marquee-bar__scroller:hover .marquee-bar__track {
+    animation-play-state: paused;
+  }
+  {% endif %}
+
+  #{{ section.id }} .marquee-bar__group {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+  }
+
+  #{{ section.id }} .marquee-bar__item-icon {
+    display: block;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  #{{ section.id }} .marquee-bar__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    color: var(--text);
+    padding-inline: 12px;
+    {% if section.settings.font_style == 'serif' %}
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(20px, 2.2vw, 28px);
+      line-height: 1.2;
+    {% else %}
+      font-family: "TT Commons Pro", sans-serif;
+      font-weight: 700;
+      font-size: clamp(12px, 1.2vw, 15px);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    {% endif %}
+  }
+
+  #{{ section.id }} .marquee-bar__divider {
+    flex: 0 0 auto;
+    color: var(--text);
+    opacity: 0.65;
+    line-height: 1;
+    user-select: none;
+    {% if section.settings.font_style == 'serif' %}
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(20px, 2.2vw, 28px);
+    {% else %}
+      font-family: "TT Commons Pro", sans-serif;
+      font-size: clamp(12px, 1.2vw, 15px);
+    {% endif %}
+  }
+
+  @keyframes marquee-bar-scroll {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #{{ section.id }} .marquee-bar__track {
+      animation: none;
+    }
+  }
+</style>
+
+{%- capture marquee_items -%}
+  {%- for block in section.blocks -%}
+    {%- assign has_icon = false -%}
+    {%- if block.settings.icon != blank -%}{%- assign has_icon = true -%}{%- endif -%}
+    {%- if block.settings.text != blank or has_icon -%}
+      <span class="marquee-bar__item" {{ block.shopify_attributes }}>
+        {%- if has_icon -%}
+          <img
+            src="{{ block.settings.icon | image_url: width: 120 }}"
+            alt=""
+            class="marquee-bar__item-icon"
+            style="width: {{ block.settings.icon_size }}px; height: {{ block.settings.icon_size }}px;"
+            loading="lazy"
+          >
+        {%- endif -%}
+        {%- if block.settings.text != blank -%}{{ block.settings.text | escape }}{%- endif -%}
+      </span>
+      <span class="marquee-bar__divider" aria-hidden="true">{{ section.settings.divider }}</span>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+<section id="{{ section.id }}">
+  <div class="marquee-bar__inner">
+
+    {% if section.settings.eyebrow != blank %}
+      <p class="marquee-bar__eyebrow">{{ section.settings.eyebrow }}</p>
+    {% endif %}
+
+    <div class="marquee-bar__scroller" role="marquee" aria-label="{{ section.settings.eyebrow | escape }}">
+      <div class="marquee-bar__track">
+        <div class="marquee-bar__group">{{ marquee_items }}</div>
+        <div class="marquee-bar__group" aria-hidden="true">{{ marquee_items }}</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Marquee Bar",
+  "tag": "section",
+  "class": "section-marquee-bar",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Label",
+      "default": "Essential for",
+      "info": "Static label on the left. Leave blank to hide."
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "font_style",
+      "label": "Font Style",
+      "default": "serif",
+      "options": [
+        { "value": "serif", "label": "Serif italic (Cormorant Garamond)" },
+        { "value": "sans", "label": "Sans uppercase (TT Commons Pro)" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "divider",
+      "label": "Divider Character",
+      "default": "·",
+      "info": "Character between items. E.g. · / | — ★"
+    },
+    {
+      "type": "checkbox",
+      "id": "fade_edges",
+      "label": "Fade edges",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Speed",
+      "min": 10,
+      "max": 120,
+      "step": 5,
+      "unit": "s",
+      "default": 30,
+      "info": "Lower = faster"
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left (default)" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Blood Flow"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon Image"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "label": "Icon Size",
+          "min": 12,
+          "max": 60,
+          "step": 2,
+          "unit": "px",
+          "default": 24
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Marquee Bar",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Blood Flow" } },
+        { "type": "item", "settings": { "text": "Hormonal Balance" } },
+        { "type": "item", "settings": { "text": "Blood Pressure" } },
+        { "type": "item", "settings": { "text": "Circulation" } },
+        { "type": "item", "settings": { "text": "Energy" } },
+        { "type": "item", "settings": { "text": "Sexual Health" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

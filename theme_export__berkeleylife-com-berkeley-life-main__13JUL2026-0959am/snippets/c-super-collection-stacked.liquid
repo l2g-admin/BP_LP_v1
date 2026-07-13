@@ -1,0 +1,712 @@
+{% comment %}
+  C Super Collection Stacked
+  Updated:
+  - Mobile: collapsed short cards (accordion-style)
+  - Desktop: horizontal layout with vertical collapsed tabs
+  - Added cta_url parameter for custom CTA links when no collection is assigned
+{% endcomment %}
+
+{% liquid
+  assign tab_collection = collection
+  assign tab_is_open = is_open | default: false
+  assign tab_id = tab_id | default: 'super-tab-' | append: tab_collection.id
+  assign section_id = section_id | default: 'section'
+  assign tab_background_color = tab_background_color | default: '#BFAEE3'
+
+  assign tab_background_image = background_image
+  if tab_background_image == blank and tab_collection.image
+    assign tab_background_image = tab_collection.image
+  elsif tab_background_image == blank and tab_collection.featured_image
+    assign tab_background_image = tab_collection.featured_image
+  endif
+
+  assign tab_title = title
+  if tab_title == blank
+    assign tab_title = tab_collection.title
+  endif
+
+  assign tab_description = description
+  if tab_description == blank and tab_collection.metafields.custom.description
+    assign tab_description = tab_collection.metafields.custom.description
+  elsif tab_description == blank
+    assign tab_description = tab_collection.description
+  endif
+
+  assign tab_cta_text = cta_text | default: 'Shop Category'
+  assign show_collapsed_icon = show_collapsed_icon | default: 'plus-icon'
+  
+  assign tab_cta_url = cta_url
+  if tab_cta_url == blank and tab_collection.url
+    assign tab_cta_url = tab_collection.url
+  elsif tab_cta_url == blank
+    assign tab_cta_url = '#'
+  endif
+
+  assign tab_image_url = tab_img_url
+%}
+
+{% style %}
+  #{{ section_id }} .c-super-collection-stacked {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: stretch;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    min-height: 632px;
+    flex:1 0 0;
+    background-color: #FAFAFA;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease;
+    flex: 1;
+  }
+
+  #{{ section_id }} .c-super-collection-stacked.is-open {
+    gap: 12px;
+    padding: 24px;
+  }
+
+  #{{ section_id }} .c-super-collection-stacked.is-closed {
+    gap: 24px;
+    padding: 24px;
+    cursor: pointer;
+    justify-content: flex-end;
+    align-items: start;
+  }
+
+  #{{ section_id }} .c-super-collection-stacked.is-open::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(55deg, rgba(0, 0, 0, 0) 51.82%, rgba(0, 0, 0, 0.34) 90.68%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0) 45.62%, rgba(0, 0, 0, 0.64) 100%),
+      linear-gradient(180deg, rgba(238, 235, 225, 0) 32.39%, rgba(238, 235, 225, 0.20) 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+  }
+
+  #{{ section_id }} .c-super-collection-stacked > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  #{{ section_id }} .c-super-collection-stacked.is-closed:hover {
+    transform: scale(1.02);
+  }
+
+  /* Top Container (tag + CTA) */
+  #{{ section_id }} .c-super-tab__top-container {
+    display: none;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  #{{ section_id }} .c-super-collection-stacked.is-open .c-super-tab__top-container {
+    display: flex;
+    opacity: 1;
+    justify-content: start;
+  }
+
+  #{{ section_id }} .c-super-tab__tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 40px;
+  }
+
+  #{{ section_id }} .c-super-tab__tag-text {
+    font-family: var(--body-family);
+    font-size: 12px;
+    color: #181E21;
+    margin: 0;
+  }
+
+  #{{ section_id }} .c-super-tab__cta .c-cta {
+    display: flex;
+    padding: 12px 24px;
+    align-items: center;
+    gap: 8px;
+    border-radius: 40px;
+    border: 1px solid #E3E6E5;
+    background: rgba(255, 255, 255, 0.21);
+  }
+
+  #{{ section_id }} .c-super-tab__cta .c-cta__text {
+    color: #E3E6E5;
+    font-family: Roboto;
+    font-size: 16px;
+  }
+
+  /* Content Container */
+  #{{ section_id }} .c-super-tab__content-wrapper {
+    display: none;
+    flex-direction: column;
+    gap: 19px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  #{{ section_id }} .c-super-collection-stacked.is-open .c-super-tab__content-wrapper {
+    display: flex;
+    opacity: 1;
+  }
+
+  #{{ section_id }} .c-super-tab__text-wrapper {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #{{ section_id }} .c-super-tab__text-wrapper.is-visible {
+    display: flex;
+  }
+
+  #{{ section_id }} .c-super-tab__text-wrapper > h2,
+  #{{ section_id }} .c-super-tab__title > h2,
+  #{{ section_id }} .c-super-tab__description > p {
+    margin: 0;
+  }
+
+   #{{ section_id }} .c-super-tab__title > h2 {
+      color: var(--Neutro-White, #FFF);
+      /* font-family: "TT Commons Pro"; */
+      font-size: 37px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%; /* 44.4px */
+    }
+
+    #{{ section_id }} .c-super-tab__title > h2 em {
+      color: var(--Neutro-White, #FFF);
+      font-family: "Cormorant Garamond";
+      font-size: 44px;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 100%;
+    }
+
+    #{{ section_id }} .c-super-tab__text-wrapper > h2 {
+      color: var(--Neutral-Lightest-Gray, #E3E6E5);
+      font-family: "Founders Grotesk";
+      font-size: var(--Text-Sizes-Heading-1, 56px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%; /* 67.2px */
+      margin: 0;
+    }
+
+     #{{ section_id }} .c-super-tab__description > p {
+      color: var(--Neutro-White, #FFF);
+      /* Body Medium/lg */
+      /* font-family: "TT Commons Pro"; */
+      font-size: var(--Text-Sizes-Text-Large, 18px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%; /* 27px */
+    }
+
+  #{{ section_id }} .c-super-tab__description {
+    color: var(--Neutro-White, #FFF);
+    /* Body Medium/lg */
+    /* font-family: "TT Commons Pro"; */
+    font-size: var(--Text-Sizes-Text-Large, 18px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 27px */
+  }
+
+  /* Review + Benefits */
+  #{{ section_id }} .c-super-tab__review-tag-wrapper {
+    display: none;
+    flex-direction: column;
+    gap: 19px;
+  }
+
+  #{{ section_id }} .c-super-tab__review-tag-wrapper.is-visible {
+    display: flex;
+  }
+
+  #{{ section_id }} .c-super-tab__review-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.24);
+    border-radius: 24px;
+  }
+
+  #{{ section_id }} .c-super-tab__review-text {
+    font-size: 14px;
+    color: #E3E6E5;
+  }
+
+  #{{ section_id }} .c-super-tab__review-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #{{ section_id }} .c-super-tab__avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #FFFFFF;
+  }
+
+  #{{ section_id }} .c-super-tab__author-name {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #F9F7EC;
+  }
+
+  #{{ section_id }} .c-super-tab__author-extra {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #F9F7EC;
+  }
+
+  /* Benefit Tags */
+  #{{ section_id }} .c-super-tab__product-tags {
+    display: flex;
+    gap: 12px;
+  }
+
+  #{{ section_id }} .c-super-tab__benefit-tag {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 12px;
+    background: rgba(216, 164, 98, 0.46);
+    border-radius: 8px;
+  }
+
+  #{{ section_id }} .c-super-tab__benefit-title {
+    font-size: 14px;
+    color: #E3E6E5;
+  }
+
+  #{{ section_id }} .c-super-tab__benefit-description {
+    font-size: 9px;
+    color: #E3E6E5;
+  }
+
+  /* Closed State */
+  #{{ section_id }} .c-super-tab__closed-content {
+    display: none;
+    flex-direction: column;
+    align-items: start;
+    gap: 8px;
+    text-align: start;
+  }
+
+  #{{ section_id }} .c-super-collection-stacked.is-closed .c-super-tab__closed-content {
+    display: flex;
+  }
+
+  #{{ section_id }} .c-super-tab__closed-tag-title {
+    color: var(--Neutro-White, #FFF);
+    /* TT Commons Pro/H3 */
+    /* font-family: "TT Commons Pro"; */
+    font-size: var(--Text-Sizes-Heading-TT-3, 24px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%; /* 28.8px */
+  }
+
+  #{{ section_id }} .c-super-tab__plus-icon {
+    width: 54px;
+    height: 54px;
+  }
+
+
+  /* Hide the + icon when tab is open */
+  #{{ section_id }} .c-super-collection-stacked.is-open .c-super-tab__closed-icon-wrapper {
+    display: none !important;
+    opacity: 0;
+  }
+
+  #{{ section_id }} .c-super-tab__closed-icon-wrapper {
+    position: absolute;
+    top: 24px;
+    align-self: center;
+  }
+
+  /* Ensure closed cards have consistent height and alignment */
+  #{{ section_id }} .c-super-collection-stacked.is-closed {
+    align-items: stretch;
+    justify-content: flex-end;
+  }
+
+  /* Make sure all cards align vertically */
+  #{{ section_id }} .c-super-tabs__tabs-wrapper {
+    align-items: stretch;
+  }
+
+  /* --- MOBILE collapsed look --- */
+  @media (max-width: 977px) {
+    #{{ section_id }} .c-super-tab__description > p {
+      color: var(--Neutro-White, #FFF);
+      /* Body Medium/lg */
+      /* font-family: "TT Commons Pro"; */
+      font-size: var(--Text-Sizes-Text-Large, 18px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%; /* 27px */
+    }
+
+  #{{ section_id }} .c-super-tab__title > p {
+      color: var(--Neutral-Lightest-Gray, #E3E6E5);
+      font-family: "Basis Grotesque Arabic Pro";
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%; /* 19.2px */
+      text-transform: uppercase;
+  }
+
+    #{{ section_id }} .c-super-tab__text-wrapper> h2 {
+      color: var(--Neutro-White, #FFF);
+      /* font-family: "TT Commons Pro"; */
+      font-size: 37px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 120%; /* 44.4px */
+    }
+
+     #{{ section_id }} .c-super-tab__text-wrapper > h2 em {
+      color: var(--Neutro-White, #FFF);
+      font-family: "Cormorant Garamond";
+      font-size: 44px;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 100%;
+    }
+
+    #{{ section_id }} .c-super-collection-stacked {
+      min-height: 160px;
+      transition: all 0.4s ease;
+    }
+
+    #{{ section_id }} .c-super-collection-stacked.is-closed {
+      min-height: 48px;
+      max-height: 130px;
+      padding: 48px 24px;
+      justify-content: center;
+      align-items: start;
+      overflow: hidden;
+      opacity: 0.9;
+      transition: all 0.4s ease;
+    }
+
+    #{{ section_id }} .c-super-collection-stacked.is-closed .c-super-tab__content-wrapper,
+    #{{ section_id }} .c-super-collection-stacked.is-closed .c-super-tab__top-container {
+      display: none !important;
+      opacity: 0;
+    }
+
+    #{{ section_id }} .c-super-collection-stacked.is-closed .c-super-tab__closed-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      align-items: start;
+      gap: 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    #{{ section_id }} .c-super-collection-stacked.is-closed .c-super-tab__closed-tag-title {
+      color: var(--Neutro-White, #FFF);
+      /* TT Commons Pro/H3 */
+      /* font-family: "TT Commons Pro"; */
+      font-size: var(--Text-Sizes-Heading-TT-3, 24px);
+      font-style: normal;
+      font-weight: 500;
+      line-height: 120%; /* 28.8px */
+    }
+
+    #{{ section_id }} .c-super-collection-stacked.is-open {
+      min-height: 560px;
+      max-height: none;
+      padding: 24px;
+    }
+
+    #{{ section_id }} .c-super-tab__closed-icon-wrapper {
+      position: absolute;
+      right: 24px;
+      align-self: center;
+      top: 0;
+      bottom: 0;
+    }
+  }
+
+  #{{ section_id }} .promo-button-button {
+    display: flex;
+    height: 60px;
+    padding: 0 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+    border-radius: 42px;
+  }
+
+  #{{ section_id }} .promo-button-text {
+    color: #F6F3F0;
+    /* button */
+    /* font-family: "TT Commons Pro"; */
+    font-size: var(--Text-Sizes-Text-Medium, 16px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%; /* 24px */
+  }
+
+  #{{ section_id }} .promo-button-button .arrow {
+    color: #F6F3F0;
+    /* button */
+    /* font-family: "TT Commons Pro"; */
+    font-size: var(--Text-Sizes-Text-Medium, 16px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%; /* 24px */
+    margin-left: 10px;
+  }
+
+  #{{ section_id }} .top-heading-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #{{section_id}} .trusted-by-box {
+    display: flex;
+    padding: 16px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4px;
+    align-self: stretch;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+
+    /* BG Blur */
+    backdrop-filter: blur(15px);
+  }
+
+  #{{ section_id }} .stars {
+    color: #D54F2F;
+    font-size: 14px;
+  }
+
+  #{{ section_id }} .trusted-text {
+    color: var(--Neutro-White, #FFF);
+    /* Body/md */
+    /* font-family: "TT Commons Pro"; */
+    font-size: var(--Text-Sizes-Text-Medium, 16px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 24px */
+  }
+
+  #{{ section_id }} .reviews-text {
+    color: var(--Neutro-White, #FFF);
+    /* TT Commons Pro/Tagline */
+    /* font-family: "TT Commons Pro"; */
+    font-size: var(--Text-Sizes-Text-Regular, 14px);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 16.8px */
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+  }
+
+  /* #{{section_id}} .img-wrapper {
+    display: none;
+  } */
+  #{{section_id}} .c-super-tab__section-bottom {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+  }
+
+  #{{section_id}} .c-super-tab__section-bottom.is-visible {
+    display: flex;
+    align-self: start;
+  }
+
+  #{{section_id}} .c-super-tab__section-bottom {
+    display: none;
+  }
+
+  #{{ section_id }} .img-wrapper-link {
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  #{{ section_id }} .img-wrapper-link:hover {
+    transform: scale(1.02);
+  }
+
+  #{{ section_id }} .img-wrapper {
+    display: flex;
+    padding: 16px 8px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  /* Responsive Adjustments */
+  @media (width >= 978px) {
+    #{{ section_id }} .c-super-collection-stacked {
+      min-height: 720px;
+    }
+
+    #{{ section_id }} .c-super-collection-stacked.is-open {
+      padding: 32px;
+      gap: 96px;
+    }
+
+    #{{ section_id }} .c-super-collection-stacked.is-closed::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.20);
+      z-index: 1;
+    }
+
+    #{{ section_id }} .c-super-tab__text-wrapper > h2 {
+      font-size: 56px;
+    }
+
+    #{{ section_id }} .c-super-tab__description {
+      font-size: 18px;
+    }
+
+    #{{ section_id }} .c-super-tab__review-tag-wrapper {
+      flex-direction: column;
+      width: 380px;
+    }
+
+    #{{ section_id }} .c-super-tab__closed-content {
+      justify-content: center;
+    }
+
+    #{{ section_id }} .c-super-tab__closed-tag-title {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+  }
+{% endstyle %}
+
+<div
+  class="c-super-collection-stacked {% if tab_is_open %}is-open{% else %}is-closed{% endif %}"
+  data-super-tab="{{ tab_id }}"
+  {% unless tab_is_open %}
+    role="button"
+    tabindex="0"
+    aria-expanded="false"
+    aria-controls="{{ tab_id }}-content"
+  {% endunless %}
+  {% if tab_background_image %}
+    style="background-image: url('{{ tab_background_image | image_url: width: 1200 }}');"
+  {% endif %}
+>
+  <!-- Top Container -->
+  <div class="c-super-tab__top-container">
+    <div class="c-super-tab__text-wrapper {% if tab_is_open %}is-visible{% endif %}">
+      <div class="top-heading-layout">
+        {% if tab_title != blank %}
+          <div class="c-super-tab__title">{{ tab_title }}</div>
+        {% endif %}
+        {% if tab_description != blank %}
+          <div class="c-super-tab__description">{{ tab_description }}</div>
+        {% endif %}
+      </div>
+      {% if  tab_cta_text != blank %}
+        <a class="promo-button-button" href="{{ tab_cta_url }}" style="background-color:{{ tab_background_color }}">
+          <span class="promo-button-text">{{ tab_cta_text }}</span>
+          <span class="arrow">→</span>
+        </a>
+      {% endif %}
+    </div>
+    {% comment %} {% if tag_title != blank %}
+      <div class="c-super-tab__tag" style="background-color: {{ tab_background_color }};">
+        <span class="c-super-tab__tag-text">{{ tag_title }}</span>
+      </div>
+    {% endif %} {% endcomment %}
+    {% comment %} <div class="c-super-tab__cta">
+      {% render 'c-cta', text: tab_cta_text, link: tab_cta_url, style: 'quaternary', size: 'medium' %}
+    </div> {% endcomment %}
+  </div>
+
+  <!-- Open State Content -->
+  <div class="c-super-tab__content-wrapper" id="{{ tab_id }}-content">
+    <div class="c-super-tab__review-tag-wrapper {% if tab_is_open %}is-visible{% endif %}">
+      <div class="trusted-by-box">
+        <div class="trusted-stars">
+          <span class="stars">★★★★★</span>
+        </div>
+        <div class="trusted-text">
+          <span>{{ tag_title_1 }}</span>
+        </div>
+        <div class="reviews-text">
+          <span>{{ tag_description_1 }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="c-super-tab__section-bottom {% if tab_is_open %}is-visible{% endif %}">
+    {% if tab_image_url != blank %}
+      <a href="{{ tab_image_url }}" class="img-wrapper-link">
+        <div class="img-wrapper">
+          <img src="{{ tab_img | img_url: 'large' }}" alt="Product" width="180">
+        </div>
+      </a>
+    {% else %}
+      <div class="img-wrapper">
+        <img src="{{ tab_img | img_url: 'large' }}" alt="Product" width="180">
+      </div>
+    {% endif %}
+  </div>
+  
+
+  <!-- Closed State -->
+  <div class="c-super-tab__closed-content">
+    {% if tag_title != blank %}
+      <span class="c-super-tab__closed-tag-title">{{ tag_title }}</span>
+    {% endif %}
+  </div>
+
+  <!-- Floating SVG Icon -->
+  {% if show_collapsed_icon %}
+    <div class="c-super-tab__closed-icon-wrapper">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="48" height="48" rx="24" fill="white"/>
+        <path d="M21.3872 18.6729C21.488 18.6729 21.565 18.7033 21.6431 18.7812L26.5874 23.7256C26.6413 23.7795 26.6665 23.8215 26.6782 23.8496V23.8506C26.693 23.8861 26.7017 23.9259 26.7017 23.9746C26.7017 24.0233 26.693 24.0631 26.6782 24.0986V24.0996C26.6665 24.1277 26.6413 24.1697 26.5874 24.2236L21.6187 29.1924C21.5409 29.2702 21.4737 29.292 21.3931 29.2891C21.299 29.2856 21.2182 29.2537 21.1323 29.168C21.0542 29.0898 21.023 29.013 21.0229 28.9121C21.0229 28.8112 21.0542 28.7344 21.1323 28.6562L25.814 23.9746L21.1069 19.2676C21.0293 19.1899 21.0073 19.1236 21.0103 19.043C21.0137 18.9487 21.0463 18.8673 21.1323 18.7812C21.2102 18.7034 21.2866 18.6729 21.3872 18.6729Z" fill="#1B1C29" stroke="#1B1C29"/>
+      </svg>
+
+    </div>
+  {% endif %}
+</div>

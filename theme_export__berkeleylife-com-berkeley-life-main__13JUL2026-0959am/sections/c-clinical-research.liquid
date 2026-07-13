@@ -1,0 +1,555 @@
+<style>
+  #{{ section.id }} {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    font-family: inherit;
+    overflow: hidden;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  /* --- SECTION BACKGROUND IMAGE --- */
+  #{{ section.id }} .cr__bg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  #{{ section.id }} .cr__bg-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    object-position: {{ section.settings.bg_position }};
+  }
+
+  #{{ section.id }} .cr__bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ section.settings.overlay_color }};
+    opacity: {{ section.settings.overlay_opacity }};
+    z-index: 2;
+  }
+
+  /* --- MAIN CONTAINER --- */
+  #{{ section.id }} .cr__container {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    {%- if section.settings.use_container_color -%}
+    background: {{ section.settings.container_bg_color }};
+    padding: 2rem;
+    {%- endif -%}
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .cr__container {
+      flex-direction: row;
+      align-items: stretch;
+      gap: 3rem;
+    }
+  }
+
+  /* --- LEFT CARD (SOLID CONTENT) --- */
+  #{{ section.id }} .cr__content-card {
+    flex: 1 1 45%;
+    background: {{ section.settings.card_solid_bg }};
+    border-radius: 1.25rem;
+    padding: {%- if section.settings.use_container_color %}0{%- else %}2.5rem 2rem{%- endif %};
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-sizing: border-box;
+    color: {{ section.settings.text_color }};
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .cr__content-card {
+      padding: 3.5rem 3rem;
+    }
+  }
+
+  #{{ section.id }} .cr__title {
+    margin: 0;
+  }
+
+  #{{ section.id }} .cr__title-accent {
+    display: block;
+    color: {{ section.settings.accent_color }};
+  }
+
+  #{{ section.id }} .cr__desc {
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  #{{ section.id }} .cr__highlight-box {
+    background-color: {{ section.settings.highlight_box_bg }};
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    font-size: clamp(20px, 2vw, 24px);
+    font-style: italic;
+    line-height: 1.5;
+    opacity: 0.95;
+  }
+
+  #{{ section.id }} .cr__btn {
+    align-self: flex-start;
+    background-color: {{ section.settings.accent_color }};
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.9rem 2rem;
+    border-radius: 2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  #{{ section.id }} .cr__btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  /* --- RIGHT CARD (GLASSMORPHISM STATS) --- */
+  #{{ section.id }} .cr__stats-card {
+    flex: 1 1 55%;
+    background: {{ section.settings.card_glass_bg }};
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    color: {{ section.settings.text_color }};
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .cr__stats-card {
+      padding: 3.5rem 3rem;
+    }
+  }
+
+  #{{ section.id }} .cr__stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .cr__stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem 2rem;
+    }
+  }
+
+  #{{ section.id }} .stat__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  #{{ section.id }} .stat__value {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 500;
+    line-height: 1;
+    margin: 0;
+  }
+
+  #{{ section.id }} .stat__label {
+    font-size: clamp(20px, 2vw, 24px);
+    font-style: italic;
+    color: {{ section.settings.accent_color }};
+    margin: 0;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 120%; 
+  }
+
+  #{{ section.id }} .stat__desc {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.8;
+  }
+
+  #{{ section.id }} .cr__cta-block {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.5rem;
+  }
+
+  {%- if section.settings.show_stat_dividers -%}
+  @media (min-width: 768px) {
+    #{{ section.id }} .cr__stats-grid {
+      gap: 0;
+    }
+    #{{ section.id }} .stat__item {
+      padding: 1.5rem 1rem;
+    }
+    #{{ section.id }} .stat__item:nth-child(odd) {
+      border-right: 1px solid {{ section.settings.divider_color }};
+      padding-right: 2rem;
+    }
+    #{{ section.id }} .stat__item:nth-child(-n+2) {
+      border-bottom: 1px solid {{ section.settings.divider_color }};
+      padding-bottom: 2rem;
+    }
+  }
+  {%- endif -%}
+</style>
+
+<section id="{{ section.id }}" class="c-clinical-research">
+  
+  <div class="cr__bg-layer">
+    {%- if section.settings.bg_image != blank -%}
+      {{ section.settings.bg_image | image_url: width: 2000 | image_tag: loading: 'lazy' }}
+    {%- endif -%}
+  </div>
+  <div class="cr__bg-overlay"></div>
+
+  <div class="container-sl">
+    <div class="cr__container">
+
+    <div class="cr__content-card">
+      <h2 class="cr__title c-title">
+        {{ section.settings.title_1 }}
+        {%- if section.settings.title_2_italic != blank -%}
+          <span class="cr__title-accent c-font-cormorant-title">{{ section.settings.title_2_italic }}</span>
+        {%- endif -%}
+      </h2>
+
+      {%- if section.settings.description != blank -%}
+        <p class="cr__desc c-description">{{ section.settings.description }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.highlight_text != blank -%}
+        <div class="cr__highlight-box c-font-cormorant-title">
+          {{ section.settings.highlight_text }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.btn_label != blank -%}
+        <a href="{{ section.settings.btn_link | default: '#' }}" class="cr__btn">
+          {{ section.settings.btn_label }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="cr__stats-card">
+      <div class="cr__stats-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'stat' -%}
+            <div class="stat__item" {{ block.shopify_attributes }}>
+              <p class="stat__value">{{ block.settings.value }}</p>
+              <p class="stat__label c-font-cormorant-title">{{ block.settings.label }}</p>
+              <p class="stat__desc">{{ block.settings.desc }}</p>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'cta_button' and block.settings.btn_label != blank -%}
+        <div class="cr__cta-block" {{ block.shopify_attributes }}>
+          {%- render 'c-btn',
+            text: block.settings.btn_label,
+            link: block.settings.btn_link,
+            bg_color: block.settings.btn_bg_color,
+            text_color: block.settings.btn_text_color,
+            show_arrow: block.settings.show_arrow
+          -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Clinical Research",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Background"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color (fallback sin imagen)",
+      "default": "#0d0f1a"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_container_color",
+      "label": "Use container background color?",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "container_bg_color",
+      "label": "Container Background Color",
+      "default": "#1b1e2a"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "select",
+      "id": "bg_position",
+      "label": "Image Position",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "top center", "label": "Top" },
+        { "value": "bottom center", "label": "Bottom" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.1,
+      "default": 0.3
+    },
+    {
+      "type": "header",
+      "content": "Left Card Content"
+    },
+    {
+      "type": "text",
+      "id": "title_1",
+      "label": "Heading Part 1",
+      "default": "Backed By"
+    },
+    {
+      "type": "text",
+      "id": "title_2_italic",
+      "label": "Heading Part 2 (Italic)",
+      "default": "Clinical Research"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "In a randomized, placebo-controlled clinical trial, participants taking Nitric Oxide Support experienced:"
+    },
+    {
+      "type": "textarea",
+      "id": "highlight_text",
+      "label": "Highlight Box Text",
+      "default": "Built on 3 clinical trials and over 28,000 published studies on nitric oxide biology"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_background",
+      "id": "card_solid_bg",
+      "label": "Left Card Background (Solid)",
+      "default": "#1b1e2a"
+    },
+    {
+      "type": "color",
+      "id": "highlight_box_bg",
+      "label": "Left Card Highlight Box Background",
+      "default": "#2a2d3c"
+    },
+    {
+      "type": "color_background",
+      "id": "card_glass_bg",
+      "label": "Right Card Background (Glassmorphism)",
+      "default": "rgba(0, 0, 0, 0.45)",
+      "info": "Use a semi-transparent color (RGBA) for the blur effect to work properly."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "General Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Orange)",
+      "default": "#d15234"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stat_dividers",
+      "label": "Show cross dividers between stats? (desktop only)",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider Color",
+      "default": "#3a3d4d"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 6,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 6,
+      "unit": "rem"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Statistic",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Big Value",
+          "default": "12.5 mmHg"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Italic Label",
+          "default": "reduction in systolic blood pressure"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Small Description",
+          "default": "Supporting healthier cardiovascular function"
+        }
+      ]
+    }
+    ,
+    {
+      "type": "cta_button",
+      "name": "CTA Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "btn_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_arrow",
+          "label": "Show arrow (→)",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "btn_bg_color",
+          "label": "Button background",
+          "default": "#D54F2F"
+        },
+        {
+          "type": "color",
+          "id": "btn_text_color",
+          "label": "Button text",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Clinical Research",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "value": "12.5 mmHg",
+            "label": "reduction in systolic blood pressure",
+            "desc": "Supporting healthier cardiovascular function"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "378%",
+            "label": "increase in nitrate levels",
+            "desc": "Indicating significantly improved nitric oxide production"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "28%",
+            "label": "improvement in circulation (FMD)",
+            "desc": "The gold standard measure of blood flow"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "Reductions",
+            "label": "in key inflammatory markers",
+            "desc": "Supporting long-term metabolic and cardiovascular health"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

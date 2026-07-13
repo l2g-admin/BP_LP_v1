@@ -1,0 +1,48 @@
+<div class="text-cream flex text-sm	tracking-[2.66px] gap-4 sticky-button justify-between items-center  font-bold bottom-0 md:bottom-20 left-0 w-full  md:w-fit fixed z-10  bg-brand  p-4 overflow-hidden  md:rounded-tr-3xl md:rounded-br-3xl" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+    {%  if section.settings.button_label != blank %}
+    <a href="{{ section.settings.button_link }}">
+        {{ section.settings.button_label }}
+    </a>
+    {% render 'icon-close', classes: "w-4 close-button cursor-pointer" %}
+    {% endif %}
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const stickyButton = document.querySelector(".sticky-button");
+        const closeButton = document.querySelector(".close-button");
+        closeButton.addEventListener("click", function () {
+            stickyButton.style.display = "none";
+        });
+    });
+</script>
+
+{% schema %}
+{
+  "name": "Sticky Button",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sticky Button"
+    },
+    {
+    "type": "text",
+    "id": "button_label",
+    "label": "t:sections.image-with-text.blocks.button.settings.button_label.label",
+        "info": "t:sections.image-with-text.blocks.button.settings.button_label.info"
+    },
+    {
+    "type": "url",
+    "id": "button_link",
+    "label": "t:sections.image-with-text.blocks.button.settings.button_link.label"
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Sticky Button"
+    }
+  ]
+}
+{% endschema %}

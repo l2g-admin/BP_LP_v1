@@ -1,0 +1,186 @@
+<style>
+  li:has( > p.list-none) {
+    list-style: none;
+  }
+</style>
+
+<div class="bg-bg"  style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+  <div
+    data-product-tabs
+    id="tabs"
+    class=" max-w-screen-2xl md:block hidden mx-auto overflow-hidden"
+
+ >
+    <div class="max-w-screen-lg mx-auto">
+      <div class="relative" data-scroll-container="{{ section.id }}">
+       <h2 class="h3 text-text mb-4 text-center uppercase"> {{ section.settings.header }}</h2>
+        <ul class="flex justify-around w-full gap-4" data-tab-list>
+
+          {% for block in section.blocks %}
+            <li
+              class="group relative p-4"
+              data-item>
+              <a
+                class=""
+                href="#{{ block.settings.label | handleize }}"
+                id="tab-{{ block.settings.label | handleize }}"
+               >
+                  <div class=" flex gap-4">
+                    <h5 class="text-xl uppercase">{{  block.settings.label }}</h5>
+                  </div>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% for block in section.blocks %}
+        <div
+          class="order-0 relative flex hidden w-full max-w-full gap-8 p-8 transform"
+          aria-labelledby="tab-{{ block.settings.label | handleize }}"
+          data-tab-panel
+          data-product-description
+          id="{{ block.settings.label | handleize }}">
+          <div>
+            <h3 class="h3 my-4 font-bold uppercase"> {{  block.settings.label }}</h3>
+            <p>{{ block.settings.description }}</p>
+            <div class="mt-8">
+              <a
+                {%- if block.settings.button_link != blank %}
+                href="{{ block.settings.button_link }}"
+                {% endif %}
+                class="button--text text-[#531423] font-bold"
+                {% if block.settings.button_link == blank %}
+                aria-disabled="true"
+                {% endif %}
+                {{ block.shopify_attributes }}>
+                {{ block.settings.button_label | escape }}
+              </a>
+            </div>
+          </div>
+          {%- if block.settings.image != blank -%}
+            <div class="">
+              {% render 'image', image: block.settings.image, classes: 'w-40', decorative: true, eager: false %}
+            </div>
+          {%- endif -%}
+
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="md:hidden block">
+  <h2 class="h2 text-text px-4 py-8 uppercase border-b border-black"> {{ section.settings.header }}</h2>
+
+  {% comment %} Mobile Accordions {% endcomment %}
+  {% for block in section.blocks %}
+        <div
+          {{ block.shopify_attributes }}>
+          <details {% if forloop.first %} open {%  endif %}class="group stats border-b border-black">
+            <summary>
+              <div class=" flex gap-4 text-[#531423] md:p-4 px-4 py-8">
+                  <div class="h4">{{ block.settings.percentage }}</div>
+                  <p>{{  block.settings.caption }}</p>
+                </div>
+            </summary>
+            <div
+              class="rte text-text p-4 py-4 pb-8">
+              <div>
+                <p>{{ block.settings.description }}</p>
+                <div class="mt-8">
+                  <a
+                    {%- if block.settings.button_link != blank %}
+                    href="{{ block.settings.button_link }}"
+                    {% endif %}
+                    class="button--text text-[#531423] font-bold"
+                    {% if block.settings.button_link == blank %}
+                    aria-disabled="true"
+                    {% endif %}
+                    {{ block.shopify_attributes }}>
+                    {{ block.settings.button_label | escape }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+      {% endfor %}
+    </div>
+
+<script type="module">
+  import { setupTabs } from "{{ 'tabs.js' | asset_url }}";
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const targetContainer = document.querySelector("[data-product-tabs]");
+    setupTabs(targetContainer);
+
+    let activeTab = null;
+
+    const tabItems = document.querySelectorAll("[data-item]");
+
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Tabs",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "info": "Overrides brand colors"
+    },
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Title"
+        },{
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id purus id ex porttitor vehicula</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Learn More",
+          "label": "t:sections.image-with-text.blocks.button.settings.button_label.label",
+          "info": "t:sections.image-with-text.blocks.button.settings.button_label.info"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "t:sections.image-with-text.blocks.button.settings.button_link.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tabs"
+    }
+  ]
+}
+{% endschema %}

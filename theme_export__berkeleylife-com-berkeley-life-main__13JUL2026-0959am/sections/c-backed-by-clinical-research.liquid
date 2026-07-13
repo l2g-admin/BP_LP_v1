@@ -1,0 +1,460 @@
+{%- comment -%}
+  Section: Backed By Clinical Research
+  Description: Two-column layout — heading/description left, 2×2 stats grid with orange cross-dividers right. Stacks vertically on mobile.
+  sl-id: sl-section-backed-by-clinical-research-v1
+  Figma Desktop: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5275-13584&m=dev
+  Figma Mobile:  https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5347-25731&m=dev
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-backed-by-clinical-research-v1'
+-%}
+
+<style>
+  /* ==========================================
+     MOBILE FIRST — Base styles (< 978px)
+     ========================================== */
+  #{{ section.id }} {
+    --sl-c-bcr-bg:      {{ section.settings.bg_color }};
+    --sl-c-bcr-text:    {{ section.settings.text_color }};
+    --sl-c-bcr-accent:  {{ section.settings.accent_color }};
+    --sl-c-bcr-pill-bg: {{ section.settings.pill_bg_color }};
+
+    background-color: var(--sl-c-bcr-bg);
+    color: var(--sl-c-bcr-text);
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+    & .c-bcr__container {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ---- Content column ---- */
+    & .c-bcr__content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    & .c-bcr__heading {
+      margin: 0;
+      line-height: 1.2;
+      letter-spacing: -1.38px;
+      color: var(--sl-c-bcr-text);
+    }
+
+    & .c-bcr__heading-plain {
+      font-family: "TT Commons Pro Medium", "TT Commons Pro", sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 40px;
+    }
+
+    & .c-bcr__heading-italic {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 48px;
+      color: var(--sl-c-bcr-accent);
+    }
+
+    & .c-bcr__description {
+      font-family: "TT Commons", sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.533;
+      letter-spacing: -0.64px;
+      margin: 0;
+      color: var(--sl-c-bcr-text);
+    }
+
+    & .c-bcr__pill {
+      background-color: var(--sl-c-bcr-pill-bg);
+      border-radius: 10px;
+      /* padding: 14px 12px; */
+      display: flex;
+      align-items: center;
+      min-height: 50px;
+    }
+
+    & .c-bcr__pill-text {
+      font-family: "EB Garamond", serif;
+      font-style: italic;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.25;
+      letter-spacing: -0.16px;
+      text-transform: lowercase;
+      color: var(--sl-c-bcr-text);
+      margin: 0;
+    }
+
+    /* ---- Stats column — mobile: stacked list ---- */
+    & .c-bcr__stats {
+      display: flex;
+      flex-direction: column;
+    }
+
+    & .c-bcr__stat {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    & .c-bcr__stat-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.2;
+    }
+
+    & .c-bcr__stat-number {
+      font-family: "TT Commons Pro Medium", "TT Commons Pro", sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 40px;
+      line-height: 1.2;
+      color: var(--sl-c-bcr-text);
+      margin: 0;
+    }
+
+    & .c-bcr__stat-label {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 1.2;
+      color: var(--sl-c-bcr-accent);
+      margin: 0;
+    }
+
+    & .c-bcr__stat-desc {
+      font-family: "TT Commons", sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--sl-c-bcr-text);
+      margin: 0;
+    }
+  }
+
+  /* ==========================================
+     DESKTOP — Two-column layout (≥ 978px)
+     ========================================== */
+  @media (min-width: 978px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_desktop }}px;
+      padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+
+      & .c-bcr__container {
+        flex-direction: row;
+        align-items: center;
+        gap: clamp(40px, 8vw, 188px);
+        justify-content: space-between;
+      }
+
+      & .c-bcr__content {
+        flex: 0 0 auto;
+        width: min(376px, 40%);
+      }
+
+      & .c-bcr__heading-plain {
+        font-size: 48px;
+      }
+
+      /* & .c-bcr__pill {
+        padding: 14px 20px;
+      } */
+
+      /* ---- Stats grid — 2×2 with orange cross dividers ---- */
+      & .c-bcr__stats {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        min-height: 337px;
+      }
+
+      & .c-bcr__stat {
+        padding: 24px;
+      }
+
+      /*
+        Cross-divider pattern:
+          Horizontal line: both top-row cells share border-bottom
+            → guaranteed same Y coordinate, continuous line left to right
+          Vertical line: both right-column cells share border-left
+            → guaranteed same X coordinate, continuous line top to bottom
+        Cell 2 carries both borders and forms the top-right corner of the cross.
+      */
+      & .c-bcr__stat:nth-child(1),
+      & .c-bcr__stat:nth-child(2) {
+        border-bottom: 1px solid var(--sl-c-bcr-accent);
+      }
+      & .c-bcr__stat:nth-child(2),
+      & .c-bcr__stat:nth-child(4) {
+        border-left: 1px solid var(--sl-c-bcr-accent);
+      }
+
+      & .c-bcr__stat-number {
+        font-size: 48px;
+      }
+    }
+  }
+</style>
+
+<section
+  id="{{ section.id }}"
+  class="c-bcr"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-bcr"
+  {% if section.settings.sl_anchor_id != blank %}
+    data-anchor="{{ section.settings.sl_anchor_id | handle }}"
+  {% endif %}
+>
+  <div class="c-bcr__container container-sl">
+
+    {%- comment -%} ---- Left: heading + description + pill ---- {%- endcomment -%}
+    <div class="c-bcr__content">
+      {%- if section.settings.heading_plain != blank or section.settings.heading_italic != blank -%}
+        <h2 class="c-bcr__heading">
+          {%- if section.settings.heading_plain != blank -%}
+            <span class="c-bcr__heading-plain">{{ section.settings.heading_plain }}</span>
+          {%- endif -%}
+          {%- if section.settings.heading_italic != blank -%}
+            <span class="c-bcr__heading-italic"> {{ section.settings.heading_italic }}</span>
+          {%- endif -%}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.description != blank -%}
+        <p class="c-bcr__description">{{ section.settings.description }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.pill_text != blank -%}
+        <div class="c-bcr__pill">
+          <p class="c-bcr__pill-text">{{ section.settings.pill_text }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ---- Right: stats grid ---- {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="c-bcr__stats">
+        {%- for block in section.blocks -%}
+          <div class="c-bcr__stat" {{ block.shopify_attributes }}>
+            <div class="c-bcr__stat-text">
+              {%- if block.settings.stat_number != blank -%}
+                <p class="c-bcr__stat-number">{{ block.settings.stat_number }}</p>
+              {%- endif -%}
+              {%- if block.settings.stat_label != blank -%}
+                <p class="c-bcr__stat-label">{{ block.settings.stat_label }}</p>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.stat_description != blank -%}
+              <p class="c-bcr__stat-desc">{{ block.settings.stat_description }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C B Clinical Research",
+  "tag": "section",
+  "class": "c-bcr-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation (e.g. 'clinical-research')"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#080b2b"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "pill_bg_color",
+      "label": "Pill Badge Background",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_plain",
+      "label": "Heading — Plain Text",
+      "default": "Backed By"
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading — Italic Accent",
+      "info": "Displayed in Cormorant Garamond italic, in the accent color.",
+      "default": "Clinical Research"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "In a randomized, placebo-controlled clinical trial, participants taking Nitric Oxide Support experienced:"
+    },
+    {
+      "type": "text",
+      "id": "pill_text",
+      "label": "Pill Badge Text",
+      "info": "Displayed in small italic lowercase type inside a beige pill.",
+      "default": "built on 3 clinical trials and over 28,000 published studies on Nitric Oxide biology"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "stat_number",
+          "label": "Stat Number / Value",
+          "default": "12.5 mmHg",
+          "info": "Large headline value (e.g. '378%', '28%', 'Reductions')."
+        },
+        {
+          "type": "text",
+          "id": "stat_label",
+          "label": "Stat Label",
+          "default": "reduction in systolic blood pressure",
+          "info": "Italic accent label displayed beneath the number."
+        },
+        {
+          "type": "text",
+          "id": "stat_description",
+          "label": "Stat Description",
+          "default": "Supporting healthier cardiovascular function"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C B Clinical Research",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "stat_number": "12.5 mmHg",
+            "stat_label": "reduction in systolic blood pressure",
+            "stat_description": "Supporting healthier cardiovascular function"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "stat_number": "378%",
+            "stat_label": "increase in nitrate levels",
+            "stat_description": "Indicating significantly improved Nitric Oxide production"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "stat_number": "28%",
+            "stat_label": "improvement in circulation (FMD)",
+            "stat_description": "The gold standard measure of blood flow"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "stat_number": "Reductions",
+            "stat_label": "in key inflammatory markers",
+            "stat_description": "Supporting long-term metabolic and cardiovascular health"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

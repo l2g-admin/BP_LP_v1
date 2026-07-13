@@ -1,0 +1,675 @@
+{%- comment -%}
+  Section: C Hero Sale
+  Description: Full-width promotional hero with background image, overlay, headline, discount offers, promo code, and CTA button.
+  sl-id: sl-section-hero-sale-v1
+  Figma: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=4230-16754&m=dev
+{%- endcomment -%}
+
+{%- comment -%} ===== Variables ===== {%- endcomment -%}
+{%- liquid
+  assign overlay_color = section.settings.overlay_color | default: '#571f11'
+  assign overlay_opacity = section.settings.overlay_opacity | default: 50
+  assign overlay_alpha = overlay_opacity | divided_by: 100.0
+
+  assign text_color = section.settings.text_color | default: '#f6f3f0'
+  assign btn_bg = section.settings.button_bg | default: '#e64f2b'
+  assign btn_text = section.settings.button_text_color | default: '#f6f3f0'
+  assign code_bg = section.settings.code_bg | default: '#d54f2f'
+  assign border_color = section.settings.border_color | default: '#ffffff'
+-%}
+
+{%- comment -%} ===== Styles ===== {%- endcomment -%}
+{% style %}
+    #shopify-section-{{ section.id }} .c-hero-sale__overlay{
+        display: block !important;
+    }
+
+  #shopify-section-{{ section.id }} .c-hero-sale {
+    --_text: {{ text_color }};
+    --_btn-bg: {{ btn_bg }};
+    --_btn-text: {{ btn_text }};
+    --_code-bg: {{ code_bg }};
+    --_border: {{ border_color }};
+
+    position: relative;
+    width: 100%;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--_text);
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__bg--desktop {
+    display: none;
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background:
+      rgba({{ overlay_color | color_extract: 'red' }}, {{ overlay_color | color_extract: 'green' }}, {{ overlay_color | color_extract: 'blue' }}, {{ overlay_alpha }});
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    gap: 20px;
+  }
+
+  /* -- Logo -- */
+  #shopify-section-{{ section.id }} .c-hero-sale__logo {
+    width: 110px;
+    height: auto;
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__logo img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* -- Subtitle -- */
+  #shopify-section-{{ section.id }} .c-hero-sale__subtitle {
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0.5px;
+    color: var(--_text);
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__subtitle em,
+  #shopify-section-{{ section.id }} .c-hero-sale__subtitle i {
+    font-family: "Cormorant Garamond", "cormorant-garamond", serif;
+    font-style: italic;
+    font-size: 1.15em;
+    letter-spacing: -0.01em;
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__subtitle strong,
+  #shopify-section-{{ section.id }} .c-hero-sale__subtitle b {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.07em;
+  }
+
+  /* -- Headline -- */
+  #shopify-section-{{ section.id }} .c-hero-sale__headline {
+    font-family: "Cormorant Garamond", "cormorant-garamond", serif;
+    font-style: italic;
+    font-size: 64px;
+    line-height: 0.78;
+    letter-spacing: -0.03em;
+    color: white;
+    margin: 0;
+  }
+
+  /* -- Offers row -- */
+  #shopify-section-{{ section.id }} .c-hero-sale__offers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    max-width: 440px;
+    padding: 20px 0;
+    border-radius: var(--radius-md, 24px);
+    border: 0.671px solid #FFF;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__offer {
+    text-align: center;
+    line-height: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__offer-percent {
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--_text);
+    display: block;
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__offer-label {
+    font-family: "Cormorant Garamond", "cormorant-garamond", serif;
+    font-style: italic;
+    font-size: 32px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--_text);
+    display: block;
+  }
+
+  /* -- Description -- */
+  #shopify-section-{{ section.id }} .c-hero-sale__description {
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.03em;
+    color: var(--_text);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  /* -- Promo code -- */
+  #shopify-section-{{ section.id }} .c-hero-sale__promo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: var(--_text);
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__promo-code {
+    background-color: var(--_code-bg);
+    color: white;
+    padding: 2px 6px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  /* -- CTA button -- */
+  #shopify-section-{{ section.id }} .c-hero-sale__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 240px;
+    padding: 12px 40px;
+    border-radius: 9999px;
+    background-color: var(--_btn-bg);
+    color: var(--_btn-text);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    text-align: center;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  #shopify-section-{{ section.id }} .c-hero-sale__cta:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  /* ===== Tablet (768px) ===== */
+  @media (min-width: 768px) {
+    #shopify-section-{{ section.id }} .c-hero-sale {
+      min-height: 560px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__bg--mobile {
+      display: none;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__bg--desktop {
+      display: block;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__content {
+      padding: 56px 40px;
+      gap: 22px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__logo {
+      width: 120px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__subtitle {
+      font-size: 13px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__headline {
+      font-size: 64px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__offers {
+      gap: 28px;
+      padding: 22px 0;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__offer-percent {
+      font-size: 32px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__offer-label {
+      font-size: 36px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__description {
+      font-size: 15px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__promo {
+      font-size: 15px;
+    }
+  }
+
+  /* ===== Laptop (978px) ===== */
+  @media (min-width: 978px) {
+    #shopify-section-{{ section.id }} .c-hero-sale {
+      min-height: 580px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__headline {
+      font-size: 64px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__offers {
+      gap: 32px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__offer-percent {
+      font-size: 34px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__offer-label {
+      font-size: 38px;
+    }
+  }
+
+  /* ===== Desktop (1200px) ===== */
+  @media (min-width: 1200px) {
+    #shopify-section-{{ section.id }} .c-hero-sale {
+      min-height: 600px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__content {
+      max-width: 640px;
+      padding: 70px 64px;
+      gap: 24px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__logo {
+      width: 131px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__subtitle {
+      font-size: 14px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__headline {
+      font-size: 64px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__offers {
+      max-width: 440px;
+      gap: 32px;
+      padding: 24px 0;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__offer-percent {
+      font-size: 36px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__offer-label {
+      font-size: 40px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__description {
+      font-size: 16px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__promo {
+      font-size: 16px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__cta {
+      min-width: 285px;
+      padding: 12px 48px;
+      font-size: 17px;
+    }
+  }
+
+  /* ===== Large (1980px) ===== */
+  @media (min-width: 1980px) {
+    #shopify-section-{{ section.id }} .c-hero-sale {
+      min-height: 680px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__content {
+      max-width: 720px;
+    }
+
+    #shopify-section-{{ section.id }} .c-hero-sale__headline {
+      font-size: 110px;
+    }
+  }
+{% endstyle %}
+
+{%- comment -%} ===== HTML ===== {%- endcomment -%}
+<section
+  {% if section.settings.sl_anchor_id != blank %}id="{{ section.settings.sl_anchor_id }}"{% endif %}
+  class="c-section c-hero-sale"
+  data-sl-id="sl-section-hero-sale-v1"
+  data-section-id="{{ section.id }}"
+>
+  {%- comment -%} Background image {%- endcomment -%}
+  {%- liquid
+    assign mobile_img = section.settings.mobile_bg_image | default: section.settings.desktop_bg_image
+    assign desktop_img = section.settings.desktop_bg_image | default: section.settings.mobile_bg_image
+  -%}
+
+  {%- if mobile_img != blank -%}
+    <div class="c-hero-sale__bg c-hero-sale__bg--mobile" aria-hidden="true">
+      {{
+        mobile_img
+        | image_url: width: 1000
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '400,600,800,1000',
+          sizes: '100vw'
+      }}
+    </div>
+  {%- endif -%}
+
+  {%- if desktop_img != blank -%}
+    <div class="c-hero-sale__bg c-hero-sale__bg--desktop" aria-hidden="true">
+      {{
+        desktop_img
+        | image_url: width: 2000
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '1000,1400,1800,2000',
+          sizes: '100vw'
+      }}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Overlay {%- endcomment -%}
+  <div class="c-hero-sale__overlay" aria-hidden="true"></div>
+
+  {%- comment -%} Content {%- endcomment -%}
+  <div class="c-hero-sale__content">
+    {%- comment -%} Logo {%- endcomment -%}
+    {%- if section.settings.logo_image != blank -%}
+      <div class="c-hero-sale__logo">
+        {{
+          section.settings.logo_image
+          | image_url: width: 300
+          | image_tag:
+            loading: 'eager',
+            widths: '130,200,300',
+            sizes: '131px',
+            alt: shop.name
+        }}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Subtitle {%- endcomment -%}
+    {%- if section.settings.subtitle != blank -%}
+      <p class="c-hero-sale__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+
+    {%- comment -%} Headline {%- endcomment -%}
+    {%- if section.settings.headline != blank -%}
+      <h1 class="c-hero-sale__headline">{{ section.settings.headline }}</h1>
+    {%- endif -%}
+
+    {%- comment -%} Offer blocks {%- endcomment -%}
+    {%- assign offer_blocks = section.blocks | where: 'type', 'offer_item' -%}
+    {%- if offer_blocks.size > 0 -%}
+      <div class="c-hero-sale__offers">
+        {%- for block in offer_blocks -%}
+          <div class="c-hero-sale__offer" {{ block.shopify_attributes }}>
+            {%- if block.settings.percent_text != blank -%}
+              <span class="c-hero-sale__offer-percent">{{ block.settings.percent_text }}</span>
+            {%- endif -%}
+            {%- if block.settings.label_text != blank -%}
+              <span class="c-hero-sale__offer-label">{{ block.settings.label_text }}</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Description {%- endcomment -%}
+    {%- if section.settings.description != blank -%}
+      <p class="c-hero-sale__description">{{ section.settings.description }}</p>
+    {%- endif -%}
+
+    {%- comment -%} Promo code {%- endcomment -%}
+    {%- if section.settings.promo_code != blank -%}
+      <p class="c-hero-sale__promo">
+        {%- if section.settings.promo_prefix != blank -%}
+          <span>{{ section.settings.promo_prefix }}</span>
+        {%- endif -%}
+        <span class="c-hero-sale__promo-code">{{ section.settings.promo_code }}</span>
+        {%- if section.settings.promo_suffix != blank -%}
+          <span>{{ section.settings.promo_suffix }}</span>
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+
+    {%- comment -%} CTA Button {%- endcomment -%}
+    {%- if section.settings.button_text != blank -%}
+      <a
+        class="c-hero-sale__cta"
+        href="{{ section.settings.button_url | default: '#' }}"
+        {%- if section.settings.button_url == blank %} role="link" aria-disabled="true"{% endif -%}
+      >
+        {{- section.settings.button_text -}}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- comment -%} ===== Schema ===== {%- endcomment -%}
+{% schema %}
+{
+  "name": "C Hero Sale",
+  "tag": "section",
+  "class": "c-hero-sale-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_bg_image",
+      "label": "Desktop background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_bg_image",
+      "label": "Mobile background image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#571f11"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image"
+    },
+    {
+      "type": "html",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<em>recommended by over</em> <strong>3,000 HEALTHCARE PROVIDERS</strong>"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Spring Sale"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description text",
+      "default": "Refresh your routine and stock up on your blood flow essentials."
+    },
+    {
+      "type": "header",
+      "content": "Promo Code"
+    },
+    {
+      "type": "text",
+      "id": "promo_prefix",
+      "label": "Text before code",
+      "default": "Use code"
+    },
+    {
+      "type": "text",
+      "id": "promo_code",
+      "label": "Promo code",
+      "default": "SPRING20"
+    },
+    {
+      "type": "text",
+      "id": "promo_suffix",
+      "label": "Text after code",
+      "default": "at checkout."
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button background",
+      "default": "#e64f2b"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "color",
+      "id": "code_bg",
+      "label": "Promo code background",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Offers border color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "offer_item",
+      "name": "Offer",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "percent_text",
+          "label": "Percentage text",
+          "default": "20% OFF",
+          "info": "e.g. \"20% OFF\""
+        },
+        {
+          "type": "text",
+          "id": "label_text",
+          "label": "Label text",
+          "default": "sitewide",
+          "info": "e.g. \"sitewide\" or \"subscriptions\""
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Hero Sale",
+      "blocks": [
+        {
+          "type": "offer_item",
+          "settings": {
+            "percent_text": "20% OFF",
+            "label_text": "sitewide"
+          }
+        },
+        {
+          "type": "offer_item",
+          "settings": {
+            "percent_text": "30% OFF",
+            "label_text": "subscriptions"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

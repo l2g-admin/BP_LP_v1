@@ -1,0 +1,325 @@
+<style>
+  #{{section.id}} {
+    background-color: {{ section.settings.background_color }};
+    
+    & .section__testimonial__container {
+      padding-block: {{ section.settings.padding_top }}rem {{ section.settings.padding_bottom }}rem;
+ 
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      & .testimonial__header__texts {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        margin-inline: auto;
+        max-width: 640px;
+      }
+
+      & .testimonial__title {
+        font-size: clamp(32px, 6vw + 1rem, 54px);
+        text-wrap: balance;
+        text-align: center;
+        line-height: normal;
+        margin: 0;
+        color: {{ section.settings.title_color }};
+      }
+
+      & .testimonial__title--span {
+        color: {{ section.settings.accent_color }};
+        font-family: "Cormorant Garamond";
+      }
+
+      & .testimonial__title--span {
+        font-weight: 300;
+        font-style: italic;
+      }
+
+      & .testimonial__description {
+        max-width: 650px;
+        font-weight: 300;
+        text-align: center;
+        font-size: clamp(18px, 2.5dvw, 20px);
+        margin: 0;
+        color: {{ section.settings.description_color }};
+        line-height: 150%;
+      }
+
+      & .swiper-slide {
+        height: auto;
+      }
+
+      & .testimonial__card {
+        border-radius: 1rem;
+        padding: 32px;
+        background-color: {{ section.settings.card_background_color }};
+        height: 100%;
+      }
+
+      & .testimonial__card__content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      & .card__stars {
+        display: flex;
+        align-items: center;
+      }
+
+      & .card__title {
+        font-size: clamp(1.2rem, 5.5dvw, 1.75rem);
+        font-weight: 300;
+        font-style: italic;
+        margin: 0;
+        font-family: "Cormorant Garamond";
+        color: {{ section.settings.card_title_color }};
+      }
+
+      & .card__description {
+        font-size: clamp(0.85rem, 4dvw, 1rem);
+        font-weight: 300;
+        margin: 0;
+        line-height: 1.4;
+        color: {{ section.settings.card_text_color }};
+      }
+
+      & .card__author {
+        font-size: clamp(1rem, 4.5dvw, 1.25rem);
+        font-weight: 300;
+        font-style: italic;
+        margin: 0;
+        color: {{ section.settings.card_author_color }};
+        font-family: "Cormorant Garamond";
+      }
+    }
+  }
+</style>
+
+<section id="{{section.id}}">
+  <div class="section__testimonial__container container-sl">
+    <div class="testimonial__header__texts">
+      <h2 class="testimonial__title">
+        {% assign title_with_accent = section.settings.title | replace: '{accent}', '<span class="testimonial__title--span">' | replace: '{/accent}', '</span>' %}
+        {{ title_with_accent }}
+      </h2>
+      <p class="testimonial__description">{{ section.settings.description }}</p>
+    </div>
+    
+    {% if section.blocks.size > 0 %}
+      <div class="testimonial__cards">
+        <section id="swiper" class="swiper swiper__cards__testimonial">
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'testimonial_card' %}
+                  <div class="swiper-slide" {{ block.shopify_attributes }}>
+                    <div class="testimonial__card">
+                      <div class="testimonial__card__content">
+                        <div class="card__stars">
+                          {% for i in (1..5) %}
+                            {% render 'c-orange-star' %}
+                          {% endfor %}
+                        </div>
+                        <h3 class="card__title">{{ block.settings.title }}</h3>
+                        <p class="card__description">{{ block.settings.description }}</p>
+                        <span class="card__author">{{ block.settings.author }}</span>
+                      </div>
+                    </div>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script type="module">
+  import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.mjs';
+
+  let swiper = null;
+
+  const initSwiper = () => {
+    swiper = new Swiper('.swiper__cards__testimonial', {
+      slidesPerView: 1.2,
+      spaceBetween: 16,
+      breakpoints: {
+        768: {
+          slidesPerView: 2.2,
+          spaceBetween: 24,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 32,
+        },
+      },
+    });
+  };
+
+  initSwiper();
+</script>
+
+{% schema %}
+{
+  "name": "C New Slider Testimonial",
+  "tag": "section",
+  "class": "section section-testimonials",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Loved by Thousands of {accent}Customers{/accent}"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Real people. Real results. See how Berkeley Life is helping customers feel more energized, balanced, and supported every day."
+    },
+    {
+      "type": "header",
+      "content": "Spacing Settings"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Top padding",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Bottom padding",
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#d2691e"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#f0ebe8"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "card_author_color",
+      "label": "Card author color",
+      "default": "#d2691e"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial_card",
+      "name": "Testimonial Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Excellent N.O. Booster"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "I've tried a few different N.O. boosters. Berkeley Life has proven to be the most effective and more importantly, the most consistently effective product."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Customer Name"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C New Slider Testimonial",
+      "blocks": [
+        {
+          "type": "testimonial_card",
+          "settings": {
+            "title": "Excellent N.O. Booster",
+            "description": "I've tried a few different N.O. boosters. Berkeley Life has proven to be the most effective and more importantly, the most consistently effective product. It seems their quality control is above the others and I'll continue to buy from them for both reasons.",
+            "author": "Darrin E."
+          }
+        },
+        {
+          "type": "testimonial_card",
+          "settings": {
+            "title": "Noticeable increased energy level",
+            "description": "I have been taking the NO tabs daily. My energy level is up and moreover sustained.",
+            "author": "Gail M."
+          }
+        },
+        {
+          "type": "testimonial_card",
+          "settings": {
+            "title": "Improved Health",
+            "description": "I am 69 yrs. old, and I am taking NO for heart health, blood pressure, and gut health. I have been taking it for three weeks, and already I can see and feel a difference. I have been taking the liquid, but just purchased the gum to try. I look forward to continued physical and mental improvement. Thank you",
+            "author": "Cheryl M."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

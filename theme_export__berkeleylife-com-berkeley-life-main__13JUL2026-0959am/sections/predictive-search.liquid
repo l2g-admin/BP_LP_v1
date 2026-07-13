@@ -1,0 +1,84 @@
+{%- if predictive_search.performed -%}
+  <div id="predictive-search-results" class="max-w-screen-md mx-auto">
+    {%- if predictive_search.resources.products.size > 0 -%}
+      <h2 id="predictive-search-products" class="predictive-search__heading md:py-4 h6 bg-sand p-4 tracking-widest uppercase border-b border-black">
+        {{ 'templates.search.products' | t }}
+
+        <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+          <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+        </svg>
+      </h2>
+    {%- endif -%}
+    <ul id="predictive-search-results-list" class="predictive-search__results-list list-unstyled bg-sand p-2" role="listbox" aria-labelledby="predictive-search-products">
+      {%- for product in predictive_search.resources.products -%}
+        <li id="predictive-search-product-{{ forloop.index }}" class="predictive-search__list-item predictive-search__result--product" role="option" aria-selected="false">
+          <a href="{{ product.url }}" class="flex items-start gap-2 px-4 py-2" tabindex="-1">
+            {%- if product.featured_media != blank -%}
+              <img class=""
+                src="{{ product.featured_media | image_url: width: 150 }}"
+                alt=""
+                width="50"
+                height="{{ 50 | divided_by: product.featured_media.preview_image.aspect_ratio }}"
+                loading="lazy"
+              >
+            {%- endif -%}
+            <div class="">
+              {%- if settings.predictive_search_show_vendor -%}
+                <span class="sr-only">{{ 'accessibility.vendor' | t }}</span><div class="predictive-search__item-vendor caption-with-letter-spacing text-sm">{{ product.vendor }}</div>
+              {%- endif -%}
+              <h6 class="h6">{{ product.title }}</h6>
+                {% render 'price', product: product, use_variant: true, show_badges: false%}
+            </div>
+          </a>
+        </li>
+      {%- endfor -%}
+
+      {%- if predictive_search.resources.articles.size > 0 -%}
+        <h2 id="predictive-search-articles" class="predictive-search__heading md:py-4 h6 bg-sand p-4 tracking-widest uppercase border-b border-black">
+         Articles
+
+          <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+            <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+          </svg>
+        </h2>
+      {%- endif -%}
+
+      {%- for article in predictive_search.resources.articles -%}
+        <li id="predictive-search-option-article-{{ forloop.index }}" class="predictive-search__list-item predictive-search__result--article" role="option" aria-selected="false">
+          <a href="{{ article.url }}" class="flex items-start gap-2 px-4 py-2" tabindex="-1">
+            {%- if article.image != blank -%}
+              <img class=""
+                src="{{ article.image | image_url: width: 100 }}"
+                alt=""
+                width="50"
+                height="{{ 50 }}"
+                loading="lazy"
+              >
+            {%- endif -%}
+            {{ article.title }}
+
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    <div class="predictive-search__loading-state bg-sand block" aria-hidden="true">
+      <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
+  </div>
+
+
+  <span class="bg-sand block px-4 pb-4" data-predictive-search-live-region-count-value>
+    {%- if predictive_search.resources.articles.size > 0 -%}
+      {% else %}
+    {%- if search.results_count == 0 -%}
+      {{ 'templates.search.no_results' | t: terms: predictive_search.terms }}
+    {%- else -%}
+      {{ 'templates.search.results_with_count' | t: terms: predictive_search.terms, count: predictive_search.resources.products.size }}
+    {%- endif -%}
+  {% endif %}
+  </span>
+
+{%- endif -%}

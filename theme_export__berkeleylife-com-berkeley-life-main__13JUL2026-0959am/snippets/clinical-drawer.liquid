@@ -1,0 +1,292 @@
+{%- comment -%}
+  Clinical Drawer Snippet
+  =======================
+  Renders a clinical trials drawer with trigger button, overlay panel, styles and JS.
+
+  Parameters:
+    - drawer_id: (required) Unique ID for the drawer
+    - button_text: Text for the trigger button (default: 'Clinical Trials')
+    - button_style: 'link' or 'default' (default: 'link')
+    - drawer_title: Title displayed in the drawer header
+    - drawer_body: Richtext content for the drawer body
+    - bg_color: Drawer background color (default: '#ffffff')
+    - text_color: Drawer text color (default: '#080b2b')
+    - show_trigger: Whether to render the trigger button (default: true)
+{%- endcomment -%}
+
+{%- assign cd_bg = bg_color | default: '#ffffff' -%}
+{%- assign cd_text = text_color | default: '#080b2b' -%}
+{%- assign cd_button_text = button_text | default: 'Clinical Trials' -%}
+{%- assign cd_button_style = button_style | default: 'link' -%}
+{%- assign cd_show_trigger = show_trigger | default: true -%}
+
+{%- if cd_show_trigger -%}
+  <button
+    type="button"
+    class="clinical-drawer-trigger"
+    aria-haspopup="dialog"
+    data-drawer-target="{{ drawer_id }}"
+    {% if cd_button_style == 'link' %}
+      style="background:none;border:none;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:0.02em;"
+    {% endif %}
+  >
+    {{ cd_button_text }}
+  </button>
+{%- endif -%}
+
+<div
+  id="{{ drawer_id }}"
+  class="clinical-drawer-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ drawer_title }}"
+  tabindex="-1"
+>
+  <div
+    class="clinical-drawer-panel"
+    style="background-color: {{ cd_bg }}; color: {{ cd_text }};"
+  >
+    <div class="clinical-drawer-header" style="background-color: {{ cd_bg }}; color: {{ cd_text }};">
+      <h2 class="clinical-drawer-title" style="color: {{ cd_text }};">
+        {{ drawer_title }}
+      </h2>
+      <button
+        type="button"
+        class="clinical-drawer-close"
+        aria-label="Close drawer"
+        data-drawer-close="{{ drawer_id }}"
+        style="color: {{ cd_text }};"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="clinical-drawer-body">
+      <div class="clinical-drawer-content" style="color: {{ cd_text }};">
+        {{ drawer_body }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .clinical-drawer-trigger {
+    margin: 8px 0;
+    color: #080b2b;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    padding: 0;
+    transition: opacity 0.2s ease;
+  }
+  .clinical-drawer-trigger:hover {
+    opacity: 0.7;
+  }
+  .clinical-drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 99999;
+    will-change: transform;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .clinical-drawer-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  .clinical-drawer-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: -4px 0 30px rgba(0, 0, 0, 0.15);
+  }
+  .clinical-drawer-overlay.is-open .clinical-drawer-panel {
+    transform: translateX(0);
+  }
+  .clinical-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 40px;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .clinical-drawer-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    flex: 1;
+    padding-right: 16px;
+  }
+  .clinical-drawer-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+  }
+  .clinical-drawer-close:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+  .clinical-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .clinical-drawer-content {
+    padding: 32px 40px;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .clinical-drawer-content h1,
+  .clinical-drawer-content h2,
+  .clinical-drawer-content h3,
+  .clinical-drawer-content h4,
+  .clinical-drawer-content h5 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    line-height: 1.3;
+    color: inherit;
+    font-weight: 800;
+  }
+  .clinical-drawer-content h1:first-child,
+  .clinical-drawer-content h2:first-child,
+  .clinical-drawer-content h3:first-child {
+    margin-top: 0;
+  }
+  .clinical-drawer-content p {
+    margin-bottom: 1em;
+  }
+  .clinical-drawer-content ul {
+    list-style: circle;
+  }
+  .clinical-drawer-content ul,
+  .clinical-drawer-content ol {
+    margin-bottom: 1em;
+    padding-left: 1.5em;
+  }
+  .clinical-drawer-content li {
+    margin-bottom: 0.5em;
+  }
+  .clinical-drawer-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1em auto;
+  }
+  .clinical-drawer-content a {
+    color: inherit;
+    text-decoration: underline;
+  }
+  body.clinical-drawer-no-scroll {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+  }
+  #shopify-section-header,
+  sticky-header,
+  .header-wrapper {
+    transition: opacity 0.3s ease;
+  }
+  body.clinical-drawer-no-scroll #shopify-section-header,
+  body.clinical-drawer-no-scroll sticky-header,
+  body.clinical-drawer-no-scroll .header-wrapper {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+  }
+  body.clinical-drawer-no-scroll .space-y-4>:not([hidden])~:not([hidden]) {
+    margin-top: 0 !important;
+  }
+  @media (max-width: 600px) {
+    .clinical-drawer-panel {
+      max-width: 100%;
+    }
+    .clinical-drawer-header {
+      padding: 20px 24px;
+    }
+    .clinical-drawer-content {
+      padding: 24px;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var drawerId = '{{ drawer_id }}';
+    var overlay = document.getElementById(drawerId);
+    if (!overlay) return;
+
+    // Move overlay to body so it's outside any section stacking context
+    document.body.appendChild(overlay);
+
+    var triggers = document.querySelectorAll('[data-drawer-target="' + drawerId + '"]');
+    var closeBtn = overlay.querySelector('[data-drawer-close="' + drawerId + '"]');
+    var scrollY = 0;
+
+    function openDrawer() {
+      scrollY = window.scrollY;
+      document.body.style.top = '-' + scrollY + 'px';
+      document.body.classList.add('clinical-drawer-no-scroll');
+      overlay.classList.add('is-open');
+      overlay.focus();
+    }
+
+    function closeDrawer() {
+      overlay.classList.remove('is-open');
+      document.body.classList.remove('clinical-drawer-no-scroll');
+      document.body.style.top = '';
+      window.scrollTo(0, scrollY);
+    }
+
+    triggers.forEach(function(trigger) {
+      trigger.addEventListener('click', openDrawer);
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeDrawer);
+    }
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeDrawer();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
+        closeDrawer();
+      }
+    });
+  })();
+</script>

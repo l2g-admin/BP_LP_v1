@@ -1,0 +1,42 @@
+{% comment %}
+  Renders a muted, autplay video that plays inline. For a11y, there is a pause button, and the video auto-pauses if (prefers-reduced-motion).
+
+  Accepts:
+  - video: {String,Object} the video source file in text, OR the video resources from a product media that provides a `sources` array
+  - image: {Object} a poster image (optional)
+  - id: {String} an id (usually form the section that renders it)
+  - extra: {String} A string for extra classes you want to add (optional)
+  - fit: {String} A string for the object-fit class - defaults to 'object-cover' (optional)
+
+  Usage:
+  {% render 'video-autoplay', id: section.id, video: section.settings.video_file, fit: section.settings.image_cover %}
+{% endcomment %}
+
+{% comment %}theme-check-disable RemoteAsset{% endcomment %}
+
+<div class="peer {{ classes }} flex justify-center items-center h-full w-full {{ fit | default: 'object-cover' }} {{ extra }}">
+  {{ video | video_tag: image_size: '600x', loop: true, autoplay: true, muted: true, controls: false, preload: "none" }}
+</div>
+
+
+<button data-lazy-video-button class="{{ hidden }} bottom-2 right-2 peer-hover:opacity-100 focus:opacity-100 group absolute top-auto left-auto w-12 h-12 p-2 text-white rounded-full" aria-label="Pause" aria-controls="Video--{{ id }}">
+  <span class="bg-black/0 opacity-20 group-focus:opacity-100 group-hover:opacity-100 group-focus:bg-black/80 group-hover:bg-black/80 flex w-full h-full p-2 rounded-full">
+    <span data-icon-play aria-hidden="true" class="w-full h-full" hidden>
+      {% render 'icon-play' %}
+    </span>
+    <span data-icon-pause aria-hidden="true" class="w-full h-full">
+      {% render 'icon-pause' %}
+    </span>
+  </span>
+</button>
+<script type="module">
+  import { videoEmbed } from "{{ 'video-embed.js' | asset_url }}";
+  const element = document.querySelector("#shopify-section-{{ section.id }} [data-embed-video]");
+  videoEmbed(element, {{ section.settings.video_url.type | json }})
+</script>
+<script type="module">
+  import { videoAutoplay } from "{{ 'video-autoplay.js' | asset_url }}";
+  const element = document.querySelector("#shopify-section-{{ id }} [data-lazy-video]");
+  videoAutoplay(element)
+</script>
+{% comment %}theme-check-enable RemoteAsset{% endcomment %}

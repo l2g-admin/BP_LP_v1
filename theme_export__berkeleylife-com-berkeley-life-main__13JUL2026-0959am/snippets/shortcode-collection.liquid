@@ -1,0 +1,9 @@
+{% assign target_collection = collections[short_code_value] %}
+{%- if target_collection.all_products_count > 0 -%}
+  <div class="not-prose bg-slate-50 p-4 {{ base_classes }}">
+    <div class="max-w-xs mx-auto">
+      <h3 class="h5 text-slate-500 mb-4 text-center">Shortcode Collection</h3>
+      {% render 'collection-card', card_collection: target_collection %}
+    </div>
+  </div>
+{%- endif -%}

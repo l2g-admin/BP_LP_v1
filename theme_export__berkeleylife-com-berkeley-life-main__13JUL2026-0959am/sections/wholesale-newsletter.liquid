@@ -1,0 +1,210 @@
+<div class="px-4 py-4 md:py-8 bg-bg text-text" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+  <div class="grid justify-center max-w-screen-lg gap-8 mx-auto md:flex">
+    {% if section.settings.image != blank %}
+    <div class="relative hidden w-1/4 md:block">
+      {% render 'image', image: section.settings.image, classes: "absolute -top-10 -right-20" %}
+    </div>
+  {% endif %}
+    <div class="  {% if section.settings.image != blank %}col-span-2 md:px-12 md:pl-28 {% else %} col-span-3{% endif %} p-8 text-center md:text-left  bg-cream rounded-3xl">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when '@app' -%}
+          {% render block %}
+        {%- when 'heading' -%}
+          <h2 class=" w-3/4 md:w-full mx-auto md:mx-0 {{ block.settings.heading_style }}" {{ block.shopify_attributes }}>{{ block.settings.heading | replace_first: "**", "<span class='font-secondaryHeader text-[50px] tracking-[-1.5px;] md:text-[73px]'>" | replace: "**", "</span>"  }}</h2>
+        {%- when 'paragraph' -%}
+          <div class="rte text-xs hidden md:block tracking-[2.28px] text-navy font-bold" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+        {%- when 'email_form' -%}
+          <div {{ block.shopify_attributes }}>
+            {% form 'customer', class: '' %}
+              <input type="hidden" name="contact[tags]" value="wholesale-email">
+              <div class="w-full">
+                <div class="items-end gap-4 pb-px mx-auto my-6 md:grid md:grid-cols-3 focus-within:text-brand group focus-within:pb-0">
+                  <div class="col-span-1 mb-4 md:mb-0 md:mr-4">
+                    <input aria-required="true" class="w-full focus:!ring-transparent focus:!border-transparent focus-visible:!outline-dashed bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0" autocomplete="given-name" type="text" id="ContactForm-first_name" name="contact[first_name]" required>
+                    <label class="block text-xs tracking-[2.28px] text-gray-500 uppercase cursor-pointer" for="ContactForm-first_name">First Name</label>
+                  </div>
+                  <div class="col-span-1 mb-4 md:mb-0 md:mr-4">
+                    <input aria-required="true" class="w-full focus:!ring-transparent focus:!border-transparent focus-visible:!outline-dashed bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0" autocomplete="family-name" type="text" id="ContactForm-last_name" name="contact[last_name]" required>
+                    <label class="block text-xs tracking-[2.28px] text-gray-500 uppercase cursor-pointer" for="ContactForm-last_name">Last Name</label>
+                  </div>
+                  <div class="col-span-1 mb-4 md:mb-0 md:mr-4">
+                    <input class="w-full focus:!ring-transparent focus:!border-transparent focus-visible:!outline-dashed bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0" autocomplete="organization" type="text" id="ContactForm-company" name="contact[company]">
+                    <label class="block text-xs tracking-[2.28px] text-gray-500 uppercase cursor-pointer" for="ContactForm-company">Company</label>
+                  </div>
+                  <div class="col-span-1 mb-4 md:mb-0 md:mr-4 md:col-span-2">
+                    <input id="ContactForm-email" type="email" name="contact[email]" class="focus:!ring-transparent focus:!border-transparent focus-visible:!outline-dashed w-full px-0 placeholder-black placeholder-opacity-30 bg-transparent border border-solid !border-b-2 border-black border-t-0 border-r-0 border-l-0" aria-required="true" autocorrect="off" autocapitalize="off" autocomplete="email" required>
+                    <label class="block text-xs tracking-[2.28px] text-gray-500 uppercase cursor-pointer" for="ContactForm-email">Email</label>
+                  </div>
+                  <div class="col-span-1 mb-4 md:mb-0 md:mr-4">
+                    <input class="w-full focus:!ring-transparent focus:!border-transparent focus-visible:!outline-dashed bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0" autocomplete="tel" type="tel" id="ContactForm-phone" name="contact[phone]">
+                    <label class="block text-xs tracking-[2.28px] text-gray-500 uppercase cursor-pointer" for="ContactForm-phone">Phone</label>
+                  </div>
+                  <div class="col-span-1 mb-4 md:mb-0 md:mr-4 md:col-span-2">
+                    <input class="w-full focus:!ring-transparent focus:!border-transparent focus-visible:!outline-dashed bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0" type="text" id="ContactForm-specialty" name="contact[note]">
+                    <label class="block text-xs tracking-[2.28px] text-gray-500 uppercase cursor-pointer" for="ContactForm-specialty">Specialty/Practice/Type</label>
+                  </div>
+                  <div>
+                    <button type="submit" class="{{ block.settings.button_style }} !text-sm tracking-normal px-4 !uppercase" name="commit" id="Subscribe" aria-label="{{ 'newsletter.button_label' | t }}">
+                    Sign Up
+                    </button>
+              </div>
+                </div>
+                {%- if form.errors -%}
+                  <small class="text-warm-red" id="Newsletter-error--{{ section.id }}">{% render 'icon-error' %}{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</small>
+                {%- endif -%}
+              </div>
+              {%- if form.posted_successfully? -%}
+                <h3 class="" id="Newsletter-success--{{ section.id }}">{{ 'newsletter.success' | t }}</h3>
+              {%- endif -%}
+              
+            {% endform %}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Wholesale Newsletter",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.newsletter.settings.paragraph.content"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },{
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "t:sections.newsletter.blocks.heading.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "heading",
+          "default": "Subscribe to our emails",
+          "label": "t:sections.newsletter.blocks.heading.settings.heading.label"
+        },
+        {
+          "type": "select",
+          "id": "heading_style",
+          "label": "Heading Style",
+          "options": [
+            {
+              "value": "h1",
+              "label": "Heading 1"
+            },
+            {
+              "value": "h2",
+              "label": "Heading 2"
+            },
+            {
+              "value": "h3",
+              "label": "Heading 3"
+            },
+            {
+              "value": "h4",
+              "label": "Heading 4"
+            },
+            {
+              "value": "h5",
+              "label": "Heading 5"
+            },
+            {
+              "value": "subhead",
+              "label": "Small Caps"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "t:sections.newsletter.blocks.paragraph.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Be the first to know about new collections and exclusive offers.</p>",
+          "label": "t:sections.newsletter.blocks.paragraph.settings.paragraph.label"
+        }
+      ]
+    },
+    {
+      "type": "email_form",
+      "name": "t:sections.newsletter.blocks.email_form.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button Style",
+          "default": "button button--primary",
+          "options": [
+            {
+              "value": "button button--primary",
+              "label": "Primary Button"
+            },
+            {
+              "value": "button button--secondary",
+              "label": "Secondary Button"
+            },
+            {
+              "value": "button button--tertiary",
+              "label": "Tertiary Button"
+            },
+            {
+              "value": "button--text",
+              "label": "Text Link"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wholesale Newsletter",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "Lorem stay up to date."
+          },
+          
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Join our email list for lorem ipsum.</p>"
+          }
+        },
+        {
+          "type": "email_form"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

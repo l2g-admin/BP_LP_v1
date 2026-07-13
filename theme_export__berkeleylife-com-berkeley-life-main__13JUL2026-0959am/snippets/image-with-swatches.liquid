@@ -1,0 +1,57 @@
+{%- assign color_values = product_card_product.options_by_name['Color'].values -%}
+{%- assign number_of_colors = color_values.size -%}
+
+<script src="{{ 'swatch-swiper.js' | asset_url }}" type="module"></script>
+
+<div class="peer w-full">
+  <swatch-swiper class="flex flex-col-reverse items-start w-full">
+
+    {%- comment -%}Thumb swiper instance{%- endcomment -%}
+    <div class="hidden w-full h-full">
+      <div class="thumb-swiper-container relative pt-1">
+        <ul role="list" class="swiper-wrapper w-full">
+          {%-liquid
+              for variant in product_card_product.variants
+                if variant.image
+                  echo '<li class="swiper-slide swiper-swatch w-10">'
+                    if variant.metafields.swatch.color
+                      echo '<span class="block w-full h-full rounded-full" style="background-color:' | append: variant.metafields.swatch.color.value | append: '">' | append: '</span>'
+                    elsif variant.metafields.swatch.image
+                      render 'image', image: variant.metafields.swatch.image.value, classes: 'w-full h-full rounded-full', img_size: "10vw"
+                    else
+                      render 'image', image: variant.image, classes: 'w-full h-full rounded-full', img_size: "10vw"
+                    endif
+                  echo '</li>'
+                endif
+              endfor
+          -%}
+        </ul>
+      </div>
+    </div>
+
+    {%- if number_of_colors > 1 -%}
+      <p class="md:hidden absolute z-10 block p-1 mx-auto text-xs">{{ number_of_colors }} colors </p>
+    {%- endif -%}
+
+    {%- comment -%}Main swiper instance{%- endcomment -%}
+
+    <a aria-label="View Product, {{ product_card_product.title }}" href="{{ product_card_product.url | default: '#' }}" class="block w-full">
+      <div class="swatch-swiper-container relative overflow-hidden">
+        <ul role="list" class="swiper-wrapper w-full">
+          {%-liquid
+            for variant in product_card_product.variants
+              if variant.image
+                echo '<li class="swiper-slide" data-position="' | append: forloop.index0
+                echo '">'
+                  render 'image', image: variant.image, classes: 'w-full h-full', img_size: img_size, eager: eager, decorative: true
+                echo '</li>'
+              endif
+            endfor
+          -%}
+        </ul>
+      </div>
+    </a>
+
+  </swatch-swiper>
+
+</div>

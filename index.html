@@ -62,10 +62,13 @@
       </div>
 
       <figure class="morph">
+        <!-- Trying the macro product-shot render as an alternative;
+             the previous cut lives at assets/better-way.mp4 with its
+             poster if we want to switch back. -->
         <video class="morph__video" muted playsinline preload="auto"
-               poster="assets/better-way-poster.jpg"
-               aria-label="A blue diamond-shaped tablet stamped VGR 100 dissolving into two Berkeley Life capsules">
-          <source src="assets/better-way.mp4" type="video/mp4">
+               poster="assets/better-way-alt-poster.jpg"
+               aria-label="A blue diamond-shaped tablet dissolving into two Berkeley Life capsules">
+          <source src="assets/better-way-alt.mp4" type="video/mp4">
         </video>
       </figure>
 
@@ -197,17 +200,21 @@
        screen.
 
        Choreography: headline over the constricted vessel and its
-       strained trickle; two NO pairs drift in and dock, the
-       how-line rising as they land; the walls ease open, the flow
-       surges (app.js morphs walls and cells on one rAF clock), and
-       the payoff line follows. Then the breath: the vessel slowly
-       begins to contract again — this is what it does when the
-       signal fades — and a fresh NO pair drifts in just in time,
-       docks, and rides the wall back out as it stretches open.
-       Seamless cycle, entry side and point varying each pass, so
-       the scene re-enacts its own mechanism for as long as anyone
-       watches. Replays on return; reduced motion gets the settled
-       poster.
+       strained trickle; two NO pairs ride in with the blood, mid-
+       stream among the cells, and settle onto the inner walls of the
+       constriction, each marking its delivery with a quiet expanding
+       ring — NO signals from inside the vessel, carried in the blood;
+       the walls ease open, the flow surges, the pairs ride the
+       widening walls out and are carried off downstream, and the
+       payoff line follows. Then the breath: the vessel slowly begins
+       to contract again — this is what it does when the signal fades —
+       and a fresh NO pair rides in on the flow, lands right as the
+       contraction peaks, signals, and rides the wall back open. Every
+       molecule, wall and cell moves on app.js's one rAF clock (one
+       motion language); entry wall, pinch point and phase vary each
+       cycle, so the scene re-enacts its own mechanism for as long as
+       anyone watches. Replays on return; reduced motion gets the
+       settled poster.
        ============================================================ -->
   <div class="fold" id="the-vessel">
 
@@ -225,7 +232,7 @@
              shape by cropping the vessel's ends (the CSS mask then
              feathers them), never letterboxing. -->
         <svg viewBox="0 0 800 260" preserveAspectRatio="xMidYMid slice" role="img"
-             aria-label="A narrowed blood vessel with a thin trickle of blood cells. Two Nitric Oxide molecules land on its walls, the walls relax open, and blood flows freely. Whenever the vessel begins to narrow again, a fresh Nitric Oxide molecule arrives and stretches it back open.">
+             aria-label="A narrowed blood vessel with a thin trickle of blood cells. Two Nitric Oxide molecules travel in with the blood flow, reach the narrowed section, and signal its inner walls to relax; the vessel widens and blood flows freely. Whenever it begins to narrow again, a fresh Nitric Oxide molecule arrives in the flow and signals it open from inside.">
           <defs>
             <!-- Tube shading: deeper rose at the walls, bright at
                  the core, so the vessel reads as a cylinder in the
@@ -334,9 +341,14 @@
   <div class="fold fold--dark" id="the-supply">
 
     <section class="hero">
-      <h2 class="hero__headline">
-        You produce <em class="hl-accent">less</em> every year.
-      </h2>
+      <header class="hero__head">
+        <h2 class="hero__headline">
+          You produce <em class="hl-accent">less</em> every year.
+        </h2>
+        <p class="hero__sub">
+          By age 40, your Nitric Oxide levels have declined by 50%.
+        </p>
+      </header>
 
       <!-- The chart. Static aria-label carries the whole story; the
            gridlines, axis labels and legend are fixed furniture, the
@@ -564,7 +576,7 @@
        like slide 1's); the no-fixed-header rule for slides 2-5 stands.
        No on-page pricing yet. The brand's four receipts (8+ years of
        R&D, 28,000 articles, 3 clinical trials, 3,000+ providers) sit
-       as a quiet band under the laurel (Jul 9, Ewan) — a dedicated
+       as a quiet band under the award (Jul 9, Ewan) — a dedicated
        proof slide was built and cut the same day as one room too
        many; the numbers belong at the decision, not one flick past
        it. Choreography: slide 2's conductor —
@@ -624,32 +636,6 @@
                hides behind the CAP, not the body — the cap is ~72% as
                wide as the PNG box, so at cap height even a small
                phone has room for the pill's full text. -->
-          <!-- Star row is 4.7-accurate: five grey base stars, a green
-               overlay clipped at 4 stars + 70% of the fifth (x=83.2 of
-               the 88-unit row). Green, not brand orange, per Ewan —
-               the universal review-trust colour, and this palette has
-               no other green to collide with. NO review count (Jul 9,
-               Ewan: 342 reads small — and any count here risks
-               contradicting the PDP's own live widget one click
-               later; a bare rating never can). Dropping the count
-               made room for "Rating" again in the cap-height gutter.
-               Keep the sticky footer's stats row in sync. -->
-          <p class="reveal__pill">
-            <svg class="reveal__pill-stars" viewBox="0 0 88 16" role="img" aria-label="4.7 out of 5 stars">
-              <defs>
-                <path id="pill-star" d="M8 1 L9.6 5.7 L14.7 5.8 L10.7 8.9 L12.1 13.7 L8 10.8 L3.9 13.7 L5.3 8.9 L1.3 5.8 L6.3 5.7 Z"/>
-                <clipPath id="pill-star-clip"><rect x="0" y="0" width="83.2" height="16"/></clipPath>
-              </defs>
-              <g class="reveal__pill-stars-bg">
-                <use href="#pill-star"/><use href="#pill-star" x="18"/><use href="#pill-star" x="36"/><use href="#pill-star" x="54"/><use href="#pill-star" x="72"/>
-              </g>
-              <g class="reveal__pill-stars-fill" clip-path="url(#pill-star-clip)">
-                <use href="#pill-star"/><use href="#pill-star" x="18"/><use href="#pill-star" x="36"/><use href="#pill-star" x="54"/><use href="#pill-star" x="72"/>
-              </g>
-            </svg>
-            4.7 Rating
-          </p>
-
           <!-- Realness pass (Jul 9, Ewan: "make these doctors look
                more real"): quote first, then a BYLINE — photo, name,
                credential as one identity unit, stacked (side-by-side
@@ -667,7 +653,10 @@
                here" affordance (Nobel pop). alt="" on avatars: the
                adjacent name IS the accessible label. -->
           <blockquote class="reveal__card reveal__card--right">
-            <p class="reveal__card-quote">&ldquo;I recommend Berkeley&nbsp;Life.&rdquo;</p>
+            <!-- No nbsp in "Berkeley Life." here (Jul 13): the joined
+                 pair is wider than a phone card's ~80px text column
+                 and overflowed the box on every phone width tested. -->
+            <p class="reveal__card-quote">&ldquo;I recommend Berkeley Life.&rdquo;</p>
             <button class="reveal__card-byline" type="button"
                     aria-expanded="false" aria-controls="doc-pop-snyder">
               <img class="reveal__card-avatar" src="assets/dr-mariza-snyder.jpg"
@@ -687,6 +676,37 @@
               <span class="reveal__card-cred">Men&rsquo;s health clinic</span>
             </button>
           </blockquote>
+
+          <!-- Star row is 4.7-accurate: five grey base stars, a green
+               overlay clipped at 4 stars + 70% of the fifth (x=83.2 of
+               the 88-unit row). Green, not brand orange, per Ewan —
+               the universal review-trust colour, and this palette has
+               no other green to collide with. NO review count (Jul 9,
+               Ewan: 342 reads small — and any count here risks
+               contradicting the PDP's own live widget one click
+               later; a bare rating never can). Dropping the count
+               made room for "Rating" again in the cap-height gutter.
+               Keep the sticky footer's stats row in sync.
+               Pill sits AFTER the cards (Jul 13): on 375px-and-under
+               phones the left card's top corner reaches the pill's
+               band and, painting later in DOM order, used to bury it
+               — pill-over-card keeps the rating legible and still
+               tucks behind the bottle (z-index 1). -->
+          <p class="reveal__pill">
+            <svg class="reveal__pill-stars" viewBox="0 0 88 16" role="img" aria-label="4.7 out of 5 stars">
+              <defs>
+                <path id="pill-star" d="M8 1 L9.6 5.7 L14.7 5.8 L10.7 8.9 L12.1 13.7 L8 10.8 L3.9 13.7 L5.3 8.9 L1.3 5.8 L6.3 5.7 Z"/>
+                <clipPath id="pill-star-clip"><rect x="0" y="0" width="83.2" height="16"/></clipPath>
+              </defs>
+              <g class="reveal__pill-stars-bg">
+                <use href="#pill-star"/><use href="#pill-star" x="18"/><use href="#pill-star" x="36"/><use href="#pill-star" x="54"/><use href="#pill-star" x="72"/>
+              </g>
+              <g class="reveal__pill-stars-fill" clip-path="url(#pill-star-clip)">
+                <use href="#pill-star"/><use href="#pill-star" x="18"/><use href="#pill-star" x="36"/><use href="#pill-star" x="54"/><use href="#pill-star" x="72"/>
+              </g>
+            </svg>
+            4.7 Rating
+          </p>
 
           <img class="reveal__bottle" src="assets/no-support-60.png"
                alt="A white Berkeley Life supplement bottle. The label reads Nitric Oxide Support, promotes blood flow for energy and heart health, 60 capsules."
@@ -728,47 +748,35 @@
       </figure>
 
       <div class="hero__action">
-        <!-- Clinicians' Choice (Jul 9): the FrontrowMD award from the
-             live PDP, redrawn in the page's own idiom instead of
-             embedding their banner art or widget script — the wide
-             black laurel PNG reads as another site's stamp, and the
-             interactive card is a third-party embed whose full
-             version already lives one click later on the PDP. Sits
-             directly under the bottle (Ewan moved it out of the
-             header — it crowded the logo band) as the award beneath
-             the awarded object. The source line is the legitimacy: it
-             names the awarder and the no-compensation condition,
-             near-verbatim from the widget. "400+" not the widget's
-             live "422" — the PDP count updates and an exact number
-             here could contradict it one click later (same reasoning
-             that cut the review count from the rating pill). -->
-        <div class="laurel">
-          <p class="laurel__title">
-            <!-- One branch drawn once: a stem arc (circle center
-                 22,20 r14 in these units) with six almond leaves
-                 seated on it, each rotated 25deg past its radial so
-                 the row leans the way a laurel grows. The right
-                 branch reuses the group and mirrors in CSS. -->
-            <svg class="laurel__branch" viewBox="-1 -2 19 37" aria-hidden="true">
-              <defs>
-                <path id="laurelLeaf" d="M0 0 C 2.6 -2.1 6 -2.1 8.4 0 C 6 2.1 2.6 2.1 0 0 Z"/>
-              </defs>
-              <g id="laurelBranch">
-                <path d="M16.1 32.7 A 14 14 0 0 1 16.1 7.3" fill="none" stroke="currentColor" stroke-width="1.1"/>
-                <use href="#laurelLeaf" transform="translate(13 30.7) rotate(155)"/>
-                <use href="#laurelLeaf" transform="translate(9.3 25.9) rotate(180)"/>
-                <use href="#laurelLeaf" transform="translate(8 20) rotate(205)"/>
-                <use href="#laurelLeaf" transform="translate(9.3 14.1) rotate(230)"/>
-                <use href="#laurelLeaf" transform="translate(13 9.3) rotate(255)"/>
-                <use href="#laurelLeaf" transform="translate(16.1 7.3) rotate(270)"/>
-              </g>
-            </svg>
-            Clinicians&rsquo; Choice
-            <svg class="laurel__branch laurel__branch--r" viewBox="-1 -2 19 37" aria-hidden="true">
-              <use href="#laurelBranch"/>
-            </svg>
-          </p>
-          <p class="laurel__source">400+ clinicians share this product on <em>FrontrowMD</em> without compensation.</p>
+        <!-- Clinicians' Choice (Jul 13): FrontrowMD's LIVE quant badge
+             for Nitric Oxide Support, the exact embed the brand's own
+             PDP uses (theme export: snippets/frontrow-widget.liquid,
+             product_id 3783 = nitric-oxide). This replaces the laurel
+             lockup we'd redrawn in the page's idiom (Jul 9-12, retired
+             to snippets/laurel.html): FrontrowMD requires their real
+             clickable widget wherever the award appears — and the live
+             badge is self-updating proof (real count, real clinician
+             avatars, "View clinicians & learn more" opens their modal
+             with the full list), which no redrawing can be.
+
+             How the embed works (their script, fetched and read Jul
+             13): the iframe renders the badge at height 0; the async
+             companion script listens for the iframe's RESIZE_HEIGHT
+             postMessage and sets the real height (113px today), and
+             on click the iframe posts OPEN_MODAL and the script
+             displays a full-screen modal iframe it appended to <body>
+             (#frontrow-portal, z-index 9999999x — clears our deck,
+             dot rail and sticky bar). The class "iframe-frontrow" and
+             the quant src params are LOAD-BEARING: the script finds
+             the badge iframe by that class to resize it. Wrapper
+             reserves the badge's settled height so the async arrival
+             never reflows the fold (styles.css .frontrow-award). -->
+        <div class="frontrow-award">
+          <script async type="text/javascript" src="https://app.thefrontrowhealth.com/api/widgets/script?presentation_type=quant&amp;product_id=3783"></script>
+          <iframe class="iframe-frontrow" id="iframe-frontrow-quant-3783"
+                  title="Clinicians&rsquo; Choice award on FrontrowMD: view clinicians and learn more"
+                  frameborder="0"
+                  src="https://app.thefrontrowhealth.com/api/widgets?presentation_type=quant&amp;product_id=3783"></iframe>
         </div>
 
         <!-- The receipts band (Jul 9, Ewan): the brand's four
@@ -788,7 +796,7 @@
              was built and cut the same day — the receipts belong on
              the slide where the visitor decides. The band is pinned
              to the fold's FOOT (absolute, just above the sticky bar,
-             see styles.css) rather than flowing after the laurel:
+             see styles.css) rather than flowing after the award:
              the page's leftover height gathers between award and
              band, not in a dead strip above the CTA (Ewan, Jul 9). -->
         <ul class="stats" role="list">
@@ -813,8 +821,8 @@
         <!-- No lede on this slide anymore (Jul 9): "Each capsule
              delivers those dietary nitrates. Day after day." was cut
              as redundant — slide 5 already teaches the mechanism, and
-             the reveal reads cleaner as object + award. The laurel's
-             source line is the slide's only body copy now. -->
+             the reveal reads cleaner as object + award. The badge's
+             own source line is the slide's only body copy now. -->
 
         <!-- No trust row here anymore (Jul 8, v3): the review proof
              moved onto the stage as the pill + cards behind the

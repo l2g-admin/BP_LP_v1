@@ -1,0 +1,38 @@
+{% comment %}
+  Renders an image
+  Accepts:
+  - image: {Object} the image
+  - classes: {String} A string for classes you want to add (optional)
+  - transition: {String} A string for classes, but specifically to overwrite the default transition (optional)
+  - fit: {String} A string for classes, but specifically to overwrite the default cover type (optional)
+  - img_size: {String} A string for the sizes attribute if you want to overwrite the default (optional)
+  - eager: {Boolean} If you want to make the image eager instead of lazy (optional)
+  - fade_in: {Boolean} You can set this to false to remove the default fade in script (optional)
+
+  Usage:
+  {% render 'image', image: article.featured_image %}
+{% endcomment %}
+<img
+  srcset="{%- if image.width >= 165 -%}
+  {{ image | image_url: width: 165 }} 165w{% endif -%}
+{%- if image.width >= 330 -%}, {{ image | image_url: width: 330 }} 330w{% endif -%}
+{%- if image.width >= 535 -%}, {{ image | image_url: width: 535 }} 535w{% endif -%}
+{%- if image.width >= 750 -%}, {{ image | image_url: width: 750 }} 750w{% endif -%}
+{%- if image.width >= 1000 -%}, {{ image | image_url: width: 1000 }} 1000w{% endif -%}
+{%- if image.width >= 1500 -%}, {{ image | image_url: width: 1500 }} 1500w{% endif -%}
+{%- if image.width >= 3000 -%}, {{ image | image_url: width: 3000 }} 3000w{% endif -%}"
+  src="{{ image | image_url: width: 1500 }}"
+  sizes="{{ img_size | default: '(min-width: 750px) 50vw, 100vw' }}"
+  {% if decorative == true -%}
+  alt=""
+  {%- else -%}
+  alt="{{ image.alt | escape }}"
+  {%- endif %}
+  height="{{ image.height }}"
+  width="{{ image.width }}"
+  {% if eager == true -%}
+  loading="eager"
+  {%- else -%}
+  loading="lazy"
+  {%- endif %}
+  {% if fade_in != false -%}class="{{ classes }}  {{ extra }} {{ fit | default: 'object-cover' }} {{ transition | default: 'opacity-0 transition-opacity duration-700' }} {{ image_position }}"onload="imgLoaded(this, 'opacity-0', 'opacity-100')"{%- else -%}class="{{ classes }} {{ extra }} {{ fit }}"{%- endif -%}>

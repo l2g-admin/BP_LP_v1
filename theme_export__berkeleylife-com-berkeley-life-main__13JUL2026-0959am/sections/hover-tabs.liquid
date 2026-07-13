@@ -1,0 +1,179 @@
+<div class="p-2 py-2 md:pt-28 bg-bg text-text" style="--color-text: {{ section.settings.text_color | default: '#090909' }}; --color-bg: {{ section.settings.bg_color | default: '#F6F3F0' }}">
+  <div class="flex flex-col-reverse mx-auto max-w-screen-2xl md:flex-row collapsible-section">
+    <!-- Hover Tabs -->
+    <div class="flex flex-col w-full px-4 text-center md:px-8 md:text-left md:w-1/2 collapsible-tabs">
+      <div class="mb-4 subhead">{{ section.settings.subheading }}</div>
+      <h4 class="w-full mx-auto mb-8 text-4xl text-center md:w-2/3 md:text-left md:mx-0 md:text-6xl">
+        {{ section.settings.heading | replace_first: "**", "<span class='font-secondaryHeader' style='letter-spacing: normal !important;'>" | replace: "**", "</span>" }}
+      </h4>
+      
+      <!-- Rich Text Block -->
+      {% for block in section.blocks %}
+        {% if block.type == 'richtext' %}
+          <div class="prose text-white motion-safe:transition-all motion-safe:duration-700 pb-4
+            {% case block.settings.text_size %}
+              {% when 'text-sm' %} text-sm
+              {% when 'text-base' %} text-base
+              {% when 'text-lg' %} text-lg
+              {% when 'text-xl' %} text-xl
+              {% else %} text-base
+            {% endcase %}">
+            <style>
+              .prose a {
+                text-decoration: underline;
+                color: white; /* Ensures links are white */
+              }
+            </style>
+            {{ block.settings.richtext | raw }}
+          </div>
+        {% endif %}
+      {% endfor %}
+      
+      <!-- Tabs -->
+      {% for block in section.blocks %}
+        {% if block.type == 'tab' %}
+          <div class="py-4 pr-4 border-t tab border-cream tab-container">
+            <button class="flex items-center justify-between w-full text-lg text-left md:text-3xl tab-title" onclick="showContent({{ forloop.index }})" onmouseenter="showContent({{ forloop.index }})">
+              {{ block.settings.heading }}
+              <span class="w-4 md:w-8">{% render 'icon-arrow', classes: "w-4 md:w-6" %}</span>
+            </button>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Right Image -->
+    <div class="w-full md:w-1/2 collapsible-image md:mb-0">
+      {% for block in section.blocks %}
+        {% if block.type == 'tab' %}
+          <div class="relative w-full mx-auto mb-8 md:w-3/4 tab-image" id="image-{{ forloop.index }}" {% unless forloop.first %}style="display: none;" {% endunless %}>
+            <div class="absolute bg-blur z-10 w-[90%] md:w-1/2 p-4 md:p-8 border text-cream border-cream rounded-2xl bottom-8 md:bottom-12 left-4">
+              {{ block.settings.text }}
+            </div>
+            {% render 'image', image: block.settings.image %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <style>
+    .collapsible-image .tab-image {
+      transition: opacity 0.1s ease;
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const tabs = document.querySelectorAll(".tab");
+      const tabImages = document.querySelectorAll(".tab-image");
+    
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("mouseenter", () => {
+          // Hide all images
+          tabImages.forEach((image) => {
+            image.style.display = "none";
+          });
+          // Show the image corresponding to the hovered tab
+          tabImages[index].style.display = "block";
+    
+          // Remove active styles from all tabs
+          tabs.forEach((tab) => {
+            tab.classList.remove("bg-[#df806a]", "text-black", "pl-4");
+          });
+    
+          // Add active styles to the hovered tab
+          tab.classList.add("bg-[#df806a]", "text-black", "pl-4");
+        });
+      });
+    
+      // Show the first tab's content by default
+      tabs[0].dispatchEvent(new Event("mouseenter"));
+    });
+    
+  </script>
+</div>
+
+
+    {% schema %}
+    {
+      "name": "Hover Tabs",
+      "settings": [
+            {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background Color"
+          },
+          {
+            "type": "color",
+            "id": "text_color",
+            "label": "Text Color"
+          },{
+            "type": "text",
+            "id": "heading",
+            "default": "Image with text",
+            "label": "t:sections.image-with-text.blocks.heading.settings.heading.label"
+          },
+          {
+            "type": "text",
+            "id": "subheading",
+            "default": "Image with text",
+            "label": "Subheading"
+          }
+      ],
+      "blocks": [
+  {
+    "type": "tab",
+    "name": "Tab",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "Image with text",
+        "label": "Tab Heading"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+        "label": "Tab Text"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      }
+    ]
+  },
+  {
+    "type": "richtext",
+    "name": "Rich Text",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "richtext",
+        "default": "<p>Add your rich text content here.</p>",
+        "label": "Rich Text Content"
+      },
+      {
+        "type": "select",
+        "id": "text_size",
+        "label": "Text Size",
+        "default": "text-base",
+        "options": [
+          { "value": "text-sm", "label": "Small" },
+          { "value": "text-base", "label": "Normal" },
+          { "value": "text-lg", "label": "Large" },
+          { "value": "text-xl", "label": "Extra Large" }
+        ]
+      }
+    ]
+  }
+],
+      "presets": [
+        {
+          "name": "Hover Tabs"
+        }
+      ]
+    }
+    {% endschema %}

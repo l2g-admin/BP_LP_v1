@@ -1,0 +1,360 @@
+<style>
+  #{{section.id}} {
+    {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+    {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+    padding-top: {{ half_padding_top }}em;
+    padding-bottom: {{ half_padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+
+    & * {
+      color: {{ section.settings.text_color }};
+      position: relative;
+      z-index: 2;
+    }
+
+    & .section__expert__container {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    & .expert__title {
+      font-size: clamp(32px, 6vw + 1rem, 54px);
+      text-wrap: balance;
+      text-align: center;
+      line-height: normal;
+      margin: 0;
+    }
+
+    & .expert__title--span {
+      color: {{ section.settings.accent_color }};
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    & .expert__content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    & .expert__image__container {
+      width: 100%;
+      max-width: 350px;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    & .expert__image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    & .expert__info {
+      border-radius: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      text-align: center;
+      padding: 48px;
+      background-color: {{ section.settings.expert_info_bg }};
+    }
+
+    & .expert__quote {
+      font-size: clamp(16px, 2.5dvw, 18px);
+      line-height: 170%;
+      font-weight: 300;
+      margin: 0;
+      font-style: normal;
+    }
+
+    & .expert__stars {
+      display: flex;
+      justify-content: center;
+      gap: 0.15rem;
+      color: {{ section.settings.accent_color }} !important;
+      font-size: 1.25rem;
+    }
+
+    & .expert__name {
+      font-size: clamp(24px, 4vw, 32px);
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-weight: 400;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+    }
+
+    & .expert__role {
+      font-size: clamp(11px, 2vw, 13px);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: {{ section.settings.accent_color }};
+      margin: 0;
+      font-family: "Montserrat", sans-serif;
+      font-style: normal;
+    }
+
+    & .expert__credentials {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+
+  @media screen and (width >= 48rem) {
+    #{{section.id}} {
+      padding-top: {{ section.settings.padding_top }}em;
+      padding-bottom: {{ section.settings.padding_bottom }}em;
+
+      & .section__expert__container {
+        gap: 3rem;
+      }
+
+      & .expert__content {
+
+      }
+
+      & .expert__image__container {
+        width: 45%;
+        max-width: 450px;
+        flex-shrink: 0;
+      }
+
+      & .expert__info {
+        flex: 1;
+        text-align: left;
+        gap: 1.5rem;
+      }
+
+      & .expert__quote {
+        font-size: 18px;
+      }
+
+      & .expert__stars {
+        justify-content: flex-start;
+      }
+
+      & .expert__credentials {
+        gap: 0.35rem;
+      }
+    }
+  }
+
+  @media screen and (width >= 64rem) {
+    #{{section.id}} {
+      & .expert__content {
+        gap: 5rem;
+        flex-direction: row;
+        align-items: center;
+        gap: 4rem;
+        max-width: 1000px;
+        margin-inline: auto;
+      }
+
+      & .expert__image__container {
+        max-width: 500px;
+      }
+
+      & .expert__quote {
+        font-size: 20px;
+      }
+    }
+  }
+</style>
+
+<section id="{{section.id}}">
+  <div class="section__expert__container container-sl">
+    {% if section.settings.title != blank %}
+      <h2 class="expert__title">
+        {% assign title_with_accent = section.settings.title | replace: '{accent}', '<span class="expert__title--span">' | replace: '{/accent}', '</span>' %}
+        {{ title_with_accent }}
+      </h2>
+    {% endif %}
+
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'expert' %}
+          <div class="expert__content" {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              <div class="expert__image__container">
+                {{ block.settings.image | image_url: width: 500 | image_tag: 
+                   alt: block.settings.image.alt | default: block.settings.name,
+                   class: 'expert__image',
+                   width: 500,
+                   height: 'auto' }}
+              </div>
+            {% endif %}
+
+            <div class="expert__info">
+              {% if block.settings.quote != blank %}
+                <blockquote class="expert__quote">"{{ block.settings.quote }}"</blockquote>
+              {% endif %}
+
+              {% if block.settings.show_stars %}
+                <div class="expert__stars">
+                  {% for i in (1..5) %}
+                    {% if i <= block.settings.star_rating %}
+                      {% render 'c-orange-star' %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="expert__credentials">
+                {% if block.settings.name != blank %}
+                  <p class="expert__name">{{ block.settings.name }}</p>
+                {% endif %}
+                {% if block.settings.role != blank %}
+                  <p class="expert__role">{{ block.settings.role }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+      {% endcase %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Expert Insights",
+  "tag": "section",
+  "class": "section section-expert-insights",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Expert Insights {accent}Women Can Trust{/accent}",
+      "info": "Use {accent}text{/accent} to highlight text in accent color"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D44F2F"
+    },
+    {
+      "type": "color",
+      "id": "expert_info_bg",
+      "label": "Expert Info Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "expert",
+      "name": "Expert",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Expert Image"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "I view Nitric Oxide as a keystone for women's health. When it's supported, everything from exercise recovery to cognitive sharpness to everyday energy improves. That's why I recommend Berkeley Life. It's clinically effective, easy for women to integrate, and truly makes a difference."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_stars",
+          "label": "Show Stars",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "star_rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Star Rating",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Expert Name",
+          "default": "Dr. Mariza Snyder"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Expert Role/Title",
+          "default": "FUNCTIONAL WELLNESS PRACTITIONER"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Expert Insights",
+      "blocks": [
+        {
+          "type": "expert",
+          "settings": {
+            "quote": "I view Nitric Oxide as a keystone for women's health. When it's supported, everything from exercise recovery to cognitive sharpness to everyday energy improves. That's why I recommend Berkeley Life. It's clinically effective, easy for women to integrate, and truly makes a difference.",
+            "show_stars": true,
+            "star_rating": 5,
+            "name": "Dr. Mariza Snyder",
+            "role": "FUNCTIONAL WELLNESS PRACTITIONER"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

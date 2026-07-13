@@ -1,0 +1,155 @@
+{%- doc -%}
+  C CTA - Call to Action Button Component
+
+  Parameters:
+  - text: Button text (required)
+  - link: Button link URL (required)
+  - style: primary, secondary, tertiary, outline (default: primary)
+  - size: small, medium, big (default: medium)
+  - icon: Icon name from icons.liquid (optional)
+  - icon_position: left, right (default: right)
+  - target: Link target (_blank, _self, etc.) (default: _self)
+  - classes: Additional CSS classes (optional)
+  - disabled: Whether button is disabled (default: false)
+  - aria_label: Accessibility label (optional, defaults to text)
+
+  Usage Examples:
+  Basic primary button:
+    {% render 'c-cta', text: 'Shop Now', link: '/collections' %}
+
+  Secondary button with icon:
+    {% render 'c-cta', text: 'Learn More', link: '/about', style: 'secondary', icon: 'icon-arrow' %}
+
+  Big primary button:
+    {% render 'c-cta', text: 'Get Started', link: '/signup', style: 'primary', size: 'big' %}
+
+  Small tertiary button with custom classes:
+    {% render 'c-cta', text: 'Cancel', link: '#', style: 'tertiary', size: 'small', classes: 'u-margin-right' %}
+
+  Icon on the left:
+    {% render 'c-cta', text: 'Favorite', link: '#', icon: 'icon-star', icon_position: 'left' %}
+{%- enddoc -%}
+
+{% style %}
+  #{{ section.id }} .c-cta {
+    text-transform: capitalize;
+    letter-spacing: unset;
+    min-width: unset;
+    color: white;
+  }
+
+  #{{ section.id }} .c-cta {
+    font-family: var(--body-family);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 12px;
+    text-decoration: none;
+  }
+
+  #{{ section.id }} .c-cta--with-icon {
+    gap: 8px;
+  }
+
+  #{{ section.id }} .c-cta--primary {
+    background-color: #F7B267;
+    border-radius: 40px !important;
+  }
+
+  #{{ section.id }} .c-cta--primary .c-cta__text {
+    color: var(--slate-black);
+    font-weight: 600;
+  }
+
+  #{{ section.id }} .c-cta--secondary {
+    border: 1px solid transparent;
+    border-radius: 40px !important;
+    color: var(--slate-black);
+  }
+
+  #{{ section.id }} .c-cta--secondary:hover {
+    border-color: var(--slate-black);
+  }
+
+  #{{ section.id }} .c-cta--secondary > svg {
+    width: 11.75px;
+    height: 9.731px;
+    flex-shrink: 0;
+  }
+
+  #{{ section.id }} .c-cta--tertiary {
+    background-color: var(--ruby-red);
+ 
+    border: 1px solid var(--ruby-red);
+    color: var(--btn-text, #f2f2f2);
+  }
+
+  #{{ section.id }} .c-cta--tertiary:hover {
+    background-color: var(--btn-text);
+    color: var(--ruby-red);
+    border-color: var(--ruby-red);
+  }
+
+  #{{ section.id }} .c-cta--outline {
+    background-color: transparent;
+    border: 1px solid var(--ruby-red);
+    color: var(--ruby-red);
+  }
+
+  #{{ section.id }} .c-cta--outline:hover {
+    background-color: var(--ruby-red);
+    color: var(--btn-text, #f2f2f2);
+    border-color: var(--ruby-red);
+  }
+
+  .c-cta__text {
+    font-size: 16px;
+    line-height: 1.5;
+    font-family: var(--body-family) !important;
+  }
+
+  @media (width >= 768px) {
+    #{{ section.id }} .c-cta {
+      gap: 8px;
+      padding: 12px 24px;
+      color: var(--btn-text, #f2f2f2);
+    }
+  }
+{% endstyle %}
+
+{%- liquid
+  assign cta_text = text | default: 'Click Here'
+  assign cta_link = link | default: '#'
+  assign cta_style = style | default: 'primary'
+  assign cta_size = size | default: 'medium'
+  assign cta_icon = icon
+  assign cta_icon_position = icon_position | default: 'right'
+  assign cta_target = target | default: '_self'
+  assign cta_classes = classes | default: ''
+  assign cta_disabled = disabled | default: false
+  assign cta_aria_label = aria_label | default: cta_text
+-%}
+
+<a
+  href="{{ cta_link }}"
+  class="c-cta c-cta--{{ cta_style }} c-cta--{{ cta_size }}{% if cta_icon %} c-cta--with-icon{% endif %}{% if cta_classes %} {{ cta_classes }}{% endif %}"
+  {% if cta_target != '_self' %}
+    target="{{ cta_target }}"
+  {% endif %}
+  {% if cta_disabled %}
+    aria-disabled="true"
+  {% endif %}
+  aria-label="{{ cta_aria_label }}"
+  {% if cta_disabled %}
+    tabindex="-1"
+  {% endif %}
+>
+  {%- if cta_icon and cta_icon_position == 'left' -%}
+    {% render 'icon', icon_name: cta_icon %}
+  {%- endif -%}
+  <span class="c-cta__text">{{ cta_text }}</span>
+  {%- if cta_icon and cta_icon_position == 'right' -%}
+    {% render 'icon', icon_name: cta_icon %}
+  {%- endif -%}
+</a>

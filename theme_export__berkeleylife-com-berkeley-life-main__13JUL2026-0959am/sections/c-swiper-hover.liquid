@@ -1,0 +1,914 @@
+<style>
+
+
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    background-color: {{ section.settings.bg_color }};
+    font-family: inherit;
+    overflow: hidden;
+
+    & .cat__container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* --- HEADER --- */
+    & .cat__header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      & .cat__header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 0;
+      }
+    }
+
+    & .cat__title {
+      color: {{ section.settings.text_color }};
+      margin: 0;
+    }
+
+    & .cat__link-global {
+      color: {{ section.settings.accent_color }};
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid {{ section.settings.accent_color }};
+      padding-bottom: 2px;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+    }
+
+    & .cat__link-global:hover {
+      opacity: 0.7;
+    }
+
+    /* --- SWIPER WRAPPER --- */
+    & .cat__slider-wrapper {
+      width: 100%;
+      position: relative;
+      min-height: {{ section.settings.card_height }}px;
+    }
+
+    @media (min-width: 768px) {
+      & .cat__slider-wrapper {
+        min-height: {{ section.settings.card_height_desktop }}px;
+      }
+    }
+
+    & .swiper-cat {
+      overflow: visible;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    & .cat__loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    /* Loaded state */
+    &.is-loaded .swiper-cat {
+      opacity: 1;
+    }
+
+    &.is-loaded .cat__loader {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    &.is-loaded .cat__card {
+      animation: cat-card-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    &.is-loaded .swiper-slide:nth-child(1) .cat__card { animation-delay: 0.05s; }
+    &.is-loaded .swiper-slide:nth-child(2) .cat__card { animation-delay: 0.15s; }
+    &.is-loaded .swiper-slide:nth-child(3) .cat__card { animation-delay: 0.25s; }
+    &.is-loaded .swiper-slide:nth-child(4) .cat__card { animation-delay: 0.35s; }
+    &.is-loaded .swiper-slide:nth-child(5) .cat__card { animation-delay: 0.45s; }
+    &.is-loaded .swiper-slide:nth-child(n+6) .cat__card { animation-delay: 0.55s; }
+
+    @keyframes cat-card-in {
+      from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &.is-loaded .cat__card {
+        animation: none;
+      }
+    }
+
+    /* --- CARD STYLES --- */
+    & .cat__card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: {{ section.settings.card_height }}px;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      text-decoration: none;
+      cursor: pointer;
+      group: card;
+    }
+
+    /* Blog Card variant — top-aligned, no hover reveal */
+    & .cat__card--blog .cat__content {
+      justify-content: flex-start;
+      align-items: stretch;
+      text-align: left;
+      gap: 0.5rem;
+    }
+
+    & .cat__card--blog:hover .cat__content {
+      justify-content: flex-start;
+    }
+
+    & .cat__card--blog .cat__bg-wrapper img,
+    & .cat__card--blog .cat__bg-wrapper svg {
+      transition: none;
+    }
+
+    & .cat__card--blog:hover .cat__bg-wrapper img,
+    & .cat__card--blog:hover .cat__bg-wrapper svg {
+      transform: none;
+      filter: none;
+    }
+
+    & .cat__card--blog:hover .cat__overlay {
+      background: linear-gradient(
+        to bottom,
+        rgba({{ ov_r }}, {{ ov_g }}, {{ ov_b }}, {{ overlay_alpha_top }}) 0%,
+        rgba({{ ov_r }}, {{ ov_g }}, {{ ov_b }}, {{ overlay_alpha }}) 100%
+      );
+    }
+
+    & .cat__blog-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    & .cat__blog-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    & .cat__blog-subtitle {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 0;
+      color: inherit;
+    }
+
+    & .cat__blog-title {
+      margin: 0;
+      color: inherit;
+    }
+
+    & .cat__blog-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      color: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    & .cat__blog-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @media (min-width: 768px) {
+      & .cat__card {
+        height: {{ section.settings.card_height_desktop }}px;
+      }
+    }
+
+    /* Background Image */
+    & .cat__bg-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    & .cat__bg-wrapper img,
+    & .cat__bg-wrapper svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
+    }
+
+    & .cat__card:hover .cat__bg-wrapper img,
+    & .cat__card:hover .cat__bg-wrapper svg {
+      transform: scale(1.08);
+      filter: blur({{ section.settings.hover_blur | default: 6 }}px);
+    }
+
+    {%- assign overlay_opacity_val = section.settings.overlay_opacity | default: 60 -%}
+    {%- assign overlay_opacity_hover_val = section.settings.overlay_opacity_hover | default: 80 -%}
+    {%- assign overlay_alpha = overlay_opacity_val | times: 0.01 -%}
+    {%- assign overlay_alpha_top = overlay_alpha | times: 0.166 -%}
+    {%- assign overlay_alpha_hover = overlay_opacity_hover_val | times: 0.01 -%}
+    {%- assign overlay_alpha_hover_top = overlay_alpha_hover | times: 0.333 -%}
+    {%- assign ov_r = section.settings.overlay_color.red -%}
+    {%- assign ov_g = section.settings.overlay_color.green -%}
+    {%- assign ov_b = section.settings.overlay_color.blue -%}
+
+    /* Gradient Overlay */
+    & .cat__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba({{ ov_r }}, {{ ov_g }}, {{ ov_b }}, {{ overlay_alpha_top }}) 0%,
+        rgba({{ ov_r }}, {{ ov_g }}, {{ ov_b }}, {{ overlay_alpha }}) 100%
+      );
+      z-index: 2;
+      transition: background 0.5s ease;
+    }
+
+    & .cat__card:hover .cat__overlay {
+      background: linear-gradient(
+        to bottom,
+        rgba({{ ov_r }}, {{ ov_g }}, {{ ov_b }}, {{ overlay_alpha_hover_top }}) 0%,
+        rgba({{ ov_r }}, {{ ov_g }}, {{ ov_b }}, {{ overlay_alpha_hover }}) 100%
+      );
+    }
+
+    /* Card Content */
+    & .cat__content {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 2rem;
+      text-align: center;
+      color: {{ section.settings.card_text_color }};
+      box-sizing: border-box;
+      transition: justify-content 0.5s ease;
+    }
+
+    & .cat__card:hover .cat__content {
+      justify-content: space-between;
+    }
+
+    & .cat__card-title {
+      margin: 0;
+      color: inherit;
+    }
+
+    /* Hover Reveal Areas */
+    & .cat__reveal-middle,
+    & .cat__reveal-bottom {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+    }
+
+    & .cat__card:hover .cat__reveal-middle,
+    & .cat__card:hover .cat__reveal-bottom {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* Badges */
+    & .cat__badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    & .cat__badge {
+      background-color: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      padding: 0.4rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* Button */
+    & .cat__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid {{ section.settings.card_text_color }};
+      border-radius: 2rem;
+      color: {{ section.settings.card_text_color }};
+      font-size: 0.9rem;
+      font-weight: 500;
+      background: transparent;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    & .cat__card:hover .cat__btn:hover {
+      background-color: {{ section.settings.card_text_color }};
+      color: {{ section.settings.overlay_color }};
+    }
+
+    /* --- CONTROLS (Progress Bar & Arrows) --- */
+    & .cat__controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    /* Custom Progress Bar */
+    & .cat__progress-wrapper {
+      position: relative;
+      flex-grow: 1;
+      height: 2px;
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    & .swiper-pagination-progressbar-fill {
+      background-color: {{ section.settings.accent_color }} !important;
+    }
+
+    /* Nav Arrows */
+    & .cat__nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    & .swiper-button-prev,
+    & .swiper-button-next {
+      position: static;
+      width: 24px;
+      height: 24px;
+      margin: 0;
+      color: {{ section.settings.accent_color }};
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+    }
+
+    & .swiper-button-prev::after,
+    & .swiper-button-next::after {
+      display: none;
+    }
+
+    & .swiper-button-prev svg,
+    & .swiper-button-next svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    & .swiper-button-disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+
+    div:empty {
+      display: block !important;
+    }
+</style>
+
+<section id="{{ section.id }}" class="c-category-slider">
+  <div class="container-sl">
+    <div class="cat__container">
+      <div class="cat__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="cat__title c-title">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.global_link_text != blank -%}
+          <a href="{{ section.settings.global_link_url | default: '#' }}" class="cat__link-global">
+            {{ section.settings.global_link_text }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="cat__slider-wrapper">
+        <div class="cat__loader" aria-hidden="false">
+          {% render 'sl-spinner', color: section.settings.accent_color %}
+        </div>
+        <div class="swiper swiper-cat">
+          <div class="swiper-wrapper">
+            {%- for block in section.blocks -%}
+              {%- assign card_modifier = '' -%}
+              {%- if block.type == 'blog' -%}{%- assign card_modifier = ' cat__card--blog' -%}{%- endif -%}
+
+              {%- if block.settings.link != blank -%}
+                <a
+                  href="{{ block.settings.link }}"
+                  class="swiper-slide cat__card{{ card_modifier }}"
+                  {{ block.shopify_attributes }}
+                >
+              {%- else -%}
+                <div
+                  class="swiper-slide cat__card{{ card_modifier }}"
+                  {{ block.shopify_attributes }}
+                >
+              {%- endif -%}
+                <div class="cat__bg-wrapper">
+                  {%- if block.settings.image != blank -%}
+                    {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+                  {%- else -%}
+                    {{ 'collection-1' | placeholder_svg_tag }}
+                  {%- endif -%}
+                </div>
+                <div class="cat__overlay"></div>
+
+                {%- if block.type == 'blog' -%}
+                  <div class="cat__content" style="color: {{ block.settings.text_color }};">
+                    <div class="cat__blog-head">
+                      <div class="cat__blog-text">
+                        {%- if block.settings.subtitle != blank -%}
+                          <p class="cat__blog-subtitle">{{ block.settings.subtitle }}</p>
+                        {%- endif -%}
+                        <h3 class="cat__blog-title c-title">{{ block.settings.title | newline_to_br }}</h3>
+                      </div>
+                      <span class="cat__blog-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                          <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                {%- else -%}
+                  <div class="cat__content">
+                    <h3 class="cat__card-title c-title">{{ block.settings.title | newline_to_br }}</h3>
+
+                    <div class="cat__reveal-middle">
+                      <div class="cat__badges">
+                        {%- if block.settings.badge_1 != blank -%}
+                          <span class="cat__badge">{{ block.settings.badge_1 }}</span>
+                        {%- endif -%}
+                        {%- if block.settings.badge_2 != blank -%}
+                          <span class="cat__badge">{{ block.settings.badge_2 }}</span>
+                        {%- endif -%}
+                        {%- if block.settings.badge_3 != blank -%}
+                          <span class="cat__badge">{{ block.settings.badge_3 }}</span>
+                        {%- endif -%}
+                      </div>
+                    </div>
+
+                    {%- if block.settings.btn_label != blank -%}
+                      <div class="cat__reveal-bottom">
+                        <div class="cat__btn">{{ block.settings.btn_label }}</div>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              {%- if block.settings.link != blank -%}
+                </a>
+              {%- else -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+
+      <div class="cat__controls">
+        <div class="swiper-pagination cat__progress-wrapper"></div>
+
+        <div class="cat__nav">
+          <div class="swiper-button-prev">
+            <svg viewBox="0 0 24 24">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </div>
+          <div class="swiper-button-next">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script type="module">
+  import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const sectionEl = document.getElementById('{{ section.id }}');
+    if (!sectionEl) return;
+
+    const swiperEl = sectionEl.querySelector('.swiper-cat');
+
+    if (swiperEl) {
+      const reveal = () => {
+        requestAnimationFrame(() => sectionEl.classList.add('is-loaded'));
+        const loader = sectionEl.querySelector('.cat__loader');
+        if (loader) {
+          setTimeout(() => loader.setAttribute('aria-hidden', 'true'), 400);
+        }
+      };
+
+      new Swiper(swiperEl, {
+        slidesPerView: 1.15,
+        spaceBetween: 16,
+        grabCursor: true,
+        navigation: {
+          nextEl: sectionEl.querySelector('.swiper-button-next'),
+          prevEl: sectionEl.querySelector('.swiper-button-prev'),
+        },
+        pagination: {
+          el: sectionEl.querySelector('.swiper-pagination'),
+          type: 'progressbar',
+        },
+        initialSlide: {{ section.settings.initial_slide | default: 0 }},
+        breakpoints: {
+          640: {
+            slidesPerView: 2.2,
+            spaceBetween: 16,
+          },
+          1024: {
+            slidesPerView: {{ section.settings.slides_desktop | default: 3.5 }},
+            spaceBetween: 16,
+          },
+          1400: {
+            slidesPerView: {{ section.settings.slides_desktop_large | default: 3.5 }},
+            spaceBetween: 16,
+          },
+        },
+        on: {
+          init: reveal,
+          afterInit: reveal,
+        },
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Swiper Hover",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Do You Need Help With?"
+    },
+    {
+      "type": "text",
+      "id": "global_link_text",
+      "label": "Global Link Text",
+      "default": "SHOP ALL"
+    },
+    {
+      "type": "url",
+      "id": "global_link_url",
+      "label": "Global Link URL"
+    },
+    {
+      "type": "header",
+      "content": "Slider Settings"
+    },
+    {
+      "type": "range",
+      "id": "slides_desktop",
+      "label": "Slides per view (Desktop ≥ 1024px)",
+      "min": 1,
+      "max": 6,
+      "step": 0.1,
+      "default": 3.5
+    },
+    {
+      "type": "range",
+      "id": "slides_desktop_large",
+      "label": "Slides per view (Desktop ≥ 1400px)",
+      "min": 1,
+      "max": 6,
+      "step": 0.1,
+      "default": 3.5
+    },
+    {
+      "type": "range",
+      "id": "initial_slide",
+      "label": "Initial Slide (0 = first)",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Card Settings"
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "label": "Card Height (Mobile)",
+      "min": 300,
+      "max": 600,
+      "step": 10,
+      "default": 450,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "card_height_desktop",
+      "label": "Card Height (Desktop)",
+      "min": 400,
+      "max": 700,
+      "step": 10,
+      "default": 550,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "hover_blur",
+      "label": "Hover Image Blur",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 6,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity (Default)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 60,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity_hover",
+      "label": "Overlay Opacity (Hover)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 80,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Heading Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Links & Progress)",
+      "default": "#cf5b43"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Image Overlay Color",
+      "default": "#2b3223",
+      "info": "This color fades in from bottom to top to make text readable."
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background Image"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Card Title",
+          "default": "Menopause &\nHormone Health",
+          "info": "Use 'Enter' to create line breaks."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card Link"
+        },
+        {
+          "type": "header",
+          "content": "Hover Content"
+        },
+        {
+          "type": "text",
+          "id": "badge_1",
+          "label": "Badge 1",
+          "default": "HORMONE BALANCE"
+        },
+        {
+          "type": "text",
+          "id": "badge_2",
+          "label": "Badge 2",
+          "default": "CYCLE STABILITY"
+        },
+        {
+          "type": "text",
+          "id": "badge_3",
+          "label": "Badge 3",
+          "default": "MENOPAUSE SUPPORT"
+        },
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "Hover Button Label",
+          "default": "Shop Now"
+        }
+      ]
+    },
+    {
+      "type": "blog",
+      "name": "Blog Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle / Category Label",
+          "default": "CATEGORY"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Card Title",
+          "default": "Blog Name To\nGo Here",
+          "info": "Use 'Enter' to create line breaks."
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Swiper Hover",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "title": "Menopause &\nHormone Health"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Sexual Health",
+            "badge_1": "INTIMACY",
+            "badge_2": "VITALITY"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Blood\nPressure",
+            "badge_1": "HEART SUPPORT",
+            "badge_2": "CIRCULATION"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Heart Health",
+            "badge_1": "CHOLESTEROL",
+            "badge_2": "ENDURANCE"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

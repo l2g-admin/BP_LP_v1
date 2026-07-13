@@ -1,0 +1,449 @@
+<style>
+  #{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: {{ section.settings.padding_top }}rem;
+    padding-bottom: {{ section.settings.padding_bottom }}rem;
+    background-color: {{ section.settings.bg_color }};
+    font-family: inherit;
+
+    & .experts__container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* --- HEADER --- */
+    & .experts__header {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    & .experts__title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      margin: 0;
+      line-height: 1.2;
+      color: #1a1a1a;
+    }
+
+    & .experts__title-highlight {
+      color: {{ section.settings.highlight_color }};
+      font-style: italic;
+      font-family: Georgia, serif;
+    }
+
+    /* --- LAYOUT SPLIT --- */
+    & .experts__split {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 992px) {
+      & .experts__split {
+        flex-direction: row;
+        align-items: stretch;
+      }
+    }
+
+    /* --- LEFT: TEXT SLIDER (SWIPER) --- */
+    & .experts__text-col {
+      flex: 1 1 50%;
+      background-color: {{ section.settings.card_bg_color }};
+      border-radius: 1.5rem;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      min-height: 400px;
+    }
+
+    @media (min-width: 992px) {
+      & .experts__text-col {
+        padding: 4rem 3rem;
+      }
+    }
+
+    & .swiper__expert-text {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    & .swiper-wrapper {
+      flex-grow: 1;
+    }
+
+    & .expert__slide {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: auto;
+      color: #ffffff;
+    }
+
+    & .expert__quote {
+      font-size: clamp(1.1rem, 2vw, 1.3rem);
+      line-height: 1.6;
+      margin: 0 0 2rem 0;
+      font-weight: 400;
+    }
+
+    & .expert__stars {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1rem;
+    }
+
+    & .expert__stars svg {
+      width: 1.2rem;
+      height: 1.2rem;
+      fill: {{ section.settings.highlight_color }};
+    }
+
+    & .expert__author {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    /* --- SWIPER CONTROLS --- */
+    & .expert__controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 3rem;
+      width: 100%;
+    }
+
+    & .swiper-button-prev,
+    & .swiper-button-next {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      color: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    & .swiper-button-prev::after,
+    & .swiper-button-next::after {
+      display: none;
+    }
+
+    & .swiper-button-prev svg,
+    & .swiper-button-next svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      transition: color 0.3s ease;
+    }
+
+    & .swiper-button-next svg {
+      stroke: {{ section.settings.highlight_color }};
+    }
+
+    & .swiper-button-prev.swiper-button-disabled,
+    & .swiper-button-next.swiper-button-disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    & .swiper-pagination {
+      position: static;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: auto;
+    }
+
+    & .swiper-pagination-bullet {
+      width: 35px;
+      height: 3px;
+      border-radius: 2px;
+      background-color: #ffffff;
+      opacity: 0.4;
+      margin: 0 !important;
+      transition: opacity 0.3s ease, background-color 0.3s ease;
+    }
+
+    & .swiper-pagination-bullet-active {
+      opacity: 1;
+      background-color: {{ section.settings.pagination_active_color }};
+    }
+
+    /* --- RIGHT: IMAGES --- */
+    & .experts__image-col {
+      flex: 1 1 50%;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      position: relative;
+      background-color: #e0e0e0;
+      min-height: 400px;
+    }
+
+    & .expert__image-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+      pointer-events: none;
+    }
+
+    & .expert__image-wrapper.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    & .expert__image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+</style>
+
+<section id="{{ section.id }}" class="section__experts">
+  <div class="experts__container">
+    
+    <div class="experts__header">
+      <h2 class="experts__title">
+        {{ section.settings.header_title_prefix }}
+        <span class="experts__title-highlight">{{ section.settings.header_title_highlight }}</span>
+      </h2>
+    </div>
+
+    <div class="experts__split">
+      
+      <div class="experts__text-col">
+        <div class="swiper swiper__expert-text">
+          <div class="swiper-wrapper">
+            {%- for block in section.blocks -%}
+              <div class="swiper-slide expert__slide" {{ block.shopify_attributes }}>
+                <p class="expert__quote">{{ block.settings.quote }}</p>
+                
+                <div class="expert__stars">
+                  {%- for i in (1..block.settings.rating) -%}
+                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                  {%- endfor -%}
+                </div>
+                
+                <h3 class="expert__author">{{ block.settings.author }}</h3>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          <div class="expert__controls">
+            <div class="swiper-button-prev">
+              <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next">
+              <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="experts__image-col">
+        {%- for block in section.blocks -%}
+          <div class="expert__image-wrapper {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.index0 }}">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script type="module">
+  import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const sectionId = '{{ section.id }}';
+    const sectionEl = document.getElementById(sectionId);
+    if (!sectionEl) return;
+
+    const swiperEl = sectionEl.querySelector('.swiper__expert-text');
+    const imageWrappers = sectionEl.querySelectorAll('.expert__image-wrapper');
+
+    if (swiperEl) {
+      const expertSwiper = new Swiper(swiperEl, {
+        loop: false,
+        slidesPerView: 1,
+        spaceBetween: 30,
+        effect: 'fade',
+        fadeEffect: {
+          crossFade: true
+        },
+        navigation: {
+          nextEl: sectionEl.querySelector('.swiper-button-next'),
+          prevEl: sectionEl.querySelector('.swiper-button-prev'),
+        },
+        pagination: {
+          el: sectionEl.querySelector('.swiper-pagination'),
+          clickable: true,
+        },
+        on: {
+          slideChange: function () {
+            const activeIndex = this.activeIndex;
+            imageWrappers.forEach((wrapper, index) => {
+              if (index === activeIndex) {
+                wrapper.classList.add('is-active');
+              } else {
+                wrapper.classList.remove('is-active');
+              }
+            });
+          }
+        }
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Swiper Sentences",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header Settings"
+    },
+    {
+      "type": "text",
+      "id": "header_title_prefix",
+      "label": "Title Prefix",
+      "default": "Trusted By Top "
+    },
+    {
+      "type": "text",
+      "id": "header_title_highlight",
+      "label": "Highlighted Text (Italic)",
+      "default": "Experts Everywhere"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlight & Brand Color",
+      "default": "#d95c3c"
+    },
+    {
+      "type": "header",
+      "content": "Container Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#f8f6f5"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Text Card Background",
+      "default": "#543a4b"
+    },
+    {
+      "type": "color",
+      "id": "pagination_active_color",
+      "label": "Pagination Active Color",
+      "default": "#d95c3c"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "rem"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Expert Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "This will be absolutely transformative for the millions of women who are currently suffering through this transition with limited solutions, outside of HRT."
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "DR. MARIZA SNYDER"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Author Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Swiper Sentences",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "An unparalleled approach to feminine care that sets a new gold standard in the industry.",
+            "author": "DR. JANE DOE"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

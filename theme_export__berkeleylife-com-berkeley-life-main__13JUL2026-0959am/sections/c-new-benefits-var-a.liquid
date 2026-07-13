@@ -1,0 +1,641 @@
+{%- liquid
+  assign bg_color = section.settings.background_color | default: '#ffffff'
+  assign text_color = section.settings.text_color | default: '#1b1c29'
+  assign accent_color = section.settings.accent_color | default: '#D54F2F'
+  assign btn_bg = section.settings.button_bg_color | default: '#D54F2F'
+  assign btn_text = section.settings.button_text_color | default: '#ffffff'
+
+  assign pt_desktop = section.settings.padding_top_desktop | append: 'px'
+  assign pb_desktop = section.settings.padding_bottom_desktop | append: 'px'
+  assign pt_mobile = section.settings.padding_top_mobile | append: 'px'
+  assign pb_mobile = section.settings.padding_bottom_mobile | append: 'px'
+
+  assign heading = section.settings.heading
+  assign eyebrow = section.settings.eyebrow
+  assign subtext = section.settings.subtext
+  assign button_text = section.settings.button_text
+  assign button_link = section.settings.button_link
+
+  assign media_type = section.settings.media_type
+  assign has_media = false
+  if media_type == 'video' and section.settings.video != blank
+    assign has_media = true
+  elsif media_type == 'image' and section.settings.image != blank
+    assign has_media = true
+  endif
+-%}
+
+<style>
+  .new-benefits-{{ section.id }} {
+    background-color: {{ bg_color }};
+    padding-top: {{ pt_mobile }};
+    padding-bottom: {{ pb_mobile }};
+    position: relative;
+    overflow: hidden;
+  }
+
+  .new-benefits__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+  }
+
+  .new-benefits__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* Left column - Section Title */
+  .new-benefits__col-left {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 100%;
+  }
+
+  .new-benefits__heading {
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1;
+    color: {{ text_color }};
+    margin: 0;
+  }
+
+  .new-benefits__eyebrow {
+    margin: 0;
+    color: {{ text_color }};
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .new-benefits__heading em,
+  .new-benefits__heading i {
+    font-family: "cormorant-garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    color: {{ accent_color }};
+    font-size: 1.2em;
+  }
+
+  .new-benefits__subtext {
+    font-size: 18px;
+    line-height: 1.5;
+    color: {{ text_color }};
+    margin: 0;
+  }
+
+  .new-benefits__subtext p {
+    margin: 0;
+  }
+
+  .new-benefits__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 56px;
+    padding: 0 40px;
+    border-radius: 42px;
+    background-color: {{ btn_bg }};
+    color: {{ btn_text }};
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    width: fit-content;
+  }
+
+  .new-benefits__button:hover {
+    opacity: 0.9;
+  }
+
+  /* Right column - Benefits list */
+  .new-benefits__col-right {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Benefit item */
+  .new-benefits__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .new-benefits__item-number {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .new-benefits__item-icon-wrap {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .new-benefits__item-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: 1px solid {{ accent_color }};
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .new-benefits__item.is-marked .new-benefits__item-icon {
+    background-color: {{ accent_color }};
+    border-color: {{ accent_color }};
+  }
+
+  .new-benefits__item-check {
+    width: 18px;
+    height: 18px;
+  }
+
+  .new-benefits__item-num {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    color: {{ text_color }};
+  }
+
+  .new-benefits__item-text {
+    padding: 0 20px;
+    width: 100%;
+  }
+
+  .new-benefits__item-text-inner {
+    border-left: 2px dashed {{ accent_color }};
+    padding: 0 0 16px 48px;
+    color: {{ text_color }};
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .new-benefits__item.is-marked .new-benefits__item-text-inner {
+    color: {{ accent_color }};
+  }
+
+  /* .new-benefits__item:last-child .new-benefits__item-text-inner {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  } */
+
+  .new-benefits__item-title {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .new-benefits__item-desc {
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin: 0;
+  }
+
+  .new-benefits__item.is-marked .new-benefits__item-desc {
+    font-weight: 500;
+  }
+
+  .new-benefits__item-desc p {
+    margin: 0;
+  }
+
+  /* Product / Media - floats on right side */
+  .new-benefits__product {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .new-benefits__product-circle {
+    position: absolute;
+    width: 90%;
+    aspect-ratio: 1;
+    bottom: -10%;
+    right: -5%;
+    border: 1.5px solid {{ accent_color }};
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .new-benefits__product-media {
+    position: relative;
+    z-index: 1;
+  }
+
+  .new-benefits__product-media img,
+  .new-benefits__product-media video {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    .new-benefits-{{ section.id }} {
+      padding-top: {{ pt_desktop }};
+      padding-bottom: {{ pb_desktop }};
+    }
+
+    .new-benefits__grid {
+      flex-direction: row;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .new-benefits__col-left {
+      flex: 0 0 auto;
+      width: 440px;
+      z-index: 2;
+    }
+
+    .new-benefits__col-right {
+      flex: 0 0 auto;
+      width: 580px;
+      z-index: 1;
+    }
+
+    .new-benefits__heading {
+      font-size: 54px;
+    }
+
+    .new-benefits__heading em,
+    .new-benefits__heading i {
+      font-size: 64px;
+    }
+
+    .new-benefits__subtext {
+      font-size: 20px;
+    }
+
+    .new-benefits__button {
+      height: 60px;
+      font-size: 18px;
+    }
+
+    .new-benefits__item-title {
+      font-size: 24px;
+    }
+
+    .new-benefits__item-desc {
+      font-size: 16px;
+    }
+
+    /* Product absolutely positioned flush to the right edge of the screen */
+    .new-benefits__product {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 455px;
+      max-width: none;
+      margin: 0;
+      z-index: 0;
+    }
+
+    .new-benefits__product-circle {
+      width: 400px;
+      height: 400px;
+      bottom: -5%;
+      right: -5%;
+      aspect-ratio: auto;
+    }
+
+    .new-benefits__product-media img,
+    .new-benefits__product-media video {
+      filter: drop-shadow(8px 3px 10px rgba(0,0,0,0.25));
+    }
+  }
+</style>
+
+<div class="new-benefits-{{ section.id }}">
+  <div class="new-benefits__container">
+    <div class="new-benefits__grid">
+
+      {%- comment -%} Column 1: heading + subtext + CTA {%- endcomment -%}
+      <div class="new-benefits__col-left">
+        {%- if eyebrow != blank -%}
+          <p class="new-benefits__eyebrow">{{ eyebrow | escape }}</p>
+        {%- endif -%}
+
+        {%- if heading != blank -%}
+          <h2 class="new-benefits__heading">{{ heading }}</h2>
+        {%- endif -%}
+
+        {%- if subtext != blank -%}
+          <div class="new-benefits__subtext rte">{{ subtext }}</div>
+        {%- endif -%}
+
+        {%- if button_text != blank -%}
+          <a
+            class="new-benefits__button"
+            {% if button_link != blank %}href="{{ button_link }}"{% endif %}
+          >
+            {{- button_text | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Column 2: numbered benefits {%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="new-benefits__col-right">
+          {%- for block in section.blocks -%}
+            <div class="new-benefits__item{% if block.settings.marked_block %} is-marked{% endif %}" {{ block.shopify_attributes }}>
+              <div class="new-benefits__item-number">
+                <span class="new-benefits__item-icon-wrap">
+                  <span class="new-benefits__item-icon">
+                    {%- if block.settings.marked_block -%}
+                      <svg class="new-benefits__item-check" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                        <path d="M5.5 10.2L8.6 13.3L14.5 7.4" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    {%- else -%}
+                      <span class="new-benefits__item-num">{{ forloop.index }}</span>
+                    {%- endif -%}
+                  </span>
+                </span>
+              </div>
+              <div class="new-benefits__item-text">
+                <div class="new-benefits__item-text-inner">
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="new-benefits__item-title">{{ block.settings.title | escape }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.description != blank -%}
+                    <div class="new-benefits__item-desc rte">{{ block.settings.description }}</div>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+
+  </div>
+
+  {%- comment -%} Product image/video floating on the right edge {%- endcomment -%}
+  {%- if has_media -%}
+    <div class="new-benefits__product">
+      <div class="new-benefits__product-media">
+        {%- if media_type == 'video' and section.settings.video != blank -%}
+          <video
+            {% if section.settings.video_autoplay %}autoplay muted{% endif %}
+            {% if section.settings.video_loop %}loop{% endif %}
+            {% if section.settings.video_controls %}controls{% endif %}
+            playsinline
+          >
+            {%- for source in section.settings.video.sources -%}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {%- endfor -%}
+          </video>
+        {%- elsif media_type == 'image' and section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1200 | image_tag:
+            loading: 'lazy',
+            alt: section.settings.image.alt
+          }}
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% schema %}
+{
+  "name": "C New Benefits Var A",
+  "tag": "section",
+  "class": "new-benefits",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Why Nitric Oxide Matters for <em>Sexual Health</em></p>"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "THE SCIENCE"
+    },
+    {
+      "type": "richtext",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "<p>Nitric Oxide plays a critical role in blood flow, stamina, and sexual performance — yet levels naturally decline with age.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Explore the Science"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Media (optional)"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media Type",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_controls",
+      "label": "Show video controls",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Padding Top (Desktop)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Padding Bottom (Desktop)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Benefit Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Benefit description goes here.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "marked_block",
+          "label": "Marked block",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C New Benefits Var A",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Nitric Oxide = Healthy Blood Flow",
+            "description": "<p>Nitric Oxide helps blood vessels relax and widen, allowing blood to flow more freely throughout the body, including where it matters most for sexual performance.</p>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Blood Flow Fuels Performance",
+            "description": "<p>When circulation is optimized, the body can better support: Erections; Stamina; Sensitivity and Overall sexual response. Low Nitric Oxide levels can make these processes harder to maintain.</p>"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Levels Decline With Age",
+            "description": "<p>As men age, natural Nitric Oxide production decreases. Supporting healthy levels can help maintain performance, energy, and confidence over time.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

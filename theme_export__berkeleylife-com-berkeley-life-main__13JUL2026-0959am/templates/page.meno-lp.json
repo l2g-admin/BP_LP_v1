@@ -1,0 +1,471 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "sticky_product_pKfVLz": {
+      "type": "sticky-product",
+      "disabled": true,
+      "settings": {
+        "product": "nitric-oxide-support"
+      }
+    },
+    "c_hero_signup_jtqVkP": {
+      "type": "c-hero-signup",
+      "blocks": {
+        "stars_JpThGW": {
+          "type": "stars",
+          "settings": {
+            "star_rating": 5,
+            "trusted_text": "TRUSTED BY 3,000+ HEALTHCARE PROVIDERS"
+          }
+        },
+        "email_signup_CEweNC": {
+          "type": "email_signup",
+          "settings": {
+            "box_title": "Sign Up for First Look",
+            "box_description": "Get updates and a first look at our upcoming <br>menopause-focused innovation.",
+            "placeholder_text": "Enter your email",
+            "button_text": "Sign Up",
+            "customer_tag": "newsletter"
+          }
+        }
+      },
+      "block_order": [
+        "stars_JpThGW",
+        "email_signup_CEweNC"
+      ],
+      "name": "C Hero Signup",
+      "settings": {
+        "heading": "Menopause changes everything — we're changing how it impacts your {accent}health{/accent}.",
+        "description": "Relief today. Resilience tomorrow. Science-backed support throughout your next chapter.",
+        "product_image": "shopify://shop_images/meno-hero-img.webp",
+        "product_image_link": "",
+        "padding_top": 4,
+        "padding_bottom": 4,
+        "background_color": "#f6f3f0",
+        "text_color": "#1b1c29",
+        "accent_color": "#d44f2f",
+        "email_box_bg": "#ebe8e6",
+        "email_box_text_color": "#1b1c29",
+        "email_button_bg": "#d54f2f",
+        "email_button_text": "#ffffff"
+      }
+    },
+    "c_logos_RGzxzB": {
+      "type": "c-logos",
+      "blocks": {
+        "logo_Gghgm8": {
+          "type": "Logo",
+          "settings": {
+            "text": "Hormonal Balance",
+            "para": ""
+          }
+        },
+        "logo_V3FTMK": {
+          "type": "Logo",
+          "settings": {
+            "text": "Blood Flow",
+            "para": ""
+          }
+        },
+        "logo_jRtCQB": {
+          "type": "Logo",
+          "settings": {
+            "text": "Blood Pressure",
+            "para": ""
+          }
+        },
+        "logo_FqELUA": {
+          "type": "Logo",
+          "settings": {
+            "text": "Circulation",
+            "para": ""
+          }
+        },
+        "logo_9ydFXR": {
+          "type": "Logo",
+          "settings": {
+            "text": "Sexual Health",
+            "para": ""
+          }
+        },
+        "logo_MttzdR": {
+          "type": "Logo",
+          "settings": {
+            "text": "Energy",
+            "para": ""
+          }
+        },
+        "logo_fhFAzt": {
+          "type": "Logo",
+          "settings": {
+            "text": "Menopause",
+            "para": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_Gghgm8",
+        "logo_V3FTMK",
+        "logo_jRtCQB",
+        "logo_FqELUA",
+        "logo_9ydFXR",
+        "logo_MttzdR",
+        "logo_fhFAzt"
+      ],
+      "name": "C Logos",
+      "settings": {
+        "show_middle": true,
+        "show_separators": true,
+        "heading": "ESSENTIAL FOR",
+        "image_height": 1,
+        "image_gap": 2.4,
+        "image_gap_mobile": 3.1,
+        "container_width": 19,
+        "marquee_speed": 45,
+        "marquee_padding_top": 1,
+        "marquee_padding_bottom": 1,
+        "direction": "-100%",
+        "toggle_pause_on_hover": false,
+        "full_width": true,
+        "grayscale_logo_colors": false,
+        "invert_logo_colors": false,
+        "bg_middle_color": "#1b1c29",
+        "bg_color": "#1b1c29",
+        "text_color": "#ffffff",
+        "section_top_subheading": "",
+        "section_top_heading": "",
+        "section_top_paragraph": "",
+        "section_top_alignment": "center",
+        "text_alignment": "center",
+        "padding_top": 1,
+        "padding_bottom": 1
+      }
+    },
+    "c_features_grid_jkUHNq": {
+      "type": "c-features-grid",
+      "name": "C Features Grid",
+      "settings": {
+        "title": "This is More than {accent}Menopause{/accent}",
+        "description": "",
+        "sound_text": "Click to activate sound",
+        "sound_text_class": "btn__cta",
+        "media_type": "video",
+        "media_video": "shopify://files/videos/Menopause and Heart Health_Product Teaser.mp4",
+        "cta_text": "Sign Up for First Look",
+        "cta_link": "#",
+        "show_card_lines": false,
+        "bg_color": "#f6f3f0",
+        "text_color": "#1b1c29",
+        "accent_color": "#d2691e",
+        "padding_top": 2,
+        "padding_bottom": 2
+      }
+    },
+    "c_expert_insights_bwnbAH": {
+      "type": "c-expert-insights",
+      "blocks": {
+        "expert_XQK6HB": {
+          "type": "expert",
+          "settings": {
+            "image": "shopify://shop_images/women-meno.webp",
+            "quote": "I view Nitric Oxide as a keystone for women's health. When it's supported, everything from exercise recovery to cognitive sharpness to everyday energy improves. That's why I recommend Berkeley Life. It's clinically effective, easy for women to integrate, and truly makes a difference.",
+            "show_stars": true,
+            "star_rating": 5,
+            "name": "Dr. Mariza Snyder",
+            "role": "Functional Wellness Practitioner & Women’s Health Expert"
+          }
+        }
+      },
+      "block_order": [
+        "expert_XQK6HB"
+      ],
+      "name": "C Expert Insights",
+      "settings": {
+        "title": "Expert Insights {accent}Women Can Trust{/accent}",
+        "bg_color": "#f6f3f0",
+        "text_color": "#1b1c29",
+        "accent_color": "#d44f2f",
+        "expert_info_bg": "#ffffff",
+        "padding_top": 3,
+        "padding_bottom": 3
+      }
+    },
+    "c_image_video_EQhhTC": {
+      "type": "c-image-video",
+      "name": "C Image Video",
+      "settings": {
+        "image": "shopify://shop_images/Estrogen_NO_Chart.png",
+        "image_alt": "Image description",
+        "video_bg_color": "#f6f3f0",
+        "video_fit": "cover",
+        "width": 100,
+        "min_height": 0,
+        "min_height_mobile": 0,
+        "autoplay": true,
+        "loop": true,
+        "muted": true,
+        "controls": true,
+        "button_text": "",
+        "button_url": "",
+        "button_style": "",
+        "section_min_height": 0,
+        "section_container": "page-width",
+        "bg_color": "#f6f3f0",
+        "text_color": "#000000",
+        "section_top_subheading": "",
+        "section_top_heading": "",
+        "section_top_paragraph": "",
+        "section_top_alignment": "center",
+        "text_alignment": "center",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_collapsible_content_N8WT7n": {
+      "type": "c-collapsible-content",
+      "blocks": {
+        "collapsible_item_3dyjY4": {
+          "type": "collapsible_item",
+          "settings": {
+            "icon": "<svg width=\"32\" height=\"32\" viewbox=\"0 0 32 32\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M9.97612 7.55054C7.84345 7.55054 5.84104 8.38053 4.33366 9.88792C1.22211 12.9995 1.22211 18.065 4.33366 21.1766C5.67728 22.5202 7.4117 23.3204 9.28012 23.4842V26.5213H5.88943C5.50607 26.5213 5.19343 26.8339 5.19343 27.2173C5.19343 27.6006 5.50607 27.9133 5.88943 27.9133H9.28012V31.304C9.28012 31.6873 9.59276 32 9.97612 32C10.3595 32 10.6721 31.6873 10.6721 31.304V27.9133H14.0628C14.4462 27.9133 14.7588 27.6006 14.7588 27.2173C14.7588 26.8339 14.4462 26.5213 14.0628 26.5213H10.6721V23.4842C12.5405 23.3241 14.2787 22.5202 15.6186 21.1766C18.7301 18.065 18.7301 12.9995 15.6186 9.88792C14.1112 8.38053 12.1051 7.55054 9.97612 7.55054ZM14.6323 20.1903C13.3891 21.4334 11.7329 22.1182 9.9724 22.1182C8.21192 22.1182 6.55938 21.4334 5.31253 20.1903C2.74439 17.6221 2.74439 13.4424 5.31253 10.8705C6.55566 9.62738 8.21192 8.94254 9.9724 8.94254C11.7329 8.94254 13.3854 9.62738 14.6323 10.8705C17.2004 13.4424 17.2004 17.6221 14.6323 20.1903Z\" fill=\"#F6F2EF\"></path>\n<path d=\"M29.5731 0.751832C29.5731 0.744388 29.5693 0.740666 29.5693 0.733223C29.5693 0.699725 29.5656 0.666227 29.5582 0.63273C29.5582 0.625286 29.5545 0.61412 29.5545 0.606676C29.547 0.569457 29.5359 0.53596 29.521 0.49874C29.521 0.495019 29.5172 0.495018 29.5172 0.491296C29.5135 0.480131 29.5061 0.472687 29.5024 0.461521C29.4875 0.435467 29.4763 0.409413 29.4577 0.38336C29.4502 0.372194 29.4428 0.361028 29.4354 0.349862C29.4167 0.32753 29.3981 0.305199 29.3795 0.282868C29.3721 0.275424 29.3646 0.264257 29.3572 0.256814C29.3274 0.23076 29.2976 0.204707 29.2641 0.182375C29.2567 0.178653 29.253 0.174931 29.2455 0.171209C29.2158 0.152599 29.1897 0.137712 29.1599 0.122824C29.1488 0.119102 29.1339 0.111658 29.1227 0.107936C29.0967 0.0967702 29.0669 0.0893264 29.0371 0.0818825C29.0259 0.0781606 29.0148 0.0744384 28.9999 0.0744384C28.9627 0.0669946 28.9217 0.0632731 28.8808 0.0632731L23.7482 0C23.7445 0 23.7408 0 23.7408 0C23.3611 0 23.0485 0.305199 23.0448 0.68856C23.0411 1.07192 23.35 1.38828 23.7333 1.39201L27.2134 1.43667L22.855 5.79879C19.7211 3.16737 15.0277 3.32369 12.0837 6.26775C8.97211 9.3793 8.97211 14.4449 12.0837 17.5564C13.6394 19.1122 15.6828 19.8901 17.7261 19.8901C19.7695 19.8901 21.8128 19.1122 23.3686 17.5564C26.3164 14.6086 26.469 9.91526 23.8376 6.7851L28.1997 2.42299L28.2443 5.903C28.2481 6.28636 28.5607 6.59156 28.9403 6.59156H28.9478C29.3311 6.58784 29.6401 6.27147 29.6363 5.88811L29.5731 0.751832ZM22.3823 16.5701C19.8141 19.1382 15.6344 19.1382 13.0625 16.5701C10.4944 14.0019 10.4944 9.82221 13.0625 7.25034C14.3466 5.96627 16.0326 5.32238 17.7224 5.32238C19.4084 5.32238 21.0982 5.96627 22.3823 7.25034C24.9541 9.82221 24.9541 14.0019 22.3823 16.5701Z\" fill=\"#F6F2EF\"></path>\n</svg>",
+            "title": "Sexual Wellness",
+            "content": "<p>Enhances desire and performance for men and women.</p>",
+            "image": "shopify://shop_images/sexual-wellnes.webp",
+            "card_percentage": "75%",
+            "card_text": "<p>Increase in libido & 83% enhanced orgasm after 60 days</p>",
+            "progress_bar_percentage": 75
+          }
+        },
+        "collapsible_item_T4JtKP": {
+          "type": "collapsible_item",
+          "settings": {
+            "icon": "<svg width=\"32\" height=\"32\" viewbox=\"0 0 32 32\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M5.08203 5.76733C5.24658 5.76733 5.40771 5.70044 5.52393 5.58423C5.64014 5.46777 5.70703 5.30664 5.70703 5.14233C5.70703 4.97729 5.64014 4.81665 5.52393 4.69971C5.40771 4.5835 5.24658 4.51733 5.08203 4.51733C4.91772 4.51733 4.75659 4.5835 4.64014 4.69971C4.52393 4.81665 4.45703 4.97729 4.45703 5.14233C4.45703 5.30664 4.52393 5.46777 4.64014 5.58423C4.75659 5.70044 4.91772 5.76733 5.08203 5.76733Z\" fill=\"#F6F2EF\"></path>\n<path d=\"M31.375 15.8107H29.812C30.4363 14.5277 30.75 13.3368 30.75 12.243C30.75 6.96252 26.7993 2.66663 21.9434 2.66663C19.7456 2.66663 17.6147 3.57361 16 5.17664C14.3853 3.57361 12.2544 2.66663 10.0566 2.66663C9.12036 2.66663 8.19824 2.82556 7.31616 3.13928C6.99097 3.255 6.82104 3.61243 6.93652 3.93762C7.05225 4.26282 7.40967 4.4325 7.73486 4.31702C8.48218 4.05139 9.26343 3.91663 10.0564 3.91663C12.1431 3.91663 14.0859 4.83435 15.5273 6.50061C15.646 6.63782 15.8186 6.71692 16 6.71692C16.1814 6.71692 16.354 6.63782 16.4727 6.50061C17.9138 4.83435 19.8567 3.91663 21.9434 3.91663C26.1101 3.91663 29.5 7.65173 29.5 12.243C29.5 13.2921 29.1272 14.4899 28.4006 15.8107H22.7073C22.542 15.8107 22.3835 15.8761 22.2664 15.9926L20.939 17.3136L19.6221 15.994C19.4685 15.8402 19.2456 15.7772 19.0342 15.8278C18.8225 15.8785 18.6526 16.0358 18.5852 16.2428L17.2756 20.278L15.6904 8.92468C15.6499 8.63416 15.4126 8.41101 15.1204 8.38806C14.8269 8.36462 14.5588 8.54871 14.4734 8.82922L12.5181 15.257L11.4971 14.234C11.3799 14.1166 11.2209 14.0507 11.0552 14.0504C11.0549 14.0504 11.0549 14.0504 11.0547 14.0504C10.8889 14.0504 10.73 14.1163 10.6128 14.2333L9.03394 15.8116H3.59985C2.87305 14.4904 2.5 13.2924 2.5 12.243C2.5 10.5746 2.94629 8.96521 3.79053 7.5885C3.97095 7.29431 3.87891 6.90955 3.58447 6.72888C3.29028 6.54846 2.90552 6.64075 2.7251 6.93494C1.76001 8.50842 1.25 10.3439 1.25 12.243C1.25 13.337 1.56396 14.5282 2.18848 15.8116H0.625C0.279785 15.8116 0 16.0914 0 16.4366C0 16.7819 0.279785 17.0616 0.625 17.0616H2.8772C4.0874 19.0375 5.96899 21.2098 8.51318 23.5634C12.0378 26.8241 15.6128 29.265 15.6487 29.2894C15.7546 29.3615 15.8772 29.3973 16 29.3973C16.1228 29.3973 16.2454 29.3615 16.3513 29.2894C16.3872 29.265 19.9622 26.8241 23.4868 23.5634C26.0315 21.2094 27.9133 19.0367 29.1233 17.0607H31.375C31.7202 17.0607 32 16.7809 32 16.4357C32 16.0905 31.7202 15.8107 31.375 15.8107ZM22.6489 22.6359C19.8291 25.2457 16.9753 27.3212 16 28.0104C15.0264 27.3224 12.1807 25.2533 9.36182 22.6456C7.19385 20.64 5.521 18.7643 4.3689 17.0616H9.29272C9.4585 17.0616 9.61743 16.9957 9.73462 16.8788L11.0542 15.5597L12.3701 16.8783C12.5254 17.0336 12.7507 17.0961 12.9639 17.0431C13.177 16.9899 13.3467 16.8287 13.4104 16.6185L14.8445 11.9049L16.4131 23.1393C16.4534 23.4276 16.6873 23.65 16.9773 23.6754C16.9958 23.6771 17.0142 23.6779 17.0322 23.6779C17.3008 23.6779 17.5422 23.5052 17.6265 23.246L19.459 17.6002L20.4951 18.6383C20.7388 18.8824 21.134 18.8832 21.3784 18.6398L22.9653 17.0607H27.6316C26.4814 18.7609 24.812 20.6334 22.6489 22.6359Z\" fill=\"#F6F2EF\"></path>\n</svg>",
+            "title": "Heart Health",
+            "content": "<p>Supports healthy blood pressure and improves circulation.</p>",
+            "image": "shopify://shop_images/hear-health.webp",
+            "card_percentage": "10%",
+            "card_text": "<p>reduction in blood pressure after 3 months</p>",
+            "progress_bar_percentage": 10
+          }
+        },
+        "collapsible_item_GhzdqU": {
+          "type": "collapsible_item",
+          "settings": {
+            "icon": "<svg width=\"18\" height=\"30\" viewbox=\"0 0 18 30\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M17.4678 9.23005C17.4131 9.12753 17.3317 9.04173 17.2321 8.98174C17.1326 8.92175 17.0187 8.88981 16.9025 8.88931H10.3884L13.1384 0.847842V0.843833C13.1695 0.746482 13.1774 0.643187 13.1614 0.542241C13.1454 0.441295 13.1059 0.345508 13.0462 0.26257C12.9856 0.182374 12.9076 0.117043 12.8179 0.0715449C12.7283 0.0260463 12.6295 0.00157791 12.529 0H5.93473C5.80218 0.000292239 5.67294 0.0414393 5.56462 0.117836C5.4563 0.194233 5.37417 0.302164 5.32941 0.426927C5.32941 0.430936 5.3254 0.430936 5.3254 0.434945L0.0299013 16.0749V16.0789C0.00261404 16.1671 -0.00613068 16.26 0.00421745 16.3518C0.0145656 16.4435 0.0437828 16.5322 0.0900319 16.6121C0.134764 16.686 0.194084 16.7501 0.264379 16.8005C0.334675 16.8508 0.414475 16.8862 0.49892 16.9047C0.543461 16.916 0.589279 16.9214 0.635216 16.9208H5.67817L3.48942 28.5701C3.47042 28.6706 3.47541 28.7741 3.50397 28.8723C3.53253 28.9705 3.58385 29.0606 3.65377 29.1353C3.71897 29.2034 3.79839 29.2564 3.88639 29.2903C3.97439 29.3243 4.06879 29.3384 4.16288 29.3317C4.25988 29.3236 4.35382 29.2938 4.43777 29.2446C4.52172 29.1953 4.59354 29.1278 4.64793 29.0471L17.4317 9.88948C17.4985 9.79381 17.5372 9.6814 17.5436 9.5649C17.55 9.4484 17.5237 9.33243 17.4678 9.23005ZM5.32941 25.7179L7.08522 16.3976C7.10248 16.3048 7.09922 16.2094 7.07568 16.1179C7.05213 16.0265 7.00887 15.9414 6.94893 15.8685C6.88905 15.7957 6.81377 15.737 6.7285 15.6968C6.64324 15.6566 6.55012 15.6358 6.45586 15.636H1.52916L6.39172 1.28279H11.6311L8.88112 9.32826C8.84797 9.42475 8.8383 9.52775 8.85294 9.62872C8.86757 9.72969 8.90609 9.82572 8.96528 9.90882C9.02447 9.99192 9.10263 10.0597 9.19327 10.1065C9.28391 10.1534 9.38441 10.1779 9.48644 10.1781H15.7039L5.32941 25.7179Z\" fill=\"white\"></path>\n</svg>",
+            "title": "Energy & Stamina",
+            "content": "<p>Boosts endurance, reduces fatigue, and speeds up recovery.</p>",
+            "image": "shopify://shop_images/energy-stamina.webp",
+            "card_percentage": "300%",
+            "card_text": "<p>increase in energy capacity after 3 months</p>",
+            "progress_bar_percentage": 100
+          }
+        },
+        "collapsible_item_jL8UqU": {
+          "type": "collapsible_item",
+          "settings": {
+            "icon": "<svg width=\"32\" height=\"32\" viewbox=\"0 0 32 32\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g clip-path=\"url(#clip0_1320_2536)\">\n<path d=\"M18.4131 13.4902C18.6027 13.412 18.8199 13.4251 19.0003 13.5292L24.3337 16.6087C24.5399 16.7277 24.667 16.948 24.667 17.1861V23.3443C24.6669 23.5824 24.5398 23.8021 24.3337 23.9212L19.0003 27.0006C18.794 27.1197 18.5399 27.1197 18.3337 27.0006L13.0003 23.9212C12.7942 23.8021 12.6671 23.5824 12.667 23.3443V17.1861C12.667 16.948 12.7941 16.7277 13.0003 16.6087L18.3337 13.5292L18.4131 13.4902ZM14.0003 17.5709V22.9589L18.667 25.6536L23.3337 22.9589V17.5709L18.667 14.8762L14.0003 17.5709Z\" fill=\"white\"></path>\n<path d=\"M23.4233 23.0107C23.6074 22.6919 24.0153 22.5826 24.3341 22.7666L27.1694 24.404C27.4882 24.5881 27.5976 24.996 27.4136 25.3148C27.2295 25.6336 26.8216 25.7429 26.5028 25.5589L23.6675 23.9216C23.3487 23.7374 23.2393 23.3296 23.4233 23.0107Z\" fill=\"white\"></path>\n<path d=\"M18 14.1064V7.94821C18 7.71006 18.1271 7.48982 18.3333 7.37074L23.6667 4.29131L23.7461 4.25225C23.9357 4.17413 24.1529 4.18714 24.3333 4.29131L29.6667 7.37074C29.8729 7.48982 30 7.71006 30 7.94821V14.1064C30 14.3446 29.8729 14.5648 29.6667 14.6839L24.3333 17.7633C24.0145 17.9474 23.6067 17.8385 23.4225 17.5198C23.2384 17.201 23.3479 16.7931 23.6667 16.609L28.6667 13.7216V8.33298L24 5.63831L19.3333 8.33298V14.1064C19.3333 14.4746 19.0349 14.7731 18.6667 14.7731C18.2985 14.7731 18 14.4746 18 14.1064Z\" fill=\"white\"></path>\n<path d=\"M20.1338 13.0403V9.01493C20.1338 8.64674 20.4323 8.34827 20.8005 8.34827C21.1686 8.34827 21.4671 8.64674 21.4671 9.01493V13.0403C21.467 13.4084 21.1685 13.707 20.8005 13.707C20.4324 13.707 20.134 13.4084 20.1338 13.0403Z\" fill=\"white\"></path>\n<path d=\"M7.74609 13.4902C7.93571 13.412 8.15288 13.4251 8.33333 13.5292L13.6667 16.6087C13.9855 16.7927 14.0948 17.2006 13.9108 17.5195C13.7267 17.8383 13.3188 17.9477 13 17.7636L8 14.8762L3.33333 17.5709V22.9589L8 25.6536L13 22.7669C13.3189 22.5827 13.7267 22.6921 13.9108 23.011C14.0947 23.3298 13.9854 23.7371 13.6667 23.9212L8.33333 27.0006C8.12706 27.1197 7.87295 27.1197 7.66667 27.0006L2.33333 23.9212C2.12721 23.8021 2.0001 23.5824 2 23.3443V17.1861C2.00002 16.948 2.12709 16.7277 2.33333 16.6087L7.66667 13.5292L7.74609 13.4902Z\" fill=\"white\"></path>\n<path d=\"M11.1154 21.4817C11.4342 21.2976 11.842 21.407 12.0262 21.7259C12.2103 22.0447 12.1009 22.4526 11.782 22.6367L8.04895 24.7923C7.73011 24.9764 7.32226 24.867 7.13815 24.5481C6.95419 24.2293 7.0635 23.8214 7.38229 23.6373L11.1154 21.4817Z\" fill=\"white\"></path>\n<path d=\"M23.334 4.86845V1.33329C23.334 0.965103 23.6325 0.666626 24.0007 0.666626C24.3688 0.666626 24.6673 0.965103 24.6673 1.33329V4.86845C24.6673 5.23664 24.3688 5.53512 24.0007 5.53512C23.6325 5.53512 23.334 5.23664 23.334 4.86845Z\" fill=\"white\"></path>\n<path d=\"M7.33398 14.1063V10.3999C7.33398 10.0318 7.63246 9.73328 8.00065 9.73328C8.36884 9.73328 8.66732 10.0318 8.66732 10.3999V14.1063C8.66732 14.4745 8.36884 14.773 8.00065 14.773C7.63246 14.773 7.33398 14.4745 7.33398 14.1063Z\" fill=\"white\"></path>\n<path d=\"M18 30.1331V26.4235C18 26.0553 18.2985 25.7568 18.6667 25.7568C19.0349 25.7568 19.3333 26.0553 19.3333 26.4235V30.1331C19.3333 30.5013 19.0349 30.7998 18.6667 30.7998C18.2985 30.7998 18 30.5013 18 30.1331Z\" fill=\"white\"></path>\n<path d=\"M2.33651 22.7646C2.65643 22.5824 3.06377 22.694 3.24601 23.014C3.42824 23.3339 3.31657 23.7412 2.99666 23.9235L0.329997 25.4423C0.0100668 25.6246 -0.397276 25.5129 -0.579509 25.193C-0.761728 24.8731 -0.650082 24.4657 -0.33016 24.2835L2.33651 22.7646Z\" fill=\"white\"></path>\n<path d=\"M31.6672 5.83094C31.986 5.6469 32.3939 5.75626 32.578 6.07509C32.762 6.39393 32.6527 6.8018 32.3338 6.98589L29.6672 8.52561C29.3483 8.70966 28.9404 8.6003 28.7564 8.28147C28.5723 7.96262 28.6817 7.55475 29.0005 7.37066L31.6672 5.83094Z\" fill=\"white\"></path>\n</g>\n<defs>\n<clippath id=\"clip0_1320_2536\">\n<rect width=\"32\" height=\"32\" fill=\"white\"></rect>\n</clippath>\n</defs>\n</svg>",
+            "title": "Hormone Balance",
+            "content": "<p>Promotes hormone signaling for overall balance and vitality.</p>",
+            "image": "shopify://shop_images/hormone-balance.webp",
+            "card_percentage": "28%",
+            "card_text": "<p>improvement in blood flow, reducing oxidative stress</p>",
+            "progress_bar_percentage": 28
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_item_3dyjY4",
+        "collapsible_item_T4JtKP",
+        "collapsible_item_GhzdqU",
+        "collapsible_item_jL8UqU"
+      ],
+      "disabled": true,
+      "name": "C Collapsible Content",
+      "settings": {
+        "background_color": "#d44f2f",
+        "border_radius_top_mobile": 40,
+        "border_radius_top": 80,
+        "heading": "Why Nitric Oxide Matters",
+        "paragraph": "<p>Nitric Oxide (NO) is a vital molecule that plays a crucial role in your blood flow. As we age, our body's natural production decreases — but you can track and support your levels to maintain optimal wellness.</p>",
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 80,
+        "padding_top_mobile": 60,
+        "padding_bottom_mobile": 60
+      }
+    },
+    "interactive_graph_hTNU6W": {
+      "type": "interactive-graph",
+      "disabled": true,
+      "custom_css": [
+        "* {margin-top: 0; padding-top: 1rem;}",
+        "span.declines {text-decoration: underline;}"
+      ],
+      "settings": {
+        "title": "When ** Nitric Oxide ** <span class=\"declines\">Declines</span>,<br>So Does Vitality.",
+        "paragraph": "From your 30s onward, Nitric Oxide levels drop — impacting circulation, stamina, and sexual health. NO Foundation restores what time takes away.",
+        "bg_color": "#f6f3f0",
+        "text_color": ""
+      }
+    },
+    "c_quote_cta_aPNQWh": {
+      "type": "c-quote-cta",
+      "name": "C Quote CTA",
+      "settings": {
+        "quote": "If you're feeling more fatigue than usual, having trouble concentrating, or notice changes impacting multiple areas of life — it's not just you. These shifts are common in peri- and post-menopause. The key is {accent}understanding what your body needs{/accent} to stay strong, energized, and vibrant through every stage.",
+        "button_text": "Sign Up for First Look",
+        "button_link": "#",
+        "content_alignment": "center",
+        "text_alignment": "left",
+        "button_alignment": "flex-start",
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "accent_color": "#d44f2f",
+        "button_bg": "#d44f2f",
+        "button_text_color": "#ffffff",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_banner_signup_b3mDeg": {
+      "type": "c-banner-signup",
+      "name": "C Banner Signup",
+      "settings": {
+        "background_image": "shopify://shop_images/cta-meno-lp.webp",
+        "title": "Something {accent}new{/accent} is coming...",
+        "subtitle": "Designed specifically for women navigating {accent}menopause{/accent} — built on Nitric-Oxide science.",
+        "description": "We've taken everything we know about women's health, blood flow, and hormonal changes to create something entirely new. <strong>Be the first to see it and get early access.</strong>",
+        "use_klaviyo_form": true,
+        "klaviyo_form_id": "Wre23A",
+        "placeholder_text": "Enter your email",
+        "button_text": "Sign Up for First Look",
+        "customer_tag": "newsletter",
+        "card_bg": "rgba(27, 28, 41, 0.50)",
+        "card_border_color": "#1b1c29",
+        "text_color": "#ffffff",
+        "accent_color": "#00b5b5",
+        "input_bg": "#ffffff",
+        "input_text_color": "#333333",
+        "button_bg": "#d44f2f",
+        "button_text_color": "#ffffff",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_faq_tabs_UWK6UP": {
+      "type": "c-faq-tabs",
+      "blocks": {
+        "faq_tab_nGtJRM": {
+          "type": "faq_tab",
+          "settings": {
+            "tab_id": "med-2",
+            "label": "General"
+          }
+        },
+        "faq_item_3zg9na": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "med-2",
+            "question": "What makes this menopause formula different from others?",
+            "answer": "<p>Unlike typical menopause supplements, this formula combines Berkeley Life’s clinically proven Nitric Oxide Support supplement which provides dietary nitrates – the essential building boxes of nitric oxide with purified pollen complex extract. Together, this dual action supplement supports both menopause symptoms and heart health—something no other product on the market does.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_xn9akF": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "med-2",
+            "question": "How does Nitric Oxide support women during menopause?",
+            "answer": "<p>As estrogen levels decline as your naturally age, your body’s natural Nitric Oxide production also drops which may affect circulation and energy. Supporting  healthy Nitric Oxide production helps promotes optimal blood flow and vitality.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_yibBh7": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "med-2",
+            "question": "Is this product hormone-free?",
+            "answer": "<p>Yes. This formula is 100%  hormone free. It can also be used alongside HRT under supervision of your healthcare provider.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_PpyqdR": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "med-2",
+            "question": "How does it support heart health?",
+            "answer": "<p>Estrogen levels naturally decline with age which can affect circulation and cardiovascular function. The Nitric Oxide Support capsules support blood vessel relaxation, healthy circulation and cardiovascular function for overall well-being during menopause and beyond </p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_brpzHQ": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "med-2",
+            "question": "How do I take it?",
+            "answer": "<p>Take two capsules daily—one Nitrate Complex capsule and one Pollen Complex capsule—with water after food. Consistency is key for optimal results and sustained Nitric Oxide support.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_W4qiXp": {
+          "type": "faq_item",
+          "settings": {
+            "tab_id": "med-2",
+            "question": "Can I take this with other supplements or medications?",
+            "answer": "<p>As with any new supplement, it’s best to discuss it with your healthcare provider.</p>",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq_tab_nGtJRM",
+        "faq_item_3zg9na",
+        "faq_item_xn9akF",
+        "faq_item_yibBh7",
+        "faq_item_PpyqdR",
+        "faq_item_brpzHQ",
+        "faq_item_W4qiXp"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "name": "C FAQ Tabs",
+      "settings": {
+        "default_active_tab": "med-2",
+        "faq_title": "**Have Questions?**<br>We’ve Got Answers.",
+        "faq_subtitle": "the most common questions about safety, dosage, shipping, and more....",
+        "bg_color": "#ffffff",
+        "faq_accent": "#d44f2f",
+        "faq_border": "#eaeaea",
+        "faq_text": "#0b0b0b",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "sticky_product_pKfVLz",
+    "c_hero_signup_jtqVkP",
+    "c_logos_RGzxzB",
+    "c_features_grid_jkUHNq",
+    "c_expert_insights_bwnbAH",
+    "c_image_video_EQhhTC",
+    "c_collapsible_content_N8WT7n",
+    "interactive_graph_hTNU6W",
+    "c_quote_cta_aPNQWh",
+    "c_banner_signup_b3mDeg",
+    "c_faq_tabs_UWK6UP"
+  ]
+}

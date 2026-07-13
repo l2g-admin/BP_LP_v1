@@ -1,0 +1,333 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": false,
+        "show_collection_image": true
+      }
+    },
+    "page_header_DMKLyj": {
+      "type": "page-header",
+      "blocks": {
+        "heading_zgV3Vz": {
+          "type": "heading",
+          "settings": {
+            "heading": "A foundation of health, powered by  **Nitric Oxide.**",
+            "heading_level": "h1",
+            "heading_style": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_zgV3Vz"
+      ],
+      "custom_css": [],
+      "settings": {
+        "bg_color": "#f6f3f0",
+        "video_file": "",
+        "text_color": "",
+        "full_width": true,
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 16,
+        "mobile_spacing_bottom": 4,
+        "text_align": "text-center"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "blocks": {
+        "bf_badges_nGYEtM": {
+          "type": "bf_badges",
+          "settings": {
+            "badge_1_text": "SPRING SALE",
+            "badge_1_bg_color": "#000000",
+            "badge_2_text": "SAVE 20%",
+            "badge_2_bg_color": "#d44f2f",
+            "special_badge_1_text": "BEST SELLER",
+            "special_badge_1_bg_color": "#d44f2f",
+            "special_badge_2_text": "SPRING SALE: 20%",
+            "special_badge_2_bg_color": "#000000"
+          }
+        }
+      },
+      "block_order": [
+        "bf_badges_nGYEtM"
+      ],
+      "settings": {
+        "products_per_page": 18,
+        "show_breadcrumbs": false,
+        "image_ratio": "aspect-square",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "quick_shop": false,
+        "show_variants": false,
+        "show_color_swatches": false,
+        "show_layout_options": false,
+        "show_subscription_pricing": true,
+        "enable_filtering": false,
+        "enable_sorting": false,
+        "menu": ""
+      }
+    },
+    "rich_text_97nCpW": {
+      "type": "rich-text",
+      "blocks": {
+        "clamped_text_4YzzPh": {
+          "type": "clamped_text",
+          "settings": {
+            "clamped_text": "<p>Discover products like the Berkeley Life Nitric Oxide Support supplement, featuring potent dietary nitrates designed to naturally boost nitric oxide levels. With just two capsules daily, this supplement supports cardiovascular health and vitality for men and women of all ages. Complement your journey with Berkeley Life Nitric Oxide Test Strips, the easy way to measure, enhance, and maintain healthy nitric oxide levels. Explore our collection to find trusted solutions for your nitric oxide needs, backed by science and loved by thousands</p>"
+          }
+        }
+      },
+      "block_order": [
+        "clamped_text_4YzzPh"
+      ],
+      "settings": {
+        "bg_color": "#f6f3f0",
+        "text_color": "#090909",
+        "full_width": false,
+        "spacing_top": 0,
+        "mobile_spacing_top": 0,
+        "spacing_bottom": 0,
+        "mobile_spacing_bottom": 0,
+        "hover_state": false,
+        "show_hover_product": false,
+        "product": ""
+      }
+    },
+    "columns_w_callouts_YfPPyw": {
+      "type": "columns-w-callouts",
+      "blocks": {
+        "image_UnmYw3": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/image_34.png",
+            "svg": ""
+          }
+        },
+        "image_qBNEcx": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/image_35.png",
+            "svg": ""
+          }
+        },
+        "image_dXFT9g": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/image_36.png",
+            "svg": ""
+          }
+        },
+        "image_zaiPLV": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/image_37.png",
+            "svg": ""
+          }
+        },
+        "callout_NzheA7": {
+          "type": "callout",
+          "settings": {
+            "title": "Gluten free, dairy-free, vegan"
+          }
+        },
+        "callout_tADRVT": {
+          "type": "callout",
+          "settings": {
+            "title": "Created in an FDA-inspected facility"
+          }
+        },
+        "callout_fggxez": {
+          "type": "callout",
+          "settings": {
+            "title": "NSF-GMP registered"
+          }
+        },
+        "callout_WHwk6k": {
+          "type": "callout",
+          "settings": {
+            "title": "GMP certified in the U.S."
+          }
+        }
+      },
+      "block_order": [
+        "image_UnmYw3",
+        "image_qBNEcx",
+        "image_dXFT9g",
+        "image_zaiPLV",
+        "callout_NzheA7",
+        "callout_tADRVT",
+        "callout_fggxez",
+        "callout_WHwk6k"
+      ],
+      "settings": {
+        "bg_color": "",
+        "text_color": "#090909",
+        "heading": "The Berkeley **Boost**",
+        "text": "<p>Berkeley Life’s complete support system can help you measure, attain, and maintain healthy N.O. levels. From supplements to test strips, our products are designed to seamlessly fit into your daily routine and work together to elevate your wellness.</p>"
+      }
+    },
+    "review_carousel_XbTbXW": {
+      "type": "review-carousel",
+      "blocks": {
+        "okendo_reviews_carousel_kJBiaq": {
+          "type": "shopify://apps/okendo/blocks/reviews-carousel/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "show_heading": false,
+            "heading": "",
+            "badge_link": "",
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "okendo_reviews_carousel_kJBiaq"
+      ],
+      "settings": {
+        "title": "Choose Your **Health Goal**"
+      }
+    },
+    "image_with_text_aytKx3": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_mnXCBk": {
+          "type": "heading",
+          "settings": {
+            "heading": "Safety, Quality & **Transparency**",
+            "cursive_color": "text-brand",
+            "heading_level": "h2",
+            "heading_style": "h1"
+          }
+        },
+        "text_pB9JiE": {
+          "type": "text",
+          "settings": {
+            "text": "<p>With over 28,000 research articles on Nitric Oxide and three clinical trials backing our formulations, our commitment to science and integrity is unmatched.<br/>Our products are rigorously researched, validated, and manufactured to the highest standards of quality, safety, and transparency—so you can trust every step of the process.</p>",
+            "columns": false
+          }
+        },
+        "button_AJ4cxM": {
+          "type": "button",
+          "settings": {
+            "button_label": "CLINICAL TESTS",
+            "b2b_button_label": "",
+            "button_link": "shopify://pages/clinical-data",
+            "b2b_button_link": "",
+            "button_style": "button--text",
+            "mobile_hide": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_mnXCBk",
+        "text_pB9JiE",
+        "button_AJ4cxM"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Group_20637.png",
+        "eager": false,
+        "mobile_hidden": false,
+        "video_file": "",
+        "image_ratio": "aspect-square",
+        "image_cover": "object-contain",
+        "layout": "image_first",
+        "split": "md:grid-cols-2",
+        "bg_color": "",
+        "text_color": "",
+        "text_align": "text-left",
+        "justify_top": false,
+        "spacing_top": 16,
+        "mobile_spacing_top": 8,
+        "spacing_bottom": 0,
+        "mobile_spacing_bottom": 0,
+        "full_width": false,
+        "border": false,
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "featured_blog_TfnXdy": {
+      "type": "featured-blog",
+      "settings": {
+        "bg_color": "#f6f3f0",
+        "text_color": "#080b2b",
+        "heading": "Be In The N.O.",
+        "description": "",
+        "blog": "news",
+        "desktop_post_limit": 5,
+        "post_limit": 5,
+        "show_image": true,
+        "show_date": false,
+        "show_author": false,
+        "show_view_all": true,
+        "mobile_scroll": true
+      }
+    },
+    "newsletter_8pHyTL": {
+      "type": "newsletter",
+      "blocks": {
+        "heading_GEqNmE": {
+          "type": "heading",
+          "settings": {
+            "heading": "STAY UPDATED",
+            "heading_style": "subhead"
+          }
+        },
+        "heading_xw6t7H": {
+          "type": "heading",
+          "settings": {
+            "heading": "**Sign up** to get emails",
+            "heading_style": "h2"
+          }
+        },
+        "paragraph_RrwCVa": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Join our email list for lorem ipsum.</p>"
+          }
+        },
+        "email_form_PD48pC": {
+          "type": "email_form",
+          "settings": {
+            "button_style": "button button--seondary"
+          }
+        }
+      },
+      "block_order": [
+        "heading_GEqNmE",
+        "heading_xw6t7H",
+        "paragraph_RrwCVa",
+        "email_form_PD48pC"
+      ],
+      "settings": {
+        "bg_color": "#d54f2f",
+        "text_color": "",
+        "image": "shopify://shop_images/Group_20604.png"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "page_header_DMKLyj",
+    "product-grid",
+    "rich_text_97nCpW",
+    "columns_w_callouts_YfPPyw",
+    "review_carousel_XbTbXW",
+    "image_with_text_aytKx3",
+    "featured_blog_TfnXdy",
+    "newsletter_8pHyTL"
+  ]
+}

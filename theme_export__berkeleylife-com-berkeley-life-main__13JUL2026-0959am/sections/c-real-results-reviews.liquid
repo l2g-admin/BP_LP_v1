@@ -1,0 +1,1051 @@
+{%- comment -%}
+  Section: C Real Results Reviews
+  Description: Desktop-first testimonial swiper with mixed text and video review cards and a custom progress control bar.
+  sl-id: sl-section-real-results-reviews-v1
+  Figma: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5789-15364&m=dev
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-real-results-reviews-v1'
+  assign section_anchor_id = section.settings.sl_anchor_id | default: section.id
+  assign cta_block = section.blocks | where: 'type', 'cta' | first
+-%}
+
+<section
+  id="{{ section_anchor_id }}"
+  class="c-real-results-reviews"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-real-results-reviews"
+>
+  <div class="c-real-results-reviews__container page-width">
+    <div class="c-real-results-reviews__heading-wrap">
+      {%- if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank -%}
+        <h2 class="c-real-results-reviews__heading">
+          {%- if section.settings.heading_line_1 != blank -%}
+            <span class="c-real-results-reviews__heading-line">{{ section.settings.heading_line_1 }}</span>
+          {%- endif -%}
+
+          {%- if section.settings.heading_line_2 != blank -%}
+            <span class="c-real-results-reviews__heading-line c-real-results-reviews__heading-line--accent">{{ section.settings.heading_line_2 }}</span>
+          {%- endif -%}
+        </h2>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="c-real-results-reviews__slider-wrap">
+        <div class="swiper c-real-results-reviews__swiper js-real-results-swiper-{{ section.id }}">
+          <div class="swiper-wrapper">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'text_review' or block.type == 'video_review' -%}
+                <div class="swiper-slide c-real-results-reviews__slide" {{ block.shopify_attributes }}>
+                  {%- case block.type -%}
+                    {%- when 'text_review' -%}
+                      <article class="c-real-results-reviews__card c-real-results-reviews__card--text">
+                        <div class="c-real-results-reviews__stars" aria-hidden="true">
+                          {%- for i in (1..5) -%}
+                            {% render 'c-orange-star' %}
+                          {%- endfor -%}
+                        </div>
+
+                        {%- if block.settings.review_title != blank -%}
+                          <p class="c-real-results-reviews__text-title">{{ block.settings.review_title }}</p>
+                        {%- endif -%}
+
+                        {%- if block.settings.review_body != blank -%}
+                          <p class="c-real-results-reviews__text-body">{{ block.settings.review_body }}</p>
+                        {%- endif -%}
+
+                        {%- if block.settings.author_name != blank -%}
+                          <p class="c-real-results-reviews__author">{{ block.settings.author_name }}</p>
+                        {%- endif -%}
+                      </article>
+
+                    {%- when 'video_review' -%}
+                      <article class="c-real-results-reviews__card c-real-results-reviews__card--video">
+                        <div class="c-real-results-reviews__video-wrap">
+                          {%- if block.settings.video != blank -%}
+                            {{
+                              block.settings.video
+                              | video_tag:
+                                class: 'c-real-results-reviews__video',
+                                autoplay: true,
+                                loop: true,
+                                muted: true,
+                                controls: false,
+                                playsinline: true,
+                                image_size: '760x1290'
+                            }}
+                          {%- elsif block.settings.video_cdn_url != blank -%}
+                            <video
+                              class="c-real-results-reviews__video"
+                              autoplay
+                              loop
+                              muted
+                              playsinline
+                              preload="metadata"
+                              {% if block.settings.poster_image != blank %}poster="{{ block.settings.poster_image | image_url: width: 760 }}"{% endif %}
+                            >
+                              <source src="{{ block.settings.video_cdn_url }}" type="video/mp4">
+                            </video>
+                          {%- endif -%}
+
+                          {%- if block.settings.video != blank or block.settings.video_cdn_url != blank -%}
+                            <div class="c-real-results-reviews__video-controls" aria-label="Video controls">
+                              <button
+                                type="button"
+                                class="c-real-results-reviews__video-control js-real-results-video-control"
+                                data-action="mute"
+                                aria-label="Unmute video"
+                                aria-pressed="false"
+                              >
+                                <span class="c-real-results-reviews__video-control-icon c-real-results-reviews__video-control-icon--muted" aria-hidden="true">
+                                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                                    <path d="M4 9.5V14.5H8.2L13 19V5L8.2 9.5H4Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M16 9L21 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                    <path d="M21 9L16 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                  </svg>
+                                </span>
+                                <span class="c-real-results-reviews__video-control-icon c-real-results-reviews__video-control-icon--unmuted" aria-hidden="true">
+                                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                                    <path d="M4 9.5V14.5H8.2L13 19V5L8.2 9.5H4Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M16.5 9C17.5 9.9 18.1 11.1 18.1 12.4C18.1 13.7 17.5 14.9 16.5 15.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                    <path d="M19 6.8C20.7 8.2 21.8 10.2 21.8 12.4C21.8 14.6 20.7 16.6 19 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                  </svg>
+                                </span>
+                              </button>
+                              <button
+                                type="button"
+                                class="c-real-results-reviews__video-control js-real-results-video-control"
+                                data-action="play"
+                                aria-label="Pause video"
+                                aria-pressed="false"
+                              >
+                                <span class="c-real-results-reviews__video-control-icon c-real-results-reviews__video-control-icon--pause" aria-hidden="true">
+                                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                                    <path d="M9 6.5V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M15 6.5V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                  </svg>
+                                </span>
+                                <span class="c-real-results-reviews__video-control-icon c-real-results-reviews__video-control-icon--play" aria-hidden="true">
+                                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                                    <path d="M8.5 6.8L17 12L8.5 17.2V6.8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                  </svg>
+                                </span>
+                              </button>
+                            </div>
+                          {%- elsif block.settings.poster_image != blank -%}
+                            {{
+                              block.settings.poster_image
+                              | image_url: width: 760
+                              | image_tag:
+                                class: 'c-real-results-reviews__video',
+                                loading: 'lazy',
+                                widths: '380, 760',
+                                alt: block.settings.author_name | default: 'Video review'
+                            }}
+                          {%- else -%}
+                            {{ 'image' | placeholder_svg_tag: 'c-real-results-reviews__video c-real-results-reviews__video--placeholder' }}
+                          {%- endif -%}
+                        </div>
+
+                        {%- if block.settings.author_name != blank -%}
+                          <p class="c-real-results-reviews__author c-real-results-reviews__author--overlay">{{ block.settings.author_name }}</p>
+                        {%- endif -%}
+                      </article>
+                  {%- endcase -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+
+      <div class="c-real-results-reviews__controls" aria-label="Review carousel controls">
+        <div class="c-real-results-reviews__scrollbar js-real-results-scrollbar-{{ section.id }}"></div>
+
+        <div class="c-real-results-reviews__arrows">
+          <button
+            type="button"
+            class="c-real-results-reviews__arrow c-real-results-reviews__arrow--prev js-real-results-prev-{{ section.id }}"
+            aria-label="Previous review"
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <path d="M15.5 5L8.5 12L15.5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            class="c-real-results-reviews__arrow c-real-results-reviews__arrow--next js-real-results-next-{{ section.id }}"
+            aria-label="Next review"
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <path d="M8.5 5L15.5 12L8.5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {%- if cta_block != blank and cta_block.settings.cta_label != blank and cta_block.settings.cta_link != blank -%}
+        <div class="c-real-results-reviews__cta-wrap" {{ cta_block.shopify_attributes }}>
+          <a
+            class="c-real-results-reviews__cta"
+            href="{{ cta_block.settings.cta_link }}"
+            {% if cta_block.settings.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+          >
+            <span class="c-real-results-reviews__cta-label">{{ cta_block.settings.cta_label }}</span>
+            <span class="c-real-results-reviews__cta-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .c-real-results-reviews {
+    --sl-c-real-results-reviews-bg: {{ section.settings.background_color }};
+    --sl-c-real-results-reviews-title-color: {{ section.settings.title_color }};
+    --sl-c-real-results-reviews-title-accent: {{ section.settings.title_accent_color }};
+    --sl-c-real-results-reviews-card-bg: {{ section.settings.card_background_color }};
+    --sl-c-real-results-reviews-text-color: {{ section.settings.text_color }};
+    --sl-c-real-results-reviews-accent: {{ section.settings.accent_color }};
+    --sl-c-real-results-reviews-track: {{ section.settings.track_color }};
+    --sl-c-real-results-reviews-track-active: {{ section.settings.track_active_color }};
+    background-color: var(--sl-c-real-results-reviews-bg);
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__container {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 1760px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__heading-wrap {
+    margin: 0 auto;
+    max-width: 1760px;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__heading {
+    color: var(--sl-c-real-results-reviews-title-color);
+    display: flex;
+    flex-direction: column;
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-size: clamp(34px, 8vw, 48px);
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__heading-line--accent {
+    color: var(--sl-c-real-results-reviews-title-accent);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(38px, 8.4vw, 52px);
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__slider-wrap {
+    margin-top: 32px;
+    overflow: visible;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__swiper {
+    overflow: visible;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__slide {
+    height: auto;
+    width: 300px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__card {
+    border-radius: 32px;
+    box-sizing: border-box;
+    height: 510px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__card--text {
+    align-items: center;
+    background: var(--sl-c-real-results-reviews-card-bg);
+    color: var(--sl-c-real-results-reviews-text-color);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 42px 26px 26px;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__stars {
+    align-items: center;
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    line-height: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__stars svg {
+    display: block;
+    height: 18px;
+    width: 18px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__text-title {
+    color: var(--sl-c-real-results-reviews-text-color);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(26px, 3.5vw, 32px);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+    max-width: 316px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__text-body {
+    color: var(--sl-c-real-results-reviews-text-color);
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 316px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__author {
+    color: var(--sl-c-real-results-reviews-accent, #D54F2F);
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 2.66px;
+    line-height: 19px;
+    margin: auto 0 0;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__card--video {
+    background: #d8d8d8;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-wrap {
+    height: 100%;
+    position: relative;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video {
+    border: 0;
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video--placeholder {
+    background: #eff1f2;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-controls {
+    align-items: center;
+    bottom: 14px;
+    display: flex;
+    gap: 8px;
+    left: 14px;
+    position: absolute;
+    z-index: 2;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control {
+    background: rgba(8, 11, 43, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    color: #ffffff;
+    cursor: pointer;
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    min-height: 34px;
+    min-width: 40px;
+    padding: 8px;
+    transition: opacity 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control-icon {
+    display: flex;
+    height: 20px;
+    width: 20px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control-icon svg {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control-icon--unmuted,
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control-icon--play,
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control.is-active .c-real-results-reviews__video-control-icon--muted,
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control.is-active .c-real-results-reviews__video-control-icon--pause {
+    display: none;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control.is-active .c-real-results-reviews__video-control-icon--unmuted,
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control.is-active .c-real-results-reviews__video-control-icon--play {
+    display: flex;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control:hover {
+    opacity: 0.85;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__video-control:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__author--overlay {
+    background: linear-gradient(180deg, rgba(8, 11, 43, 0) 0%, rgba(8, 11, 43, 0.55) 100%);
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    padding: 40px 16px 16px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__controls {
+    align-items: center;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr;
+    margin-top: 28px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__scrollbar {
+    background: var(--sl-c-real-results-reviews-track);
+    border-radius: 999px;
+    height: 1px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__scrollbar .swiper-scrollbar-drag {
+    background: var(--sl-c-real-results-reviews-track-active);
+    border-radius: 999px;
+    top: 0;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__arrows {
+    align-items: center;
+    display: flex;
+    gap: 2px;
+    justify-self: end;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__arrow {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: var(--sl-c-real-results-reviews-accent);
+    cursor: pointer;
+    display: inline-flex;
+    height: 40px;
+    justify-content: center;
+    padding: 0;
+    transition: opacity 0.2s ease;
+    width: 40px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__arrow:hover {
+    opacity: 0.72;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__arrow.swiper-button-disabled {
+    cursor: default;
+    opacity: 0.35;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__arrow svg {
+    height: 24px;
+    width: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__cta-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__cta {
+    align-items: center;
+    background: var(--sl-c-real-results-reviews-accent);
+    border-radius: 42px;
+    color: #f6f3f0;
+    column-gap: 8px;
+    display: inline-flex;
+    font-family: 'TT Commons Pro', 'TT Commons', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    line-height: 1.2;
+    min-height: 56px;
+    padding: 16px 40px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__cta:hover {
+    opacity: 0.88;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__cta:focus-visible {
+    outline: 2px solid #080b2b;
+    outline-offset: 3px;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__cta-label {
+    display: inline-block;
+  }
+
+  #shopify-section-{{ section.id }} .c-real-results-reviews__cta-arrow {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  @media (min-width: 768px) {
+    #shopify-section-{{ section.id }} .c-real-results-reviews__container {
+      padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+      padding-top: {{ section.settings.padding_top_desktop }}px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__heading {
+      font-size: 48px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__heading-line--accent {
+      font-size: 52px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__slider-wrap {
+      margin-top: 48px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__slide {
+      width: 380px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__card {
+      height: 645px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__card--text {
+      padding: 48px 32px 26px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__text-title {
+      max-width: 316px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__controls {
+      gap: 24px;
+      grid-template-columns: 1fr auto;
+      margin-top: 48px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__video-controls {
+      bottom: 18px;
+      left: 18px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__video-control {
+      min-height: 36px;
+      min-width: 42px;
+    }
+
+    #shopify-section-{{ section.id }} .c-real-results-reviews__cta-wrap {
+      margin-top: 48px;
+    }
+  }
+
+  @media (min-width: 978px) {
+    #shopify-section-{{ section.id }} .c-real-results-reviews__container {
+      padding-inline: 80px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    #shopify-section-{{ section.id }} .c-real-results-reviews__container {
+      padding-inline: 80px;
+    }
+  }
+
+  @media (min-width: 1980px) {
+    #shopify-section-{{ section.id }} .c-real-results-reviews__container {
+      max-width: 1920px;
+      padding-inline: 80px;
+    }
+  }
+{% endstyle %}
+
+<script>
+  (function() {
+    const sectionId = '{{ section.id }}';
+    const containerSelector = '.js-real-results-swiper-' + sectionId;
+    const scrollbarSelector = '.js-real-results-scrollbar-' + sectionId;
+    const nextSelector = '.js-real-results-next-' + sectionId;
+    const prevSelector = '.js-real-results-prev-' + sectionId;
+
+    window.__slRealResultsInstances = window.__slRealResultsInstances || {};
+
+    function destroySwiper(instanceId) {
+      const instance = window.__slRealResultsInstances[instanceId];
+      if (instance && typeof instance.destroy === 'function') {
+        instance.destroy(true, true);
+      }
+      delete window.__slRealResultsInstances[instanceId];
+    }
+
+    function initSwiper() {
+      if (typeof Swiper === 'undefined') {
+        return;
+      }
+
+      const slider = document.querySelector(containerSelector);
+      if (!slider) {
+        return;
+      }
+
+      destroySwiper(sectionId);
+
+      const nextEl = document.querySelector(nextSelector);
+      const prevEl = document.querySelector(prevSelector);
+      const scrollbarEl = document.querySelector(scrollbarSelector);
+
+      window.__slRealResultsInstances[sectionId] = new Swiper(containerSelector, {
+        slidesPerView: 'auto',
+        spaceBetween: 24,
+        slidesOffsetBefore: 16,
+        slidesOffsetAfter: 16,
+        speed: 550,
+        grabCursor: true,
+        watchOverflow: true,
+        navigation: {
+          nextEl: nextEl,
+          prevEl: prevEl
+        },
+        scrollbar: {
+          el: scrollbarEl,
+          draggable: true,
+          dragClass: 'swiper-scrollbar-drag'
+        },
+        breakpoints: {
+          0: {
+            spaceBetween: 16,
+            slidesOffsetBefore: 16,
+            slidesOffsetAfter: 16
+          },
+          768: {
+            spaceBetween: 24,
+            slidesOffsetBefore: 24,
+            slidesOffsetAfter: 24
+          }
+        }
+      });
+    }
+
+    function syncVideoButtonLabels(button, video) {
+      if (!button || !video) {
+        return;
+      }
+
+      const action = button.dataset.action;
+
+      if (action === 'mute') {
+        const shouldUnmute = video.muted;
+        button.classList.toggle('is-active', !shouldUnmute);
+        button.setAttribute('aria-label', shouldUnmute ? 'Unmute video' : 'Mute video');
+        button.setAttribute('aria-pressed', shouldUnmute ? 'false' : 'true');
+      }
+
+      if (action === 'play') {
+        const isPaused = video.paused;
+        button.classList.toggle('is-active', isPaused);
+        button.setAttribute('aria-label', isPaused ? 'Play video' : 'Pause video');
+        button.setAttribute('aria-pressed', isPaused ? 'false' : 'true');
+      }
+    }
+
+    function syncVideoControlGroup(videoWrap) {
+      if (!videoWrap) {
+        return;
+      }
+
+      const video = videoWrap.querySelector('video');
+      if (!video) {
+        return;
+      }
+
+      const buttons = videoWrap.querySelectorAll('.js-real-results-video-control');
+      buttons.forEach(function(button) {
+        syncVideoButtonLabels(button, video);
+      });
+    }
+
+    function muteOtherVideos(activeVideo, slider) {
+      if (!activeVideo || !slider) {
+        return;
+      }
+
+      const allVideos = slider.querySelectorAll('video');
+      allVideos.forEach(function(video) {
+        if (video !== activeVideo && !video.muted) {
+          video.muted = true;
+        }
+      });
+    }
+
+    function initVideoControls() {
+      const slider = document.querySelector(containerSelector);
+      if (!slider) {
+        return;
+      }
+
+      if (slider.dataset.videoControlsBound === 'true') {
+        return;
+      }
+      slider.dataset.videoControlsBound = 'true';
+
+      const videoWraps = slider.querySelectorAll('.c-real-results-reviews__video-wrap');
+      videoWraps.forEach(function(videoWrap) {
+        syncVideoControlGroup(videoWrap);
+      });
+
+      slider.addEventListener('click', function(event) {
+        const button = event.target.closest('.js-real-results-video-control');
+        if (!button) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const videoWrap = button.closest('.c-real-results-reviews__video-wrap');
+        if (!videoWrap) {
+          return;
+        }
+
+        const video = videoWrap.querySelector('video');
+        if (!video) {
+          return;
+        }
+
+        if (button.dataset.action === 'mute') {
+          const nextMutedState = !video.muted;
+          video.muted = nextMutedState;
+
+          if (!nextMutedState) {
+            muteOtherVideos(video, slider);
+          }
+        }
+
+        if (button.dataset.action === 'play') {
+          if (video.paused) {
+            video.play().catch(function() {});
+          } else {
+            video.pause();
+          }
+        }
+
+        syncVideoControlGroup(videoWrap);
+      });
+
+      slider.addEventListener('play', function(event) {
+        const video = event.target;
+        if (video && video.tagName === 'VIDEO') {
+          syncVideoControlGroup(video.closest('.c-real-results-reviews__video-wrap'));
+        }
+      }, true);
+
+      slider.addEventListener('pause', function(event) {
+        const video = event.target;
+        if (video && video.tagName === 'VIDEO') {
+          syncVideoControlGroup(video.closest('.c-real-results-reviews__video-wrap'));
+        }
+      }, true);
+
+      slider.addEventListener('volumechange', function(event) {
+        const video = event.target;
+        if (video && video.tagName === 'VIDEO') {
+          if (!video.muted) {
+            muteOtherVideos(video, slider);
+          }
+          syncVideoControlGroup(video.closest('.c-real-results-reviews__video-wrap'));
+        }
+      }, true);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        initSwiper();
+        initVideoControls();
+      });
+    } else {
+      initSwiper();
+      initVideoControls();
+    }
+
+    document.addEventListener('shopify:section:load', function(event) {
+      if (event.detail && event.detail.sectionId === sectionId) {
+        initSwiper();
+        initVideoControls();
+      }
+    });
+
+    document.addEventListener('shopify:section:unload', function(event) {
+      if (event.detail && event.detail.sectionId === sectionId) {
+        destroySwiper(sectionId);
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "C Real Results Reviews",
+  "tag": "section",
+  "class": "c-real-results-reviews-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading line 1",
+      "default": "Real Results."
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading line 2",
+      "default": "Real People."
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Desktop padding top",
+      "min": 0,
+      "max": 220,
+      "step": 4,
+      "unit": "px",
+      "default": 128
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Desktop padding bottom",
+      "min": 0,
+      "max": 220,
+      "step": 4,
+      "unit": "px",
+      "default": 128
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile padding top",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile padding bottom",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#dfdbd9"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Heading color",
+      "default": "#0b0b0b"
+    },
+    {
+      "type": "color",
+      "id": "title_accent_color",
+      "label": "Heading accent color",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Text card background",
+      "default": "#fdfeff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#080b2b"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "track_color",
+      "label": "Control bar base",
+      "default": "#d0ccc9"
+    },
+    {
+      "type": "color",
+      "id": "track_active_color",
+      "label": "Control bar active",
+      "default": "#d54f2f"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_review",
+      "name": "Text review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "review_title",
+          "label": "Review title",
+          "default": "They completely transformed the way I work out."
+        },
+        {
+          "type": "textarea",
+          "id": "review_body",
+          "label": "Review body",
+          "default": "\"Since starting Berkeley Life three months ago, my endurance has improved dramatically. I'm pushing past plateaus I couldn't break through for years.\""
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author",
+          "default": "Name here"
+        }
+      ]
+    },
+    {
+      "type": "video_review",
+      "name": "Video review",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify-hosted video"
+        },
+        {
+          "type": "url",
+          "id": "video_cdn_url",
+          "label": "External CDN video URL (MP4)",
+          "info": "Used only if no Shopify-hosted video is selected. Must point to a direct .mp4 file."
+        },
+        {
+          "type": "image_picker",
+          "id": "poster_image",
+          "label": "Fallback image"
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author",
+          "default": "Name here"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "CTA",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label",
+          "default": "Unlock my free sample kit"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_in_new_tab",
+          "label": "Open in new tab",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Real Results Reviews",
+      "blocks": [
+        {
+          "type": "text_review"
+        },
+        {
+          "type": "video_review"
+        },
+        {
+          "type": "text_review"
+        },
+        {
+          "type": "cta"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

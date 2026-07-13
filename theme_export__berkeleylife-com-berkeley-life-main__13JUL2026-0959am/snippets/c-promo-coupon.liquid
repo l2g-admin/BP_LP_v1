@@ -1,0 +1,248 @@
+{%- doc -%}
+  C Promo Coupon - Promo banner with a description on the left and a copy-to-clipboard discount code on the right.
+
+  Parameters:
+  - uid: Unique identifier for scoping CSS/JS (required — e.g. section.id or block.id)
+  - text: Leading description (richtext or string). Wrap the emphasized portion in <strong> to make it bold.
+  - code: Discount code to display & copy (default: 'PRIME')
+  - copy_label: Default button label (default: 'Copy')
+  - copied_label: Label shown after a successful copy (default: 'Copied!')
+  - aria_label: Accessible label for the copy button (default: 'Copy discount code')
+  - bg_color: Banner background color (default: '#F7EFE2')
+  - border_color: Banner border color (default: '#F7EFE2')
+  - text_color: Description text color (default: '#1B1E2A')
+  - code_bg_color: Code pill background color (default: '#FFFFFF')
+  - code_border_color: Code pill border color (default: '#D54F2F')
+  - code_text_color: Code text color (default: '#1B1E2A')
+  - button_bg_color: Copy button background color (default: '#1B1E2A')
+  - button_text_color: Copy button text color (default: '#FFFFFF')
+  - padding_top / padding_bottom: Desktop padding in px (default: 16)
+  - padding_top_mobile / padding_bottom_mobile: Mobile padding in px (default: 14)
+
+  Usage:
+    {% render 'c-promo-coupon',
+      uid: block.id,
+      text: block.settings.text,
+      code: block.settings.code
+    %}
+{%- enddoc -%}
+
+{%- liquid
+  assign pcc_uid = uid | default: 'c-promo-coupon'
+  assign pcc_root_id = 'c-promo-coupon-' | append: pcc_uid
+  assign pcc_text = text | default: 'Claim 25% off storewide + up to <strong>48% off first subscriptions</strong>'
+  assign pcc_code = code | default: 'PRIME'
+  assign pcc_copy_label = copy_label | default: 'Copy'
+  assign pcc_copied_label = copied_label | default: 'Copied!'
+  assign pcc_aria_label = aria_label | default: 'Copy discount code'
+  assign pcc_bg = bg_color | default: '#F7EFE2'
+  assign pcc_border = border_color | default: '#F7EFE2'
+  assign pcc_text_color = text_color | default: '#1B1E2A'
+  assign pcc_code_bg = code_bg_color | default: '#FFFFFF'
+  assign pcc_code_border = code_border_color | default: '#D54F2F'
+  assign pcc_code_text = code_text_color | default: '#1B1E2A'
+  assign pcc_btn_bg = button_bg_color | default: '#1B1E2A'
+  assign pcc_btn_text = button_text_color | default: '#FFFFFF'
+  assign pcc_pt = padding_top | default: 16
+  assign pcc_pb = padding_bottom | default: 16
+  assign pcc_pt_m = padding_top_mobile | default: 14
+  assign pcc_pb_m = padding_bottom_mobile | default: 14
+-%}
+
+<div id="{{ pcc_root_id }}" class="c-promo-coupon" data-promo-coupon-root>
+  <div class="c-promo-coupon__inner">
+    <div class="c-promo-coupon__text">{{ pcc_text }}</div>
+
+    <div class="c-promo-coupon__code-wrap">
+      <span class="c-promo-coupon__code" data-promo-coupon-code>{{ pcc_code }}</span>
+      <button
+        type="button"
+        class="c-promo-coupon__button"
+        data-promo-coupon-button
+        data-code="{{ pcc_code | escape }}"
+        data-copy-label="{{ pcc_copy_label | escape }}"
+        data-copied-label="{{ pcc_copied_label | escape }}"
+        aria-label="{{ pcc_aria_label | escape }}"
+      >
+        <span data-promo-coupon-button-label>{{ pcc_copy_label }}</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  #{{ pcc_root_id }} {
+    --sl-c-promo-coupon-bg: {{ pcc_bg }};
+    --sl-c-promo-coupon-border: {{ pcc_border }};
+    --sl-c-promo-coupon-text: {{ pcc_text_color }};
+    --sl-c-promo-coupon-code-bg: {{ pcc_code_bg }};
+    --sl-c-promo-coupon-code-border: {{ pcc_code_border }};
+    --sl-c-promo-coupon-code-text: {{ pcc_code_text }};
+    --sl-c-promo-coupon-btn-bg: {{ pcc_btn_bg }};
+    --sl-c-promo-coupon-btn-text: {{ pcc_btn_text }};
+    --sl-c-promo-coupon-pt: {{ pcc_pt_m }}px;
+    --sl-c-promo-coupon-pb: {{ pcc_pb_m }}px;
+
+    padding-top: var(--sl-c-promo-coupon-pt);
+    padding-bottom: var(--sl-c-promo-coupon-pb);
+    padding-left: 14px;
+    padding-right: 14px;
+    background-color: var(--sl-c-promo-coupon-bg);
+    border: 1px solid var(--sl-c-promo-coupon-border);
+    border-radius: 12px;
+  }
+
+  #{{ pcc_root_id }} .c-promo-coupon__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+ 
+  }
+
+  #{{ pcc_root_id }} .c-promo-coupon__text {
+    margin: 0;
+    flex: 0 0 50%;
+    min-width: 0;
+    color: var(--sl-c-promo-coupon-text);
+    font-family: "TT Commons Pro", var(--font-body-family), sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.35;
+  }
+
+  #{{ pcc_root_id }} .c-promo-coupon__text strong {
+    font-weight: 700;
+  }
+
+  #{{ pcc_root_id }} .c-promo-coupon__code-wrap {
+    display: inline-flex;
+    align-items: stretch;
+    gap: 0;
+    background-color: var(--sl-c-promo-coupon-code-bg);
+    border: 1.5px solid var(--sl-c-promo-coupon-code-border);
+    border-radius: 10px;
+    padding: 4px;
+    flex: 0 0 auto;
+  }
+
+  #{{ pcc_root_id }} .c-promo-coupon__code {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    color: var(--sl-c-promo-coupon-code-text);
+    font-family: "TT Commons Pro", var(--font-heading-family), sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    user-select: all;
+  }
+
+  #{{ pcc_root_id }} .c-promo-coupon__button {
+    appearance: none;
+    border: 0;
+    margin: 0;
+    padding: 8px 16px;
+    background-color: var(--sl-c-promo-coupon-btn-bg);
+    color: var(--sl-c-promo-coupon-btn-text);
+    font-family: "TT Commons Pro", var(--font-heading-family), sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.15s ease-in-out;
+  }
+
+  #{{ pcc_root_id }} .c-promo-coupon__button:hover {
+    opacity: 0.88;
+  }
+
+  #{{ pcc_root_id }} .c-promo-coupon__button:focus-visible {
+    outline: 2px solid var(--sl-c-promo-coupon-code-border);
+    outline-offset: 2px;
+  }
+
+  #{{ pcc_root_id }} .c-promo-coupon__button[data-copied="true"] {
+    opacity: 0.85;
+  }
+
+  @media (min-width: 768px) {
+    #{{ pcc_root_id }} {
+      --sl-c-promo-coupon-pt: {{ pcc_pt }}px;
+      --sl-c-promo-coupon-pb: {{ pcc_pb }}px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    #{{ pcc_root_id }} .c-promo-coupon__inner {
+      flex-wrap: nowrap;
+      gap: 20px;
+    }
+
+    #{{ pcc_root_id }} .c-promo-coupon__text {
+      font-size: 15px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var rootEl = document.getElementById('{{ pcc_root_id }}');
+    if (!rootEl) return;
+
+    var buttonEl = rootEl.querySelector('[data-promo-coupon-button]');
+    if (!buttonEl) return;
+
+    var labelEl = buttonEl.querySelector('[data-promo-coupon-button-label]');
+    var code = buttonEl.getAttribute('data-code') || '';
+    var copyLabel = buttonEl.getAttribute('data-copy-label') || 'Copy';
+    var copiedLabel = buttonEl.getAttribute('data-copied-label') || 'Copied!';
+    var resetTimer = null;
+
+    function setLabel(text, copied) {
+      if (labelEl) labelEl.textContent = text;
+      if (copied) {
+        buttonEl.setAttribute('data-copied', 'true');
+      } else {
+        buttonEl.removeAttribute('data-copied');
+      }
+    }
+
+    function fallbackCopy(value) {
+      var textarea = document.createElement('textarea');
+      textarea.value = value;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'absolute';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+      } catch (err) {}
+      document.body.removeChild(textarea);
+    }
+
+    buttonEl.addEventListener('click', function () {
+      if (!code) return;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).catch(function () {
+          fallbackCopy(code);
+        });
+      } else {
+        fallbackCopy(code);
+      }
+
+      setLabel(copiedLabel, true);
+
+      if (resetTimer) clearTimeout(resetTimer);
+      resetTimer = setTimeout(function () {
+        setLabel(copyLabel, false);
+      }, 2000);
+    });
+  })();
+</script>

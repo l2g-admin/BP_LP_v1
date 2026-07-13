@@ -1,0 +1,1465 @@
+<style>
+  #{{ section.id }} {
+    background-color: {{ section.settings.background_color }};
+    position: relative;
+    overflow: hidden;
+
+    & .hero-signup__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      & .hero-signup__bg--desktop {
+        display: none;
+      }
+
+      & .hero-signup__bg--mobile {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      @media (min-width: 768px) {
+        & .hero-signup__bg--desktop {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+        & .hero-signup__bg--mobile {
+          display: none;
+        }
+      }
+    }
+
+    & .hero-signup__container {
+      padding-block: {{ section.settings.padding_top }}rem {{ section.settings.padding_bottom }}rem;
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: {{ section.settings.mobile_layout }};
+      gap: 2rem;
+      min-height: auto;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    & .hero-signup__content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    & .hero-signup__stars {
+      display: flex;
+      
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 14px;
+    }
+
+    & .stars-wrapper {
+      display: flex;
+      color: {{ section.settings.accent_color }};
+      gap: 0.15rem;
+    }
+
+    & .trusted-text {
+      color: {{ section.settings.accent_color }};
+      font-size: clamp(12px, 3vw, 14px);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: "Montserrat", sans-serif;
+      font-style: normal;
+    }
+
+    & .hero-signup__subheading {
+      font-size: clamp(12px, 3vw, 16px);
+      font-style: normal;
+      font-weight: 700;
+      line-height: 120%;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin: 0;
+      color: {{ section.settings.subheading_color }};
+    }
+
+    & .hero-signup__title {
+      font-size: clamp(32px, 8vw, 56px);
+      font-weight: 400;
+      line-height: 110%;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+      width: 100%;
+    }
+
+    & .hero-signup__title--accent {
+      color: {{ section.settings.accent_color }};
+      font-style: italic;
+      font-family: "Cormorant Garamond";
+    }
+
+    & .hero-signup__description {
+      font-size: clamp(16px, 4vw, 20px);
+      line-height: 150%;
+      font-weight: 300;
+      margin: 0;
+      color: {{ section.settings.text_color }};
+      width: 100%;
+    }
+
+    /* Email signup box styles */
+    & .hero-signup__email-box {
+      background-color: {{ section.settings.email_box_bg }};
+      border-radius: 16px;
+      padding: 1.5rem;
+      width: 100%;
+ 
+      margin-top: 0.5rem;
+    }
+
+    & .email-box__title {
+      font-size: clamp(18px, 4vw, 22px);
+ 
+      color: {{ section.settings.email_box_text_color }};
+      margin: 0 0 0.5rem 0;
+      text-align: center;
+    }
+
+    & .email-box__description {
+      font-size: clamp(14px, 3vw, 16px);
+      color: {{ section.settings.email_box_text_color }};
+      opacity: 0.8;
+      margin: 0 0 1rem 0;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    & .email-box__form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    & .email-box__input-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+      background-color: transparent;
+      border-radius: 9999px;
+      padding: 0.5rem;
+    }
+
+    & .email-box__input {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      border: none;
+      border-radius: 9999px;
+      font-size: 16px;
+      background-color: white;
+      color: #333;
+      outline: none;
+    }
+
+    & .email-box__input::placeholder {
+      color: #999;
+    }
+
+    & .email-box__button {
+      padding: 1rem 2rem;
+      background-color: {{ section.settings.email_button_bg }};
+      color: {{ section.settings.email_button_text }};
+      border: none;
+      border-radius: 9999px;
+      font-size: 14px;
+ 
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      white-space: nowrap;
+    }
+
+    & .email-box__button:hover {
+      background-color: {{ section.settings.email_button_bg | color_darken: 10 }};
+      transform: scale(1.02);
+    }
+
+    & .chart__button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background-color: {{ section.settings.accent_color }};
+      border-radius: 9999px;
+      color: #ffffff;
+      font-size: clamp(14px, 2vw, 16px);
+      text-decoration: none;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      font-weight: 400;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 2px solid {{ section.settings.accent_color }};
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    & .hero-signup__features {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.25rem 1.5rem;
+      width: 100%;
+      margin: 0.25rem 0;
+    }
+
+    & .hero-signup__features-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:not(:last-child)::after {
+        content: '|';
+        margin-left: 1.5rem;
+        color: {{ section.settings.text_color }};
+        opacity: 0.3;
+        font-weight: 300;
+      }
+    }
+
+    & .hero-signup__features-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    & .hero-signup__features-text {
+      font-size: clamp(13px, 2.5vw, 15px);
+      font-weight: 400;
+      color: {{ section.settings.text_color }};
+      opacity: 0.75;
+      line-height: 1.2;
+    }
+
+    & .hero-signup__feature {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    & .feature__icon {
+      flex-shrink: 0;
+      width: var(--icon-size, 40px);
+      height: var(--icon-size, 40px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    & .feature__text {
+      flex: 1;
+      font-size: clamp(14px, 3vw, 16px);
+      line-height: 1.5;
+      color: var(--feature-text-color, {{ section.settings.text_color }});
+
+      & * {
+        margin: 0;
+        color: var(--feature-text-color, {{ section.settings.text_color }});
+      }
+    }
+
+    /* Product image/video styles */
+    & .hero-signup__product-image {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    & .hero-signup__product-image img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 24px;
+    }
+
+    & .hero-signup__product-image video {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 24px;
+    }
+
+    /* Product Card */
+    & .hero-signup__product-card {
+      width: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 1.5rem;
+ 
+
+      & .pc__top {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+      }
+
+      & .pc__thumb {
+        width: 80px;
+        flex-shrink: 0;
+
+        & img {
+          width: 100%;
+          height: auto;
+          object-fit: contain;
+        }
+      }
+
+      & .pc__info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      & .pc__title {
+        font-size: 20px;
+        font-weight: normal;
+        margin: 0;
+        color: #0c1737;
+      }
+
+      & .pc__desc {
+        font-size: 14px;
+        line-height: 1.4;
+        color: #555;
+        margin: 0;
+      }
+
+      & .pc__reviews {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.25rem;
+      }
+
+      & .pc__stars {
+        display: flex;
+        gap: 1px;
+        color: {{ section.settings.accent_color }};
+        font-size: 14px;
+      }
+
+      & .pc__options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+
+      & .pc__option {
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 1rem;
+        cursor: pointer;
+        text-align: center;
+        transition: border-color 0.2s ease;
+
+        & input[type="radio"] { display: none; }
+        &.active { border-color: {{ section.settings.accent_color }}; }
+      }
+
+      & .pc__option-label {
+        display: block;
+        font-size: 13px;
+        color: #333;
+        margin-bottom: 0.35rem;
+      }
+
+      & .pc__option-price {
+        display: block;
+        font-size: 20px;
+        font-weight: 700;
+        color: #0c1737;
+      }
+
+      & .pc__option-compare {
+        font-size: 14px;
+        color: #999;
+        text-decoration: line-through;
+        margin-left: 0.35rem;
+        font-weight: 400;
+      }
+
+      & .pc__option-save {
+        display: block;
+        font-size: 12px;
+        color: {{ section.settings.accent_color }};
+        font-weight: 600;
+        margin-top: 0.25rem;
+      }
+
+      & .pc__price-display {
+        font-size: clamp(40px, 8vw, 56px);
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        color: var(--pc-price-color, #0c1737);
+        line-height: 1;
+        margin: 0 0 0.25rem;
+      }
+
+      & .pc__subtitle-text {
+        font-size: 14px;
+        color: #666;
+        margin: 0 0 1.5rem;
+      }
+
+      & .pc__add-btn {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        border: none;
+        border-radius: 999px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+
+        &:hover {
+          opacity: 0.9;
+          transform: translateY(-1px);
+        }
+      }
+    }
+
+    /* Desktop styles */
+    @media (min-width: 768px) {
+
+
+      & .hero-signup__content {
+        width: 100%;
+        gap: 1.25rem;
+      }
+
+      & .hero-signup__title {
+        font-size: clamp(40px, 5vw, 56px);
+      }
+
+      & .hero-signup__stars {
+        font-size: 18px;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      & .trusted-text {
+        font-size: 14px;
+      }
+
+      & .hero-signup__description {
+        font-size: 20px;
+        max-width: 90%;
+      }
+
+      & .hero-signup__email-box {
+        padding: 2rem;
+ 
+      }
+
+      & .email-box__form {
+        flex-direction: row;
+        gap: 0;
+      }
+
+      & .email-box__input-wrapper {
+        flex-direction: row;
+        gap: 0.5rem;
+        padding: 0.35rem 0.35rem 0.35rem 0.5rem;
+      }
+
+      & .email-box__input {
+        padding: 0.875rem 1rem;
+      }
+
+      & .email-box__button {
+        padding: 0.875rem 1.5rem;
+        flex-shrink: 0;
+      }
+
+      & .hero-signup__product-image {
+        width: 100%;
+        margin-top: 0;
+      }
+
+      & .hero-signup__product-image img {
+        max-width: 100%;
+        border-radius: 32px;
+      }
+
+      & .hero-signup__product-image video {
+        max-width: 100%;
+        border-radius: 32px;
+      }
+    }
+
+    /* Large desktop */
+    @media (min-width: 1200px) {
+      & .hero-signup__container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 1.5rem 4rem;
+        align-items: start;
+        padding-block: {{ section.settings.padding_top | times: 1.5 }}rem {{ section.settings.padding_bottom | times: 1.5 }}rem;
+      }
+
+      & .hero-signup__content {
+        grid-column: 1;
+        grid-row: 1;
+        width: 100%;
+      }
+
+      & .hero-signup__product-card {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      & .hero-signup__product-image {
+        grid-column: 2;
+        grid-row: 1 / -1;
+        align-self: center;
+        width: 100%;
+      }
+
+      & .email-box__input-wrapper {
+        background-color: #ffffff;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  {% if section.settings.bg_image_desktop != blank or section.settings.bg_image_mobile != blank %}
+    <div class="hero-signup__bg">
+      {% if section.settings.bg_image_desktop != blank %}
+        {{ section.settings.bg_image_desktop | image_url: width: 1920 | image_tag:
+          class: 'hero-signup__bg--desktop',
+          loading: 'lazy',
+          alt: 'Background'
+        }}
+      {% endif %}
+      {% if section.settings.bg_image_mobile != blank %}
+        {{ section.settings.bg_image_mobile | image_url: width: 800 | image_tag:
+          class: 'hero-signup__bg--mobile',
+          loading: 'lazy',
+          alt: 'Background'
+        }}
+      {% endif %}
+    </div>
+  {% endif %}
+  <div class="hero-signup__container container-sl">
+    <div class="hero-signup__content">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'stars' %}
+            <div class="hero-signup__stars" {{ block.shopify_attributes }}>
+              <div class="stars-wrapper">
+                {% for i in (1..5) %}
+                  {% if i <= block.settings.star_rating %}
+                    {% render 'c-orange-star' %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <span class="trusted-text">{{ block.settings.trusted_text }}</span>
+            </div>
+        {% endcase %}
+      {% endfor %}
+
+      {% if section.settings.subheading != blank %}
+        <p class="hero-signup__subheading">
+          {{ section.settings.subheading }}
+        </p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h1 class="hero-signup__title">
+          {% assign title_with_accent = section.settings.heading
+            | replace: '{accent}', '<span class="hero-signup__title--accent">'
+            | replace: '{/accent}', '</span>'
+          %}
+          {{ title_with_accent }}
+        </h1>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <p class="hero-signup__description">
+          {{ section.settings.description }}
+        </p>
+      {% endif %}
+
+      {% assign features_blocks = section.blocks | where: 'type', 'features' %}
+      {% assign features_rendered = false %}
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'email_signup' %}
+            <div class="hero-signup__email-box" {{ block.shopify_attributes }}>
+              {% if block.settings.box_title != blank %}
+                <h3 class="email-box__title">{{ block.settings.box_title }}</h3>
+              {% endif %}
+              {% if block.settings.box_description != blank %}
+                <p class="email-box__description">{{ block.settings.box_description }}</p>
+              {% endif %}
+              
+              {% if block.settings.use_klaviyo_form %}
+                <div class="klaviyo-form-{{ block.settings.klaviyo_form_id }}"></div>
+              {% else %}
+                {% form 'customer', class: 'email-box__form' %}
+                  <input type="hidden" name="contact[tags]" value="{{ block.settings.customer_tag }}">
+                  <div class="email-box__input-wrapper">
+                    <input
+                      type="email"
+                      name="contact[email]"
+                      class="email-box__input"
+                      placeholder="{{ block.settings.placeholder_text | default: 'Enter your email' }}"
+                      required
+                      autocomplete="email"
+                    >
+                    <button type="submit" class="email-box__button">
+                      {{ block.settings.button_text | default: 'Sign Up' }}
+                    </button>
+                  </div>
+                {% endform %}
+              {% endif %}
+            </div>
+          {% when 'button' %}
+            {% if block.settings.button_text != blank %}
+              <div class="c-buttons-div" {{ block.shopify_attributes }}>
+                {% if block.settings.use_scroll_down and block.settings.scroll_target != blank %}
+                  <button
+                    type="button"
+                    class="{{ block.settings.button_style | default: 'c-b1' }}"
+                    data-scroll-to="{{ block.settings.scroll_target | escape }}"
+                  >
+                    {{ block.settings.button_text }}
+                  </button>
+                {% else %}
+                  <a href="{{ block.settings.button_url }}" class="{{ block.settings.button_style | default: 'c-b1' }}">
+                    {{ block.settings.button_text }}
+                  </a>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% when 'features' %}
+            {% if features_rendered == false and features_blocks.size > 0 %}
+              <div class="hero-signup__features">
+                {% for feature_block in features_blocks %}
+                  <div class="hero-signup__features-item" {{ feature_block.shopify_attributes }}>
+                    {% if feature_block.settings.icon != blank %}
+                      <div class="hero-signup__features-icon">
+                        {{ feature_block.settings.icon | image_url: width: 60 | image_tag: loading: 'lazy', alt: '' }}
+                      </div>
+                    {% endif %}
+                    {% if feature_block.settings.text != blank %}
+                      <span class="hero-signup__features-text">{{ feature_block.settings.text }}</span>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+              {% assign features_rendered = true %}
+            {% endif %}
+          {% when 'feature' %}
+            <div class="hero-signup__feature" {{ block.shopify_attributes }} style="--icon-size: {{ block.settings.icon_size }}px; --feature-text-color: {{ block.settings.text_color }};">
+              {% if block.settings.feature_icon != blank %}
+                <div class="feature__icon">
+                  {{ block.settings.feature_icon | image_url: width: 120 | image_tag: loading: 'lazy', alt: 'Feature icon' }}
+                </div>
+              {% endif %}
+              {% if block.settings.feature_text != blank %}
+                <div class="feature__text">
+                  {{ block.settings.feature_text }}
+                </div>
+              {% endif %}
+            </div>
+          {% when 'copy_code' %}
+            <div {{ block.shopify_attributes }}>
+              {% render 'copy-code-box',
+                unique_id: block.id,
+                box_title: block.settings.box_title,
+                coupon_code: block.settings.coupon_code,
+                copy_btn_label: block.settings.copy_btn_label,
+                copy_success_text: block.settings.copy_success_text,
+                button_text: block.settings.button_text,
+                button_url: block.settings.button_url,
+                discount_text: block.settings.discount_text,
+                discount_note: block.settings.discount_note,
+                box_bg_color: block.settings.box_bg_color,
+                border_color: block.settings.border_color,
+                title_color: block.settings.title_color,
+                code_bg_color: block.settings.code_bg_color,
+                code_text_color: block.settings.code_text_color,
+                copy_btn_bg: block.settings.copy_btn_bg,
+                copy_btn_text: block.settings.copy_btn_text,
+                cta_btn_bg: block.settings.cta_btn_bg,
+                cta_btn_text: block.settings.cta_btn_text,
+                discount_text_color: block.settings.discount_text_color
+              %}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+
+    {% if section.settings.product_image != blank or section.settings.product_video != blank or section.settings.product_video_url != blank %}
+      <div class="hero-signup__product-image">
+        {% if section.settings.product_image != blank %}
+          {% if section.settings.product_image_link != blank %}
+            <a href="{{ section.settings.product_image_link }}">
+              <img
+                src="{{ section.settings.product_image | image_url: width: 800 }}"
+                alt="{{ section.settings.product_image.alt | escape }}"
+                width="800"
+                height="auto"
+                loading="lazy"
+              >
+            </a>
+          {% else %}
+            <img
+              src="{{ section.settings.product_image | image_url: width: 800 }}"
+              alt="{{ section.settings.product_image.alt | escape }}"
+              width="800"
+              height="auto"
+              loading="lazy"
+            >
+          {% endif %}
+        {% elsif section.settings.product_video != blank %}
+          <video autoplay muted loop playsinline{% if section.settings.video_click_controls %} data-click-controls{% endif %}>
+            {% for source in section.settings.product_video.sources %}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {% endfor %}
+          </video>
+        {% elsif section.settings.product_video_url != blank %}
+          <video
+            src="{{ section.settings.product_video_url }}"
+            autoplay
+            muted
+            loop
+            playsinline
+            {% if section.settings.video_click_controls %}data-click-controls{% endif %}
+          ></video>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% for block in section.blocks %}
+      {% if block.type == 'product_card' %}
+        {% assign pc_product = block.settings.product %}
+        <div class="hero-signup__product-card" {{ block.shopify_attributes }} style="--pc-price-color: {{ block.settings.price_color }}">
+          {% if pc_product != blank %}
+            {% assign pc_variant = pc_product.selected_or_first_available_variant %}
+
+            <div class="pc__top">
+              <div class="pc__thumb">
+                <img src="{{ pc_product.featured_image | image_url: width: 200 }}" alt="{{ pc_product.title | escape }}" loading="lazy">
+              </div>
+              <div class="pc__info">
+                <h3 class="pc__title">{{ pc_product.title }}</h3>
+                {% if block.settings.description != blank %}
+                  <p class="pc__desc">{{ block.settings.description }}</p>
+                {% endif %}
+                <a href="{{ block.settings.reviews_link | default: '#' }}" class="pc__reviews-link">
+                  {% render 'okendo-reviews-product-rating-summary', product: pc_product %}
+                </a>
+              </div>
+            </div>
+
+            <div class="pc__options">
+              {%- assign first_allocation = true -%}
+              {%- for variant in pc_product.variants -%}
+                {%- if variant.selling_plan_allocations.size > 0 -%}
+                  {%- for allocation in variant.selling_plan_allocations -%}
+                    {%- assign subscription_price = allocation.price_adjustments.first.price -%}
+                    {%- assign one_time_price = variant.price -%}
+                    {%- assign savings_amount = one_time_price | minus: subscription_price -%}
+                    {%- assign savings_percentage = savings_amount | times: 100 | divided_by: one_time_price -%}
+                    <label class="pc__option{% if first_allocation %} active{% endif %}"
+                      data-price="{{ subscription_price | money }}"
+                      data-subtitle="{{ variant.title }} Supply · Subscribe & Save {{ savings_percentage | round: 1 }}%"
+                      data-variant-id="{{ variant.id }}"
+                      data-selling-plan="{{ allocation.selling_plan.id }}">
+                      <input type="radio" name="purchase_type_{{ block.id }}" value="{{ variant.id }}-{{ allocation.selling_plan.id }}"{% if first_allocation %} checked{% endif %}>
+                      <span class="pc__option-label">{{ variant.title }} Subscribe</span>
+                      <span class="pc__option-price">
+                        {{ subscription_price | money }}
+                        <span class="pc__option-compare">{{ one_time_price | money }}</span>
+                      </span>
+                      {%- if savings_percentage > 0 -%}
+                        <span class="pc__option-save">Save {{ savings_percentage | round: 1 }}%</span>
+                      {%- endif -%}
+                    </label>
+                    {%- assign first_allocation = false -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            {%- assign first_variant = pc_product.variants | first -%}
+            {%- assign first_alloc = first_variant.selling_plan_allocations | first -%}
+            {%- assign first_sub_price = first_alloc.price_adjustments.first.price -%}
+            {%- assign first_otp = first_variant.price -%}
+            {%- assign first_savings = first_otp | minus: first_sub_price | times: 100 | divided_by: first_otp -%}
+            <div class="pc__price-display">{{ first_sub_price | money }}</div>
+            <p class="pc__subtitle-text">{{ first_variant.title }} Supply · Subscribe & Save {{ first_savings | round: 1 }}%</p>
+
+            {%- assign pc_form_id = 'pc-product-form-' | append: section.id -%}
+            {%- form 'product', pc_product, id: pc_form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              <input type="hidden" name="id" value="{{ first_variant.id }}" data-pc-variant>
+              <input type="hidden" name="selling_plan" value="{% if first_alloc %}{{ first_alloc.selling_plan.id }}{% endif %}" data-pc-selling-plan>
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="pc__add-btn" id="PcAddToCart-{{ section.id }}" style="background-color: {{ block.settings.button_bg }}; color: #fff;">
+                {{ block.settings.button_text }}
+              </button>
+            {%- endform -%}
+          {% else %}
+            <p style="text-align:center; padding:2rem; color:#999;">Select a product in the block settings</p>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var sectionEl = document.getElementById('{{ section.id }}');
+    if (!sectionEl) return;
+
+    /* ── Scroll-down buttons ── */
+    sectionEl.querySelectorAll('[data-scroll-to]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var target = document.querySelector(btn.dataset.scrollTo);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* ── Video click to toggle controls ── */
+    sectionEl.querySelectorAll('.hero-signup__product-image video[data-click-controls]').forEach(function(video) {
+      video.style.cursor = 'pointer';
+      video.addEventListener('click', function(e) {
+        if (video.controls) return;
+        e.preventDefault();
+        video.controls = true;
+        video.muted = false;
+      });
+    });
+
+    /* ── Option selection ── */
+    sectionEl.querySelectorAll('.pc__option').forEach(function(option) {
+      option.addEventListener('click', function() {
+        var card = this.closest('.hero-signup__product-card');
+        card.querySelectorAll('.pc__option').forEach(function(o) { o.classList.remove('active'); });
+        this.classList.add('active');
+        this.querySelector('input[type="radio"]').checked = true;
+
+        var priceEl = card.querySelector('.pc__price-display');
+        var subtitleEl = card.querySelector('.pc__subtitle-text');
+        var variantInput = card.querySelector('[data-pc-variant]');
+        var spInput = card.querySelector('[data-pc-selling-plan]');
+
+        if (priceEl) priceEl.textContent = this.dataset.price;
+        if (subtitleEl) subtitleEl.textContent = this.dataset.subtitle;
+        if (variantInput) variantInput.value = this.dataset.variantId;
+        if (spInput) spInput.value = this.dataset.sellingPlan || '';
+      });
+    });
+
+    /* ── AJAX Add to Cart ── */
+    var addBtn = document.getElementById('PcAddToCart-{{ section.id }}');
+    var pcForm = sectionEl.querySelector('form[data-type="add-to-cart-form"]');
+
+    if (addBtn && pcForm) {
+      addBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (addBtn.disabled || addBtn.classList.contains('loading')) return;
+
+        addBtn.classList.add('loading');
+        addBtn.setAttribute('aria-disabled', 'true');
+
+        var formData = new FormData(pcForm);
+
+        fetch(window.routes?.cart_add_url || '/cart/add.js', {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest', Accept: 'application/json' },
+          body: formData
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.status) {
+            console.error('Error adding to cart:', data.description);
+            return;
+          }
+          var cartDrawer = document.querySelector('cart-drawer');
+          if (cartDrawer) { cartDrawer.render(); cartDrawer.open(); }
+        })
+        .catch(function(err) { console.error('Add to cart failed:', err); })
+        .finally(function() {
+          addBtn.classList.remove('loading');
+          addBtn.removeAttribute('aria-disabled');
+        });
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C Hero Signup",
+  "tag": "section",
+  "class": "section section-hero-signup",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Menopause changes everything — we're changing how it impacts your {accent}health{/accent}.",
+      "info": "Use {accent}text{/accent} to highlight text in accent color"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Relief today. Resilience tomorrow. Science-backed support for midlife health, heart vitality, and hormonal changes."
+    },
+    {
+      "type": "header",
+      "content": "Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image_desktop",
+      "label": "Background Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image_mobile",
+      "label": "Background Image (Mobile)",
+      "info": "Falls back to desktop image if empty"
+    },
+    {
+      "type": "header",
+      "content": "Product Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product Image"
+    },
+    {
+      "type": "url",
+      "id": "product_image_link",
+      "label": "Product Image Link",
+      "info": "Optional link for the product image"
+    },
+    {
+      "type": "url",
+      "id": "product_video_url",
+      "label": "Product Video URL",
+      "info": "URL to an mp4 video. Image takes priority if both are set."
+    },
+    {
+      "type": "video",
+      "id": "product_video",
+      "label": "Product Video",
+      "info": "Shopify-hosted video. Takes priority over Video URL."
+    },
+    {
+      "type": "checkbox",
+      "id": "video_click_controls",
+      "label": "Show controls on video click",
+      "default": false,
+      "info": "When enabled, clicking the video will reveal native playback controls and unmute."
+    },
+    {
+      "type": "header",
+      "content": "Mobile Layout"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile Layout Direction",
+      "default": "column-reverse",
+      "options": [
+        {
+          "value": "column",
+          "label": "Column (Text → Image → Product)"
+        },
+        {
+          "value": "column-reverse",
+          "label": "Column Reverse (Product → Image → Text)"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Spacing Settings"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Top padding",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Bottom padding",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#F6F3F0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#080B2B"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading Color",
+      "default": "#080B2B"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D44F2F"
+    },
+    {
+      "type": "header",
+      "content": "Email Box Colors"
+    },
+    {
+      "type": "color",
+      "id": "email_box_bg",
+      "label": "Email Box Background",
+      "default": "#EBE8E6"
+    },
+    {
+      "type": "color",
+      "id": "email_box_text_color",
+      "label": "Email Box Text Color",
+      "default": "#080B2B"
+    },
+    {
+      "type": "color",
+      "id": "email_button_bg",
+      "label": "Email Button Background",
+      "default": "#D44F2F"
+    },
+    {
+      "type": "color",
+      "id": "email_button_text",
+      "label": "Email Button Text",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stars",
+      "name": "Stars Rating",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "star_rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Star Rating",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "trusted_text",
+          "label": "Trusted Text",
+          "default": "TRUSTED BY 3,000+ HEALTHCARE PROVIDERS"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Learn More"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button Link",
+          "info": "Ignored when 'Use scroll down' is enabled."
+        },
+        {
+          "type": "checkbox",
+          "id": "use_scroll_down",
+          "label": "Use scroll down",
+          "default": false,
+          "info": "When enabled, the button smoothly scrolls to the target below instead of navigating."
+        },
+        {
+          "type": "text",
+          "id": "scroll_target",
+          "label": "Scroll target selector",
+          "info": "CSS selector of the element to scroll to (e.g. #shopify-section-abc123 or .my-section). Only used when 'Use scroll down' is enabled."
+        },
+        {
+          "type": "text",
+          "id": "button_style",
+          "label": "Button CSS Class",
+          "default": "c-b1",
+          "info": "CSS class for button styling"
+        }
+      ]
+    },
+    {
+      "type": "features",
+      "name": "Features Item",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Clinically Backed"
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "feature_icon",
+          "label": "Feature Icon"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "min": 20,
+          "max": 80,
+          "step": 5,
+          "unit": "px",
+          "label": "Icon Size",
+          "default": 40
+        },
+        {
+          "type": "richtext",
+          "id": "feature_text",
+          "label": "Feature Text",
+          "default": "<p>Feature description goes here</p>"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#080B2B"
+        }
+      ]
+    },
+    {
+      "type": "copy_code",
+      "name": "Copy Code Box",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "box_title",
+          "label": "Box Title",
+          "default": "YOUR EXCLUSIVE OFFER"
+        },
+        {
+          "type": "text",
+          "id": "coupon_code",
+          "label": "Coupon Code",
+          "default": "MENO20"
+        },
+        {
+          "type": "text",
+          "id": "copy_btn_label",
+          "label": "Copy Button Text",
+          "default": "Copy"
+        },
+        {
+          "type": "text",
+          "id": "copy_success_text",
+          "label": "Copy Success Text",
+          "default": "Copied!"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "CTA Button Text",
+          "default": "Shop Menopause Support"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "CTA Button URL"
+        },
+        {
+          "type": "html",
+          "id": "discount_text",
+          "label": "Discount Text",
+          "default": "Paste at checkout to save <strong>20%</strong>"
+        },
+        {
+          "type": "text",
+          "id": "discount_note",
+          "label": "Discount Note",
+          "default": "*first-purchase discount"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "box_bg_color",
+          "label": "Box Background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border Color",
+          "default": "#D44F2F"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title Color",
+          "default": "#080B2B"
+        },
+        {
+          "type": "color",
+          "id": "code_bg_color",
+          "label": "Code Background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "code_text_color",
+          "label": "Code Text Color",
+          "default": "#080B2B"
+        },
+        {
+          "type": "color",
+          "id": "copy_btn_bg",
+          "label": "Copy Button Background",
+          "default": "#5C4B51"
+        },
+        {
+          "type": "color",
+          "id": "copy_btn_text",
+          "label": "Copy Button Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "cta_btn_bg",
+          "label": "CTA Button Background",
+          "default": "#D44F2F"
+        },
+        {
+          "type": "color",
+          "id": "cta_btn_text",
+          "label": "CTA Button Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "discount_text_color",
+          "label": "Discount Text Color",
+          "default": "#080B2B"
+        }
+      ]
+    },
+    {
+      "type": "email_signup",
+      "name": "Email Signup",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "use_klaviyo_form",
+          "label": "Use Klaviyo Form",
+          "default": false,
+          "info": "Enable to use Klaviyo embedded form instead of built-in form"
+        },
+        {
+          "type": "text",
+          "id": "klaviyo_form_id",
+          "label": "Klaviyo Form ID",
+          "default": "Wre23A",
+          "info": "Only used if 'Use Klaviyo Form' is enabled. Enter the form ID from Klaviyo (e.g., Wre23A)"
+        },
+        {
+          "type": "text",
+          "id": "box_title",
+          "label": "Box Title",
+          "default": "Sign Up for First Look"
+        },
+        {
+          "type": "textarea",
+          "id": "box_description",
+          "label": "Box Description",
+          "default": "Get updates and a first look at our upcoming menopause-focused innovation."
+        },
+        {
+          "type": "text",
+          "id": "placeholder_text",
+          "label": "Input Placeholder",
+          "default": "Enter your email",
+          "info": "Only for built-in form"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Sign Up",
+          "info": "Only for built-in form"
+        },
+        {
+          "type": "text",
+          "id": "customer_tag",
+          "label": "Customer Tag",
+          "default": "newsletter",
+          "info": "Only for built-in form. Tag applied to customers who sign up"
+        }
+      ]
+    },
+    {
+      "type": "product_card",
+      "name": "Product Card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Product Description",
+          "default": "Clinically proven to improve blood flow, energy, sexual health, and full-body wellness."
+        },
+        {
+          "type": "url",
+          "id": "reviews_link",
+          "label": "Reviews Link",
+          "info": "URL wrapped around the Okendo star rating."
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Add to Cart"
+        },
+        {
+          "type": "color",
+          "id": "button_bg",
+          "label": "Button Background",
+          "default": "#d25435"
+        },
+        {
+          "type": "color",
+          "id": "price_color",
+          "label": "Price Color",
+          "default": "#0c1737"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Hero Signup",
+      "blocks": [
+        { "type": "stars" },
+        { "type": "email_signup" }
+      ]
+    }
+  ]
+}
+{% endschema %}

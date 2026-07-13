@@ -1,0 +1,15 @@
+<div class="p-4 max-w-screen-xl mx-auto text-center">
+  <h1 class="h2 mb-8">
+    {{ page.title | escape }}
+  </h1>
+  <div class="rte">
+    {{ page.content }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-page.name",
+  "tag": "section"
+}
+{% endschema %}

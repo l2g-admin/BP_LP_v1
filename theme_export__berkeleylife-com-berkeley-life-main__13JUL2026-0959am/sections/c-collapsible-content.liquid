@@ -1,0 +1,729 @@
+{%- liquid
+  assign bg_color = section.settings.background_color
+  assign radius_top_mobile = section.settings.border_radius_top_mobile | append: 'px'
+  assign radius_top = section.settings.border_radius_top | append: 'px'
+
+  assign pt_desktop = section.settings.padding_top_desktop | append: 'px'
+  assign pb_desktop = section.settings.padding_bottom_desktop | append: 'px'
+  assign pt_mobile = section.settings.padding_top_mobile | append: 'px'
+  assign pb_mobile = section.settings.padding_bottom_mobile | append: 'px'
+
+  assign heading = section.settings.heading
+  assign paragraph = section.settings.paragraph
+
+  assign first_block = section.blocks[0]
+-%}
+
+<style>
+  :root {
+    --color-orange: #D44F2F;
+    --color-active-bg: #FFFFFF1A;
+  }
+
+  div:empty {
+    display: block;}
+
+  .collapsible-section-wrapper {
+    background-color: {{ bg_color }};
+    padding-top: {{ pt_mobile }};
+    padding-bottom: {{ pb_mobile }};
+    border-top-left-radius: {{ radius_top_mobile }};
+    border-top-right-radius: {{ radius_top_mobile }};
+    overflow: hidden; /* Ensures radius is respected */
+  }
+
+  .collapsible-section-container {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .collapsible-section-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem; /* 40px */
+  }
+
+  .collapsible-accordion-group {
+    border: solid 1px #fff;
+  }
+
+  .collapsible-item {
+    border-bottom: 1px solid var(--color-active-bg);
+  }
+  .collapsible-item:first-of-type {
+    border-top: 1px solid var(--color-active-bg);
+  }
+
+  /* Accordion button */
+  .collapsible-item-trigger {
+    display: grid;
+    align-items: center;
+    gap: 1rem; /* 16px */
+    width: 100%;
+    padding: 32px; /* 24px 8px */
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .collapsible-item-trigger-content {
+    align-items: center;
+    display: flex;
+    gap:20px;
+    align-self: stretch;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .collapsible-item.is-active {
+    background-color: var(--color-active-bg);
+  }
+  .collapsible-item-trigger:hover {
+    background-color: var(--color-active-bg);
+  }
+
+  .collapsible-item-icon-wrapper {
+    width: 24px;
+    height: 24px;
+    color: var(--color-orange);
+  }
+  .collapsible-item-icon-wrapper img,
+  .collapsible-item-icon-wrapper svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .collapsible-item-title {
+    font-size: 32px; /* 20px */
+    font-weight: 400;
+    font-style: italic;
+    flex: 1 0 0;
+    font-family: "cormorant-garamond";
+    color: #FFFFFF;
+  }
+
+  /* .collapsible-item-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    color: #FFFFFF;
+  }
+  .collapsible-item-toggle-icon span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 2px;
+    background-color: currentColor;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+  .collapsible-item-toggle-icon span:last-child {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+  .collapsible-item.is-active .collapsible-item-toggle-icon span:last-child {
+    transform: translate(-50%, -50%) rotate(0deg);
+  } */
+
+  .collapsible-item.is-active .collapsible-item-toggle-icon span.icon-active {
+    display: block;
+  }
+
+  .collapsible-item.is-active .collapsible-item-toggle-icon span.icon-inactive {
+    display: none;
+  }
+
+  .collapsible-item .collapsible-item-toggle-icon span.icon-active {
+    display: none;
+  }
+
+  .collapsible-item .collapsible-item-toggle-icon span.icon-inactive {
+    display: block;
+  }
+
+  /* Accordion content */
+  .collapsible-item-content {
+    display: grid;
+    /* padding-top: 24px; */
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease-in-out;
+  }
+  .collapsible-item-content > div {
+    overflow: hidden;
+  }
+  .collapsible-item.is-active .collapsible-item-content {
+    grid-template-rows: 1fr;
+  }
+
+  .collapsible-item-content-inner::before{
+    content: "";
+    display: block;
+    position: relative;
+    bottom: 24px;
+    height: 1px;
+    width: 90%;
+    align-self: center;
+    background-color: #fff; /* 20% white */
+  }
+
+  .collapsible-item-content-inner {
+    padding-top:24px;
+    padding-bottom: 24px; /* 24px */
+    padding-left: calc(24px + 1rem); /* 40px, to align with title */
+    padding-right: 0.5rem;
+    color: #FFFFFFCC; /* 80% white */
+ 
+  }
+  .collapsible-item-content-inner p {
+    margin: 0;
+  }
+  
+  /* Image Card */
+  .collapsible-image-wrapper {
+    position: relative;
+    border-radius: 0.75rem; /* 12px */
+    overflow: hidden;
+  }
+  .collapsible-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .collapsible-image-card {
+    position: absolute;
+    bottom: 24px; /* 24px */
+    width: 260px;
+    right: 24px; /* 24px */
+    background-color: #0F172A; /* Using a dark blue from image */
+    color: #FFFFFF;
+    padding: 0px 32px 32px 32px;   
+    border-radius: 32px; /* 8px */
+  }
+
+  .collapsible-card-percentage {
+    font-family: "cormorant-garamond", serif;
+    font-size: 54px;
+    font-style: italic;
+  }
+  .collapsible-card-text {
+    font-size: 14px; /* 16px */
+    line-height: 1.5;
+    color: #FFFFFFCC; /* 80% white */
+    margin-top: 0.75rem; /* 12px */
+  }
+
+  /* Progress Bar */
+  .collapsible-progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #FFFFFF33; /* 20% white */
+    border-radius: 99px;
+    margin-top: 1.5rem; /* 24px */
+    overflow: hidden;
+  }
+  .collapsible-progress-bar-inner {
+    height: 100%;
+    width: var(--progress-width, 0%);
+    background-color: var(--color-orange);
+    border-radius: 99px;
+    transition: width 0.5s ease-in-out;
+  }
+
+  /* Section Header */
+  .collapsible-section-header h2 {
+    font-size: 2.25rem; /* 36px */
+    font-weight: 500;
+    line-height: 1.2;
+    color: #FFFFFF;
+    margin: 0;
+      & span {
+      font-style: italic;
+      font-weight: 300;
+      font-size: 3.25rem;
+      font-family: "Cormorant Garamond";
+    }
+  }
+  .collapsible-section-header .rte {
+    font-size: 1rem; /* 16px */
+    line-height: 1.5;
+    color: #FFFFFFCC; /* 80% white */
+    margin-top: 1rem; /* 16px */
+  }
+  .collapsible-section-header .rte p {
+    margin: 0;
+  }
+
+  /* Desktop Styles */
+  @media (min-width: 768px) {
+    .collapsible-section-wrapper {
+      padding-top: {{ pt_desktop }};
+      padding-bottom: {{ pb_desktop }};
+      border-top-left-radius: {{ radius_top }};
+      border-top-right-radius: {{ radius_top }};
+    }
+
+    .collapsible-section-grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: flex-start;
+    }
+
+    .collapsible-section-header h2 {
+      font-size: 3rem; /* 48px */
+    }
+
+    .collapsible-item-title {
+      font-size: 32px; /* 24px */
+    }
+
+    .collapsible-card-percentage {
+      font-family: "cormorant-garamond", serif;
+      font-size: 72px;
+      font-style: italic;
+    }
+    .collapsible-card-text {
+      font-size: 20px; /* 16px */
+      line-height: 1.5;
+      color: #FFFFFFCC; /* 80% white */
+      margin-top: 0.75rem; /* 12px */
+    }
+  }
+</style>
+
+<div class="collapsible-section-wrapper">
+  <div class="container-sl">
+    <div class="collapsible-section-grid">
+      
+      <!-- Column 1: Text & Accordion -->
+      <div class="collapsible-content-col">
+        {% if heading != blank or paragraph != blank %}
+          <div class="collapsible-section-header" style="margin-bottom: 2.5rem;">
+            {% if heading != blank %}
+              <h2>{{ heading }}</h2>
+            {% endif %}
+            {% if paragraph != blank %}
+              <div class="rte">{{ paragraph }}</div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if section.blocks.size > 0 %}
+          <div class="collapsible-accordion-group" data-section-id="{{ section.id }}">
+            {% for block in section.blocks %}
+              <div
+                class="collapsible-item {% if forloop.first %}is-active{% endif %}"
+                {{ block.shopify_attributes }}
+              >
+                <button
+                  class="collapsible-item-trigger"
+                  data-block-id="{{ block.id }}"
+                  aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-controls="content-{{ section.id }}-{{ block.id }}"
+                >
+                <div class="collapsible-item-trigger-content">
+                    {%- if block.settings.icon != blank -%}
+                    <span class="collapsible-item-icon-wrapper">
+                        {{ block.settings.icon }}
+                    </span>
+                  {%- else -%}
+                    <span class="collapsible-item-icon-wrapper"></span>
+                  {%- endif -%}
+                  
+                  <span class="collapsible-item-title">{{ block.settings.title | default: 'Collapsible Item' }}</span>
+                  
+                  <span class="collapsible-item-toggle-icon">
+                    <span class="icon-active">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
+                            <path d="M19 13C19 13.2652 18.8946 13.5196 18.7071 13.7071C18.5196 13.8946 18.2652 14 18 14H8.00001C7.73479 14 7.48044 13.8946 7.2929 13.7071C7.10536 13.5196 7.00001 13.2652 7.00001 13C7.00001 12.7348 7.10536 12.4804 7.2929 12.2929C7.48044 12.1054 7.73479 12 8.00001 12H18C18.2652 12 18.5196 12.1054 18.7071 12.2929C18.8946 12.4804 19 12.7348 19 13ZM26 13C26 15.5712 25.2376 18.0846 23.8091 20.2224C22.3807 22.3603 20.3503 24.0265 17.9749 25.0104C15.5995 25.9944 12.9856 26.2518 10.4638 25.7502C7.94208 25.2486 5.6257 24.0105 3.80762 22.1924C1.98953 20.3743 0.751405 18.0579 0.249797 15.5362C-0.251811 13.0144 0.0056327 10.4006 0.989572 8.02512C1.97351 5.64968 3.63975 3.61935 5.77759 2.1909C7.91543 0.762437 10.4288 0 13 0C16.4467 0.00363977 19.7512 1.37445 22.1884 3.81163C24.6256 6.24882 25.9964 9.5533 26 13ZM24 13C24 10.8244 23.3549 8.69767 22.1462 6.88873C20.9375 5.07979 19.2195 3.66989 17.2095 2.83733C15.1995 2.00476 12.9878 1.78692 10.854 2.21136C8.72022 2.6358 6.76021 3.68345 5.22183 5.22183C3.68345 6.7602 2.63581 8.72022 2.21137 10.854C1.78693 12.9878 2.00477 15.1995 2.83733 17.2095C3.66989 19.2195 5.07979 20.9375 6.88873 22.1462C8.69767 23.3549 10.8244 24 13 24C15.9164 23.9967 18.7123 22.8367 20.7745 20.7745C22.8367 18.7123 23.9967 15.9164 24 13Z" fill="white"/>
+                        </svg>
+                    </span>
+                    <span class="icon-inactive">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
+                            <path d="M13 0C10.4288 0 7.91543 0.762437 5.77759 2.1909C3.63975 3.61935 1.97351 5.64968 0.989572 8.02512C0.0056327 10.4006 -0.251811 13.0144 0.249797 15.5362C0.751405 18.0579 1.98953 20.3743 3.80762 22.1924C5.6257 24.0105 7.94208 25.2486 10.4638 25.7502C12.9856 26.2518 15.5995 25.9944 17.9749 25.0104C20.3503 24.0265 22.3807 22.3603 23.8091 20.2224C25.2376 18.0846 26 15.5712 26 13C25.9964 9.5533 24.6256 6.24882 22.1884 3.81163C19.7512 1.37445 16.4467 0.00363977 13 0ZM13 24C10.8244 24 8.69767 23.3549 6.88873 22.1462C5.07979 20.9375 3.66989 19.2195 2.83733 17.2095C2.00477 15.1995 1.78693 12.9878 2.21137 10.854C2.63581 8.72022 3.68345 6.7602 5.22183 5.22183C6.76021 3.68345 8.72022 2.6358 10.854 2.21136C12.9878 1.78692 15.1995 2.00476 17.2095 2.83733C19.2195 3.66989 20.9375 5.07979 22.1462 6.88873C23.3549 8.69767 24 10.8244 24 13C23.9967 15.9164 22.8367 18.7123 20.7745 20.7745C18.7123 22.8367 15.9164 23.9967 13 24ZM19 13C19 13.2652 18.8946 13.5196 18.7071 13.7071C18.5196 13.8946 18.2652 14 18 14H14V18C14 18.2652 13.8946 18.5196 13.7071 18.7071C13.5196 18.8946 13.2652 19 13 19C12.7348 19 12.4804 18.8946 12.2929 18.7071C12.1054 18.5196 12 18.2652 12 18V14H8.00001C7.73479 14 7.48044 13.8946 7.2929 13.7071C7.10536 13.5196 7.00001 13.2652 7.00001 13C7.00001 12.7348 7.10536 12.4804 7.2929 12.2929C7.48044 12.1054 7.73479 12 8.00001 12H12V8C12 7.73478 12.1054 7.48043 12.2929 7.29289C12.4804 7.10536 12.7348 7 13 7C13.2652 7 13.5196 7.10536 13.7071 7.29289C13.8946 7.48043 14 7.73478 14 8V12H18C18.2652 12 18.5196 12.1054 18.7071 12.2929C18.8946 12.4804 19 12.7348 19 13Z" fill="#F6F2EF"/>
+                        </svg>
+                    </span>
+                  </span>
+                </div>
+                  
+                </button>
+                
+                <div
+                  class="collapsible-item-content"
+                  id="content-{{ section.id }}-{{ block.id }}"
+                  aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}"
+                >
+                  <div>
+                    <div class="collapsible-item-content-inner rte">
+                      {{ block.settings.content }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <script type-data-json="block-data-{{ block.id }}">
+                {
+                  "image_url": "{{ block.settings.image | image_url: width: 1200 }}",
+                  "image_alt": "{{ block.settings.image.alt | default: block.settings.title | escape }}",
+                  "card_percentage": "{{ block.settings.card_percentage | escape }}",
+                  "card_text": {{ block.settings.card_text | json }},
+                  "progress": {{ block.settings.progress_bar_percentage }},
+                  "show_card": {{ block.settings.show_card }}
+                }
+              </script>
+
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Column 2: Image & Card -->
+      <div class="collapsible-image-col">
+        <div class="collapsible-image-wrapper" style="position: sticky; top: 2rem;">
+          <img
+            id="collapsible-image-{{ section.id }}"
+            src="{{ first_block.settings.image | image_url: width: 1200 }}"
+            alt="{{ first_block.settings.image.alt | default: first_block.settings.title | escape }}"
+            width="600"
+            height="700"
+            loading="eager"
+          >
+          
+          <div id="collapsible-image-card-{{ section.id }}" class="collapsible-image-card" {% unless first_block.settings.show_card %}style="display: none;"{% endunless %}>
+            {%- if first_block.settings.card_percentage != blank -%}
+              <div id="collapsible-card-percentage-{{ section.id }}" class="collapsible-card-percentage">
+                {{ first_block.settings.card_percentage }}
+              </div>
+            {%- endif -%}
+            
+            {%- if first_block.settings.card_text != blank -%}
+              <div id="collapsible-card-text-{{ section.id }}" class="collapsible-card-text rte">
+                {{ first_block.settings.card_text }}
+              </div>
+            {%- endif -%}
+            
+            <div class="collapsible-progress-bar">
+              <div
+                id="collapsible-progress-bar-inner-{{ section.id }}"
+                class="collapsible-progress-bar-inner"
+                style="--progress-width: {{ first_block.settings.progress_bar_percentage | default: 0 }}%;"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Find all collapsible sections
+  const accordionGroups = document.querySelectorAll('.collapsible-accordion-group');
+  
+  accordionGroups.forEach(function(accordionGroup) {
+    const sectionId = accordionGroup.dataset.sectionId;
+    const triggers = accordionGroup.querySelectorAll('.collapsible-item-trigger');
+    const items = accordionGroup.querySelectorAll('.collapsible-item');
+    
+    // Get the display elements
+    const imageEl = document.getElementById('collapsible-image-' + sectionId);
+    const cardEl = document.getElementById('collapsible-image-card-' + sectionId);
+    const cardPercentageEl = document.getElementById('collapsible-card-percentage-' + sectionId);
+    const cardTextEl = document.getElementById('collapsible-card-text-' + sectionId);
+    const progressBarEl = document.getElementById('collapsible-progress-bar-inner-' + sectionId);
+    
+    // Add click event to each trigger
+    triggers.forEach(function(trigger) {
+      trigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const clickedItem = trigger.closest('.collapsible-item');
+        const wasActive = clickedItem.classList.contains('is-active');
+        const blockId = trigger.dataset.blockId;
+        
+        // Close all items
+        items.forEach(function(item) {
+          item.classList.remove('is-active');
+          const itemTrigger = item.querySelector('.collapsible-item-trigger');
+          const itemContent = item.querySelector('.collapsible-item-content');
+          itemTrigger.setAttribute('aria-expanded', 'false');
+          itemContent.setAttribute('aria-hidden', 'true');
+        });
+        
+        // Open clicked item if it wasn't active
+        if (!wasActive) {
+          clickedItem.classList.add('is-active');
+          trigger.setAttribute('aria-expanded', 'true');
+          clickedItem.querySelector('.collapsible-item-content').setAttribute('aria-hidden', 'false');
+          
+          // Update display content
+          updateContent(blockId, imageEl, cardEl, cardPercentageEl, cardTextEl, progressBarEl);
+        }
+      });
+    });
+  });
+  
+  function updateContent(blockId, imageEl, cardEl, cardPercentageEl, cardTextEl, progressBarEl) {
+    // Find the data script for this block
+    const dataScript = document.querySelector('script[type-data-json="block-data-' + blockId + '"]');
+    
+    if (!dataScript) {
+      console.error('No data found for block:', blockId);
+      return;
+    }
+    
+    try {
+      const data = JSON.parse(dataScript.textContent);
+      
+      // Show or hide the card
+      if (cardEl) {
+        cardEl.style.display = data.show_card ? '' : 'none';
+      }
+
+      // Update image
+      if (imageEl && data.image_url) {
+        imageEl.src = data.image_url;
+        imageEl.alt = data.image_alt || '';
+      }
+      
+      // Update card percentage
+      if (cardPercentageEl && data.card_percentage) {
+        cardPercentageEl.textContent = data.card_percentage;
+      }
+      
+      // Update card text
+      if (cardTextEl && data.card_text) {
+        cardTextEl.innerHTML = data.card_text;
+      }
+      
+      // Update progress bar
+      if (progressBarEl && typeof data.progress !== 'undefined') {
+        const progressValue = parseInt(data.progress) || 0;
+        
+        // Reset progress to 0 first
+        progressBarEl.style.setProperty('--progress-width', '0%');
+        
+        // Animate to target value after a short delay
+        setTimeout(function() {
+          progressBarEl.style.setProperty('--progress-width', progressValue + '%');
+        }, 150);
+      }
+      
+    } catch (error) {
+      console.error('Error parsing block data:', error);
+    }
+  }
+});
+
+// Handle Shopify theme editor reloads
+document.addEventListener('shopify:section:load', function(event) {
+  // Trigger DOMContentLoaded logic for the reloaded section
+  const accordionGroup = event.target.querySelector('.collapsible-accordion-group');
+  if (accordionGroup) {
+    // Re-run the initialization for this specific section
+    setTimeout(function() {
+      const event = new Event('DOMContentLoaded');
+      document.dispatchEvent(event);
+    }, 100);
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "C Collapsible Content",
+  "tag": "section",
+  "class": "shopify-section-collapsible-content",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#D44F2F"
+    },
+    {
+      "type": "range",
+      "id": "border_radius_top_mobile",
+      "label": "Top Corner Radius Mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "border_radius_top",
+      "label": "Top Corner Radius",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Nitric Oxide Matters"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "default": "<p>Nitric Oxide (NO) is a vital molecule that plays a crucial role in your <strong>vascular health and blood flow</strong>. As we age, our body's natural production decreases — but you can track and support your levels to maintain optimal wellness.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Desktop Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Desktop Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collapsible_item",
+      "name": "Collapsible Item",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "html",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Item Title"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Use this text to share information about your collapsible item.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Display Card Content"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_card",
+          "label": "Show Percentage Card",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "card_percentage",
+          "label": "Card Percentage Text",
+          "default": "75%"
+        },
+        {
+          "type": "richtext",
+          "id": "card_text",
+          "label": "Card Text",
+          "default": "<p>Increase in libido & 83% enhanced orgasm after 60 days</p>"
+        },
+        {
+          "type": "range",
+          "id": "progress_bar_percentage",
+          "label": "Progress Bar Percentage",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 75
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Collapsible Content",
+      "blocks": [
+        {
+          "type": "collapsible_item",
+          "settings": {
+            "title": "Sexual Wellness",
+            "content": "<p>Enhances desire and performance for men and women.</p>"
+          }
+        },
+        {
+          "type": "collapsible_item",
+          "settings": {
+            "title": "Heart Health"
+          }
+        },
+        {
+          "type": "collapsible_item",
+          "settings": {
+            "title": "Energy & Stamina"
+          }
+        },
+        {
+          "type": "collapsible_item",
+          "settings": {
+            "title": "Hormonal Balance"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

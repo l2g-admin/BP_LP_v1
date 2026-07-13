@@ -1,0 +1,297 @@
+<li id="CartItem-{{ item.index | plus: 1 }}" {% if item.product_id == settings.gift_wrap_product.id %}data-variant="{{ item.variant_id }}" data-index="{{ item.index | plus: 1 }}"{% endif %} class="relative flex flex-wrap py-6">
+
+  {%- comment -%}Item Image{%- endcomment -%}
+  <div aria-hidden="true" class="empty:invisible empty:block shrink-0 w-20 h-20 {% if settings.cart_drawer == false %}md:w-64 md:h-64{% endif %}overflow-hidden ">
+    {%- if item.image -%}
+      <img class="object-contain object-center w-full h-full"
+      src="{{ item.image | image_url: width: 150 }}"
+      alt=""
+      loading="lazy"
+      width="75"
+      height="{{ 75 | divided_by: item.image.aspect_ratio | ceil }}"
+      >
+    {%- endif -%}
+  </div>
+
+  {%- comment -%}Loading Overlay{%- endcomment -%}
+  <div class="absolute inset-0 z-10 hidden w-full h-full bg-white opacity-50" data-loading-overlay>
+    <div class="flex items-center justify-center w-full h-full">
+      <svg aria-hidden="true" focusable="false" role="presentation" class="w-8 animate-rotator" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
+  </div>
+
+  {%- comment -%}Item Details{%- endcomment -%}
+  <div class="grid flex-1 grid-cols-1 gap-2 ml-4" data-cart-item>
+    <div class="col-span-1 {% if settings.cart_drawer == false %}md:col-span-1{% endif %} col-start-1 row-start-1 space-y-2">
+      {%- if show_vendor -%}
+        <p class="text-xs font-bold tracking-widest uppercase opacity-80">{{ item.product.vendor }}</p>
+      {%- endif -%}
+
+      {%- comment -%}Item Title{%- endcomment -%}
+      <a href="{{ item.product.url }}" class="block text-lg underline break-words transition-all decoration-transparent underline-offset-1 hover:underline-current focus:underline-current hover:decoration-2 focus:decoration-2">{{ item.product.title | escape }}</a>
+
+      {%- comment -%}Item Properties and Options{%- endcomment -%}
+      <div class="space-y-2 text-sm opacity-80">
+        {%- if item.product.has_only_default_variant == false or item.properties.size != 0 or item.selling_plan_allocation != nil -%}
+          <div class="flex divide-x">
+            {%- if item.product.has_only_default_variant == false -%}
+              {%- for option in item.options_with_values -%}
+                <div class="px-2 first-of-type:pl-0">
+                  <span class="sr-only">{{ option.name }}: </span>
+                  <span>{{ option.value }}</span>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- for property in item.properties -%}
+              {%- assign property_first_char = property.first | slice: 0 -%}
+              {%- if property.last != blank and property_first_char != '_' -%}
+                <div class="px-2 first-of-type:pl-0">
+                  <span class="sr-only">{{ property.first }}: </span>
+                  <span>
+                    {%- if property.last contains '/uploads/' -%}
+                      <a href="{{ property.last }}" target="_blank">
+                        {{ property.last | split: '/' | last }}
+                      </a>
+                    {%- else -%}
+                      {{ property.last }}
+                    {%- endif -%}
+                  </span>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          {% if enable_selector %}
+            <select class="inline-subscription-select max-w-[185px] md:max-w-[200px] bg-transparent border-2 border-brand rounded-full text-brand text-sm" name="selling-plan" data-line="{{ forloop.index }}" data-quantity="{{ item.quantity }}" data-index="{{ item.index | plus: 1 }}">
+              <option class="{% if item.selling_plan_allocation == nil %}one-time{% endif %}" value="">One-time purchase</option>
+              {% for selling_plan_allocation in item.variant.selling_plan_allocations %}
+                <option
+                  value="{{ selling_plan_allocation.selling_plan.id }}"
+                  {% if item.selling_plan_allocation.selling_plan.id == selling_plan_allocation.selling_plan.id %}selected="selected"{% endif %}
+                >
+                  {{ selling_plan_allocation.selling_plan.name }}
+                </option>
+              {% endfor %}
+            </select>
+          {% else %}
+            <p class="text-sm" data-name="selling-plan-text" data-plan="{{ item.selling_plan_allocation.selling_plan.id }}" data-index="{{ item.index | plus: 1 }}">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+          {% endif %}
+
+          
+
+        {%- endif -%}
+
+        <p class="flex sr-only" id="Line-item-error-{{ item.index | plus: 1 }}">
+          <span class="peer" data-cart-error></span>
+          <svg aria-hidden="true" focusable="false" role="presentation" class="w-6 peer-empty:hidden" viewBox="0 0 13 13">
+            <circle cx="6.5" cy="6.50049" r="5.5" stroke="white" stroke-width="2"/>
+            <circle cx="6.5" cy="6.5" r="5.5" fill="#EB001B" stroke="#EB001B" stroke-width="0.7"/>
+            <path d="M5.87413 3.52832L5.97439 7.57216H7.02713L7.12739 3.52832H5.87413ZM6.50076 9.66091C6.88091 9.66091 7.18169 9.37267 7.18169 9.00504C7.18169 8.63742 6.88091 8.34917 6.50076 8.34917C6.12061 8.34917 5.81982 8.63742 5.81982 9.00504C5.81982 9.37267 6.12061 9.66091 6.50076 9.66091Z" fill="white"/>
+            <path d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z" fill="white" stroke="#EB001B" stroke-width="0.7">
+          </svg>
+        </p>
+      </div>
+    </div>
+
+    {%- comment -%}Item Quantity{%- endcomment -%}
+    <div class="col-start-2 row-start-2 text-right justify-self-end">
+      <label class="sr-only" for="Quantity-{{ item.index | plus: 1 }}">
+        {{ 'products.product.quantity.label' | t }}
+      </label>
+      {%- liquid
+        assign disable_quantity = false
+        if item.product.id == settings.gift_wrap_product.id and cart.attributes.gift_wrap != 'multiple'
+          assign disable_quantity = true
+        endif
+      -%}
+      <quantity-input class="relative flex w-24 border-b-2 border-navy">
+        <button class="w-8 shrink-0 border-none text-sm flex no-js-hidden {% if disable_quantity %}hidden{% endif %}" name="minus" type="button" {% if disable_quantity %}disabled{% endif %}>
+          <span class="sr-only">{{ 'products.product.quantity.decrease' | t: product: item.product.title | escape }}</span>
+          <span class="w-3 m-auto opacity-50 pointer-events-none">{% render 'icon-minus' %}</span>
+        </button>
+        <input class="w-full h-8 p-1 text-base text-center bg-transparent border-none appearance-none grow"
+          data-quantity
+          type="number"
+          name="updates[]"
+          value="{{ item.quantity }}"
+          min="0"
+          aria-label="{{ 'products.product.quantity.input_label' | t: product: item.product.title | escape }}"
+          id="Quantity-{{ item.index | plus: 1 }}"
+          data-index="{{ item.index | plus: 1 }}"
+          {% if disable_quantity %}disabled{% endif %}
+        >
+        <button class="w-8 shrink-0 border-none text-sm flex no-js-hidden {% if disable_quantity %}hidden{% endif %}" name="plus" type="button" {% if disable_quantity %}disabled{% endif %}>
+          <span class="sr-only">{{ 'products.product.quantity.increase' | t: product: item.product.title | escape }}</span>
+          <span class="w-3 m-auto opacity-50 pointer-events-none">{% render 'icon-plus' %}</span>
+        </button>
+      </quantity-input>
+      <cart-remove-button id="Remove-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}" class="inline-block py-1 mt-1 mb-auto {% if disable_quantity %}hidden{% endif %}">
+        <a href="{{ item.url_to_remove }}" class="flex items-center justify-center w-full h-full text-base tracking-wide text-navy" aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}">
+          <span class="w-2 h-2">{% render 'icon-close' %}</span>
+          <span class="ml-2">Remove</span>
+        </a>
+      </cart-remove-button>
+    </div>
+
+    {%- comment -%}Item Price{%- endcomment -%}
+    <div class="col-start-1 row-start-2">
+
+      {%- if item.original_price != item.final_price -%}
+        <div>
+          <span class="sr-only">
+            {{ 'products.product.price.regular_price' | t }}
+          </span>
+          <span class="mr-2">
+            <s>
+              {{ item.original_price | money }}
+            </s>
+          </span>
+          <span class="sr-only">
+            {{ 'products.product.price.sale_price' | t }}
+          </span>
+          <span class="font-bold text-brand">
+            {{ item.final_price | money }}
+          </span>
+        </div>
+
+        {%- if item.variant.available and item.unit_price_measurement -%}
+          <div>
+            <span class="sr-only">{{ 'products.product.price.unit_price' | t }}</span>
+            {{ item.variant.unit_price | money }}
+            <span aria-hidden="true">/</span>
+            <span class="sr-only">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+            {%- if item.variant.unit_price_measurement.reference_value != 1 -%}
+              {{- item.variant.unit_price_measurement.reference_value -}}
+            {%- endif -%}
+            {{ item.variant.unit_price_measurement.reference_unit }}
+          </div>
+        {%- endif -%}
+      {%- elsif item.variant.compare_at_price -%}
+        <div>
+          <span class="sr-only">
+            {{ 'products.product.price.regular_price' | t }}
+          </span>
+          <span class="mr-2">
+            <s>
+              {{ item.variant.compare_at_price | money }}
+            </s>
+          </span>
+          <span class="sr-only">
+            {{ 'products.product.price.sale_price' | t }}
+          </span>
+          <span class="font-bold text-brand">
+            {{ item.final_price | money }}
+          </span>
+        </div>
+      {%- else -%}
+        <span>
+          {{ item.original_price | money }}
+        </span>
+      {%- endif -%}
+
+      <ul class="flex gap-4 text-brand" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+        {%- for discount in item.discounts -%}
+          <li class="flex items-center gap-2">
+            <span class="w-4">{%- render 'icon-discount' -%}</span>
+            {{ discount.title }}
+          </li>
+        {%- endfor -%}
+      </ul>
+
+    </div>
+
+    {%- comment -%}Item Price Total{%- endcomment -%}
+    <div class="col-start-2 row-start-1 text-right justify-self-end">
+      {%- if item.original_line_price != item.final_line_price -%}
+        <div>
+          <span class="sr-only">
+            {{ 'products.product.price.sale_price' | t }}
+          </span>
+          <span>
+            {{ item.final_line_price | money }}
+          </span>
+        </div>
+      {%- else -%}
+        <span>
+          {{ item.original_line_price | money }}
+        </span>
+      {%- endif -%}
+    </div>
+
+  </div>
+  {% if enable_selector %}
+
+
+  {% for selling_plan_allocation in item.variant.selling_plan_allocations %}
+      {%- assign subscription_price = selling_plan_allocation.price_adjustments.first.price -%}
+      {%- assign one_time_price = item.variant.price -%}
+      {%- assign savings_amount = one_time_price | minus: subscription_price -%}
+      {%- assign savings_percentage = savings_amount | times: 100 | divided_by: one_time_price -%}
+                  
+    {% assign plan = selling_plan_allocation.selling_plan %}
+    {% if plan.name contains '30' %}
+      {% unless customer.b2b? %}
+  <fieldset class="w-full px-4 py-2 space-y-2 bg-white rounded-md upsell-container" data-selling-plan-wrapper>
+  <legend class="sr-only">Purchase options</legend>
+
+  <label class="flex items-center gap-2 sr-only">
+    <input
+      type="radio"
+      name="selling-plan-{{ item.index | plus: 1 }}"
+      value=""
+      data-index="{{ item.index | plus: 1 }}"
+      {% if item.selling_plan_allocation == nil %}checked{% endif %}
+    >
+    One-time purchase
+  </label>
+    <label class="flex flex-col gap-2">
+     
+      <h3 class="text-sm text-black p1">Subscribe and Save <span class="px-2 py-1 !text-xs uppercase rounded-full bg-cream text-brand subhead">Save {{ savings_percentage | round: 1 }}%</span></h3>
+        <div class="flex justify-between gap-4">
+        <ul class="mt-1 text-sm subscription-list">
+          {%- assign first_char = variant.title | slice: 0, 1 -%}
+          {%- assign first_number = first_char | plus: 0 -%}
+          <li>
+            {%- if first_number > 1 -%}
+              {{ first_number }} months
+            {%- else -%}
+              1 month
+            {%- endif -%}   {{ variant.title }} supply &nbsp;{%- if first_number > 1 -%}
+              every {{ first_number }} months
+            {%- else -%}
+              each month
+            {%- endif -%}
+         
+          </li>
+          <li>Free Shipping</li>
+          <li>Pause any time</li>
+        </ul>
+        <div class="flex flex-col justify-end gap-4 text-right">
+          <p class="text-lg italic font-secondaryHeader text-brand">{{ subscription_price | money }}/ mo <span class="opacity-70">vs. {{ one_time_price | money }}</span></p>
+         <input
+          class="sr-only cart-subscription-upsell"
+        type="radio"
+        name="selling-plan-{{ item.index | plus: 1 }}"
+        value="{{ plan.id }}"
+        data-index="{{ item.index | plus: 1 }}"
+        {% if item.selling_plan_allocation.selling_plan.id == plan.id %}checked{% endif %}
+      >
+      <span class="px-2 upgrade text-white uppercase cursor-pointer rounded-full !h-fit py-1 font-bold tracking-[0.1em] !text-xs bg-navy w-fit">Upgrade Now</span>
+
+      </div>  
+      </div>
+    </label>
+    </fieldset>
+  {% endunless %}
+    {% endif %}
+    
+  {% endfor %}
+
+          {% else %}
+            <p class="text-sm" data-name="selling-plan-text" data-plan="{{ item.selling_plan_allocation.selling_plan.id }}" data-index="{{ item.index | plus: 1 }}">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+          {% endif %}
+
+</li>

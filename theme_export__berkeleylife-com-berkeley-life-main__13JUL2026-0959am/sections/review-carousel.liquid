@@ -1,0 +1,306 @@
+<!-- sections/okendo-reviews.liquid -->
+<div class="relative px-4 py-4 pt-0 bg-white md:pt-8 md:px-8 md:py-8 md:pb-12">
+<div id="okendo-reviews-section" class="overflow-hidden review-swiper-container">
+  <h2 class="my-8 text-center !tracking-[-1.8px] h2">{{ section.settings.title  | replace_first: "**", "<span class=' font-secondaryHeader text-[50px] md:text-[71px]'>" | replace: "**", "</span>"}}</h2>
+
+  <div id="filter-container" class="flex flex-wrap justify-center max-w-xl gap-4 mx-auto mb-8 w-fit">
+    <!-- Filters will be dynamically populated -->
+  </div>
+  <div id="reviews-container" class="swiper-wrapper">
+    <!-- Reviews will be dynamically loaded -->
+  </div>
+  <div class="swiper-button-next after:hidden"><svg width="26" height="29" viewBox="0 0 26 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 14.3848L25.5 14.3848" stroke="#080B2B" stroke-width="2"/>
+    <path d="M25.1729 14.3846C20.3781 13.6218 10.7883 9.67692 10.7883 0" stroke="#080B2B" stroke-width="2"/>
+    <path d="M25.1729 14.3844C20.3781 15.1472 10.7883 19.0921 10.7883 28.769" stroke="#080B2B" stroke-width="2"/>
+    </svg>
+    </div>
+  <div class="swiper-button-prev after:hidden"><svg width="26" height="29" viewBox="0 0 26 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M25.5 14.3843L4.47035e-07 14.3843" stroke="#080B2B" stroke-width="2"/>
+    <path d="M0.327056 14.3844C5.12193 15.1472 14.7117 19.0921 14.7117 28.769" stroke="#080B2B" stroke-width="2"/>
+    <path d="M0.327053 14.3846C5.12193 13.6218 14.7117 9.67692 14.7117 0" stroke="#080B2B" stroke-width="2"/>
+    </svg>
+    </div>
+</div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    console.log("DOMContentLoaded event triggered");
+    
+    // Static Okendo Store ID
+    const okendoStoreId = "d67d538c-ecef-4cd5-a192-b6800e5d793d";
+    console.log("Okendo Store ID:", okendoStoreId);
+
+    const productId = typeof product !== 'undefined' && product.id ? product.id : "8564475003043";
+
+
+    console.log("Product ID:", productId);
+
+    // API Endpoint
+    const apiUrl = `https://api.okendo.io/v1/stores/${okendoStoreId}/reviews?product_id=shopify-8564478869667`;
+    console.log("API URL:", apiUrl);
+
+    // Fetch reviews from Okendo API
+    async function fetchReviews() {
+      try {
+        console.log("Fetching reviews from API...");
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Failed to fetch reviews");
+        const data = await response.json();
+        console.log("Fetched reviews:", data);
+        return data.reviews;
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+        return [];
+      }
+    }
+
+    // Render filter buttons dynamically based on categories
+    function renderFilters(categories) {
+      console.log("Rendering filter buttons:", categories);
+      const filterContainer = document.getElementById("filter-container");
+      if (!filterContainer) {
+        console.error("Filter container not found");
+        return;
+      }
+      filterContainer.innerHTML = "";
+
+      // Create a button for each category
+      categories.forEach((category) => {
+        const button = document.createElement("div");
+        button.classList.add("filter-btn", "w-fit");
+        button.setAttribute("data-filter", category);
+        button.innerText = category;
+        filterContainer.appendChild(button);
+      });
+
+      // Add a "Show All" button
+      const showAllButton = document.createElement("button");
+      showAllButton.classList.add("filter-btn");
+      showAllButton.setAttribute("data-filter", "all");
+      showAllButton.innerText = "Show All";
+      filterContainer.appendChild(showAllButton);
+    }
+
+    // Render reviews
+    function renderReviews(reviews) {
+      console.log("Rendering reviews:", reviews);
+      const reviewsContainer = document.getElementById("reviews-container");
+      if (!reviewsContainer) {
+        console.error("Reviews container not found");
+        return;
+      }
+      reviewsContainer.innerHTML = "";
+
+      reviews.forEach((review, reviewIndex) => {
+        // Filter out reviews with 3 or fewer stars
+        if (review.rating <= 3) {
+          return;
+        }
+
+        // Ensure productAttributes exists and is an array
+        if (review.productAttributes && Array.isArray(review.productAttributes)) {
+          const categoryAttribute = review.productAttributes.find((attr) => attr.title === "Category");
+
+          // Ensure categories is always an array
+          let categories = [];
+          if (categoryAttribute && categoryAttribute.value) {
+            // If value exists, ensure it's an array (if it's a string, wrap it in an array)
+            categories = Array.isArray(categoryAttribute.value) ? categoryAttribute.value : [categoryAttribute.value];
+          }
+
+          // Log the categories to check their structure
+
+          // Only call .join() if categories is an array
+          if (Array.isArray(categories)) {
+            const categoriesString = categories.join(", "); // Convert array to a comma-separated string
+            const reviewElement = document.createElement("div");
+            reviewElement.classList.add("review", "swiper-slide");
+            reviewElement.setAttribute("data-categories", categoriesString);
+            reviewElement.innerHTML = `
+              <div class="text-brand">${"★".repeat(review.rating)}</div>
+              <h3>${review.title}</h3>
+              <p class="text-lg">"${review.body}"</p>
+              <p class="mt-4 text-base text-brand subhead">${review.reviewer.displayName}</p>
+            `;
+            reviewsContainer.appendChild(reviewElement);
+          } else {
+            console.error("Categories is not an array:", categories);
+          }
+        } else {
+        }
+      });
+
+      // Apply filters after reviews are rendered
+      applyFilters();
+    }
+
+    // Apply filter functionality
+    function applyFilters() {
+      console.log("Applying filters...");
+      const filterButtons = document.querySelectorAll(".filter-btn");
+      const reviews = document.querySelectorAll(".review");
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const filter = button.getAttribute("data-filter");
+          console.log("Filter selected:", filter);
+
+          reviews.forEach((review) => {
+            const categories = review.getAttribute("data-categories").split(", ");
+            if (filter === "all" || categories.includes(filter)) {
+              review.style.display = "block";
+            } else {
+              review.style.display = "none";
+            }
+          });
+
+          // Highlight the active filter button
+          filterButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+        });
+      });
+    }
+
+    // Main Initialization Function
+    async function initialize() {
+      console.log("Initializing...");
+      const reviews = await fetchReviews();
+
+      // Extract unique categories
+      const allCategories = new Set();
+      reviews.forEach((review) => {
+          // Check if productAttributes exists and is an array
+          if (review.productAttributes && Array.isArray(review.productAttributes)) {
+              // Find the category attribute
+              const categoryAttribute = review.productAttributes.find((attr) => attr.title === "Category");
+
+              // Ensure categories is always an array
+              let categories = [];
+              if (categoryAttribute && categoryAttribute.value) {
+                  // If value exists, ensure it's an array (if it's a string, wrap it in an array)
+                  categories = Array.isArray(categoryAttribute.value) ? categoryAttribute.value : [categoryAttribute.value];
+              }
+
+
+              // Only call .forEach() if categories is a valid array
+              if (Array.isArray(categories)) {
+                  categories.forEach((category) => allCategories.add(category));
+              } else {
+                  console.error("Categories is not an array:", categories);
+              }
+          } else {
+          }
+      });
+
+      renderFilters(Array.from(allCategories));
+      renderReviews(reviews);
+    }
+
+    initialize();
+  });
+</script>
+
+<script type="module">
+  const selector = `.review-swiper-container`
+  const rootElement = document.querySelector(selector)
+  async function initTestimonial() {
+    const { Swiper } = await import('https://unpkg.com/swiper@8/swiper-bundle.esm.browser.min.js')
+    const testimonialSwiper = new Swiper(selector,  {
+      direction: 'horizontal',
+      spaceBetween: 30,
+      slidesPerView: 1,
+      clickable: true,
+      draggable: true,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      a11y: {
+        enabled: true,
+        slideRole: 'listitem'
+      },
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 3.3,
+          spaceBetween: 20,
+        },
+      }
+    })
+  }
+  function reveal() {
+    const handleIntersection = (entries, observer) => {
+      if (!entries[0].isIntersecting) return;
+      observer.unobserve(rootElement);
+      initTestimonial()
+    }
+    new IntersectionObserver(handleIntersection.bind(rootElement), {rootMargin: '0px 0px 200px 0px'}).observe(rootElement);
+  }
+  reveal();
+</script>
+
+<style>
+  .review{
+    width: 363px;
+    flex-shrink: 0;
+    background: #F6F3F0;
+    border-radius: 40px;
+    font-size: 20px;
+    text-align: center;
+    padding: 16px 24px;
+  }
+  .review h3{
+    font-size: 26px;
+  }
+
+  .filter-btn{
+    border-radius: 46.058px;
+    border: 1.5px solid #080B2B;
+    padding: 10px 16px;
+    color: #D54F2F;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 19px; /* 118.75% */
+    letter-spacing: 3.04px;
+    text-transform: uppercase;
+    cursor: pointer
+  }
+
+  .filter-btn:hover, .filter-btn.active{
+  background: #080B2B;
+  color: #F6F3F0;
+  }
+</style>
+
+
+  {% schema %}
+  {
+    "name": "Review Carousel",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "default": "Reviews",
+        "label": "Title"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "@app"
+      }
+    ],
+    "presets": [
+    {
+        "name": "Review Carousel"
+    }
+    ]
+  }
+  {% endschema %}
+  

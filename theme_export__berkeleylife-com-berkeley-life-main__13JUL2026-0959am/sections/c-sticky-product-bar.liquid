@@ -1,0 +1,997 @@
+<style>
+  [data-back-to-top] {
+    display: none !important;
+  }
+
+  /* Mobile trigger button */
+  .sticky-bar-trigger {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    z-index: 1000000000001;
+    background: {{ section.settings.button_bg_color }};
+    color: {{ section.settings.button_text_color }} !important;
+    border: none;
+    border-radius: 24px 24px 0 0;
+    padding: 8px 24px 12px;
+    font-size: 12px;
+    
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out, bottom 0.3s ease-in-out;
+
+    & svg {
+      width: 12px;
+      height: 12px;
+      fill: {{ section.settings.button_text_color }};
+      transition: transform 0.3s ease;
+    }
+
+    & span {
+      color: {{ section.settings.button_text_color }} !important;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    &.is-hidden {
+      transform: translateX(-50%) translateY(100%);
+    }
+
+    &.is-rotated svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .sticky-bar-trigger {
+      display: flex;
+    }
+  }
+
+  #{{ section.id }} {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(calc(100% + 3rem));
+ 
+    max-width: 1400px;
+    z-index: 1000000000000;
+    background: {{ section.settings.bg_color }};
+    box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.25);
+    border-radius: 16px;
+    transition: transform 0.3s ease-in-out;
+    
+    &.is-visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    & * {
+      color: {{ section.settings.text_color }};
+    }
+
+    & .sticky-bar__container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    & .sticky-bar__product {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    & .sticky-bar__image {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f5f5f5;
+      flex-shrink: 0;
+
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    & .sticky-bar__title {
+      font-size: 16px;
+        font-weight: 300;
+        font-style: italic;
+    font-family: "Cormorant Garamond";
+      margin: 0;
+      color: {{ section.settings.title_color }};
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+
+    & .sticky-bar__actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      justify-content: flex-end;
+    }
+
+    & .sticky-bar__purchase-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    & .sticky-bar__label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: {{ section.settings.label_color }};
+      white-space: nowrap;
+    }
+
+    & .sticky-bar__select {
+      appearance: none;
+      background: {{ section.settings.select_bg_color }};
+      border: 2px solid {{ section.settings.border_color }};
+        border-radius: 42px !important;
+      padding: 10px 35px 10px 20px !important;
+      font-size: 14px;
+      font-weight: 500;
+      color: {{ section.settings.select_text_color }};
+      cursor: pointer;
+      width: auto;
+      max-width: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      transition: border-color 0.2s ease, width 0.2s ease;
+
+      &:hover {
+        border-color: {{ section.settings.focus_border_color }};
+      }
+
+      &:focus {
+        outline: none;
+        border-color: {{ section.settings.focus_border_color }};
+      }
+    }
+
+    & .sticky-bar__product-form {
+      display: contents;
+    }
+
+    & .sticky-bar__form {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-direction: row !important;
+    }
+
+    & .sticky-bar__variant-select {
+      appearance: none;
+      background: {{ section.settings.select_bg_color }};
+      border: 2px solid {{ section.settings.border_color }};
+      border-radius: 42px !important;
+      padding: 10px 20px !important;
+      font-size: 14px;
+      font-weight: 500;
+      color: {{ section.settings.select_text_color }};
+      cursor: pointer;
+      min-width: 120px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      transition: border-color 0.2s ease;
+
+      &:hover {
+        border-color: {{ section.settings.focus_border_color }};
+      }
+
+      &:focus {
+        outline: none;
+        border-color: {{ section.settings.focus_border_color }};
+      }
+    }
+
+    & .sticky-bar__submit {
+      background: {{ section.settings.button_bg_color }};
+      color: {{ section.settings.button_text_color }} !important;
+      border: none;
+      border-radius: 42px;
+      padding: 18px 20px;
+      font-size: 14px;
+      line-height: normal;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      white-space: nowrap;
+      align-self: end;
+
+      &:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      &[aria-busy="true"] {
+        pointer-events: none;
+        opacity: 0.7;
+      }
+    }
+
+    /* Tablet Styles */
+    @media (max-width: 1024px) {
+      border-radius: 16px 16px 0 0;
+      width: 95% !important;
+      
+      & .sticky-bar__container {
+        flex-wrap: wrap;
+        padding: 12px 16px;
+        gap: 12px;
+      }
+
+      & .sticky-bar__product {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      & .sticky-bar__title {
+        max-width: calc(100% - 70px);
+      }
+
+      & .sticky-bar__actions {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 576px) {
+
+      & .sticky-bar__actions {
+        place-content: flex-start;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      & .sticky-bar__purchase-options {
+        width: 100%;
+        min-width: 0;
+      }
+
+      & .sticky-bar__form {
+        flex-direction: column !important;
+        width: 100%;
+        gap: 10px;
+      }
+
+      & .sticky-bar__label {
+        display: none;
+      }
+
+      & .sticky-bar__select {
+        width: 100% !important;
+        max-width: 100%;
+        padding: 12px 30px 12px 16px !important;
+        font-size: 12px;
+      }
+
+      & .sticky-bar__variant-select {
+        width: 100%;
+        max-width: 100%;
+        font-size: 13px;
+      }
+
+      & .sticky-bar__submit {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 14px;
+        align-self: stretch;
+      }
+    }
+
+   
+
+    /* Hide bar when at the very bottom of page */
+    &.hide-at-footer {
+      transform: translateY(100%);
+    }
+
+    /* Mobile only mode */
+    {%- if section.settings.mobile_only -%}
+    @media (min-width: 1025px) {
+      display: none !important;
+    }
+    {%- endif -%}
+  }
+</style>
+
+{%- comment -%} Determine which product to use {%- endcomment -%}
+{%- if section.settings.use_pdp_product and product != blank -%}
+  {%- comment -%} Use the current PDP product if available {%- endcomment -%}
+  {%- assign product = product -%}
+{%- elsif section.settings.product != blank -%}
+  {%- comment -%} Use the manually selected product {%- endcomment -%}
+  {%- assign product = section.settings.product -%}
+{%- else -%}
+  {%- assign product = blank -%}
+{%- endif -%}
+
+{%- if product != blank -%}
+<!-- Mobile trigger button -->
+<button class="sticky-bar-trigger" id="sticky-bar-trigger-{{ section.id }}" aria-label="Open purchase options">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 4l-8 8h16z"/>
+  </svg>
+  <span>{{ section.settings.button_text }}</span>
+</button>
+
+<section id="{{ section.id }}" data-trigger-section="{{ section.settings.trigger_section_id }}" data-mobile-only="{{ section.settings.mobile_only }}">
+  <div class="sticky-bar__container">
+    {%- comment -%} Product Info {%- endcomment -%}
+    <div class="sticky-bar__product">
+      <div class="sticky-bar__image">
+        {%- if product.featured_image -%}
+          <img 
+            src="{{ product.featured_image | image_url: width: 100 }}" 
+            alt="{{ product.title | escape }}"
+            loading="lazy">
+        {%- endif -%}
+      </div>
+      <h3 class="sticky-bar__title">{{ product.title }}</h3>
+    </div>
+
+    {%- comment -%} Actions {%- endcomment -%}
+    <div class="sticky-bar__actions">
+      {%- assign sticky_form_id = 'sticky-product-form-' | append: section.id -%}
+      
+      <product-form class="sticky-bar__product-form">
+        <div data-product-form-errors role="alert" hidden>
+          <span data-product-form-error-msg></span>
+        </div>
+        
+        {%- form 'product', product, id: sticky_form_id, class: 'sticky-bar__form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+          {%- comment -%} Find initial variant based on mode {%- endcomment -%}
+          {%- assign initial_variant_id = product.selected_or_first_available_variant.id -%}
+          {%- if section.settings.use_hardcoded_options -%}
+            {%- for variant in product.variants -%}
+              {%- if variant.metafields.custom.one_time_purchase == true -%}
+                {%- assign initial_variant_id = variant.id -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+          
+          {%- comment -%} Hidden inputs for cart submission {%- endcomment -%}
+          <input type="hidden" name="id" class="js-variant-id" value="{{ initial_variant_id }}">
+          <input type="hidden" name="selling_plan" class="js-selling-plan" value="">
+
+          <div class="sticky-bar__purchase-options">
+            <span class="sticky-bar__label">{{ section.settings.purchase_label }}</span>
+
+            {%- if section.settings.use_hardcoded_options -%}
+              {%- comment -%} Hardcoded Purchase Options {%- endcomment -%}
+              <select name="purchase_option" class="sticky-bar__select js-purchase-select" data-hardcoded="true">
+                {%- comment -%} One-time purchase (uses variant with one_time_purchase metafield) {%- endcomment -%}
+                <option value="onetime" data-selling-plan="" data-variant-id="{{ initial_variant_id }}">
+                  {{ section.settings.onetime_label }}
+                </option>
+                
+                {%- comment -%} 3-month subscription (90 days delivery) {%- endcomment -%}
+                {%- for variant in product.variants -%}
+                  {%- if variant.title contains '3' or variant.title contains 'Month' -%}
+                    {%- for allocation in variant.selling_plan_allocations -%}
+                      {%- assign base_price = variant.price -%}
+                      {%- assign plan_price = base_price -%}
+                      {%- if allocation.selling_plan.price_adjustments.size > 0 -%}
+                        {%- assign adj = allocation.selling_plan.price_adjustments[0] -%}
+                        {%- if adj.value_type == 'percentage' -%}
+                          {%- assign discount = base_price | times: adj.value | divided_by: 100 -%}
+                          {%- assign plan_price = base_price | minus: discount -%}
+                        {%- elsif adj.value_type == 'fixed_amount' -%}
+                          {%- assign plan_price = base_price | minus: adj.value -%}
+                        {%- elsif adj.value_type == 'price' -%}
+                          {%- assign plan_price = adj.value -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                      <option 
+                        value="subscribe" 
+                        data-selling-plan="{{ allocation.selling_plan.id }}"
+                        data-variant-id="{{ variant.id }}"
+                        data-price="{{ plan_price }}"
+                        selected>
+                        {{ section.settings.three_month_label }}
+                      </option>
+                      {%- break -%}
+                    {%- endfor -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                
+                {%- comment -%} 1-month subscription (monthly delivery) {%- endcomment -%}
+                {%- for variant in product.variants -%}
+                  {%- assign variant_title_downcase = variant.title | downcase -%}
+                  {%- if variant_title_downcase contains '1' or variant_title_downcase == 'default title' -%}
+                    {%- for allocation in variant.selling_plan_allocations -%}
+                      {%- assign base_price = variant.price -%}
+                      {%- assign plan_price = base_price -%}
+                      {%- if allocation.selling_plan.price_adjustments.size > 0 -%}
+                        {%- assign adj = allocation.selling_plan.price_adjustments[0] -%}
+                        {%- if adj.value_type == 'percentage' -%}
+                          {%- assign discount = base_price | times: adj.value | divided_by: 100 -%}
+                          {%- assign plan_price = base_price | minus: discount -%}
+                        {%- elsif adj.value_type == 'fixed_amount' -%}
+                          {%- assign plan_price = base_price | minus: adj.value -%}
+                        {%- elsif adj.value_type == 'price' -%}
+                          {%- assign plan_price = adj.value -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                      <option 
+                        value="subscribe" 
+                        data-selling-plan="{{ allocation.selling_plan.id }}"
+                        data-variant-id="{{ variant.id }}"
+                        data-price="{{ plan_price }}">
+                        {{ section.settings.one_month_label }}
+                      </option>
+                      {%- break -%}
+                    {%- endfor -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </select>
+            {%- else -%}
+              {%- comment -%} Dynamic Purchase Options - Combined select with variants + purchase options {%- endcomment -%}
+              {%- comment -%} Filter variants based on B2B/B2C status using metafields {%- endcomment -%}
+              <select name="purchase_option" class="sticky-bar__select js-purchase-select js-combined-select">
+                {%- for variant in product.variants -%}
+                  {%- comment -%} 
+                    B2B Logic:
+                    - If customer.b2b? is true: Show variants with b2bonly=true OR both_d2c_b2b=true
+                    - If customer.b2b? is false (D2C): Show variants where b2bonly is NOT true (includes both_d2c_b2b and regular variants)
+                  {%- endcomment -%}
+                  {%- assign show_variant = false -%}
+                  {%- if customer.b2b? -%}
+                    {%- if variant.metafields.custom.b2bonly.value == true or variant.metafields.custom.both_d2c_b2b.value == true -%}
+                      {%- assign show_variant = true -%}
+                    {%- endif -%}
+                  {%- else -%}
+                    {%- if variant.metafields.custom.b2bonly.value != true -%}
+                      {%- assign show_variant = true -%}
+                    {%- endif -%}
+                  {%- endif -%}
+
+                  {%- if show_variant -%}
+                    {%- assign variant_label = variant.title -%}
+                    {%- if variant.title == 'Default Title' -%}
+                      {%- assign variant_label = '' -%}
+                    {%- endif -%}
+                    
+                    {%- comment -%} One-time purchase option for this variant (only if not disabled) {%- endcomment -%}
+                    {%- unless variant.metafields.custom.disable_one_time_purchase -%}
+                      <option 
+                        value="onetime" 
+                        data-selling-plan=""
+                        data-variant-id="{{ variant.id }}"
+                        data-price="{{ variant.price }}"
+                        {% if variant == product.selected_or_first_available_variant %}selected{% endif %}
+                        {% unless variant.available %}disabled{% endunless %}>
+                        {%- if variant_label != '' -%}{{ variant_label }} - {%- endif -%}{{ section.settings.onetime_label }} - {{ variant.price | money }}{% unless variant.available %} - Sold Out{% endunless %}
+                      </option>
+                    {%- endunless -%}
+                    
+                    {%- comment -%} Subscription options for this variant {%- endcomment -%}
+                    {%- for allocation in variant.selling_plan_allocations -%}
+                      {%- assign base_price = variant.price -%}
+                      {%- assign plan_price = base_price -%}
+                      {%- assign plan = allocation.selling_plan -%}
+                      {%- if plan.price_adjustments.size > 0 -%}
+                        {%- assign adj = plan.price_adjustments[0] -%}
+                        {%- if adj.value_type == 'percentage' -%}
+                          {%- assign discount = base_price | times: adj.value | divided_by: 100 -%}
+                          {%- assign plan_price = base_price | minus: discount -%}
+                        {%- elsif adj.value_type == 'fixed_amount' -%}
+                          {%- assign plan_price = base_price | minus: adj.value -%}
+                        {%- elsif adj.value_type == 'price' -%}
+                          {%- assign plan_price = adj.value -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                      <option 
+                        value="subscribe" 
+                        data-selling-plan="{{ plan.id }}"
+                        data-variant-id="{{ variant.id }}"
+                        data-price="{{ plan_price }}"
+                        {% unless variant.available %}disabled{% endunless %}>
+                        {%- if variant_label != '' -%}{{ variant_label }} - {%- endif -%}{{ plan.name }} - {{ plan_price | money }}{% unless variant.available %} - Sold Out{% endunless %}
+                      </option>
+                    {%- endfor -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
+          </div>
+
+          <button 
+            type="submit" 
+            name="add"
+            class="sticky-bar__submit"
+            {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+            {%- if product.selected_or_first_available_variant.available -%}
+              {{ section.settings.button_text }}
+            {%- else -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- endif -%}
+          </button>
+        {%- endform -%}
+      </product-form>
+    </div>
+  </div>
+
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const stickyBar = document.getElementById('{{ section.id }}');
+  const triggerBtn = document.getElementById('sticky-bar-trigger-{{ section.id }}');
+  if (!stickyBar) return;
+
+  const triggerSectionId = stickyBar.dataset.triggerSection;
+  const mobileOnly = stickyBar.dataset.mobileOnly === 'true';
+  const form = stickyBar.querySelector('form');
+  const variantInput = form.querySelector('.js-variant-id');
+  const sellingPlanInput = form.querySelector('.js-selling-plan');
+  const variantSelect = form.querySelector('.js-variant-select');
+  const purchaseSelect = form.querySelector('.js-purchase-select');
+  const submitBtn = form.querySelector('.sticky-bar__submit');
+
+  // Check if mobile
+  function isMobile() {
+    return window.innerWidth <= 1024;
+  }
+
+  // Mobile state
+  let mobileBarOpen = false;
+
+  // Visibility handling based on trigger section (desktop only)
+  function handleVisibility() {
+    // Check for "ancla" section - hide bar when scrolled above it
+    const anclaSection = document.getElementById('ancla');
+    let shouldHideForAncla = false;
+    
+    if (anclaSection) {
+      const anclaRect = anclaSection.getBoundingClientRect();
+      // Hide if the top of "ancla" section is below the viewport (user scrolled up past it)
+      if (anclaRect.top > 0) {
+        shouldHideForAncla = true;
+      }
+    }
+
+    // On mobile, visibility is controlled by trigger button
+    if (isMobile()) {
+      // Show trigger button based on scroll position
+      if (!triggerSectionId || triggerSectionId.trim() === '') {
+        if (shouldHideForAncla) {
+          triggerBtn.classList.add('is-hidden');
+          if (mobileBarOpen) {
+            mobileBarOpen = false;
+            stickyBar.classList.remove('is-visible');
+            triggerBtn.classList.remove('is-rotated');
+            triggerBtn.style.bottom = '0';
+          }
+        } else {
+          triggerBtn.classList.remove('is-hidden');
+        }
+      } else {
+        const triggerSection = document.getElementById(triggerSectionId);
+        if (!triggerSection) {
+          if (shouldHideForAncla) {
+            triggerBtn.classList.add('is-hidden');
+          } else {
+            triggerBtn.classList.remove('is-hidden');
+          }
+        } else {
+          const triggerRect = triggerSection.getBoundingClientRect();
+          const triggerTop = triggerRect.top + window.scrollY;
+          
+          if (window.scrollY >= triggerTop && !shouldHideForAncla) {
+            triggerBtn.classList.remove('is-hidden');
+          } else {
+            triggerBtn.classList.add('is-hidden');
+            // Also close the bar if scrolling back up
+            if (mobileBarOpen) {
+              mobileBarOpen = false;
+              stickyBar.classList.remove('is-visible');
+              triggerBtn.classList.remove('is-rotated');
+              triggerBtn.style.bottom = '0';
+            }
+          }
+        }
+      }
+      return;
+    }
+
+    // Desktop behavior - show bar on scroll
+    // If mobile only mode is enabled, don't show on desktop
+    if (mobileOnly) {
+      stickyBar.classList.remove('is-visible');
+      return;
+    }
+
+    // First check if we should hide for ancla
+    if (shouldHideForAncla) {
+      stickyBar.classList.remove('is-visible');
+      return;
+    }
+
+    if (!triggerSectionId || triggerSectionId.trim() === '') {
+      stickyBar.classList.add('is-visible');
+      return;
+    }
+
+    const triggerSection = document.getElementById(triggerSectionId);
+    if (!triggerSection) {
+      console.warn('Trigger section not found:', triggerSectionId, '- showing bar by default');
+      stickyBar.classList.add('is-visible');
+      return;
+    }
+
+    const triggerRect = triggerSection.getBoundingClientRect();
+    const triggerTop = triggerRect.top + window.scrollY;
+    
+    if (window.scrollY >= triggerTop) {
+      stickyBar.classList.add('is-visible');
+    } else {
+      stickyBar.classList.remove('is-visible');
+    }
+  }
+
+  // Mobile trigger button click handler
+  if (triggerBtn) {
+    triggerBtn.addEventListener('click', function() {
+      mobileBarOpen = !mobileBarOpen;
+      
+      if (mobileBarOpen) {
+        stickyBar.classList.add('is-visible');
+        triggerBtn.classList.add('is-rotated');
+        // Move trigger to top of sticky bar
+        const barHeight = stickyBar.offsetHeight;
+        triggerBtn.style.bottom = barHeight + 'px';
+      } else {
+        stickyBar.classList.remove('is-visible');
+        triggerBtn.classList.remove('is-rotated');
+        // Reset trigger position
+        triggerBtn.style.bottom = '0';
+      }
+    });
+  }
+
+  // Handle resize
+  window.addEventListener('resize', function() {
+    if (!isMobile()) {
+      // On desktop, hide trigger and use scroll behavior
+      if (triggerBtn) {
+        triggerBtn.classList.add('is-hidden');
+        triggerBtn.classList.remove('is-rotated');
+        triggerBtn.style.bottom = '0';
+      }
+      mobileBarOpen = false;
+    } else if (mobileBarOpen) {
+      // Update trigger position on resize if bar is open
+      const barHeight = stickyBar.offsetHeight;
+      triggerBtn.style.bottom = barHeight + 'px';
+    }
+    handleVisibility();
+  });
+
+  // Throttled scroll handler
+  let ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        handleVisibility();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  // Initial check
+  handleVisibility();
+
+  // Handle variant change
+  if (variantSelect) {
+    variantSelect.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const variantId = selectedOption.value;
+      variantInput.value = variantId;
+    });
+  }
+
+  // Handle purchase option change
+  if (purchaseSelect) {
+    purchaseSelect.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const sellingPlanId = selectedOption.dataset.sellingPlan;
+      const isHardcoded = purchaseSelect.dataset.hardcoded === 'true';
+      const isCombined = purchaseSelect.classList.contains('js-combined-select');
+      
+      sellingPlanInput.value = sellingPlanId || '';
+      
+      // For hardcoded mode or combined mode, also update the variant ID
+      if ((isHardcoded || isCombined) && selectedOption.dataset.variantId) {
+        variantInput.value = selectedOption.dataset.variantId;
+      }
+      
+      // Update button text based on selection
+      if (sellingPlanId && sellingPlanId !== '') {
+        submitBtn.textContent = '{{ section.settings.subscribe_button_text }}';
+      } else {
+        submitBtn.textContent = '{{ section.settings.button_text }}';
+      }
+    });
+
+    // Initialize default values for hardcoded mode (3-month subscription)
+    if (purchaseSelect.dataset.hardcoded === 'true') {
+      const defaultOption = purchaseSelect.options[purchaseSelect.selectedIndex];
+      if (defaultOption && defaultOption.dataset.sellingPlan) {
+        sellingPlanInput.value = defaultOption.dataset.sellingPlan;
+        if (defaultOption.dataset.variantId) {
+          variantInput.value = defaultOption.dataset.variantId;
+        }
+        submitBtn.textContent = '{{ section.settings.subscribe_button_text }}';
+      }
+    }
+
+    // Initialize default values for combined select mode
+    if (purchaseSelect.classList.contains('js-combined-select')) {
+      const defaultOption = purchaseSelect.options[purchaseSelect.selectedIndex];
+      if (defaultOption) {
+        if (defaultOption.dataset.variantId) {
+          variantInput.value = defaultOption.dataset.variantId;
+        }
+        if (defaultOption.dataset.sellingPlan) {
+          sellingPlanInput.value = defaultOption.dataset.sellingPlan;
+          submitBtn.textContent = '{{ section.settings.subscribe_button_text }}';
+        } else {
+          sellingPlanInput.value = '';
+          submitBtn.textContent = '{{ section.settings.button_text }}';
+        }
+      }
+    }
+  }
+
+  // Dynamic width adjustment for select
+  function adjustSelectWidth(selectElement) {
+    if (!selectElement) return;
+    
+    // Create a temporary span to measure text width
+    const tempSpan = document.createElement('span');
+    tempSpan.style.visibility = 'hidden';
+    tempSpan.style.position = 'absolute';
+    tempSpan.style.whiteSpace = 'nowrap';
+    tempSpan.style.font = window.getComputedStyle(selectElement).font;
+    
+    const selectedText = selectElement.options[selectElement.selectedIndex]?.text || '';
+    tempSpan.textContent = selectedText;
+    
+    document.body.appendChild(tempSpan);
+    const textWidth = tempSpan.offsetWidth;
+    document.body.removeChild(tempSpan);
+    
+    // Add padding for the dropdown arrow and borders (55px = 35px right padding + 20px left padding)
+    const totalWidth = textWidth + 55;
+    selectElement.style.width = totalWidth + 'px';
+  }
+
+  // Apply dynamic width to purchase select
+  if (purchaseSelect) {
+    adjustSelectWidth(purchaseSelect);
+    purchaseSelect.addEventListener('change', function() {
+      adjustSelectWidth(this);
+    });
+  }
+});
+</script>
+{%- else -%}
+  {%- comment -%} No product selected - show placeholder in editor {%- endcomment -%}
+  {%- if request.design_mode -%}
+    <section id="{{ section.id }}" class="is-visible" style="position: relative; transform: none;">
+      <div style="padding: 24px; text-align: center; background: #f5f5f5;">
+        <p style="margin: 0; color: #666;">⚠️ Please select a product in the section settings</p>
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "C Sticky Product Bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Settings"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select Product"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_pdp_product",
+      "label": "Use current PDP product",
+      "default": false,
+      "info": "When enabled on a Product Detail Page (PDP), the sticky bar will use the current page's product instead of the manually selected one above."
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_only",
+      "label": "Show only on mobile",
+      "default": false,
+      "info": "When enabled, the sticky bar will only be visible on mobile devices"
+    },
+    {
+      "type": "text",
+      "id": "trigger_section_id",
+      "label": "Trigger Section ID",
+      "info": "Enter the section ID where the sticky bar should appear (e.g., 'shopify-section-xxx'). Leave empty to show after scrolling 50% of viewport."
+    },
+    {
+      "type": "header",
+      "content": "Hardcoded Options Mode"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_hardcoded_options",
+      "label": "Use hardcoded subscription options",
+      "default": false,
+      "info": "Enable to show fixed options: One-time, 3-month subscription, 1-month subscription"
+    },
+    {
+      "type": "text",
+      "id": "three_month_label",
+      "label": "3-month subscription label",
+      "default": "3 Month Supply (Ships every 90 days)"
+    },
+    {
+      "type": "text",
+      "id": "one_month_label",
+      "label": "1-month subscription label",
+      "default": "1 Month Supply (Ships monthly)"
+    },
+    {
+      "type": "header",
+      "content": "Labels & Text"
+    },
+    {
+      "type": "text",
+      "id": "purchase_label",
+      "label": "Purchase options label",
+      "default": "PURCHASE OPTIONS"
+    },
+    {
+      "type": "text",
+      "id": "onetime_label",
+      "label": "One-time purchase label",
+      "default": "One-time Purchase"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Add to cart button text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "subscribe_button_text",
+      "label": "Subscribe button text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "loading_text",
+      "label": "Loading text",
+      "default": "Adding..."
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Success text",
+      "default": "Added!"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Product title color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Label color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Form Elements"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "color",
+      "id": "select_bg_color",
+      "label": "Select background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "select_text_color",
+      "label": "Select text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "focus_border_color",
+      "label": "Focus border color",
+      "default": "#C65D34"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background color",
+      "default": "#C65D34"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Sticky Product Bar"
+    }
+  ]
+}
+{% endschema %}

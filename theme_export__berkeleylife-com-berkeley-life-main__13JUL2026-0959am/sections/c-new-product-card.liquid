@@ -1,0 +1,1237 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap');
+
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+    color: #111111;
+    overflow: hidden;
+
+    & .c-products__container {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    /* --- HEADER (Top Section) --- */
+    & .c-products__header {
+      display: flex;
+      justify-content: {{ section.settings.header_alignment }};
+      align-items: stretch;
+      gap: 4rem;
+    }
+
+    & .c-products__title-wrap {
+      {% if section.settings.header_alignment == 'space-between' %}flex: 1;{% endif %}
+    }
+
+    & .c-products__title {
+      font-size: clamp(40px, 4vw, 54px);
+      font-weight: 400;
+      color: {{ section.settings.title_color }};
+      margin: 0;
+      font-style: normal;
+    
+    line-height: 100%; 
+ 
+
+      & span {
+        font-family: "Cormorant Garamond", serif;
+             font-size: clamp(40px, 4vw, 54px);
+        color: {{ section.settings.accent_color }};
+        font-style: italic;
+        font-weight: 500;
+      }
+    }
+
+    & .c-products__desc-wrap {
+      display: flex;
+ 
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    & .c-products__desc {
+      font-size: 16px;
+      line-height: 1.6;
+      color: {{ section.settings.desc_color }};
+      margin: 0;
+      max-width: 550px;
+    }
+
+    & .c-products__shop-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: {{ section.settings.accent_color }};
+      text-decoration: none;
+      border-bottom: 2px solid {{ section.settings.accent_color }};
+      padding-bottom: 4px;
+      transition: opacity 0.3s ease;
+
+      &:hover {
+        opacity: 0.7;
+      }
+
+      & svg {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover svg {
+        transform: translateX(4px);
+      }
+    }
+
+    /* --- SWIPER SLIDER --- */
+    & .c-products__slider-wrapper {
+      width: 100%;
+      position: relative;
+      min-height: 480px;
+    }
+
+    & .swiper {
+      overflow: visible;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    & .swiper-slide {
+      height: auto;
+      display: flex;
+    }
+
+    /* --- LOADER + REVEAL --- */
+    & .c-products__loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    &.is-loaded .swiper {
+      opacity: 1;
+    }
+
+    &.is-loaded .c-products__loader {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    &.is-loaded .c-prod-card {
+      animation: c-prod-card-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    &.is-loaded .swiper-slide:nth-child(1) .c-prod-card { animation-delay: 0.05s; }
+    &.is-loaded .swiper-slide:nth-child(2) .c-prod-card { animation-delay: 0.15s; }
+    &.is-loaded .swiper-slide:nth-child(3) .c-prod-card { animation-delay: 0.25s; }
+    &.is-loaded .swiper-slide:nth-child(4) .c-prod-card { animation-delay: 0.35s; }
+    &.is-loaded .swiper-slide:nth-child(5) .c-prod-card { animation-delay: 0.45s; }
+    &.is-loaded .swiper-slide:nth-child(n+6) .c-prod-card { animation-delay: 0.55s; }
+
+    @keyframes c-prod-card-in {
+      from { opacity: 0; transform: translateY(24px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &.is-loaded .c-prod-card { animation: none; }
+    }
+
+    /* --- PRODUCT CARD --- */
+    & .c-prod-card {
+      background-color: {{ section.settings.card_bg_color }};
+      border-radius: 16px;
+      padding: 1.5rem .5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      position: relative;
+      gap: 0;
+    }
+
+    & .c-prod-card__top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    & .c-prod-card__bottom {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-top: auto;
+    }
+
+    /* Badge */
+    & .c-prod-card__badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 1;
+      text-transform: uppercase;
+      border: 1.5px solid {{ section.settings.accent_color }};
+      color: {{ section.settings.accent_color }};
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background-color: transparent;
+    }
+
+    /* Image */
+    & .c-prod-card__img-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background-color: #ffffff;
+      border-radius: 1rem;
+    }
+
+    & .c-prod-card__img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: opacity 0.5s ease;
+    }
+
+    & .c-prod-card__img--secondary {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+    }
+
+    & .c-prod-card__img-wrap:hover .c-prod-card__img--primary {
+      opacity: 0;
+    }
+
+    & .c-prod-card__img-wrap:hover .c-prod-card__img--secondary {
+      opacity: 1;
+    }
+
+    /* Reviews */
+    & .c-prod-card__reviews {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      width: 100%;
+      margin-top: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    & .c-prod-card__stars {
+      display: flex;
+      gap: 2px;
+      color: {{ section.settings.accent_color }};
+
+      & svg {
+        width: 14px;
+        height: 14px;
+        fill: currentColor;
+      }
+    }
+
+    & .c-prod-card__review-text {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: {{ section.settings.accent_color }};
+    }
+
+    /* Title */
+    & .c-prod-card__title {
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.3;
+      color: {{ section.settings.card_title_color }};
+ 
+      text-align: left;
+      width: 100%;
+      margin: 0;
+    }
+
+    /* Pricing */
+    & .c-prod-card__pricing {
+      display: flex;
+      align-items: baseline;
+      width: 100%;
+      gap: 8px;
+      text-align: left;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    & .c-pricing__compare {
+      font-size: 14px;
+      color: #999999;
+      text-decoration: line-through;
+    }
+
+    & .c-pricing__regular {
+      font-size: 18px;
+      color: {{ section.settings.accent_color }};
+      font-weight: 600;
+    }
+
+    & .c-pricing__from {
+      font-size: 12px;
+      color: #999999;
+      align-self: flex-end;
+      margin-bottom: 2px;
+    }
+
+    /* Divider */
+    & .c-prod-card__divider {
+      width: 100%;
+      height: 1px;
+      background-color: #d0cdc8;
+      margin: 1.25rem 0;
+    }
+
+    & .c-prod-card__form,
+    & .c-prod-card__form .form {
+      width: 100%;
+    }
+
+    /* Buttons */
+    & .c-prod-card__add-btn {
+      width: 100%;
+      background-color: {{ section.settings.accent_color }};
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #b5452a;
+      }
+    }
+
+    & a.c-prod-card__add-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-sizing: border-box;
+    }
+
+    /* --- PRODUCT CARD V2 (Centered Layout) --- */
+    & .c-prod-card--v2 {
+      padding: 1.5rem 1.25rem;
+    }
+
+    & .c-prod-card__badge--center {
+      position: static;
+      align-self: flex-start !important;
+      margin-bottom: 0.5rem;
+    }
+
+    & .c-prod-card__reviews--center {
+      justify-content: center;
+    }
+
+    & .c-prod-card--v2 .c-prod-card__title {
+      text-align: center;
+    }
+
+    & .c-prod-card--v2 .c-prod-card__img-wrap {
+      background-color: transparent;
+      margin-top: 0.5rem;
+    }
+
+    & .c-prod-card--v2 .c-prod-card__pricing {
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    & .c-prod-card--v2 .c-pricing__from {
+      width: 100%;
+      align-self: flex-start;
+      margin-bottom: 0;
+      color: {{ section.settings.accent_color }};
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    & .c-prod-card__learn-more {
+      display: inline-flex;
+      align-items: center;
+      align-self: center;
+      margin-top: 0.75rem;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: {{ section.settings.accent_color }};
+      text-decoration: none;
+      border-bottom: 2px solid {{ section.settings.accent_color }};
+      padding-bottom: 2px;
+      transition: opacity 0.3s ease;
+    }
+
+    & .c-prod-card__learn-more:hover {
+      opacity: 0.7;
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (max 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+      & .c-products__container {
+        gap: 2rem;
+      }
+
+      & .c-products__shop-all {
+        align-self: flex-end;
+      }
+
+      & .c-products__desc-wrap {
+        flex-direction: column;
+      }
+
+      & .c-products__header {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      & .c-products__title {
+        width: 100%;
+      }
+
+      & .c-products__desc {
+        font-size: 15px;
+      }
+
+      & .c-products__slider-wrapper {
+        width: 100%;
+        min-height: 560px;
+      }
+
+      & .c-prod-card {
+        padding: 1.25rem;
+      }
+
+      & .c-prod-card__title {
+        font-size: 20px;
+ 
+      }
+ 
+
+      & .c-prod-card__divider {
+        margin: 1rem 0;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="c-products__container">
+      <div class="c-products__header">
+        <div class="c-products__title-wrap">
+          {% if section.settings.title != blank %}
+            <h2 class="c-products__title">
+              {{ section.settings.title }}
+            </h2>
+          {% endif %}
+        </div>
+        <div class="c-products__desc-wrap">
+          {% if section.settings.description != blank %}
+            <p class="c-products__desc">{{ section.settings.description }}</p>
+          {% endif %}
+          {% if section.settings.shop_all_text != blank %}
+            <a href="{{ section.settings.shop_all_link }}" class="c-products__shop-all">
+              {{ section.settings.shop_all_text }}
+                {% render 'c-new-arrow-link' %}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="c-products__slider-wrapper">
+        <div class="c-products__loader" aria-hidden="false">
+          {% render 'sl-spinner', color: section.settings.accent_color %}
+        </div>
+        <div class="swiper js-prod-swiper-{{ section.id }}">
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              {% assign product = all_products[block.settings.product] %}
+
+              {%- comment -%} Find the display variant based on settings {%- endcomment -%}
+              {%- assign display_variant = product.selected_or_first_available_variant -%}
+              {%- if block.settings.variant_index != blank -%}
+                {%- assign vi = block.settings.variant_index | plus: 0 -%}
+                {%- for variant in product.variants -%}
+                  {%- if forloop.index0 == vi -%}
+                    {%- assign display_variant = variant -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- else -%}
+                {%- for variant in product.variants -%}
+                  {%- unless variant.metafields.custom.hide_variant == true -%}
+                    {%- assign display_variant = variant -%}
+                    {%- break -%}
+                  {%- endunless -%}
+                {%- endfor -%}
+              {%- endif -%}
+
+              {%- comment -%} Subscription pricing computation (ignores allocations priced at 0) {%- endcomment -%}
+              {%- assign card_has_selling_plans = false -%}
+              {%- assign card_lowest_sub_price = 999999999 -%}
+              {%- if section.settings.show_subscription_pricing -%}
+                {%- for variant in product.variants -%}
+                  {%- if variant.metafields.custom.hide_variant == true -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                  {%- if variant.selling_plan_allocations.size > 0 -%}
+                    {%- for allocation in variant.selling_plan_allocations -%}
+                      {%- assign card_sub_price = allocation.price_adjustments.first.price | plus: 0 -%}
+                      {%- if card_sub_price > 0 and card_sub_price < card_lowest_sub_price -%}
+                        {%- assign card_has_selling_plans = true -%}
+                        {%- assign card_lowest_sub_price = card_sub_price -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+
+              {%- comment -%} Display price fallback: if the chosen variant's price is 0, use the next variant with price > 0 {%- endcomment -%}
+              {%- assign display_price = display_variant.price -%}
+              {%- assign display_compare_at = display_variant.compare_at_price -%}
+              {%- if display_price == 0 or display_variant.metafields.custom.hide_variant == true -%}
+                {%- for variant in product.variants -%}
+                  {%- if variant.metafields.custom.hide_variant == true -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                  {%- if variant.price > 0 -%}
+                    {%- assign display_price = variant.price -%}
+                    {%- assign display_compare_at = variant.compare_at_price -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+
+              <div class="swiper-slide" {{ block.shopify_attributes }}>
+                {%- case block.type -%}
+                  {%- when 'product_card' -%}
+                <div class="c-prod-card">
+                  <div class="c-prod-card__top">
+                    <a href="{{ product.url | default: '#' }}" class="c-prod-card__img-wrap">
+                      {% if block.settings.badge_text != blank %}
+                        <div class="c-prod-card__badge">{{ block.settings.badge_text }}</div>
+                      {% endif %}
+                      {% if block.settings.custom_image != blank %}
+                        <img
+                          src="{{ block.settings.custom_image | image_url: width: 400 }}"
+                          alt="{{ block.settings.custom_title | escape }}"
+                          class="c-prod-card__img c-prod-card__img--primary"
+                          loading="lazy"
+                        >
+                        {% if block.settings.custom_image_hover != blank %}
+                          <img
+                            src="{{ block.settings.custom_image_hover | image_url: width: 400 }}"
+                            alt="{{ block.settings.custom_title | escape }}"
+                            class="c-prod-card__img c-prod-card__img--secondary"
+                            loading="lazy"
+                          >
+                        {% elsif product.images[1] != blank %}
+                          <img
+                            src="{{ product.images[1] | image_url: width: 400 }}"
+                            alt="{{ block.settings.custom_title | escape }}"
+                            class="c-prod-card__img c-prod-card__img--secondary"
+                            loading="lazy"
+                          >
+                        {% endif %}
+                      {% elsif product.featured_image != blank %}
+                        <img
+                          src="{{ product.featured_image | image_url: width: 400 }}"
+                          alt="{{ product.title | escape }}"
+                          class="c-prod-card__img c-prod-card__img--primary"
+                          loading="lazy"
+                        >
+                        {% if product.images[1] != blank %}
+                          <img
+                            src="{{ product.images[1] | image_url: width: 400 }}"
+                            alt="{{ product.title | escape }}"
+                            class="c-prod-card__img c-prod-card__img--secondary"
+                            loading="lazy"
+                          >
+                        {% endif %}
+                      {% else %}
+                        {{ 'product-1' | placeholder_svg_tag: 'c-prod-card__img' }}
+                      {% endif %}
+                    </a>
+
+                    <div class="c-prod-card__reviews">
+                      {% render 'okendo-reviews-product-rating-summary', product: product %}
+                    </div>
+
+                    <h3 class="c-prod-card__title">
+                      {{ block.settings.custom_title | default: product.title | default: 'Product Title' }}
+                    </h3>
+
+                    <div class="c-prod-card__pricing">
+                      {% if block.settings.use_custom_price and block.settings.custom_price != blank %}
+                        {% if block.settings.custom_compare_price != blank %}
+                          <span class="c-pricing__compare">{{ block.settings.custom_compare_price }}</span>
+                        {% endif %}
+                        <span class="c-pricing__regular">{{ block.settings.custom_price }}</span>
+                      {% elsif section.settings.show_subscription_pricing and card_has_selling_plans and card_lowest_sub_price < 999999999 %}
+                        <span class="c-pricing__from">From</span>
+                        <span class="c-pricing__regular">
+                          {%- if settings.currency_code_enabled -%}
+                            {{ card_lowest_sub_price | money_with_currency }}
+                          {%- else -%}
+                            {{ card_lowest_sub_price | money }}
+                          {%- endif -%}
+                        </span>
+                      {% else %}
+                        {%- if display_compare_at > display_price -%}
+                          <span class="c-pricing__compare">{{ display_compare_at | money }}</span>
+                        {%- endif -%}
+                        <span class="c-pricing__regular">{{ display_price | money }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="c-prod-card__bottom">
+                    <div class="c-prod-card__divider"></div>
+
+                    {%- assign card_form_id = 'product-card-form-' | append: section.id | append: '-' | append: forloop.index -%}
+                    {% capture product_rating %}
+                      {% render 'okendo-reviews-product-rating-summary', product: product %}
+                    {% endcapture %}
+                    {%- if block.settings.redirect_to_pdp -%}
+                      <a
+                        href="{{ product.url | default: '#' }}"
+                        class="c-prod-card__add-btn c-prod-card__add-btn--link"
+                      >
+                        {{ section.settings.add_to_cart_text | default: 'Add to Cart' }}
+                      </a>
+                    {%- else -%}
+                      <product-form class="c-prod-card__form">
+                      <div data-product-form-errors role="alert" hidden>
+                        <span data-product-form-error-msg></span>
+                      </div>
+                      {%- form 'product', product, id: card_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                        <input type="hidden" name="id" value="{{ display_variant.id }}">
+                        <button
+                          type="submit"
+                          name="add"
+                          class="c-prod-card__add-btn"
+                          data-product-handle="{{ product.handle }}"
+                          data-product-id="{{ display_variant.id }}"
+                          data-subscription="{% if product.selling_plan_groups.size > 0 %}true{% else %}false{% endif %}"
+                          data-productrating="{{ product_rating | strip_newlines | escape }}"
+                          data-featuredImage="https:{{ product.featured_media | image_url }}"
+                          data-disableFlyout="{{ product.metafields.custom.disable_subscription_flyout }}"
+                          data-metadata='[
+                            {% for variant in product.variants %}
+                              {
+                                "id": {{ variant.id }},
+                                "is_most_popular_subscription": "{{ variant.metafields.custom.is_most_popular_subscription | escape }}",
+                                "disable_one_time_purchase": "{{ variant.metafields.custom.disable_one_time_purchase | escape }}"
+                              }{% unless forloop.last %},{% endunless %}
+                            {% endfor %}
+                          ]'
+                          {% unless display_variant.available %}disabled{% endunless %}>
+                          {%- if display_variant.available -%}
+                            {{ section.settings.add_to_cart_text | default: 'Add to Cart' }}
+                          {%- else -%}
+                            {{ 'products.product.sold_out' | t }}
+                          {%- endif -%}
+                        </button>
+                      {%- endform -%}
+                    </product-form>
+                    {%- endif -%}
+                  </div>
+                </div>
+                  {%- when 'product_card_v2' -%}
+                <div class="c-prod-card c-prod-card--v2">
+                  <div class="c-prod-card__top">
+                    {% if block.settings.badge_text != blank %}
+                      <div class="c-prod-card__badge c-prod-card__badge--center">{{ block.settings.badge_text }}</div>
+                    {% endif %}
+
+                    <div class="c-prod-card__reviews c-prod-card__reviews--center">
+                      {% render 'okendo-reviews-product-rating-summary', product: product %}
+                    </div>
+
+                    <h3 class="c-prod-card__title">
+                      {{ block.settings.custom_title | default: product.title | default: 'Product Title' }}
+                    </h3>
+
+                    <a href="{{ product.url | default: '#' }}" class="c-prod-card__img-wrap">
+                      {% if block.settings.custom_image != blank %}
+                        <img
+                          src="{{ block.settings.custom_image | image_url: width: 400 }}"
+                          alt="{{ block.settings.custom_title | escape }}"
+                          class="c-prod-card__img c-prod-card__img--primary"
+                          loading="lazy"
+                        >
+                        {% if block.settings.custom_image_hover != blank %}
+                          <img
+                            src="{{ block.settings.custom_image_hover | image_url: width: 400 }}"
+                            alt="{{ block.settings.custom_title | escape }}"
+                            class="c-prod-card__img c-prod-card__img--secondary"
+                            loading="lazy"
+                          >
+                        {% elsif product.images[1] != blank %}
+                          <img
+                            src="{{ product.images[1] | image_url: width: 400 }}"
+                            alt="{{ block.settings.custom_title | escape }}"
+                            class="c-prod-card__img c-prod-card__img--secondary"
+                            loading="lazy"
+                          >
+                        {% endif %}
+                      {% elsif product.featured_image != blank %}
+                        <img
+                          src="{{ product.featured_image | image_url: width: 400 }}"
+                          alt="{{ product.title | escape }}"
+                          class="c-prod-card__img c-prod-card__img--primary"
+                          loading="lazy"
+                        >
+                        {% if product.images[1] != blank %}
+                          <img
+                            src="{{ product.images[1] | image_url: width: 400 }}"
+                            alt="{{ product.title | escape }}"
+                            class="c-prod-card__img c-prod-card__img--secondary"
+                            loading="lazy"
+                          >
+                        {% endif %}
+                      {% else %}
+                        {{ 'product-1' | placeholder_svg_tag: 'c-prod-card__img' }}
+                      {% endif %}
+                    </a>
+
+                    <div class="c-prod-card__pricing">
+                      {% if block.settings.use_custom_price and block.settings.custom_price != blank %}
+                        {% if block.settings.custom_compare_price != blank %}
+                          <span class="c-pricing__compare">{{ block.settings.custom_compare_price }}</span>
+                        {% endif %}
+                        <span class="c-pricing__regular">{{ block.settings.custom_price }}</span>
+                      {% elsif section.settings.show_subscription_pricing and card_has_selling_plans and card_lowest_sub_price < 999999999 %}
+                        <span class="c-pricing__from">From</span>
+                        <span class="c-pricing__regular">
+                          {%- if settings.currency_code_enabled -%}
+                            {{ card_lowest_sub_price | money_with_currency }}
+                          {%- else -%}
+                            {{ card_lowest_sub_price | money }}
+                          {%- endif -%}
+                        </span>
+                      {% else %}
+                        {%- if display_compare_at > display_price -%}
+                          <span class="c-pricing__compare">{{ display_compare_at | money }}</span>
+                        {%- endif -%}
+                        <span class="c-pricing__regular">{{ display_price | money }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="c-prod-card__bottom">
+                    {%- assign card_form_id = 'product-card-form-' | append: section.id | append: '-' | append: forloop.index -%}
+                    {% capture product_rating %}
+                      {% render 'okendo-reviews-product-rating-summary', product: product %}
+                    {% endcapture %}
+                    {%- if block.settings.redirect_to_pdp -%}
+                      <a
+                        href="{{ product.url | default: '#' }}"
+                        class="c-prod-card__add-btn c-prod-card__add-btn--link"
+                      >
+                        {{ section.settings.add_to_cart_text | default: 'Add to Cart' }}
+                      </a>
+                    {%- else -%}
+                      <product-form class="c-prod-card__form">
+                      <div data-product-form-errors role="alert" hidden>
+                        <span data-product-form-error-msg></span>
+                      </div>
+                      {%- form 'product', product, id: card_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                        <input type="hidden" name="id" value="{{ display_variant.id }}">
+                        <button
+                          type="submit"
+                          name="add"
+                          class="c-prod-card__add-btn"
+                          data-product-handle="{{ product.handle }}"
+                          data-product-id="{{ display_variant.id }}"
+                          data-subscription="{% if product.selling_plan_groups.size > 0 %}true{% else %}false{% endif %}"
+                          data-productrating="{{ product_rating | strip_newlines | escape }}"
+                          data-featuredImage="https:{{ product.featured_media | image_url }}"
+                          data-disableFlyout="{{ product.metafields.custom.disable_subscription_flyout }}"
+                          data-metadata='[
+                            {% for variant in product.variants %}
+                              {
+                                "id": {{ variant.id }},
+                                "is_most_popular_subscription": "{{ variant.metafields.custom.is_most_popular_subscription | escape }}",
+                                "disable_one_time_purchase": "{{ variant.metafields.custom.disable_one_time_purchase | escape }}"
+                              }{% unless forloop.last %},{% endunless %}
+                            {% endfor %}
+                          ]'
+                          {% unless display_variant.available %}disabled{% endunless %}>
+                          {%- if display_variant.available -%}
+                            {{ section.settings.add_to_cart_text | default: 'Add to Cart' }}
+                          {%- else -%}
+                            {{ 'products.product.sold_out' | t }}
+                          {%- endif -%}
+                        </button>
+                      {%- endform -%}
+                    </product-form>
+                    {%- endif -%}
+
+                    {% if block.settings.learn_more_text != blank %}
+                      <a
+                        href="{{ block.settings.learn_more_link | default: product.url | default: '#' }}"
+                        class="c-prod-card__learn-more"
+                      >
+                        {{ block.settings.learn_more_text }}
+                      </a>
+                    {% endif %}
+                  </div>
+                </div>
+                {%- endcase -%}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const swiperSelector = '.js-prod-swiper-{{ section.id }}';
+    const swiperContainer = document.querySelector(swiperSelector);
+    const sectionEl = document.getElementById('{{ section.id }}');
+
+    if (swiperContainer) {
+      const reveal = () => {
+        if (!sectionEl) return;
+        requestAnimationFrame(() => sectionEl.classList.add('is-loaded'));
+        const loader = sectionEl.querySelector('.c-products__loader');
+        if (loader) {
+          setTimeout(() => loader.setAttribute('aria-hidden', 'true'), 400);
+        }
+      };
+
+      new Swiper(swiperSelector, {
+        slidesPerView: 1.1,
+        spaceBetween: 16,
+        grabCursor: true,
+        breakpoints: {
+          768: {
+            slidesPerView: 2.2,
+            spaceBetween: 24,
+          },
+          992: {
+            slidesPerView: {{ section.settings.desktop_slides_per_view }},
+            spaceBetween: 16,
+          },
+        },
+        on: {
+          init: reveal,
+          afterInit: reveal,
+        },
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "C New Product Card",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f6f4f2"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#ebe8e2"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#d25435"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#1c223a"
+    },
+    {
+      "type": "color",
+      "id": "desc_color",
+      "label": "Description Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card Title Color",
+      "default": "#1c223a"
+    },
+    {
+      "type": "header",
+      "content": "Header Text"
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Header Alignment (Desktop)",
+      "options": [
+        { "value": "space-between", "label": "Default (Space Between)" },
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "End" }
+      ],
+      "default": "space-between"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Better Health Starts With <span>Blood Flow</span>",
+      "info": "Wrap text in <span></span> to apply the special orange italic font."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Every Berkeley Life product is powered by Nitric Oxide, the molecule behind your energy, heart health, and long-term vitality. Backed by science, tested at home, trusted by healthcare professionals."
+    },
+    {
+      "type": "text",
+      "id": "shop_all_text",
+      "label": "Shop All Text",
+      "default": "SHOP ALL PRODUCTS"
+    },
+    {
+      "type": "url",
+      "id": "shop_all_link",
+      "label": "Shop All Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subscription_pricing",
+      "label": "Show Subscription Pricing",
+      "default": true,
+      "info": "When enabled, shows the lowest subscription price (From $X.XX) for products with selling plans, matching the collection grid behavior."
+    },
+    {
+      "type": "header",
+      "content": "Global Card Buttons"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "Add To Cart Button",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "header",
+      "content": "Slider Settings"
+    },
+    {
+      "type": "range",
+      "id": "desktop_slides_per_view",
+      "label": "Slides Visible on Desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Bottom Padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px",
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Product Card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "BESTSELLER"
+        },
+        {
+          "type": "header",
+          "content": "Overrides (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom Title",
+          "info": "Leave blank to use product title"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image",
+          "info": "Leave blank to use product image"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image_hover",
+          "label": "Custom Hover Image",
+          "info": "Shown on hover. Leave blank to use second product image"
+        },
+        {
+          "type": "header",
+          "content": "Custom Pricing"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_custom_price",
+          "label": "Use Custom Price",
+          "default": false,
+          "info": "Enable to override the product price with custom values"
+        },
+        {
+          "type": "text",
+          "id": "custom_price",
+          "label": "Custom Price",
+          "info": "e.g. $29.95 — Displayed only when checkbox is enabled"
+        },
+        {
+          "type": "text",
+          "id": "custom_compare_price",
+          "label": "Custom Compare-at Price",
+          "info": "e.g. $39.95 — Shown as strikethrough. Leave blank to hide"
+        },
+        {
+          "type": "header",
+          "content": "Variant Override"
+        },
+        {
+          "type": "text",
+          "id": "variant_index",
+          "label": "Variant Position",
+          "info": "Enter the variant index (0 = first, 1 = second, etc.). Leave blank to use the default one-time purchase variant."
+        },
+        {
+          "type": "header",
+          "content": "Button Behavior"
+        },
+        {
+          "type": "checkbox",
+          "id": "redirect_to_pdp",
+          "label": "Redirect to product page",
+          "info": "If enabled, the button links to the product's PDP instead of adding to cart.",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "product_card_v2",
+      "name": "Product Card V2",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "NEW FORMULA"
+        },
+        {
+          "type": "header",
+          "content": "Overrides (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom Title",
+          "info": "Leave blank to use product title"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image",
+          "info": "Leave blank to use product image"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image_hover",
+          "label": "Custom Hover Image",
+          "info": "Shown on hover. Leave blank to use second product image"
+        },
+        {
+          "type": "header",
+          "content": "Custom Pricing"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_custom_price",
+          "label": "Use Custom Price",
+          "default": false,
+          "info": "Enable to override the product price with custom values"
+        },
+        {
+          "type": "text",
+          "id": "custom_price",
+          "label": "Custom Price",
+          "info": "e.g. $29.95 — Displayed only when checkbox is enabled"
+        },
+        {
+          "type": "text",
+          "id": "custom_compare_price",
+          "label": "Custom Compare-at Price",
+          "info": "e.g. $39.95 — Shown as strikethrough. Leave blank to hide"
+        },
+        {
+          "type": "header",
+          "content": "Variant Override"
+        },
+        {
+          "type": "text",
+          "id": "variant_index",
+          "label": "Variant Position",
+          "info": "Enter the variant index (0 = first, 1 = second, etc.). Leave blank to use the default one-time purchase variant."
+        },
+        {
+          "type": "header",
+          "content": "Button Behavior"
+        },
+        {
+          "type": "checkbox",
+          "id": "redirect_to_pdp",
+          "label": "Redirect to product page",
+          "info": "If enabled, the button links to the product's PDP instead of adding to cart.",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Learn More Link"
+        },
+        {
+          "type": "text",
+          "id": "learn_more_text",
+          "label": "Learn More Text",
+          "default": "LEARN MORE"
+        },
+        {
+          "type": "url",
+          "id": "learn_more_link",
+          "label": "Learn More Link",
+          "info": "Optional. Defaults to product page if left blank."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C New Product Card",
+      "blocks": [
+        { "type": "product_card", "settings": { "badge_text": "BESTSELLER", "custom_title": "Nitric Oxide Support" } },
+        {
+          "type": "product_card",
+          "settings": { "badge_text": "NEW", "custom_title": "Menopause and Heart Health Support" }
+        },
+        {
+          "type": "product_card",
+          "settings": { "badge_text": "NEW FORMULA", "custom_title": "Boost Prebiotic Nitrate Gum" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,281 @@
+{%- comment -%}This section is a slideshow of testimonials{%- endcomment -%}
+
+<style>
+  @media(max-width:768px){
+    .heading-testimonials{
+      font-size: 40px;
+    }
+  }
+  .testimonial-swiper-container .swiper-wrapper {
+    align-items: stretch;
+  }
+  .testimonial-swiper-container .swiper-slide {
+    height: auto;
+  }
+</style>
+
+<div class="bg-cream md:bg-bg" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#f7f7f7' }}" data-id="{{ section.id }}">
+  <div class="items-center px-4 mx-auto overflow-hidden lg:px-0 md:py-16 text-text">
+  <div class="z-10 h-full pl-4 text-center lg:pl-8">
+  {%- if section.settings.title != blank -%}
+    <h2 class="mb-8 mt-8 text-4xl text-center font-header tracking-[-1.2px] md:tracking-[-1.414px] md:text-6xl text-text heading-testimonials">{{ section.settings.title | replace_first: "**", "<span class='text-brand text-[50px] md:text-[71px] font-secondaryHeader'>" | replace_first: "**", "</span>" }}</h2>
+  {%- else -%}
+    <h2 class="sr-only">Testimonials</h2>
+  {%- endif -%}
+  {% if section.settings.subhead != blank%}
+    <p class="mb-8">{{section.settings.subhead}}</p>
+  {%endif%}
+  </div>
+
+  <div class="relative items-center w-full h-full max-w-full mx-auto text-center testimonial-swiper-container ">
+    <svg aria-hidden="true" focusable="false" role="presentation" style="width: 0; height: 0;" viewBox="0 0 16 16">
+      <defs>
+         <mask id="none">
+            <rect x="0" y="0" width="16" height="16" fill="#fff" />
+            <rect x="1%" y="0" width="16" height="16" fill="#222" />
+         </mask>
+         <mask id="half">
+            <rect x="0" y="0" width="16" height="16" fill="#fff" />
+            <rect x="50%" y="0" width="16" height="16" fill="#222" />
+         </mask>
+         <mask id="whole">
+          <rect x="0" y="0" width="16" height="16" fill="#fff" />
+          <rect x="100%" y="0" width="16" height="16" fill="#222" />
+         </mask>
+         <symbol viewBox="0 0 16 16" id="star">
+          <path d="M8 0L9.88854 6.11146H16L11.0557 9.88854L12.9443 16L8 12.2229L3.05573 16L4.94427 9.88854L0 6.11146H6.11146L8 0Z" fill="#EC5A36"/>
+         </symbol>
+      </defs>
+    </svg>
+    {%- if section.blocks.size > 0 -%}
+      <ul class="pb-12 swiper-wrapper md:col-span-2"
+      role="list"
+      >
+      {%- for block in section.blocks -%}
+        {%- comment -%}Slide wrapper{%- endcomment -%}
+        <li class="text-center border border-solid swiper-slide md:text-left rounded-3xl bg-[#FDFEFF]">
+          <div class="flex flex-col w-full h-full md:grid">
+                <style>
+                  .card-color{
+                    background-color: {{ block.settings.card_color }};
+                    border-radius: 16px;
+                  }
+                </style>
+            
+            {%- comment -%}Main quote content{%- endcomment -%}
+            <div class="flex flex-col justify-center p-6 space-y-4 text-center card-color h-full">
+              {%- if block.settings.stars > 3 -%}
+                <div class="mx-auto text-sm md:text-base w-fit">
+                  <p class="flex space-x-1">
+                    <span class="sr-only">Rating is {{ block.settings.stars }} out of 5</span>
+                    <svg aria-hidden="true" focusable="false" role="presentation" width="16" height="16" viewBox="0 0 16 16">
+                      <use xlink:href="#star"/>
+                    </svg>
+                    <svg aria-hidden="true" focusable="false" role="presentation" width="16" height="16" viewBox="0 0 16 16">
+                      <use xlink:href="#star"/>
+                    </svg>
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <use xlink:href="#star"/>
+                    </svg>
+                    <svg aria-hidden="true" focusable="false" role="presentation" width="16" height="16" viewBox="0 0 16 16">
+                      <use xlink:href="#star"
+                      {% if block.settings.stars >= 4 %}
+                        mask="url(#whole)"
+                      {% elsif block.settings.stars == 3.5 %}
+                        mask="url(#half)"
+                      {% elsif block.settings.stars <= 3.0 %}
+                        mask="url(#none)"
+                      {% else %}
+                        mask="url(#none)"
+                      {% endif %}
+                      ></use>
+                    </svg>
+                    <svg aria-hidden="true" focusable="false" role="presentation" width="16" height="16" viewBox="0 0 16 16">
+                      <use xlink:href="#star"
+                      {% if block.settings.stars == 5 %}
+                        mask="url(#whole)"
+                      {% elsif block.settings.stars == 4.5 %}
+                        mask="url(#half)"
+                      {% elsif block.settings.stars <= 4.0 %}
+                        mask="url(#none)"
+                      {% else %}
+                        mask="url(#none)"
+                      {% endif %}
+                      />
+                    </svg>
+                  </p>
+                </div>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}
+                <p class="pb-4 text-xl font-bold tracking-widest">{{ block.settings.title }}</p>
+              {%- endif -%}
+              {%- if block.settings.quote != blank -%}
+                <div class="text-xl">{{ block.settings.quote }}</div>
+              {%- endif -%}
+              {%- if block.settings.name != blank -%}
+                <p class="pb-4 text-sm font-bold tracking-widest uppercase text-brand">{{ block.settings.name }}</p>
+              {%- endif -%}
+              {% if block.settings.image != blank %}
+                {% render 'image', image: block.settings.image, classes: 'object-cover w-20 mx-auto rounded-full h-20' %}
+              {% endif %}
+            </div>
+
+          </div>
+        </li>
+      {%- endfor -%}
+      </ul>
+    {%- endif -%} 
+    <div class="absolute w-12 text-black -translate-x-1/2 bottom-4 left-1/2">
+    {% comment %} <div class="rotate-180 !left-0 swiper-button-prev after:hidden">{% render 'icon-arrow' classes: "text-black" %} </div>
+    <div class="swiper-button-next !right-0 after:hidden"> {% render 'icon-arrow' classes: "text-black" %}</div> {% endcomment %}
+
+  </div>
+  </div>
+
+</div>
+</div>
+
+<style>
+
+  .bg-cream-faded {
+    background: linear-gradient(to right, rgba(247, 247, 247, 256) 90%, rgba(246, 243, 240, 0) 100%);
+  }
+</style>
+
+{%- if section.blocks.size > 0 -%}
+  <script type="module">
+    const selector = `[data-id="{{ section.id }}"] .testimonial-swiper-container`
+    const rootElement = document.querySelector(selector)
+    async function initTestimonial() {
+      const { Swiper } = await import('https://unpkg.com/swiper@8/swiper-bundle.esm.browser.min.js')
+      const testimonialSwiper = new Swiper(selector,  {
+        mousewheel: {
+          forceToAxis: true
+        },
+        slidesPerView: 1,
+        centeredSlides: true,
+        direction: 'horizontal',
+        spaceBetween: 25,
+        loop: true,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        a11y: {
+          enabled: true,
+          slideRole: 'listitem'
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: 3.5,
+            spaceBetween: 20,
+          },
+          1500: {
+            slidesPerView: 4.5,
+            spaceBetween: 30,
+          },
+        }
+      })
+    }
+    function reveal() {
+      const handleIntersection = (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(rootElement);
+        initTestimonial()
+      }
+      new IntersectionObserver(handleIntersection.bind(rootElement), {rootMargin: '0px 0px 200px 0px'}).observe(rootElement);
+    }
+    reveal();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "C Testimonials Alt",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "title",
+      "default": "Testimonials",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subhead",
+      "default": "recommended by over 2500 HCPS",
+      "label": "Subhead"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonials Alt",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },{
+          "type": "text",
+          "id": "name",
+          "label": "Name"
+        },
+        {
+          "type": "range",
+          "id": "stars",
+          "label": "Stars",
+          "unit": "str",
+          "min": 1,
+          "max": 5,
+          "step": 0.5,
+          "default": 5,
+          "info": "This won't show if set below 3."
+        },
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Main Quote"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "color",
+          "id": "card_color",
+          "label": "Card Color"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Testimonials Alt",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

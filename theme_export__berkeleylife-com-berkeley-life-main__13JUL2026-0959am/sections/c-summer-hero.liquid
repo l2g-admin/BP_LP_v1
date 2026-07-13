@@ -1,0 +1,762 @@
+<style>
+  #{{ section.id }} {
+    --bg-cream: {{ section.settings.background_color }};
+    --text-navy: {{ section.settings.text_color }};
+    --accent-orange: {{ section.settings.accent_color }};
+    --card-bg: {{ section.settings.trust_card_bg }};
+
+    background-color: var(--bg-cream);
+  }
+
+  #{{ section.id }} .summer-hero__container {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  #{{ section.id }} .summer-hero__text {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: {{ section.settings.padding_top_mobile }}rem 15px {{ section.settings.padding_bottom_mobile }}rem;
+    box-sizing: border-box;
+    order: {% if section.settings.mobile_layout == 'image-first' %}2{% else %}1{% endif %};
+  }
+
+  #{{ section.id }} .summer-hero__subheading {
+    font-family: "TT Commons Pro", sans-serif;
+    font-size: clamp(13px, 1.1vw, 16px);
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--text-navy);
+    margin: 0;
+  }
+
+  #{{ section.id }} .summer-hero__heading {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 500;
+    font-size: clamp(40px, 6vw, 64px);
+    line-height: 1.05;
+    color: var(--text-navy);
+    margin: 0;
+  }
+
+  #{{ section.id }} .summer-hero__heading-highlight {
+    display: block;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(44px, 7vw, 72px);
+    line-height: 1.05;
+    color: var(--accent-orange);
+    margin-top: 4px;
+  }
+
+  #{{ section.id }} .summer-hero__description {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 400;
+    font-size: clamp(15px, 1.6vw, 18px);
+    line-height: 1.5;
+    color: var(--text-navy);
+    margin: 0;
+  }
+
+  #{{ section.id }} .summer-hero__description strong {
+    font-weight: 400;
+    color: var(--accent-orange);
+  }
+
+  #{{ section.id }} .summer-hero__description p {
+    margin: 0;
+  }
+
+  #{{ section.id }} .summer-hero__description p + p {
+    margin-top: 8px;
+  }
+
+  #{{ section.id }} .summer-hero__trust {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #{{ section.id }} .summer-hero__trust-line {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.2;
+    color: var(--text-navy);
+    margin: 0;
+  }
+
+  #{{ section.id }} .summer-hero__reviews {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #{{ section.id }} .summer-hero__stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  #{{ section.id }} .summer-hero__stars svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  #{{ section.id }} .summer-hero__review-text {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1.2;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--text-navy);
+  }
+
+  #{{ section.id }} .summer-hero__cta {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  #{{ section.id }} .summer-hero__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  #{{ section.id }} .summer-hero__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    border-radius: 42px;
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 1.5;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid var(--accent-orange);
+  }
+
+  #{{ section.id }} .summer-hero__button--primary {
+    background-color: var(--accent-orange);
+    color: var(--bg-cream);
+  }
+
+  #{{ section.id }} .summer-hero__button--primary:hover {
+    transform: translateY(-2px);
+    background-color: {{ section.settings.accent_color | color_darken: 10 }};
+  }
+
+  #{{ section.id }} .summer-hero__button--secondary {
+    background-color: transparent;
+    color: var(--accent-orange);
+  }
+
+  #{{ section.id }} .summer-hero__button--secondary:hover {
+    transform: translateY(-2px);
+    background-color: rgba(213, 79, 47, 0.08);
+  }
+
+  #{{ section.id }} .summer-hero__image-wrapper {
+    order: {% if section.settings.mobile_layout == 'image-first' %}1{% else %}2{% endif %};
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  #{{ section.id }} .summer-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: {{ section.settings.image_object_fit_mobile | default: 'cover' }};
+    display: block;
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .summer-hero__image {
+      object-fit: {{ section.settings.image_object_fit_desktop | default: 'cover' }};
+      height: 100%;
+    }
+  }
+
+  {%- assign badge_blocks = section.blocks | where: 'type', 'badge' -%}
+  {%- for badge_block in badge_blocks limit: 1 -%}
+  #{{ section.id }} .summer-hero__image-badge {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+    max-width: {{ badge_block.settings.size_mobile }}px;
+    z-index: 2;
+  }
+  {%- endfor -%}
+
+  #{{ section.id }} .summer-hero__image-badge-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  {%- assign badge_blocks = section.blocks | where: 'type', 'badge' -%}
+  {%- for badge_block in badge_blocks limit: 1 -%}
+  @media (min-width: 992px) {
+    #{{ section.id }} .summer-hero__image-badge {
+      right: 24px;
+      bottom: 24px;
+      max-width: {{ badge_block.settings.size_desktop }}px;
+    }
+  }
+  {%- endfor -%}
+
+  #{{ section.id }} .summer-hero__features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  #{{ section.id }} .summer-hero__feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  #{{ section.id }} .summer-hero__feature-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #{{ section.id }} .summer-hero__feature-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .summer-hero__features {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    #{{ section.id }} .summer-hero__button {
+      flex: 1 1 0;
+      width: auto;
+    }
+  }
+
+  @media (min-width: 992px) {
+    #{{ section.id }} .summer-hero__container {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    #{{ section.id }} .summer-hero__text {
+      gap: 28px;
+      padding-top: {{ section.settings.padding_top_desktop }}rem;
+      padding-bottom: {{ section.settings.padding_bottom_desktop }}rem;
+      padding-left: 48px;
+      padding-right: 48px;
+      order: {% if section.settings.desktop_layout == 'image-left' %}2{% else %}1{% endif %};
+    }
+
+    #{{ section.id }} .summer-hero__image-wrapper {
+      order: {% if section.settings.desktop_layout == 'image-left' %}1{% else %}2{% endif %};
+    }
+
+    #{{ section.id }} .summer-hero__cta {
+      width: 80%;
+    }
+
+    #{{ section.id }} .summer-hero__image {
+      border-radius: 0 0 0 var(--radius-xlg, 64px);
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="summer-hero__container">
+    <div class="summer-hero__text">
+        {% if section.settings.subheading != blank %}
+          <p class="summer-hero__subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+
+        {% if section.settings.heading_line_1 != blank or section.settings.heading_highlight != blank %}
+          <h1 class="summer-hero__heading">
+            {{ section.settings.heading_line_1 }}
+            {% if section.settings.heading_highlight != blank %}
+              <span class="summer-hero__heading-highlight">{{ section.settings.heading_highlight }}</span>
+            {% endif %}
+          </h1>
+        {% endif %}
+
+        {% if section.settings.description != blank %}
+          <div class="summer-hero__description">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+
+        {%- assign feature_blocks = section.blocks | where: 'type', 'feature' -%}
+        {%- if feature_blocks.size > 0 -%}
+          <div class="summer-hero__features">
+            {%- for block in feature_blocks -%}
+              <div
+                class="summer-hero__feature"
+                style="color: {{ block.settings.text_color }};"
+                {{ block.shopify_attributes }}
+              >
+                <span class="summer-hero__feature-icon" style="color: {{ block.settings.icon_color }};">
+                  {%- render 'c-icon-verified-badge' -%}
+                </span>
+                <span>{{ block.settings.text }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="summer-hero__cta">
+          {% if section.settings.trust_providers != blank or section.settings.review_text != blank %}
+            <div class="summer-hero__trust">
+              {% if section.settings.trust_providers != blank %}
+                <p class="summer-hero__trust-line">{{ section.settings.trust_providers }}</p>
+              {% endif %}
+              {% if section.settings.review_text != blank %}
+                <div class="summer-hero__reviews">
+                  <span class="summer-hero__stars" aria-hidden="true">
+                    {% for i in (1..5) %}
+                      {% render 'c-orange-star' %}
+                    {% endfor %}
+                  </span>
+                  <span class="summer-hero__review-text">{{ section.settings.review_text }}</span>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          <div class="summer-hero__buttons">
+          {% if section.settings.primary_button_text != blank %}
+            <a
+              href="{{ section.settings.primary_button_link }}"
+              class="summer-hero__button summer-hero__button--primary"
+            >
+              {{ section.settings.primary_button_text }}
+            </a>
+          {% endif %}
+          {% if section.settings.secondary_button_text != blank %}
+              <a
+                href="{{ section.settings.secondary_button_link }}"
+                class="summer-hero__button summer-hero__button--secondary"
+              >
+                {{ section.settings.secondary_button_text }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="summer-hero__image-wrapper">
+        {% if section.settings.hero_image != blank or section.settings.hero_image_mobile != blank %}
+          <picture>
+            {% if section.settings.hero_image_mobile != blank %}
+              <source
+                media="(max-width: 991px)"
+                srcset="{{ section.settings.hero_image_mobile | image_url: width: 2000 }}"
+              >
+            {% endif %}
+            <img
+              src="{{ section.settings.hero_image | image_url: width: 2000 }}"
+              alt="{{ section.settings.hero_image.alt | default: section.settings.heading_line_1 | escape }}"
+              class="summer-hero__image"
+              loading="eager"
+              width="600"
+              height="auto"
+            >
+          </picture>
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag: 'summer-hero__image' }}
+        {% endif %}
+
+        {%- assign badge_blocks = section.blocks | where: 'type', 'badge' -%}
+        {%- for block in badge_blocks limit: 1 -%}
+          {%- if block.settings.image != blank -%}
+            {%- if block.settings.open_trust_reviews -%}
+              <button
+                type="button"
+                class="summer-hero__image-badge"
+                data-et-reviews-trigger
+                aria-label="Open expert reviews"
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.image | image_url: width: 440 | image_tag: loading: 'lazy', class: 'summer-hero__image-badge-img' }}
+              </button>
+            {%- else -%}
+              <a
+                href="{{ block.settings.link | default: '#' }}"
+                class="summer-hero__image-badge"
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.image | image_url: width: 440 | image_tag: loading: 'lazy', class: 'summer-hero__image-badge-img' }}
+              </a>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+<script>
+  (function () {
+    var section = document.getElementById('{{ section.id }}');
+    if (!section) return;
+    var badges = section.querySelectorAll('[data-et-reviews-trigger]');
+    if (!badges.length) return;
+    badges.forEach(function (badge) {
+      badge.addEventListener('click', function (e) {
+        e.preventDefault();
+        var trustSection = document.querySelector('.c-expert-trust');
+        if (!trustSection) return;
+        var toggle = trustSection.querySelector('[data-et-reviews-toggle]');
+        var wrapper = trustSection.querySelector('.et__reviews-wrapper');
+        if (toggle && toggle.getAttribute('aria-expanded') !== 'true') {
+          toggle.click();
+        } else if (wrapper) {
+          wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          trustSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "C Summer Hero",
+  "tag": "section",
+  "class": "section-summer-hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Padding Mobile"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Padding Desktop"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Padding top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop Layout",
+      "default": "text-left",
+      "options": [
+        { "value": "text-left", "label": "Text left, Image right" },
+        { "value": "image-left", "label": "Image left, Text right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile Layout",
+      "default": "text-first",
+      "options": [
+        { "value": "text-first", "label": "Text first, Image below" },
+        { "value": "image-first", "label": "Image first, Text below" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#F6F3F0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1B1C29"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "color",
+      "id": "trust_card_bg",
+      "label": "Trust Card Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Headline"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading (above title)"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading",
+      "default": "Stock Up for Summer."
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Highlight (italic)",
+      "default": "Save Up to 25%."
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p><strong>Exclusive provider savings for Men's Health Month: June 15–26 only. No code needed.</strong> Shop the clinically-backed Nitric Oxide Support your patients need, at a great price.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Trust Badge"
+    },
+    {
+      "type": "text",
+      "id": "trust_providers",
+      "label": "Providers Text",
+      "default": "Trusted by 3,000+ healthcare providers"
+    },
+    {
+      "type": "text",
+      "id": "review_text",
+      "label": "Review Text",
+      "default": "4.8 | BASED ON 221 TRUSTED REVIEWS"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_button_text",
+      "label": "Primary Button Text",
+      "default": "Login and Shop"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Secondary Button Text",
+      "default": "Create Account"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_mobile",
+      "label": "Hero Image (Mobile)",
+      "info": "Optional. If left empty, the desktop image will be used on mobile as well."
+    },
+    {
+      "type": "select",
+      "id": "image_object_fit_mobile",
+      "label": "Image Fit — Mobile",
+      "default": "cover",
+      "options": [
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" },
+        { "value": "fill", "label": "Fill" },
+        { "value": "none", "label": "None" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_object_fit_desktop",
+      "label": "Image Fit — Desktop",
+      "default": "cover",
+      "options": [
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" },
+        { "value": "fill", "label": "Fill" },
+        { "value": "none", "label": "None" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "28,000+ Published Studies"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon Color",
+          "default": "#D54F2F"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#1B1C29"
+        }
+      ]
+    },
+    {
+      "type": "badge",
+      "name": "Image Badge",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Badge Image"
+        },
+        {
+          "type": "range",
+          "id": "size_mobile",
+          "label": "Size — Mobile",
+          "min": 60,
+          "max": 800,
+          "step": 10,
+          "unit": "px",
+          "default": 160
+        },
+        {
+          "type": "range",
+          "id": "size_desktop",
+          "label": "Size — Desktop",
+          "min": 60,
+          "max": 800,
+          "step": 10,
+          "unit": "px",
+          "default": 200
+        },
+        {
+          "type": "checkbox",
+          "id": "open_trust_reviews",
+          "label": "Open inline reviews from C Expert Trust",
+          "info": "If enabled, clicking the badge scrolls to the C Expert Trust section on this page and opens its FrontRow reviews widget (requires 'Show reviews inline' enabled on that section).",
+          "default": false
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Used only when 'Open inline reviews' is OFF."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Summer Hero",
+      "blocks": [
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,135 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "163838995707f11246": {
+      "type": "faq",
+      "blocks": {
+        "separator_qR8iMC": {
+          "type": "separator",
+          "settings": {
+            "title": "FAQs"
+          }
+        },
+        "collapsible_tab_3iTnrK": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "What does my friend need to do before we both get $10?",
+            "content": "<p>Your friend will get $10 to shop with Berkeley Life once you send them your referral link. After they order using the unique discount code from your referral, you'll receive your $10 reward 30 days later.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "collapsible_tab_bn7TNg": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "How many friends can I refer?",
+            "content": "<p>You can refer an unlimited number of friends. Share the benefits of better blood flow and nitric oxide support with as many people as you like.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "16383899573bc25123-1": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "What does my friend need to do before we both get $10?",
+            "content": "<p>Your friend will receive $10 to shop with Berkeley Life once you send them your referral link. After they place their order using the unique discount code from your referral, you’ll receive your $10 reward 30 days later</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "collapsible_tab_icBUCw": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "When will I receive my $10 reward?",
+            "content": "<p>You will receive your $10 reward 30 days after your referred friend completes their qualifying purchase using your unique referral discount code.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "collapsible_tab_RyTFUM": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "What products are eligible for the referral discount?",
+            "content": "<p>All Berkeley Life products are eligible for the referral discount when purchased using a valid referral discount code.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "collapsible_tab_9fHb9r": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Can I refer someone who has purchased Berkeley Life before?",
+            "content": "<p>The referral program is for new customers only. The person you refer must be a first-time purchaser of Berkeley Life products.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "collapsible_tab_gBJAYL": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "What happens if my friend returns their order?",
+            "content": "<p>Our return window for new customers is 30 days. If your friend returns their order, you will not receive your $10 reward.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        },
+        "collapsible_tab_gVnjzA": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "I have a different question.",
+            "content": "<p>If you have a question that hasn’t been answered here, please contact our customer support team via https://berkeleylife.com/pages/contact We’re happy to help.</p>",
+            "icon": "none",
+            "faq_id": ""
+          }
+        }
+      },
+      "block_order": [
+        "separator_qR8iMC",
+        "collapsible_tab_3iTnrK",
+        "collapsible_tab_bn7TNg",
+        "16383899573bc25123-1",
+        "collapsible_tab_icBUCw",
+        "collapsible_tab_RyTFUM",
+        "collapsible_tab_9fHb9r",
+        "collapsible_tab_gBJAYL",
+        "collapsible_tab_gVnjzA"
+      ],
+      "disabled": true,
+      "settings": {
+        "header_color": "#080b2b",
+        "text_color": "#080b2b",
+        "enable_page_schema": true,
+        "title": ""
+      }
+    },
+    "1773237011de00c7b8": {
+      "type": "apps",
+      "blocks": {
+        "okendo_quizzes_widget_XwaXtE": {
+          "type": "shopify://apps/okendo/blocks/quizzes-widget/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "channel_quiz_id": "93efa457-5713-4559-ab68-92fb351f6458",
+            "full_screen": false,
+            "header_offset": 0
+          }
+        }
+      },
+      "block_order": [
+        "okendo_quizzes_widget_XwaXtE"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "163838995707f11246",
+    "1773237011de00c7b8"
+  ]
+}

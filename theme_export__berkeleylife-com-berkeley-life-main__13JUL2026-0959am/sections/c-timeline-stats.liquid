@@ -1,0 +1,499 @@
+<style>
+  /* =========================================
+     DESKTOP STYLES (Base / Desktop First)
+     ========================================= */
+  #{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top_desktop }}px;
+    padding-bottom: {{ section.settings.padding_bottom_desktop }}px;
+
+    & .c-timeline__header {
+      margin-bottom: 3.5rem;
+      text-align: {{ section.settings.header_alignment }};
+    }
+
+    & .c-timeline__eyebrow {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2.1px;
+      color: {{ section.settings.accent_color }};
+      margin: 0 0 0.75rem 0;
+      line-height: 120%;
+    }
+
+    & .c-timeline__title {
+      font-size: clamp(36px, 4vw, 48px);
+      line-height: 1.2;
+      color: {{ section.settings.heading_color }};
+      margin: 0;
+
+      & span {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(40px, 4.5vw, 54px);
+        font-style: italic;
+        color: {{ section.settings.accent_color }};
+      }
+    }
+
+    & .c-timeline__body {
+      display: grid;
+      grid-template-columns: repeat({{ section.blocks.size }}, 1fr);
+      column-gap: 2rem;
+    }
+
+    & .c-timeline__phase {
+      display: contents;
+    }
+
+    & .c-timeline__phase-content {
+      grid-row: 1;
+    }
+
+    & .c-timeline__phase-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.75rem;
+    }
+
+    & .c-timeline__day {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: {{ section.settings.accent_color }};
+    }
+
+    & .c-timeline__badge {
+      display: inline-flex;
+      align-items: center;
+      border: 1.5px solid {{ section.settings.accent_color }};
+      border-radius: 20px;
+      padding: 3px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: {{ section.settings.accent_color }};
+      line-height: 1.4;
+    }
+
+    & .c-timeline__phase-title {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: clamp(24px, 2.5vw, 32px);
+      color: {{ section.settings.heading_color }};
+      margin: 0 0 1.25rem 0;
+      line-height: 1.2;
+    }
+
+    & .c-timeline__benefits ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+
+    & .c-timeline__benefits li {
+      position: relative;
+      padding-left: 1.25rem;
+      font-size: 15px;
+      line-height: 1.5;
+      color: {{ section.settings.text_color }};
+    }
+
+    & .c-timeline__benefits li::before {
+      content: '+';
+      position: absolute;
+      left: 0;
+      color: {{ section.settings.accent_color }};
+      font-weight: 700;
+    }
+
+    & .c-timeline__phase-progress {
+      grid-row: 2;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 2rem 0;
+    }
+
+    & .c-timeline__phase-progress::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: -2rem;
+      height: 2px;
+      background-color: {{ section.settings.accent_color }};
+      transform: translateY(-50%);
+    }
+
+    & .c-timeline__phase:last-child .c-timeline__phase-progress::after {
+      right: 0;
+    }
+
+    & .c-timeline__progress-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background-color: {{ section.settings.heading_color }};
+      position: relative;
+      z-index: 1;
+      display: block;
+    }
+
+    & .c-timeline__image-wrapper {
+      grid-row: 3;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+    }
+
+    & .c-timeline__image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    & .c-timeline__btn-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 3.5rem;
+    }
+  }
+
+  /* =========================================
+     MOBILE STYLES (up to 991px)
+     ========================================= */
+  @media screen and (max-width: 991px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+
+      & .c-timeline__header {
+        margin-bottom: 2.5rem;
+      }
+
+      & .c-timeline__title {
+        font-size: 32px;
+
+        & span {
+          font-size: 36px;
+        }
+      }
+
+      & .c-timeline__body {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        padding-left: 36px;
+      }
+
+      & .c-timeline__body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 8px;
+        width: 2px;
+        background-color: #d0d0d0;
+        border-radius: 1px;
+      }
+
+      & .c-timeline__phase {
+        display: block;
+        position: relative;
+        padding-bottom: 2.5rem;
+      }
+
+      & .c-timeline__phase:last-child {
+        padding-bottom: 0;
+      }
+
+      & .c-timeline__phase-progress {
+        position: absolute;
+        left: -36px;
+        top: 0;
+        padding: 0;
+      }
+
+      & .c-timeline__phase-progress::after {
+        display: none;
+      }
+
+      & .c-timeline__image-wrapper {
+        margin-top: 1.5rem;
+        aspect-ratio: 16 / 10;
+      }
+
+      & .c-timeline__btn-wrapper {
+        margin-top: 2.5rem;
+      }
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="container-sl">
+    <div class="c-timeline__header">
+      {% if section.settings.eyebrow != blank %}
+        <p class="c-timeline__eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h2 class="c-timeline__title">{{ section.settings.title }}</h2>
+      {% endif %}
+    </div>
+
+    <div class="c-timeline__body">
+      {% for block in section.blocks %}
+        <div class="c-timeline__phase" {{ block.shopify_attributes }}>
+          <div class="c-timeline__phase-content">
+            <div class="c-timeline__phase-top">
+              {% if block.settings.day_text != blank %}
+                <span class="c-timeline__day">{{ block.settings.day_text }}</span>
+              {% endif %}
+              {% if block.settings.badge_text != blank %}
+                <span class="c-timeline__badge">{{ block.settings.badge_text }}</span>
+              {% endif %}
+            </div>
+
+            {% if block.settings.phase_title != blank %}
+              <h3 class="c-timeline__phase-title">{{ block.settings.phase_title }}</h3>
+            {% endif %}
+
+            {% if block.settings.benefits != blank %}
+              <div class="c-timeline__benefits">
+                {{ block.settings.benefits }}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="c-timeline__phase-progress">
+            <span class="c-timeline__progress-dot"></span>
+          </div>
+
+          {% if block.settings.image != blank %}
+            <div class="c-timeline__image-wrapper">
+              <img
+                src="{{ block.settings.image | image_url: width: 800 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                loading="lazy"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+              >
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if section.settings.btn_text != blank %}
+      <div class="c-timeline__btn-wrapper">
+        {% render 'arrow-btn', link: section.settings.btn_link, text: section.settings.btn_text, bg_color: section.settings.accent_color %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "C Timeline Stats",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#0c1737"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#d25435"
+    },
+    {
+      "type": "header",
+      "content": "Header Text"
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Header Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "THE JOURNEY"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "What to <span>Expect</span>",
+      "info": "Wrap text in <span></span> to apply the italic serif font."
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "Start Today"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 50,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "timeline_phase",
+      "name": "Timeline Phase",
+      "settings": [
+        {
+          "type": "text",
+          "id": "day_text",
+          "label": "Day Label",
+          "default": "DAY 7"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "IGNITION"
+        },
+        {
+          "type": "text",
+          "id": "phase_title",
+          "label": "Phase Title",
+          "default": "First Signals"
+        },
+        {
+          "type": "richtext",
+          "id": "benefits",
+          "label": "Benefits List",
+          "info": "Use a bulleted list. Each item will display with an orange '+' marker."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Phase Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Timeline Stats",
+      "blocks": [
+        {
+          "type": "timeline_phase",
+          "settings": {
+            "day_text": "DAY 7",
+            "badge_text": "IGNITION",
+            "phase_title": "First Signals",
+            "benefits": "<ul><li>Steadier energy through the day</li><li>Workouts start to feel different</li><li>Morning fog begins to lift</li><li>Measurable improvement on test strips</li></ul>"
+          }
+        },
+        {
+          "type": "timeline_phase",
+          "settings": {
+            "day_text": "DAY 30",
+            "badge_text": "BUILD",
+            "phase_title": "Momentum",
+            "benefits": "<ul><li>Better strength and endurance</li><li>Focus sharpens at work and in the gym</li><li>Improved sexual performance</li><li>Blood pressure trending healthier</li></ul>"
+          }
+        },
+        {
+          "type": "timeline_phase",
+          "settings": {
+            "day_text": "DAY 90",
+            "badge_text": "REFINEMENT",
+            "phase_title": "New Normal",
+            "benefits": "<ul><li>Energy and strength: dialed in</li><li>Sustained cardiovascular support</li><li>Your new baseline — for life</li><li>Share it with the men you care about</li></ul>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,50 @@
+{% comment %}
+  Renders a share button
+
+  Accepts:
+  - share_url: {String} The string to add to the store url
+  - block: {Object} A block for sharing to set the label
+  - type: {String} To help with the naming of the id (usually either 'Product' or  'Article')
+
+  Usage:
+  {% render 'share', share_url: product.url, block: block, type: 'Product' %}
+{% endcomment %}
+
+<share-button class="relative block my-4" {{ block.shopify_attributes }}>
+  <button class="flex items-center hidden gap-2">
+    {% render 'icon-share' %}
+    {{ block.settings.share_label | escape }}
+  </button>
+  <details>
+    <summary>
+      <div class="flex items-center gap-2">
+        {% render 'icon-share' %}
+        {{ block.settings.share_label | escape }}
+      </div>
+    </summary>
+    <div id="{{ type }}-share-{{ section.id }}" class="w-80 absolute z-10 bg-white grid grid-cols-[1fr,auto,auto] items-center max-w-xs gap-2 shadow-md p-2">
+      <span id="ShareMessage-{{ section.id }}" class="col-span-full hidden row-start-2" role="status">
+      </span>
+      <div class="w-full">
+        <label class="sr-only" for="url">{{ 'general.share.share_url' | t }}</label>
+        <input type="text"
+              class="w-full"
+              id="url"
+              value="{{ shop.url | append: share_url }}"
+              placeholder="{{ 'general.share.share_url' | t }}"
+              onclick="this.select();"
+              readonly
+        >
+      </div>
+      <button data-share-close class="no-js-hidden shrink-0 w-6 h-6">
+        {% render 'icon-close' %}
+        <span class="sr-only">{{ 'general.share.close' | t }}</span>
+      </button>
+      <button data-share-copy class="no-js-hidden shrink-0 w-6 h-6">
+        {% render 'icon-clipboard' %}
+        <span class="sr-only">{{ 'general.share.copy_to_clipboard' | t }}</span>
+      </button>
+    </div>
+  </details>
+</share-button>
+<script src="{{ 'share.js' | asset_url }}" defer="defer"></script>

@@ -1,0 +1,62 @@
+{%- liquid
+  if section.settings.show_collection_image
+    if collection.image or collection.metafields.smkk.video
+      assign show_image = true
+      assign text_color = "text-white"
+      assign mb = "mb-8"
+    endif
+  endif
+-%}
+
+<div class="relative {{ mb | default: "mb-4" }} {{ text_color }}">
+  {%- if show_image -%}
+    {%- comment -%}This is a collection metafield that we use for a video option.{%- endcomment -%}
+    {%- if collection.metafields.smkk.video -%}
+      <div class="absolute inset-0">
+          {% render 'video-autoplay', video: collection.metafields.smkk.video.value.url, image: collection.image, id: section.id %}
+      </div>
+    {%- else -%}
+      <div class="absolute inset-0 w-full h-full overflow-hidden">
+        {% render 'image', image: collection.image, classes: 'object-cover w-full h-full' %}
+      </div>
+      <div class="bg-black/20 absolute inset-0 w-full h-full">
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+  <div class="px-4 md:px-8 py-8 pb-0 md:py-12 flex flex-col justify-center{% if show_image %} min-h-[25vh] pb-8{% endif %}">
+    <div class="relative space-y-4 text-center">
+      <h1 class="h2">
+        <span class="sr-only">{{ 'sections.collection_template.title' | t }}: </span>
+        {{- collection.title | escape -}}
+      </h1>
+      {%- if section.settings.show_collection_description and collection.description != blank -%}
+        <div class="rte max-w-prose mx-auto">{{ collection.description }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.main-collection-banner.settings.paragraph.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "default": true,
+      "label": "t:sections.main-collection-banner.settings.show_collection_description.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "default": false,
+      "label": "t:sections.main-collection-banner.settings.show_collection_image.label",
+      "info": "t:sections.main-collection-banner.settings.show_collection_image.info"
+    }
+  ]
+}
+{% endschema %}

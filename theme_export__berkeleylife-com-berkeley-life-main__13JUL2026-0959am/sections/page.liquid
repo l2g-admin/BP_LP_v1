@@ -1,0 +1,74 @@
+{%- assign the_page = section.settings.page | default: page -%}
+
+<div class="bg-bg text-text" style="--color-text: {{ section.settings.text_color | default: '#ffffff' }}; --color-bg: {{ section.settings.bg_color | default: '#222222' }}">
+  <div class="md:px-8 max-w-screen-lg px-4 mx-auto {{ section.settings.spacing_top | prepend: 'pt-' }} {{ section.settings.spacing_bottom | prepend: 'pb-' }}">
+    <div class="prose-lg">
+      <h2>
+        {%- if the_page.title != blank -%}
+          {{ the_page.title | escape }}
+        {%- else -%}
+          Page title
+        {%- endif -%}
+      </h2>
+      <div>
+        {%- if the_page.content != blank -%}
+          {{ the_page.content }}
+        {%- else -%}
+          <div>
+            {{ 'page' | placeholder_svg_tag: 'page-placeholder' }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.page.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "page",
+      "id": "page",
+      "label": "t:sections.page.settings.page.label",
+      "info": "The page whose content you want to display. Defaults to the current page."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "range",
+      "id": "spacing_top",
+      "label": "Spacing top",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 8,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom",
+      "label": "Spacing bottom",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 8,
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.page.presets.name"
+    }
+  ]
+}
+{% endschema %}

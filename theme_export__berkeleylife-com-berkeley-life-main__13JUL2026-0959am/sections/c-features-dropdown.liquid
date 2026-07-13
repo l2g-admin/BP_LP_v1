@@ -1,0 +1,711 @@
+<style>
+  .okeConnect.okeQuizzes:empty {
+    display: none !important;
+  }
+  #{{ section.id }} {
+    & .section__features {
+      width: 100%;
+      background-color: {{ section.settings.bg_background }};
+      padding-top: {{ section.settings.padding_top_mobile }}rem;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}rem;
+    }
+
+    @media screen and (min-width: 768px) {
+      & .section__features {
+        padding-top: {{ section.settings.padding_top_desktop }}rem;
+        padding-bottom: {{ section.settings.padding_bottom_desktop }}rem;
+      }
+    }
+
+
+    & .features__header {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+       
+      & .features__header__text {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      & .c-buttons-div {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    & .features__header--centered {
+      place-items: center;
+      text-align: center;
+      margin-bottom: 2rem;
+
+      & .features__subtitle {
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    & .features__title {
+      font-size: clamp(28px, 5vw, 48px);
+
+      color: {{ section.settings.title_color }};
+      margin: 0 0 16px 0;
+      line-height: 120%;
+      &  span {
+          font-style: italic;
+          font-weight: 300;
+           font-size: clamp(28px, 5vw, 48px);
+          font-family: "Cormorant Garamond";
+          color: {{ section.settings.active_line_color }};
+        }
+    }
+
+    & .features__subtitle {
+      font-size: clamp(14px, 2vw, 18px);
+      color: {{ section.settings.subtitle_color }};
+      margin: 0 0 24px 0;
+      line-height: 1.5;
+      max-width: 600px;
+    }
+
+    & .features__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background-color: {{ section.settings.active_line_color }};
+      color: #fff;
+      text-decoration: none;
+      border-radius: 24px;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+
+      &:hover {
+        opacity: 0.85;
+      }
+    }
+
+    & .features__cta-wrapper {
+      display: flex;
+      align-items: center;
+      margin-top: 24px;
+    }
+
+    & .features__cta-wrapper--centered {
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    & .features__content {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    & .features__list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    & .feature__item {
+      border-left: 3px solid rgba(27, 33, 82, 0.15);
+      padding-left: 20px;
+      transition: border-color 0.3s ease-in-out;
+
+      &.feature__item--active {
+        border-color: var(--active-color, {{ section.settings.active_line_color }});
+      }
+    }
+
+    & .feature__header {
+      display: flex;
+      align-items: center;
+      
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    & .feature__title {
+      font-size: clamp(18px, 3vw, 28px);
+      color: {{ section.settings.text_active_color }};
+      margin: 0;
+    
+      transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    & .feature__item--active .feature__title {
+      color: var(--active-color, {{ section.settings.active_line_color }});
+      opacity: 1;
+    }
+
+    & .feature__body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.4s ease-in-out;
+    }
+
+    & .feature__item--active .feature__body {
+      grid-template-rows: 1fr;
+    }
+
+    & .feature__body__inner {
+      overflow: hidden;
+    }
+
+    & .feature__description {
+      font-size: clamp(14px, 2vw, 16px);
+      color: {{ section.settings.subtitle_color }};
+      line-height: 1.6;
+      margin: 0;
+      padding-bottom: 20px;
+    }
+
+    & .features__media {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      min-height: 400px;
+    }
+
+    & .features__image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+
+    & .features__embed {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+
+      & iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+    }
+
+    & .features__videos {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    & .features__items-media {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+    }
+
+    & .feature__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+
+      &.feature__image--active {
+        opacity: 1;
+      }
+    }
+
+    & .feature__video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+
+      &.feature__video--active {
+        opacity: 1;
+      }
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    #{{ section.id }} {
+      & .features__content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 24px 60px;
+      }
+
+      & .features__header {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      & .features__list {
+        grid-column: 1;
+        grid-row: 2;
+        gap: 1.5rem;
+      }
+
+      & .features__cta-wrapper {
+        grid-column: 1;
+        grid-row: 3;
+      }
+
+      & .features__media {
+        grid-column: 2;
+        grid-row: 1 / 4;
+        min-height: unset;
+      }
+
+      & .feature__item {
+        padding-left: 24px;
+      }
+
+      {%- if section.settings.flip_layout_desktop -%}
+        & .features__header {
+          grid-column: 2;
+        }
+
+        & .features__list {
+          grid-column: 2;
+          gap: 1.5rem;
+        }
+
+        & .features__cta-wrapper {
+          grid-column: 2;
+        }
+
+        & .features__media {
+          grid-column: 1;
+        }
+      {%- endif -%}
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="section__features">
+    <div class="container-sl">
+      {%- if section.settings.header_outside_content -%}
+        <div class="features__header features__header--centered">
+          <div class="features__header__text">
+            {%- if section.settings.title != blank -%}
+              <h2 class="features__title">{{ section.settings.title }}</h2>
+            {%- endif -%}
+            {%- if section.settings.subtitle != blank -%}
+              <p class="features__subtitle">{{ section.settings.subtitle }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="features__content">
+        {%- unless section.settings.header_outside_content -%}
+          <div class="features__header">
+            <div class="features__header__text">
+              {%- if section.settings.title != blank -%}
+                <h2 class="features__title">{{ section.settings.title }}</h2>
+              {%- endif -%}
+              {%- if section.settings.subtitle != blank -%}
+                <p class="features__subtitle">{{ section.settings.subtitle }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endunless -%}
+
+        <div class="features__list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'feature_item' -%}
+              <div
+                class="feature__item {% if forloop.first %}feature__item--active{% endif %}"
+                data-feature-item
+                data-index="{{ forloop.index0 }}"
+                style="--active-color: {{ block.settings.active_color | default: section.settings.active_line_color }};"
+                {{ block.shopify_attributes }}
+              >
+                <button
+                  type="button"
+                  class="feature__header"
+                  aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                >
+                  <h3 class="feature__title">{{ block.settings.title }}</h3>
+                </button>
+                <div class="feature__body">
+                  <div class="feature__body__inner">
+                    {%- if block.settings.description != blank -%}
+                      <p class="feature__description">{{ block.settings.description }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <div class="features__media">
+          {%- if section.settings.use_static_image and section.settings.media_image != blank -%}
+            {{
+              section.settings.media_image
+              | image_url: width: 1200
+              | image_tag: class: 'features__image', alt: section.settings.media_alt, loading: 'lazy'
+            }}
+          {%- else -%}
+            <div class="features__items-media">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'feature_item' -%}
+                  {%- if block.settings.image != blank -%}
+                    <img 
+                      src="{{ block.settings.image | image_url: width: 1200 }}"
+                      alt="{{ block.settings.title | escape }}"
+                      class="feature__image {% if forloop.first %}feature__image--active{% endif %}"
+                      data-image-index="{{ forloop.index0 }}"
+                      loading="lazy"
+                      width="600"
+                      height="600"
+                    >
+                  {%- elsif block.settings.video != blank -%}
+                    <video
+                      class="feature__video {% if forloop.first %}feature__video--active{% endif %}"
+                      data-video-index="{{ forloop.index0 }}"
+                      autoplay
+                      loop
+                      muted
+                      playsinline
+                    >
+                      {%- for source in block.settings.video.sources -%}
+                        <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                      {%- endfor -%}
+                    </video>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.cta_text != blank and section.settings.cta_outside_content == false -%}
+          <div class="features__cta-wrapper">
+            <a href="{{ section.settings.cta_link }}" class="{{ section.settings.cta_class | default: 'features__cta' }}">
+              {{ section.settings.cta_text }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.cta_text != blank and section.settings.cta_outside_content -%}
+        <div class="features__cta-wrapper features__cta-wrapper--centered">
+          <a href="{{ section.settings.cta_link }}" class="{{ section.settings.cta_class | default: 'features__cta' }}">
+            {{ section.settings.cta_text }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const section = document.getElementById('{{ section.id }}');
+    if (!section) return;
+
+    const featureItems = section.querySelectorAll('[data-feature-item]');
+    const featureVideos = section.querySelectorAll('.feature__video');
+    const featureImages = section.querySelectorAll('.feature__image');
+
+    featureItems.forEach((item) => {
+      const header = item.querySelector('.feature__header');
+      const index = item.dataset.index;
+
+      header.addEventListener('click', () => {
+        const isActive = item.classList.contains('feature__item--active');
+
+        // Close all items
+        featureItems.forEach((otherItem) => {
+          otherItem.classList.remove('feature__item--active');
+          otherItem.querySelector('.feature__header').setAttribute('aria-expanded', 'false');
+        });
+
+        // Hide all videos
+        featureVideos.forEach((video) => {
+          video.classList.remove('feature__video--active');
+        });
+
+        // Hide all images
+        featureImages.forEach((image) => {
+          image.classList.remove('feature__image--active');
+        });
+
+        // Open clicked item if it wasn't active
+        if (!isActive) {
+          item.classList.add('feature__item--active');
+          header.setAttribute('aria-expanded', 'true');
+
+          // Show corresponding image or video
+          const activeImage = section.querySelector(`.feature__image[data-image-index="${index}"]`);
+          const activeVideo = section.querySelector(`.feature__video[data-video-index="${index}"]`);
+          
+          if (activeImage) {
+            activeImage.classList.add('feature__image--active');
+          } else if (activeVideo) {
+            activeVideo.classList.add('feature__video--active');
+          }
+        }
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "C Features Dropdown",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Padding Mobile"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top Mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom Mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "header",
+      "content": "Padding Desktop"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Padding Top Desktop",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Padding Bottom Desktop",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_background",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle & Description Color",
+      "default": "#999999"
+    },
+    {
+      "type": "color",
+      "id": "text_active_color",
+      "label": "Feature Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "active_line_color",
+      "label": "Active Line Color",
+      "default": "#d70007"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_outside_content",
+      "label": "Header Outside Content",
+      "default": false,
+      "info": "Move header text above features content and center it."
+    },
+    {
+      "type": "checkbox",
+      "id": "cta_outside_content",
+      "label": "CTA Outside Content",
+      "default": false,
+      "info": "Move CTA button below features content and center it."
+    },
+    {
+      "type": "checkbox",
+      "id": "flip_layout_desktop",
+      "label": "Flip Layout (Desktop)",
+      "default": false,
+      "info": "Move image to left and content to right on desktop"
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Built for Smarter Strength Training"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Suji enhances your workouts by increasing muscle engagement, lowering joint stress, and helping you build strength consistently with less risk of injury."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Start Training Smarter"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
+    },
+    {
+      "type": "text",
+      "id": "cta_class",
+      "label": "CTA Button CSS Class",
+      "default": "features__cta",
+      "info": "Custom CSS class for the button"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_static_image",
+      "label": "Use Static Image",
+      "default": false,
+      "info": "The main image will not change when opening dropdowns"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_image",
+      "label": "Imagen Principal"
+    },
+    {
+      "type": "text",
+      "id": "media_alt",
+      "label": "Image Alt Text"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_item",
+      "name": "Feature Item",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title",
+          "default": "Targeted compression technology"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Activate the right muscles instantly with precise, science-backed compression."
+        },
+        {
+          "type": "color",
+          "id": "active_color",
+          "label": "Active Line Color",
+          "info": "Leave empty to use the default section color"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Image to display when this dropdown is active"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Video to display when this dropdown is active (used when no image is set)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Features Dropdown",
+      "blocks": [
+        {
+          "type": "feature_item",
+          "settings": {
+            "title": "Targeted compression technology",
+            "description": "Activate the right muscles instantly with precise, science-backed compression."
+          }
+        },
+        {
+          "type": "feature_item",
+          "settings": {
+            "title": "Lower load, same output",
+            "description": "Achieve the same muscle activation with less weight, reducing strain on your joints and connective tissues."
+          }
+        },
+        {
+          "type": "feature_item",
+          "settings": {
+            "title": "Progressive training insights",
+            "description": "Track your progress and get personalized recommendations to optimize your training over time."
+          }
+        },
+        {
+          "type": "feature_item",
+          "settings": {
+            "title": "Portable & gym-proof",
+            "description": "Designed to withstand the toughest gym environments while being easy to carry anywhere you train."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

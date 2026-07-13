@@ -1,0 +1,73 @@
+{%- comment -%}
+  Static Features List
+  Usage: {% render 'static-features' %}
+{%- endcomment -%}
+
+<style>
+  .static-features {
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 24px 28px;
+    background: #fff;
+    max-width: 600px;
+  }
+
+  .static-features__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .static-features__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #333;
+  }
+
+  .static-features__icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: #e85a2c;
+    margin-top: 2px;
+  }
+
+  .static-features__text {
+    flex: 1;
+  }
+</style>
+
+<div class="static-features">
+  <ul class="static-features__list">
+    <li class="static-features__item">
+      <svg class="static-features__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span class="static-features__text">Supports healthy blood flow where it matters</span>
+    </li>
+    <li class="static-features__item">
+      <svg class="static-features__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span class="static-features__text">Helps improve stamina and sexual performance</span>
+    </li>
+    <li class="static-features__item">
+      <svg class="static-features__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span class="static-features__text">Backed by gold-standard clinical research</span>
+    </li>
+    <li class="static-features__item">
+      <svg class="static-features__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span class="static-features__text">Trusted by doctors and healthcare professionals</span>
+    </li>
+  </ul>
+</div>

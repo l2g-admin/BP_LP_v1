@@ -1,0 +1,4777 @@
+{%- comment -%}
+  Section: C PDP Hero
+  Description: Custom product detail page hero with image gallery, subscription plan selector, trust badges, and accordion info tabs.
+  sl-id: sl-section-pdp-hero-v1
+  Figma: https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5268-3870
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-pdp-hero-v1'
+  assign section_id = section.settings.sl_anchor_id | default: section.id
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_form_id = 'c-pdp-hero-form-' | append: section.id
+  assign fallback_installment_form_id = 'c-pdp-hero-fallback-installment-form-' | append: section.id
+  assign hero_img = section.settings.hero_image | default: product.featured_image
+  assign subscription_plans_block = section.blocks | where: 'type', 'subscription_plans' | first
+  assign has_subscription_plans_block = false
+  if subscription_plans_block
+    assign has_subscription_plans_block = true
+  endif
+
+  assign buy_buttons_block = section.blocks | where: 'type', 'buy_buttons' | first
+  assign single_variant_product = false
+  if product.variants.size == 1
+    assign single_variant_product = true
+  endif
+
+  assign has_selling_plans = false
+  if product.selling_plan_groups.size > 0
+    assign has_selling_plans = true
+  endif
+-%}
+
+{%- capture clinical_trials_drawer_body_default -%}
+  <p>Only a small percentage of dietary supplements are tested in gold-standard human clinical trials.</p>
+  <p>Berkeley Life® Nitric Oxide Support has been evaluated in double-blind, placebo-controlled research demonstrating its ability to increase nitric oxide bioavailability in humans.</p>
+  <p>The dietary nitrate ingredients used in our formulation are supported by a growing body of peer-reviewed clinical research validating improvements in vascular function, endothelial health, and blood pressure regulation.</p>
+  <h3>The Impact of Clinical Proof</h3>
+  <p>Double-blind, placebo-controlled trials (DBPCTs) are considered the gold standard in scientific research because they help ensure:</p>
+  <ul>
+    <li>Bias elimination</li>
+    <li>Control for placebo effect</li>
+    <li>Validated efficacy</li>
+    <li>Safety and tolerability assessment</li>
+  </ul>
+  <p>By studying the full nitrate formulation as it is consumed, Berkeley Life® ensures the product is evaluated for real-world effectiveness and safety - not just theoretical ingredient benefits.</p>
+  <h3>Nitric Oxide Production</h3>
+  <p>Berkeley Life® is formulated to increase nitric oxide through the dietary nitrate → nitrite → nitric oxide pathway.</p>
+  <p>Unlike L-arginine-based supplements, this pathway remains active even when endothelial nitric oxide synthase (eNOS) declines with age.</p>
+  <h3>Clinical Trial Results</h3>
+  <p>In a double-blind, placebo-controlled study, participants taking Berkeley Life® demonstrated significant increases in salivary nitrite and plasma nitrite compared to placebo. Test strip readings correlated with laboratory measurements, confirming improved nitric oxide bioavailability.</p>
+  <h3>Vascular &amp; Endothelial Health</h3>
+  <p>Nitric oxide is essential for healthy blood vessel function. It supports vasodilation, circulation, and endothelial integrity - all of which naturally decline with age.</p>
+  <h3>Clinical Trial Results</h3>
+  <p>In clinical research evaluating dietary nitrate supplementation over 12 weeks, participants showed improvements in endothelial function and reductions in carotid artery stiffness, a recognized marker of cardiovascular risk. These findings support the role of nitrate-based nitric oxide in maintaining vascular flexibility and heart health.</p>
+  <h3>Blood Pressure Support</h3>
+  <p>Nitric oxide helps relax and widen blood vessels, supporting healthy blood pressure regulation.</p>
+  <h3>Clinical Trial Results</h3>
+  <p>Clinical studies of dietary nitrates have demonstrated improvements in systolic blood pressure and vascular responsiveness compared to placebo, particularly with consistent daily use over 8-12 weeks.</p>
+  <h3>Energy &amp; Oxygen Efficiency</h3>
+  <p>Nitric oxide plays a critical role in oxygen delivery and mitochondrial signaling. Healthy nitric oxide levels support efficient energy production and muscle performance.</p>
+  <h3>Clinical Research Findings</h3>
+  <p>Research on dietary nitrates has shown improvements in oxygen utilization and exercise efficiency, including reduced oxygen cost during physical activity.</p>
+  <h3>Aging &amp; Nitric Oxide Decline</h3>
+  <p>Nitric oxide production naturally declines with age due to oxidative stress, hormonal shifts, and reduced enzyme activity.</p>
+  <p>Berkeley Life® provides a nitrate-based pathway that supports nitric oxide production independently of age-related enzymatic decline, offering measurable vascular support as the body's natural production decreases.</p>
+{%- endcapture -%}
+
+{%- comment -%} ===== Styles ===== {%- endcomment -%}
+{% style %}
+  #{{ section_id }} {
+    --pdp-navy: #1b1c29;
+    --pdp-orange: #d54f2f;
+    --pdp-cream: #f6f3f0;
+    --pdp-orange-light: #fdf5f3;
+    --pdp-border: #ebe8e6;
+    --pdp-grey: #a1a1aa;
+    --pdp-orange-500: #e76a4c;
+    --pdp-plan-accent: {{ section.settings.subscription_plans_accent_color | default: '#d54f2f' }};
+    --pdp-plan-selected-bg: {{ section.settings.subscription_plans_selected_bg_color | default: '#fdf5f3' }};
+
+    background-color: white;
+    padding-block: 48px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__container {
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* ---- GALLERY ---- */
+  #{{ section_id }} .c-pdp-hero__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__hero {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #f6f3f0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__hero img,
+  #{{ section_id }} .c-pdp-hero__hero svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 16px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__badge {
+    position: absolute;
+    bottom: 28px;
+    left: 24px;
+    background-color: var(--pdp-orange);
+    color: var(--pdp-cream);
+    font-family: "TT Commons", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2.28px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 15px;
+    white-space: nowrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__clinicians {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    padding-inline: 24px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__clinicians img {
+    width: 100%;
+    height: auto;
+    max-height: 60px;
+    object-fit: contain;
+    border-radius: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__image-badge {
+    position: absolute;
+    z-index: 3;
+    width: var(--sl-c-pdp-hero-image-badge-width, 96px);
+    max-width: 45%;
+    pointer-events: none;
+  }
+
+  #{{ section_id }} .c-pdp-hero__image-badge img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__image-badge--top-left {
+    top: var(--sl-c-pdp-hero-image-badge-offset, 16px);
+    left: var(--sl-c-pdp-hero-image-badge-offset, 16px);
+  }
+
+  #{{ section_id }} .c-pdp-hero__image-badge--top-right {
+    top: var(--sl-c-pdp-hero-image-badge-offset, 16px);
+    right: var(--sl-c-pdp-hero-image-badge-offset, 16px);
+  }
+
+  #{{ section_id }} .c-pdp-hero__image-badge--bottom-left {
+    bottom: var(--sl-c-pdp-hero-image-badge-offset, 16px);
+    left: var(--sl-c-pdp-hero-image-badge-offset, 16px);
+  }
+
+  #{{ section_id }} .c-pdp-hero__image-badge--bottom-right {
+    bottom: var(--sl-c-pdp-hero-image-badge-offset, 16px);
+    right: var(--sl-c-pdp-hero-image-badge-offset, 16px);
+  }
+
+  /* ---- FrontRow banner ---- */
+  #{{ section_id }} .c-pdp-hero__hero-wrap {
+    position: relative;
+  }
+
+  #{{ section_id }} .c-pdp-hero__thumbs {
+    display: flex;
+    flex-direction: row;
+    gap: 9px;
+    margin-top: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  #{{ section_id }} .c-pdp-hero__thumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  #{{ section_id }} .c-pdp-hero__thumb {
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    background: #f6f3f0;
+    flex: 0 0 66px;
+    width: 66px;
+    height: 66px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__thumb img,
+  #{{ section_id }} .c-pdp-hero__thumb svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 6px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__thumb {
+    background: none;
+    border: 2px solid transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: border-color 0.15s, opacity 0.15s;
+    opacity: 0.7;
+  }
+
+  #{{ section_id }} .c-pdp-hero__thumb--active,
+  #{{ section_id }} .c-pdp-hero__thumb:hover {
+    opacity: 1;
+    border-color: var(--pdp-orange);
+    border-radius: 6px;
+  }
+
+  /* ---- PRODUCT INFO ---- */
+  #{{ section_id }} .c-pdp-hero__info {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-width: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__breadcrumbs a,
+  #{{ section_id }} .c-pdp-hero__breadcrumbs span {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--pdp-navy);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__breadcrumbs-sep {
+    color: var(--pdp-navy);
+    font-size: 14px;
+    opacity: 0.5;
+  }
+
+  /* Mobile: show breadcrumbs--mob above gallery, hide the one inside info */
+  #{{ section_id }} .c-pdp-hero__breadcrumbs--mob {
+    display: flex;
+  }
+
+  #{{ section_id }} .c-pdp-hero__info .c-pdp-hero__breadcrumbs {
+    display: none;
+  }
+
+  #{{ section_id }} .c-pdp-hero__heading {
+    border-bottom: 1px solid var(--pdp-orange);
+    padding-bottom: 12px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__title {
+    font-weight: 500;
+    font-size: clamp(38px, 6vw, 52px);
+    line-height: 1.2;
+    color: var(--pdp-navy);
+    margin: 0;
+    letter-spacing: 0;
+    word-break: break-word;
+  }
+
+  #{{ section_id }} .c-pdp-hero__reviews {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__stars {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--pdp-orange);
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  #{{ section_id }} .c-pdp-hero__reviews-link {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--pdp-orange);
+    text-decoration: underline;
+    white-space: nowrap;
+    padding-left: 2px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__reviews-fallback {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__reviews-fallback-stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--pdp-orange);
+    line-height: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__reviews-fallback-star {
+    width: 14px;
+    height: 14px;
+    display: block;
+  }
+
+  #{{ section_id }} .c-pdp-hero__reviews-fallback-text,
+  #{{ section_id }} .c-pdp-hero__reviews-fallback-trust {
+    margin: 0;
+    font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--pdp-navy);
+    white-space: nowrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__reviews-fallback-divider {
+    width: 1px;
+    height: 17px;
+    background: var(--pdp-navy);
+    opacity: 0.5;
+    flex: 0 0 1px;
+  }
+
+  @media (max-width: 767px) {
+    #{{ section_id }} .c-pdp-hero__reviews-fallback {
+      gap: 6px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__reviews-fallback-text,
+    #{{ section_id }} .c-pdp-hero__reviews-fallback-trust {
+      font-size: 12px;
+      letter-spacing: 1.1px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__reviews-fallback-divider {
+      height: 14px;
+    }
+  }
+
+  #{{ section_id }} .c-pdp-hero__description {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--pdp-navy);
+    margin: 0;
+    max-width: 38em;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+  }
+
+  #{{ section_id }} .c-pdp-hero__included-box {
+    background: var(--pdp-cream);
+    border-radius: 24px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__included-heading {
+    margin: 0;
+    font-family: "TT Commons", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--pdp-navy);
+  }
+
+  #{{ section_id }} .c-pdp-hero__included-products {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__included-product {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__included-product-image-wrap {
+    position: relative;
+    flex: 0 0 80px;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  #{{ section_id }} .c-pdp-hero__included-product-image-wrap img,
+  #{{ section_id }} .c-pdp-hero__included-product-image-wrap svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__included-product-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    color: var(--pdp-navy);
+  }
+
+  #{{ section_id }} .c-pdp-hero__included-product-title,
+  #{{ section_id }} .c-pdp-hero__included-product-subtitle {
+    margin: 0;
+    word-break: break-word;
+  }
+
+  #{{ section_id }} .c-pdp-hero__included-product-title {
+    font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.48px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__included-product-subtitle {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.48px;
+  }
+
+  @media (max-width: 767px) {
+    #{{ section_id }} .c-pdp-hero__included-box {
+      padding: 20px;
+      gap: 14px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__included-products {
+      gap: 12px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__included-product {
+      gap: 12px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__included-product-image-wrap {
+      flex-basis: 64px;
+      width: 64px;
+      height: 64px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__included-product-title,
+    #{{ section_id }} .c-pdp-hero__included-product-subtitle {
+      font-size: 14px;
+      letter-spacing: 0.42px;
+    }
+  }
+
+  #{{ section_id }} .c-pdp-hero__price-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__price {
+    margin: 0;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--pdp-navy);
+    white-space: nowrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__price-compare {
+    font-family: "TT Commons", sans-serif;
+    font-size: 18px;
+    line-height: 1.2;
+    color: var(--pdp-navy);
+    opacity: 0.55;
+    white-space: nowrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__price-save {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: var(--pdp-orange);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 767px) {
+    #{{ section_id }} .c-pdp-hero__price {
+      font-size: 28px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__price-compare {
+      font-size: 16px;
+    }
+  }
+
+  #{{ section_id }} .c-pdp-hero__supp-facts {
+    font-size: 16px;
+    color: #080b2b;
+    text-decoration: underline;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin: 0;
+    display: inline-block;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .no-js-inline {
+    display: none;
+  }
+  .no-js .no-js-inline {
+    display: inline-block;
+  }
+
+  /* ---- SUPPLEMENT FACTS MODAL ---- */
+  .c-pdp-hero__supp-facts-modal {
+    box-sizing: border-box;
+    opacity: 0;
+    position: fixed;
+    visibility: hidden;
+    z-index: -1;
+    margin: 0 auto;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    width: 100%;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    height: 100%;
+    transition: opacity 0.25s cubic-bezier(0.104, 0.204, 0.492, 1),
+                visibility 0.25s cubic-bezier(0.104, 0.204, 0.492, 1);
+  }
+  .c-pdp-hero__supp-facts-modal[open] {
+    opacity: 1;
+    visibility: visible;
+    z-index: 200;
+  }
+  .c-pdp-hero__supp-facts-modal__content {
+    overflow: auto;
+    max-height: 90vh;
+    max-width: clamp(300px, 90vw, 700px);
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+  }
+  .c-pdp-hero__supp-facts-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
+    border-radius: 8px 8px 0 0;
+  }
+  .c-pdp-hero__supp-facts-modal__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .c-pdp-hero__supp-facts-modal__close {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: inherit;
+    line-height: 0;
+    flex-shrink: 0;
+  }
+  .c-pdp-hero__supp-facts-modal__body {
+    padding: 24px;
+    overflow-y: auto;
+  }
+  .c-pdp-hero__supp-facts-modal__body img {
+    display: block;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ---- SUBSCRIPTION PLANS ---- */
+  #{{ section_id }} .c-pdp-hero__plans {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    padding-top: 15px;
+    margin-bottom: 24px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--pdp-border);
+    border-radius: 4px;
+    background-color: var(--pdp-cream);
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-option--selected {
+    border-color: var(--pdp-plan-accent);
+    background-color: var(--pdp-plan-selected-bg);
+    align-items: flex-start;
+    z-index: 1;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plans--b2b {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-pill {
+    width: auto;
+    min-height: 0;
+    padding: 10px 14px;
+    border: 2px solid var(--pdp-plan-accent);
+    border-radius: 999px;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-pill .c-pdp-hero__plan-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 1px;
+    height: 1px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-pill .c-pdp-hero__plan-pill-title {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.3;
+    color: var(--pdp-navy);
+    white-space: nowrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-pill .c-pdp-hero__plan-pill-price {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.3;
+    color: var(--pdp-plan-accent);
+    white-space: nowrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-pill.c-pdp-hero__plan-option--selected {
+    background: var(--pdp-plan-selected-bg);
+    border-color: var(--pdp-plan-accent);
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-pill.c-pdp-hero__plan-option--selected .c-pdp-hero__plan-pill-title,
+  #{{ section_id }} .c-pdp-hero__plan-pill.c-pdp-hero__plan-option--selected .c-pdp-hero__plan-pill-price {
+    color: var(--pdp-plan-accent);
+  }
+
+  @media (min-width: 768px) {
+    #{{ section_id }} .c-pdp-hero__plans {
+      gap: 16px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__plans--b2b {
+      gap: 12px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__plan-pill {
+      padding: 12px 18px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__plan-pill .c-pdp-hero__plan-pill-title,
+    #{{ section_id }} .c-pdp-hero__plan-pill .c-pdp-hero__plan-pill-price {
+      font-size: 16px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__plan-option {
+      gap: 24px;
+      padding: 16px;
+      min-height: 88px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__plan-option--selected {
+      padding: 24px 16px;
+      /* min-height: 112px; */
+    }
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-popular {
+    position: absolute;
+    top: -18px;
+    right: 16px;
+    background-color: var(--pdp-orange);
+    color: #fff;
+    font-family: "TT Commons", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: 37px;
+    white-space: nowrap;
+    z-index: 2;
+    letter-spacing: 0;
+    box-shadow: 0 2px 8px 0 rgba(213,79,47,0.08);
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-radio {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: none !important;
+    border: 1px solid var(--pdp-plan-accent) !important;
+    border-radius: 50%;
+    background-color: var(--pdp-cream);
+    position: relative;
+    cursor: pointer;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-radio:checked::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    background-color: var(--pdp-plan-accent);
+    border-radius: 50%;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-details {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-desc {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    @media (max-width: 768px) {
+      width: 200px;
+    }
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-name {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.2;
+    color: var(--pdp-navy);
+    white-space: nowrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-save-tag {
+    border: 1px solid var(--pdp-plan-accent);
+    border-radius: 35px;
+    padding: 5px;
+    font-family: "TT Commons", sans-serif;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 1.5;
+    color: var(--pdp-plan-accent);
+    white-space: nowrap;
+    background: transparent;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-delivery {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--pdp-navy);
+  }
+
+  #shopify-section-{{ section.id }} .c-pdp-hero__clinical-button-wrap .clinical-drawer-trigger {
+    align-items: center;
+    background: none;
+    border: none;
+    border-bottom: 2px solid #D54F2F;
+    color: #D54F2F;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    gap: 8px;
+    letter-spacing: 1.4px;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0 0 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .c-pdp-hero__clinical-button-wrap .clinical-drawer-trigger::after {
+    content: '\2192';
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  #shopify-section-{{ section.id }} .c-pdp-hero__clinical-button-wrap .clinical-drawer-trigger:hover {
+    opacity: 0.85;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section_id }} .c-pdp-hero__plan-title-row {
+      gap: 12px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__plan-name {
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__plan-save-tag {
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__plan-delivery {
+      font-size: 14px;
+    }
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-perks {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-option--selected .c-pdp-hero__plan-perks {
+    max-height: 300px;
+    opacity: 1;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-perks:empty {
+    display: none;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-perk {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: "TT Commons", sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--pdp-plan-accent);
+    margin-bottom: 2px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-perk svg {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-price-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    align-self: stretch;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-price-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section_id }} .c-pdp-hero__plan-price-row {
+      gap: 8px;
+      min-height: 28px;
+    }
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-price {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.2;
+    color: var(--pdp-plan-accent);
+    white-space: nowrap;
+    letter-spacing: -0.5px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-compare {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 400;
+    color: var(--pdp-plan-accent);
+    opacity: 0.4;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 1px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-compare s {
+    font-size: 14px;
+    line-height: 1.5;
+    text-decoration: line-through;
+    text-decoration-color: currentColor;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-per-mo {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-billing {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--pdp-plan-accent);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section_id }} .c-pdp-hero__plan-compare s {
+      font-size: 16px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__plan-billing {
+      font-size: 14px;
+    }
+  }
+
+  /* One-time purchase option */
+  #{{ section_id }} .c-pdp-hero__plan-otp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 4px 0;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #{{ section_id }} .c-pdp-hero__plan-otp-text {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--pdp-plan-accent);
+    text-decoration: underline;
+    text-align: center;
+    flex: 1;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section_id }} .c-pdp-hero__plan-otp {
+      padding: 4px 0;
+    }
+
+    #{{ section_id }} .c-pdp-hero__plan-otp-text {
+      font-size: 20px;
+    }
+  }
+
+  /* ---- CTA BUTTON ---- */
+  #{{ section_id }} .c-pdp-hero__cta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  #{{ section_id }} .c-pdp-hero__cta-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--pdp-border);
+    border-radius: 999px;
+    overflow: hidden;
+    background: #fff;
+    height: 56px;
+    flex: 0 0 auto;
+  }
+
+  #{{ section_id }} .c-pdp-hero__qty-btn {
+    width: 40px;
+    height: 56px;
+    border: none;
+    background: transparent;
+    color: var(--pdp-navy);
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__qty-input {
+    width: 44px;
+    border: none;
+    text-align: center;
+    font-family: "TT Commons", sans-serif;
+    font-size: 16px;
+    color: var(--pdp-navy);
+    background: transparent;
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  #{{ section_id }} .c-pdp-hero__qty-input::-webkit-outer-spin-button,
+  #{{ section_id }} .c-pdp-hero__qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 75px;
+    background-color: var(--pdp-orange);
+    color: var(--pdp-cream);
+    font-family: "TT Commons", sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    border-radius: 42px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    text-decoration: none;
+    box-shadow: 0 2px 8px 0 rgba(213,79,47,0.08);
+  }
+
+  #{{ section_id }} .c-pdp-hero__cta-row .c-pdp-hero__cta-btn {
+    flex: 1 1 auto;
+    width: auto;
+    height: 56px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__cta-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  #{{ section_id }} .c-pdp-hero__cta-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  #{{ section_id }} .c-pdp-hero__cta-btn.loading {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+  }
+
+  #{{ section_id }} .c-pdp-hero__cta-btn.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 22px;
+    height: 22px;
+    margin-top: -11px;
+    margin-left: -11px;
+    border-radius: 50%;
+    border: 3px solid rgba(246, 243, 240, 0.4);
+    border-top-color: var(--pdp-cream);
+    animation: pdp-btn-spin 0.6s linear infinite;
+    box-sizing: border-box;
+  }
+
+  @keyframes pdp-btn-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  #{{ section_id }} .installment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+
+  #{{ section_id }} .c-pdp-hero__shop-pay {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: "TT Commons", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--pdp-navy);
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+
+  #{{ section_id }} .c-pdp-hero__shop-pay a {
+    color: var(--pdp-navy);
+    text-decoration: underline;
+  }
+
+  #{{ section_id }} .c-pdp-hero__hsa {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: "TT Commons", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--pdp-navy);
+    justify-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__hsa a {
+    color: var(--pdp-navy);
+    text-decoration: underline;
+  }
+
+  /* ---- PAYMENT ICONS ---- */
+  #{{ section_id }} .c-pdp-hero__payment-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #{{ section_id }} .c-pdp-hero__payment-icons img {
+    height: 35px;
+    width: auto;
+    display: block;
+  }
+
+  /* ---- CERTIFICATIONS ---- */
+  #{{ section_id }} .c-pdp-hero__certs {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 8px;
+    padding-inline: 24px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__cert {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__cert-img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    opacity: 0.5;
+    margin-bottom: 4px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__cert-label {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.2;
+    color: var(--pdp-grey);
+    text-align: center;
+    opacity: 0.7;
+  }
+
+  /* ---- MILITARY DISCOUNT ---- */
+  #{{ section_id }} .c-pdp-hero__military {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  #{{ section_id }} .c-pdp-hero__military img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ---- APP BLOCKS (Okendo etc.) ---- */
+  #{{ section_id }} .c-pdp-hero__app-block {
+    display: block;
+  }
+
+  /* ---- UPSELL ---- */
+  #{{ section_id }} .c-pdp-hero__upsell {
+    position: relative;
+    background: #ebe8e6;
+    border: 1px solid var(--pdp-navy);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__upsell-badge {
+    position: absolute;
+    top: -17px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--upsell-badge-bg, var(--pdp-navy));
+    color: #ebe8e6;
+    padding: 4px 16px;
+    border-radius: 8px;
+    font-family: "TT Commons", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
+    z-index: 2;
+  }
+
+  #{{ section_id }} .c-pdp-hero__upsell-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__upsell-img {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    display: block;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  #{{ section_id }} .c-pdp-hero__upsell-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  #{{ section_id }} .c-pdp-hero__upsell-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__upsell-title {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 1.2;
+    color: var(--pdp-orange);
+    margin: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__upsell-subtitle {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--pdp-navy);
+    margin: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__upsell-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    background-color: var(--pdp-orange);
+    color: #f6f3f0;
+    font-family: "TT Commons", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 42px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    padding-inline: 32px;
+    white-space: nowrap;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+
+  #{{ section_id }} .c-pdp-hero__upsell-btn:hover {
+    opacity: 0.88;
+  }
+
+  #{{ section_id }} .c-pdp-hero__upsell-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Ensure the product-form/form wrappers fill the available column width */
+  #{{ section_id }} .c-pdp-hero__upsell > product-form,
+  #{{ section_id }} .c-pdp-hero__upsell > product-form form {
+    width: 100%;
+    min-width: 0;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section_id }} .c-pdp-hero__upsell {
+      flex-direction: row;
+      gap: 32px;
+      align-items: center;
+    }
+
+    #{{ section_id }} .c-pdp-hero__upsell-badge {
+      left: 24px;
+      transform: none;
+    }
+
+    #{{ section_id }} .c-pdp-hero__upsell-row {
+      gap: 32px;
+      flex-shrink: 0;
+    }
+
+    #{{ section_id }} .c-pdp-hero__upsell > product-form {
+      flex: 1;
+      width: auto;
+    }
+
+    #{{ section_id }} .c-pdp-hero__upsell-btn {
+      width: 100%;
+    }
+  }
+
+  /* ---- ACCORDIONS ---- */
+  #{{ section_id }} .c-pdp-hero__accordions {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion {
+    border-bottom: 1px solid var(--pdp-navy);
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion:last-child {
+    border-bottom: none;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding-block: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion-title {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 2.1px;
+    text-transform: uppercase;
+    color: var(--pdp-navy);
+    flex: 1;
+    margin: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    color: var(--pdp-navy);
+    transition: transform 0.25s ease;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion-icon::before,
+  #{{ section_id }} .c-pdp-hero__accordion-icon::after {
+    content: '';
+    position: absolute;
+    background-color: currentColor;
+    border-radius: 2px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion-icon::before {
+    width: 16px;
+    height: 2px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion-icon::after {
+    width: 2px;
+    height: 16px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--open .c-pdp-hero__accordion-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    opacity: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--open .c-pdp-hero__accordion-body {
+    max-height: 2000px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion-content {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--pdp-navy);
+    padding-bottom: 16px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion-content p { margin-block: 0.5em; }
+  #{{ section_id }} .c-pdp-hero__accordion-content p:first-child { margin-top: 0; }
+  #{{ section_id }} .c-pdp-hero__accordion-content p:last-child { margin-bottom: 0; }
+  #{{ section_id }} .c-pdp-hero__accordion-content li { margin-bottom: 4px; }
+
+  /* Accordion ingredient headings */
+  #{{ section_id }} .c-pdp-hero__accordion-content strong,
+  #{{ section_id }} .c-pdp-hero__accordion-content b {
+    color: var(--pdp-orange);
+    font-weight: 700;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp {
+    border-bottom: 1px solid var(--pdp-orange);
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-trigger {
+    padding-block: 16px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-title {
+    font-family: "TT Commons Pro Bold", "TT Commons", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 2.1px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 9999px;
+    background: var(--pdp-navy);
+    color: #ffffff;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-icon::before,
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-icon::after {
+    background-color: currentColor;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-icon::before {
+    width: 14px;
+    height: 2px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-icon::after {
+    width: 2px;
+    height: 14px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp.c-pdp-hero__accordion--open .c-pdp-hero__accordion-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    opacity: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-body {
+    max-height: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp.c-pdp-hero__accordion--open .c-pdp-hero__accordion-body {
+    max-height: 2000px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-content {
+    font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+    font-weight: 500;
+    padding-top: 16px;
+    padding-bottom: 24px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-content p {
+    margin-block: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-content ol {
+    list-style: decimal;
+    padding-left: 24px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient {
+    border-bottom: 1px solid var(--pdp-orange);
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient .c-pdp-hero__accordion-trigger {
+    padding-block: 16px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient .c-pdp-hero__accordion-title {
+    font-family: "TT Commons Pro Bold", "TT Commons", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 2.1px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient .c-pdp-hero__accordion-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 9999px;
+    background: var(--pdp-navy);
+    color: #ffffff;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient .c-pdp-hero__accordion-icon::before,
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient .c-pdp-hero__accordion-icon::after {
+    background-color: currentColor;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient .c-pdp-hero__accordion-icon::before {
+    width: 14px;
+    height: 2px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient .c-pdp-hero__accordion-icon::after {
+    width: 2px;
+    height: 14px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient.c-pdp-hero__accordion--open .c-pdp-hero__accordion-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    opacity: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient .c-pdp-hero__accordion-body {
+    max-height: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__accordion--ingredient.c-pdp-hero__accordion--open .c-pdp-hero__accordion-body {
+    max-height: 2000px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__ingredient-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 16px;
+    padding-bottom: 24px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__ingredient {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    min-width: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__ingredient-image-wrap {
+    flex: 0 0 56px;
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 4px 0 rgba(27, 28, 41, 0.06);
+  }
+
+  #{{ section_id }} .c-pdp-hero__ingredient-image-wrap img,
+  #{{ section_id }} .c-pdp-hero__ingredient-image-wrap svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 8px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__ingredient-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  #{{ section_id }} .c-pdp-hero__ingredient-title {
+    font-family: "TT Commons Pro Medium", "TT Commons", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.3;
+    color: var(--pdp-navy);
+    margin: 0 0 2px;
+    letter-spacing: 0.2px;
+  }
+
+  #{{ section_id }} .c-pdp-hero__ingredient-desc {
+    font-family: "TT Commons", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--pdp-navy);
+    margin: 0;
+    opacity: 0.92;
+  }
+
+  @media (max-width: 767px) {
+    #{{ section_id }} .c-pdp-hero__accordion--ingredient .c-pdp-hero__accordion-trigger {
+      padding-block: 14px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__ingredient-list {
+      gap: 14px;
+      padding-top: 16px;
+      padding-bottom: 24px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__ingredient {
+      gap: 12px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__ingredient-image-wrap {
+      flex-basis: 44px;
+      width: 44px;
+      height: 44px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__ingredient-title {
+      font-size: 15px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__ingredient-desc {
+      font-size: 13px;
+    }
+  }
+
+
+  #{{ section_id }} .c-pdp-hero__clinical-button-wrap {
+    margin: 20px 0 20px;
+    align-self: center;
+  }
+
+  #{{ section_id }} .c-pdp-hero__clinical-button {
+    align-items: center;
+    background: none;
+    border: none;
+    border-bottom: 2px solid var(--pdp-orange);
+    color: var(--pdp-orange);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    gap: 8px;
+    letter-spacing: 1.4px;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0 0 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  #{{ section_id }} .c-pdp-hero__clinical-button-icon {
+    font-size: 16px;
+    line-height: 1;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    display: block;
+  }
+
+  #{{ section_id }} .c-pdp-hero__clinical-button:hover {
+    opacity: 0.85;
+  }
+
+  @media (max-width: 767px) {
+    #{{ section_id }} .c-pdp-hero__accordion--pdp .c-pdp-hero__accordion-trigger {
+      padding-block: 14px;
+    }
+  }
+
+  /* Columns wrapper: gallery + info — stacked on mobile, side-by-side on desktop */
+  #{{ section_id }} .c-pdp-hero__columns {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    width: 100%;
+  }
+
+  /* ---- TABLET 768px ---- */
+  @media (min-width: 768px) {
+    #{{ section_id }} .c-pdp-hero__container {
+      padding-inline: 32px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__hero {
+      aspect-ratio: 16 / 9;
+      border-radius: 20px;
+    }
+    #{{ section_id }} .c-pdp-hero__hero img,
+    #{{ section_id }} .c-pdp-hero__hero svg {
+      border-radius: 20px;
+    }
+    #{{ section_id }} .c-pdp-hero__thumbs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      overflow-x: unset;
+    }
+    #{{ section_id }} .c-pdp-hero__thumb {
+      flex: unset;
+      width: auto;
+      height: auto;
+      border-radius: 20px;
+      background: none;
+      border: 2px solid transparent;
+      padding: 0;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: border-color 0.15s, opacity 0.15s;
+    }
+    #{{ section_id }} .c-pdp-hero__thumb--active,
+    #{{ section_id }} .c-pdp-hero__thumb:hover {
+      opacity: 1;
+      border-color: var(--pdp-orange);
+    }
+    #{{ section_id }} .c-pdp-hero__thumb img,
+    #{{ section_id }} .c-pdp-hero__thumb svg {
+      border-radius: 18px;
+    }
+  }
+
+  /* ---- LAPTOP 978px: two-column layout ---- */
+  @media (min-width: 978px) {
+    #{{ section_id }} .c-pdp-hero__container {
+      padding-inline: 40px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__columns {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+      gap: 64px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__gallery {
+      align-self: start;
+      position: sticky;
+      top: 80px;
+      min-width: 0;
+    }
+
+    #{{ section_id }} .c-pdp-hero__breadcrumbs--mob {
+      display: none;
+    }
+
+    #{{ section_id }} .c-pdp-hero__info .c-pdp-hero__breadcrumbs {
+      display: flex;
+    }
+
+    #{{ section_id }} .c-pdp-hero__hero {
+      aspect-ratio: 1 / 1;
+    }
+
+    #{{ section_id }} .c-pdp-hero__info {
+      min-width: 0;
+    }
+    #{{ section_id }} .c-pdp-hero__thumbs {
+      gap: 32px;
+    }
+  }
+
+  /* ---- DESKTOP 1200px ---- */
+  @media (min-width: 1200px) {
+    #{{ section_id }} {
+      padding-block: 80px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__container {
+      padding-inline: 64px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__columns {
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+
+    #{{ section_id }} .c-pdp-hero__description {
+      font-size: 20px;
+    }
+    #{{ section_id }} .c-pdp-hero__thumbs {
+      gap: 36px;
+    }
+  }
+
+  /* ---- LARGE 1980px ---- */
+  @media (min-width: 1980px) {
+    #{{ section_id }} .c-pdp-hero__columns {
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+    }
+    #{{ section_id }} .c-pdp-hero__thumbs {
+      gap: 40px;
+    }
+  }
+{% endstyle %}
+
+{%- comment -%} ===== HTML ===== {%- endcomment -%}
+<section
+  {% if section.settings.sl_anchor_id != blank %}id="{{ section.settings.sl_anchor_id }}"{% else %}id="{{ section.id }}"{% endif %}
+  class="c-section c-pdp-hero"
+  data-sl-id="{{ sl_id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="c-pdp-hero__container">
+
+    {%- comment -%} Mobile breadcrumbs (shown above gallery on mobile only) {%- endcomment -%}
+    {%- if section.settings.show_breadcrumbs -%}
+      <nav class="c-pdp-hero__breadcrumbs c-pdp-hero__breadcrumbs--mob" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Homepage</a>
+        <span class="c-pdp-hero__breadcrumbs-sep" aria-hidden="true">›</span>
+        <a href="{{ routes.all_products_collection_url }}">Products</a>
+        <span class="c-pdp-hero__breadcrumbs-sep" aria-hidden="true">›</span>
+        <span aria-current="page">{{ product.title }}</span>
+      </nav>
+    {%- endif -%}
+
+    {%- comment -%} ===== COLUMNS: GALLERY + INFO ===== {%- endcomment -%}
+    <div class="c-pdp-hero__columns">
+
+      {%- comment -%} ===== LEFT: IMAGE GALLERY ===== {%- endcomment -%}
+      <div class="c-pdp-hero__gallery">
+
+{%- comment -%} FrontRow Banner Block {%- endcomment -%}
+        {%- assign frontrow_banner_block = section.blocks | where: 'type', 'frontrow_banner' | first -%}
+
+        {%- comment -%} Hero Image {%- endcomment -%}
+        <div class="c-pdp-hero__hero-wrap">
+          <div class="c-pdp-hero__hero">
+            {%- if hero_img -%}
+              {{
+                hero_img
+                | image_url: width: 1200
+                | image_tag:
+                  alt: hero_img.alt | default: product.title,
+                  loading: 'eager',
+                  fetchpriority: 'high',
+                  widths: '400, 600, 800, 1000, 1200'
+              }}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+
+            {%- if section.settings.bestseller_badge_text != blank -%}
+              <div class="c-pdp-hero__badge">
+                {{- section.settings.bestseller_badge_text -}}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.clinicians_badge_image -%}
+              <div class="c-pdp-hero__clinicians">
+                {{
+                  section.settings.clinicians_badge_image
+                  | image_url: width: 600
+                  | image_tag:
+                    alt: 'Clinicians Choice Badge',
+                    loading: 'eager'
+                }}
+              </div>
+            {%- endif -%}
+
+            {%- comment -%} Image Badge Block (overlay on hero image) {%- endcomment -%}
+            {%- assign image_badge_block = section.blocks | where: 'type', 'image_badge' | first -%}
+            {%- if image_badge_block and image_badge_block.settings.image -%}
+              {%- assign badge_position = image_badge_block.settings.position | default: 'bottom-right' -%}
+              {%- assign badge_width = image_badge_block.settings.width | default: 96 -%}
+              {%- assign badge_offset = image_badge_block.settings.offset | default: 16 -%}
+              <div
+                class="c-pdp-hero__image-badge c-pdp-hero__image-badge--{{ badge_position }}"
+                style="--sl-c-pdp-hero-image-badge-width: {{ badge_width }}px; --sl-c-pdp-hero-image-badge-offset: {{ badge_offset }}px;"
+                {{ image_badge_block.shopify_attributes }}
+              >
+                {{
+                  image_badge_block.settings.image
+                  | image_url: width: 400
+                  | image_tag:
+                    alt: image_badge_block.settings.image.alt | default: 'Badge',
+                    loading: 'lazy',
+                    widths: '120, 240, 360, 480'
+                }}
+              </div>
+            {%- endif -%}
+          </div>
+
+          {%- if frontrow_banner_block -%}
+            <div class="frontrow__container" {{ frontrow_banner_block.shopify_attributes }}>
+              {%- render 'frontrow-banner', product_type: frontrow_banner_block.settings.product_type -%}
+            </div>
+            <style>
+              .frontrow__container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+              }
+              @media (max-width: 767px) {
+                .frontrow__container {
+                  max-width: 100% !important;
+                  width: 100% !important;
+                }
+              }
+            </style>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Thumbnail grid — 2 columns via CSS grid {%- endcomment -%}
+        {%- liquid
+          assign gallery_has_images = false
+          for i in (1..6)
+            assign key = 'gallery_image_' | append: i
+            assign gimg = section.settings[key]
+            unless gimg
+              assign gimg = product.images[i]
+            endunless
+            if gimg
+              assign gallery_has_images = true
+              break
+            endif
+          endfor
+        -%}
+
+        {%- if gallery_has_images or hero_img -%}
+          <div class="c-pdp-hero__thumbs">
+            {%- comment -%} Hero image as first thumb {%- endcomment -%}
+            {%- if hero_img -%}
+              {%- assign hero_thumb_src = hero_img | image_url: width: 1200 -%}
+              <button
+                type="button"
+                class="c-pdp-hero__thumb c-pdp-hero__thumb--active"
+                data-thumb
+                data-src="{{ hero_thumb_src }}"
+                data-alt="{{ hero_img.alt | default: product.title | escape }}"
+                aria-label="View main image"
+                aria-pressed="true"
+              >
+                {{
+                  hero_img
+                  | image_url: width: 400
+                  | image_tag:
+                    alt: hero_img.alt | default: product.title,
+                    loading: 'eager',
+                    widths: '200, 400'
+                }}
+              </button>
+            {%- endif -%}
+            {%- for i in (1..6) -%}
+              {%- assign key = 'gallery_image_' | append: i -%}
+              {%- assign gimg = section.settings[key] -%}
+              {%- unless gimg -%}
+                {%- assign gimg = product.images[i] -%}
+              {%- endunless -%}
+              {%- if gimg -%}
+                {%- assign thumb_src = gimg | image_url: width: 1200 -%}
+                {%- assign thumb_src_400 = gimg | image_url: width: 400 -%}
+                {%- assign thumb_src_800 = gimg | image_url: width: 800 -%}
+                {%- assign thumb_src_set = thumb_src_400 | append: ' 400w, ' | append: thumb_src_800 | append: ' 800w, ' | append: thumb_src | append: ' 1200w' -%}
+                <button
+                  type="button"
+                  class="c-pdp-hero__thumb"
+                  data-thumb
+                  data-src="{{ thumb_src }}"
+                  data-srcset="{{ thumb_src_set }}"
+                  data-alt="{{ gimg.alt | default: product.title | escape }}"
+                  aria-label="View image {{ forloop.index }}"
+                  aria-pressed="false"
+                >
+                  {{
+                    gimg
+                    | image_url: width: 400
+                    | image_tag:
+                      alt: gimg.alt | default: product.title,
+                      loading: 'lazy',
+                      widths: '200, 400'
+                  }}
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+      </div>
+
+      {%- comment -%} ===== RIGHT: PRODUCT INFO ===== {%- endcomment -%}
+      <div class="c-pdp-hero__info">
+
+        {%- comment -%} Breadcrumbs — section-level setting {%- endcomment -%}
+        {%- if section.settings.show_breadcrumbs -%}
+          <nav class="c-pdp-hero__breadcrumbs" aria-label="Breadcrumb">
+            <a href="{{ routes.root_url }}">Homepage</a>
+            <span class="c-pdp-hero__breadcrumbs-sep" aria-hidden="true">›</span>
+            <a href="{{ routes.all_products_collection_url }}">Products</a>
+            <span class="c-pdp-hero__breadcrumbs-sep" aria-hidden="true">›</span>
+            <span aria-current="page">{{ product.title }}</span>
+          </nav>
+        {%- endif -%}
+
+        {%- comment -%} ===== BLOCK-DRIVEN PRODUCT INFO ===== {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+            {%- comment -%} App blocks — renders Okendo star rating, reviews widgets, etc. {%- endcomment -%}
+            {%- when '@app' -%}
+              <div class="c-pdp-hero__app-block" {{ block.shopify_attributes }}>
+                {% render block %}
+              </div>
+
+            {%- when 'title' -%}
+              <div class="c-pdp-hero__heading" {{ block.shopify_attributes }}>
+                <h1 class="c-pdp-hero__title">{{ product.title }}</h1>
+              </div>
+
+            {%- when 'reviews_fallback' -%}
+              <div class="c-pdp-hero__reviews-fallback" {{ block.shopify_attributes }}>
+                {%- assign stars_count = block.settings.stars_count | default: 5 | plus: 0 -%}
+                {%- if stars_count < 0 -%}
+                  {%- assign stars_count = 0 -%}
+                {%- endif -%}
+                {%- if stars_count > 5 -%}
+                  {%- assign stars_count = 5 -%}
+                {%- endif -%}
+
+                <span class="c-pdp-hero__reviews-fallback-stars" aria-label="{{ stars_count }} stars">
+                  {%- for i in (1..stars_count) -%}
+                    <svg
+                      class="c-pdp-hero__reviews-fallback-star"
+                      viewBox="0 0 14 14"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path d="M5.95377 0.692456C6.3024 -0.128719 7.46697 -0.128718 7.8156 0.692457L9.10564 3.73217C9.24672 4.06458 9.55944 4.29179 9.91872 4.32037L13.2032 4.58156C14.0906 4.65215 14.4505 5.7586 13.7744 6.3377L11.2722 8.48189C10.9986 8.71635 10.8791 9.08343 10.9626 9.434L11.727 12.6432C11.9334 13.5098 10.9913 14.1932 10.2314 13.73L7.41608 12.0136C7.10852 11.8261 6.66085 11.8261 6.35329 12.0136L3.53799 13.73C2.77808 14.1932 1.83597 13.5098 2.0424 12.6432L2.8068 9.434C2.89031 9.08343 2.77075 8.71635 2.49718 8.48189L-0.00506658 6.3377C-0.681217 5.7586 -0.32131 4.65215 0.566112 4.58156L3.85064 4.32037C4.20992 4.29179 4.52265 4.06458 4.66373 3.73217L5.95377 0.692456Z"/>
+                    </svg>
+                  {%- endfor -%}
+                </span>
+
+                {%- if block.settings.rating_text != blank -%}
+                  <p class="c-pdp-hero__reviews-fallback-text">{{ block.settings.rating_text }}</p>
+                {%- endif -%}
+
+                {%- if block.settings.trust_text != blank -%}
+                  <span class="c-pdp-hero__reviews-fallback-divider" aria-hidden="true"></span>
+                  <p class="c-pdp-hero__reviews-fallback-trust">{{ block.settings.trust_text }}</p>
+                {%- endif -%}
+              </div>
+
+            {%- when 'description' -%}
+              <div {{ block.shopify_attributes }}>
+                {%- if block.settings.custom_description != blank -%}
+                  <p class="c-pdp-hero__description">{{ block.settings.custom_description }}</p>
+                {%- elsif product.description != blank -%}
+                  <p class="c-pdp-hero__description">{{ product.description | strip_html }}</p>
+                {%- endif -%}
+              </div>
+
+            {%- when 'included_products' -%}
+              {%- liquid
+                assign included_heading = block.settings.heading | default: "WHAT'S INCLUDED"
+                assign product_one = block.settings.product_1
+                assign product_two = block.settings.product_2
+
+                assign product_one_image = block.settings.product_1_image
+                if product_one_image == blank and product_one != blank
+                  assign product_one_image = product_one.featured_image
+                endif
+
+                assign product_two_image = block.settings.product_2_image
+                if product_two_image == blank and product_two != blank
+                  assign product_two_image = product_two.featured_image
+                endif
+
+                assign product_one_title = block.settings.product_1_title
+                if product_one_title == blank and product_one != blank
+                  assign product_one_title = product_one.title
+                endif
+
+                assign product_two_title = block.settings.product_2_title
+                if product_two_title == blank and product_two != blank
+                  assign product_two_title = product_two.title
+                endif
+
+                assign product_one_subtitle = block.settings.product_1_subtitle
+                if product_one_subtitle == blank and product_one != blank
+                  assign product_one_variant_title = product_one.selected_or_first_available_variant.title
+                  unless product_one_variant_title == blank or product_one_variant_title == 'Default Title'
+                    assign product_one_subtitle = product_one_variant_title
+                  endunless
+                endif
+
+                assign product_two_subtitle = block.settings.product_2_subtitle
+                if product_two_subtitle == blank and product_two != blank
+                  assign product_two_variant_title = product_two.selected_or_first_available_variant.title
+                  unless product_two_variant_title == blank or product_two_variant_title == 'Default Title'
+                    assign product_two_subtitle = product_two_variant_title
+                  endunless
+                endif
+              -%}
+
+              {%- if product_one != blank or product_two != blank -%}
+                <div class="c-pdp-hero__included-box" {{ block.shopify_attributes }}>
+                  {%- if included_heading != blank -%}
+                    <p class="c-pdp-hero__included-heading">{{ included_heading }}</p>
+                  {%- endif -%}
+
+                  <div class="c-pdp-hero__included-products">
+                    {%- if product_one != blank -%}
+                      <div class="c-pdp-hero__included-product">
+                        <div class="c-pdp-hero__included-product-image-wrap">
+                          {%- if product_one_image != blank -%}
+                            {{
+                              product_one_image
+                              | image_url: width: 240
+                              | image_tag:
+                                alt: product_one_title,
+                                loading: 'lazy',
+                                widths: '64, 80, 160, 240'
+                            }}
+                          {%- else -%}
+                            {{ 'product-1' | placeholder_svg_tag: 'c-pdp-hero__included-product-image-wrap' }}
+                          {%- endif -%}
+                        </div>
+
+                        <div class="c-pdp-hero__included-product-text">
+                          {%- if product_one_title != blank -%}
+                            <p class="c-pdp-hero__included-product-title">{{ product_one_title }}</p>
+                          {%- endif -%}
+                          {%- if product_one_subtitle != blank -%}
+                            <p class="c-pdp-hero__included-product-subtitle">{{ product_one_subtitle }}</p>
+                          {%- endif -%}
+                        </div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if product_two != blank -%}
+                      <div class="c-pdp-hero__included-product">
+                        <div class="c-pdp-hero__included-product-image-wrap">
+                          {%- if product_two_image != blank -%}
+                            {{
+                              product_two_image
+                              | image_url: width: 240
+                              | image_tag:
+                                alt: product_two_title,
+                                loading: 'lazy',
+                                widths: '64, 80, 160, 240'
+                            }}
+                          {%- else -%}
+                            {{ 'product-1' | placeholder_svg_tag: 'c-pdp-hero__included-product-image-wrap' }}
+                          {%- endif -%}
+                        </div>
+
+                        <div class="c-pdp-hero__included-product-text">
+                          {%- if product_two_title != blank -%}
+                            <p class="c-pdp-hero__included-product-title">{{ product_two_title }}</p>
+                          {%- endif -%}
+                          {%- if product_two_subtitle != blank -%}
+                            <p class="c-pdp-hero__included-product-subtitle">{{ product_two_subtitle }}</p>
+                          {%- endif -%}
+                        </div>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+
+            {%- when 'product_price' -%}
+              {%- liquid
+                assign price_variant = product.selected_or_first_available_variant
+                assign show_compare = false
+                if price_variant.compare_at_price > price_variant.price
+                  assign show_compare = true
+                  assign savings_amount = price_variant.compare_at_price | minus: price_variant.price
+                  assign savings_percent = savings_amount | times: 100 | divided_by: price_variant.compare_at_price
+                endif
+              -%}
+              <div class="c-pdp-hero__price-wrap" {{ block.shopify_attributes }}>
+                <p class="c-pdp-hero__price" data-pdp-price>{{ price_variant.price | money }}</p>
+                <s
+                  class="c-pdp-hero__price-compare"
+                  data-pdp-price-compare
+                  {% unless show_compare %}hidden{% endunless %}
+                >
+                  {%- if show_compare -%}{{ price_variant.compare_at_price | money }}{%- endif -%}
+                </s>
+                <span
+                  class="c-pdp-hero__price-save"
+                  data-pdp-price-save
+                  {% unless show_compare %}hidden{% endunless %}
+                >
+                  {%- if show_compare -%}Save {{ savings_percent | round }}%{%- endif -%}
+                </span>
+              </div>
+
+            {%- when 'supplement_facts' -%}
+              {%- comment -%} Supplement Facts — link button that opens a modal {%- endcomment -%}
+              {%- assign sf_label = block.settings.link_label | default: 'SUPPLEMENT FACTS' -%}
+              <div {{ block.shopify_attributes }}>
+                <modal-opener class="c-pdp-hero__supp-facts-opener no-js-hidden" data-modal="#SuppFactsModal-{{ block.id }}">
+                  <button
+                    id="SuppFactsBtn-{{ block.id }}"
+                    class="c-pdp-hero__supp-facts"
+                    type="button"
+                    aria-haspopup="dialog"
+                  >
+                    {{- sf_label -}}
+                  </button>
+                </modal-opener>
+                {%- comment -%} No-JS fallback: link to page or image in new tab {%- endcomment -%}
+                {%- if block.settings.page != blank -%}
+                  <a href="{{ block.settings.page.url }}" class="c-pdp-hero__supp-facts no-js-inline" target="_blank" rel="noopener">{{- sf_label -}}</a>
+                {%- elsif block.settings.image != blank -%}
+                  <a href="{{ block.settings.image | image_url: width: 1200 }}" class="c-pdp-hero__supp-facts no-js-inline" target="_blank" rel="noopener">{{- sf_label -}}</a>
+                {%- endif -%}
+              </div>
+
+              <modal-dialog id="SuppFactsModal-{{ block.id }}" class="c-pdp-hero__supp-facts-modal">
+                <div
+                  role="dialog"
+                  aria-label="{{ sf_label }}"
+                  aria-modal="true"
+                  class="c-pdp-hero__supp-facts-modal__content"
+                  tabindex="-1"
+                >
+                  <div class="c-pdp-hero__supp-facts-modal__header">
+                    <h2 class="c-pdp-hero__supp-facts-modal__title">{{- sf_label -}}</h2>
+                    <button
+                      id="ModalClose-{{ block.id }}"
+                      type="button"
+                      class="c-pdp-hero__supp-facts-modal__close"
+                      aria-label="{{ 'accessibility.close' | t }}"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                  <div class="c-pdp-hero__supp-facts-modal__body">
+                    {%- if block.settings.image != blank -%}
+                      {{
+                        block.settings.image
+                        | image_url: width: 800
+                        | image_tag:
+                          alt: sf_label,
+                          loading: 'lazy',
+                          widths: '400, 600, 800'
+                      }}
+                    {%- elsif block.settings.page != blank -%}
+                      <h3>{{ block.settings.page.title }}</h3>
+                      {{ block.settings.page.content }}
+                    {%- elsif block.settings.content != blank -%}
+                      {{ block.settings.content }}
+                    {%- endif -%}
+                  </div>
+                </div>
+              </modal-dialog>
+
+            {%- when 'subscription_plans' -%}
+              {%- comment -%} Product form: subscription plan selector + add to cart {%- endcomment -%}
+              {%- assign bb_for_wrap = section.blocks | where: 'type', 'buy_buttons' | first -%}
+              {%- if bb_for_wrap and bb_for_wrap.settings.open_side_cart -%}
+                <product-form class="c-pdp-hero__product-form">
+                <div data-product-form-errors role="alert" hidden><span data-product-form-error-msg></span></div>
+              {%- endif -%}
+              {%- form 'product', product, id: product_form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                <input type="hidden" name="id" id="pdp-variant-{{ section.id }}" value="{{ current_variant.id }}" />
+                <input type="hidden" name="selling_plan" id="pdp-selling-plan-{{ section.id }}" value="" />
+
+                {%- if has_selling_plans -%}
+                  <div class="c-pdp-hero__plans{% if customer.b2b? %} c-pdp-hero__plans--b2b{% endif %}" data-pdp-plans {{ block.shopify_attributes }}>
+                    {%- if customer.b2b? -%}
+                      {%- assign is_first_option = true -%}
+                      {%- for variant in product.variants -%}
+                        {%- assign variant_is_b2b_only = false -%}
+                        {%- if variant.metafields.custom.b2bonly.value == true -%}
+                          {%- assign variant_is_b2b_only = true -%}
+                        {%- endif -%}
+                        {%- assign variant_is_both_d2c_b2b = false -%}
+                        {%- if variant.metafields.custom.both_d2c_b2b.value == true -%}
+                          {%- assign variant_is_both_d2c_b2b = true -%}
+                        {%- endif -%}
+
+                        {%- if variant_is_b2b_only or variant_is_both_d2c_b2b -%}
+                          <label
+                            class="c-pdp-hero__plan-option c-pdp-hero__plan-pill{% if is_first_option %} c-pdp-hero__plan-option--selected{% endif %}"
+                            for="variant-{{ section.id }}-{{ variant.id }}-b2b"
+                            data-pdp-plan-label
+                          >
+                            <input
+                              type="radio"
+                              id="variant-{{ section.id }}-{{ variant.id }}-b2b"
+                              name="variant_selling_plan"
+                              class="c-pdp-hero__plan-radio"
+                              value="{{ variant.id }}-otp"
+                              data-pdp-plan-radio
+                              {% if product.selected_or_first_available_variant.id == variant.id and product.selected_selling_plan == null %}
+                                checked
+                              {% elsif is_first_option %}
+                                checked
+                              {% endif %}
+                            >
+                            <span class="c-pdp-hero__plan-pill-title">{{ variant.title }}</span>
+                            <span class="c-pdp-hero__plan-pill-price">{{ variant.price | money }}</span>
+                          </label>
+                          {%- assign is_first_option = false -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- assign is_first_option = true -%}
+                      {%- assign plan_option_index = 0 -%}
+                      {%- assign all_plan_perk_blocks = section.blocks | where: 'type', 'plan_perks' -%}
+                      {%- for variant in product.variants -%}
+                        {%- assign variant_is_b2b_only = false -%}
+                        {%- if variant.metafields.custom.b2bonly.value == true -%}
+                          {%- assign variant_is_b2b_only = true -%}
+                        {%- endif -%}
+                        {%- assign show_variant_for_customer = false -%}
+                        {%- if variant_is_b2b_only != true -%}
+                          {%- assign show_variant_for_customer = true -%}
+                        {%- endif -%}
+
+                        {%- if show_variant_for_customer -%}
+                          {%- for allocation in variant.selling_plan_allocations -%}
+                          {%- assign subscription_price = allocation.price -%}
+                          {%- assign one_time_price = variant.price -%}
+                          {%- assign savings_amount = one_time_price | minus: subscription_price -%}
+                          {%- assign savings_percentage = savings_amount | times: 100 | divided_by: one_time_price -%}
+                          {%- assign savings_percentage_rounded = savings_percentage | divided_by: 5.0 | round | times: 5 -%}
+                          {%- assign is_popular = false -%}
+                          {%- if variant.metafields.custom.is_most_popular_subscription == true -%}
+                            {%- assign is_popular = true -%}
+                          {%- endif -%}
+                          {%- assign months_char = variant.title | slice: 0, 1 -%}
+                          {%- assign months = months_char | plus: 0 -%}
+                          {%- if months < 1 -%}{%- assign months = 1 -%}{%- endif -%}
+                          {%- assign subscription_price_per_month = subscription_price | divided_by: months -%}
+                          {%- assign one_time_price_per_month = one_time_price | divided_by: months -%}
+
+                          <label
+                            class="c-pdp-hero__plan-option{% if is_first_option %} c-pdp-hero__plan-option--selected{% endif %}"
+                            for="variant-{{ section.id }}-{{ variant.id }}-plan-{{ allocation.selling_plan.id }}"
+                            data-pdp-plan-label
+                          >
+                            {%- if is_popular -%}
+                              <span class="c-pdp-hero__plan-popular">Most Popular</span>
+                            {%- endif -%}
+
+                            <input
+                              type="radio"
+                              id="variant-{{ section.id }}-{{ variant.id }}-plan-{{ allocation.selling_plan.id }}"
+                              name="variant_selling_plan"
+                              class="c-pdp-hero__plan-radio"
+                              value="{{ variant.id }}-{{ allocation.selling_plan.id }}"
+                              data-pdp-plan-radio
+                              data-subscribe-text-override="{{ variant.metafields.custom.subscribe_atc_text.value | default: '' | escape }}"
+                              {% if product.selected_or_first_available_variant.id == variant.id and product.selected_selling_plan.id == allocation.selling_plan.id %}
+                                checked
+                              {% elsif is_first_option %}
+                                checked
+                              {% endif %}
+                            >
+
+                            <div class="c-pdp-hero__plan-body">
+                              <div class="c-pdp-hero__plan-details">
+                                <div class="c-pdp-hero__plan-title-row">
+                                  <span class="c-pdp-hero__plan-name">
+                                    {%- if block.settings.use_recharge_titles -%}
+                                      {{ allocation.selling_plan.name }}
+                                    {%- else -%}
+                                      {{ variant.title }} Supply
+                                    {%- endif -%}
+                                  </span>
+                                  {%- if savings_percentage > 0 -%}
+                                    <span class="c-pdp-hero__plan-save-tag">Save {{ savings_percentage_rounded }}%</span>
+                                  {%- endif -%}
+                                </div>
+
+                                <div class="c-pdp-hero__plan-desc">
+                                  <p class="c-pdp-hero__plan-delivery">
+                                    Delivered every&nbsp;
+                                    {%- if months > 1 -%}
+                                      {{ months }} months
+                                    {%- else -%}
+                                      month
+                                    {%- endif -%}
+                                  </p>
+
+                                    {%- assign current_plan_perks = all_plan_perk_blocks | slice: plan_option_index, 1 | first -%}
+                                    <ul class="c-pdp-hero__plan-perks">
+                                      {%- if current_plan_perks -%}
+                                        {%- comment -%} Per-plan perks block {%- endcomment -%}
+                                        {%- for i in (1..5) -%}
+                                          {%- assign perk_key = 'perk_' | append: i -%}
+                                          {%- assign perk_icon_key = 'perk_' | append: i | append: '_icon' -%}
+                                          {%- assign perk_val = current_plan_perks.settings[perk_key] -%}
+                                          {%- assign perk_icon_val = current_plan_perks.settings[perk_icon_key] -%}
+                                          {%- if perk_val != blank -%}
+                                            <li class="c-pdp-hero__plan-perk">
+                                              {%- if perk_icon_val != blank -%}
+                                                {{ perk_icon_val }}
+                                              {%- else -%}
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                              {%- endif -%}
+                                              {{ perk_val }}
+                                            </li>
+                                          {%- endif -%}
+                                        {%- endfor -%}
+                                      {%- else -%}
+                                        {%- comment -%} Fallback: global subscription_perk blocks + perk_1..5 settings {%- endcomment -%}
+                                        {%- for perk_block in section.blocks -%}
+                                          {%- if perk_block.type == 'subscription_perk' -%}
+                                            <li class="c-pdp-hero__plan-perk">
+                                              {%- if perk_block.settings.perk_icon != blank -%}
+                                                {{ perk_block.settings.perk_icon }}
+                                              {%- else -%}
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                              {%- endif -%}
+                                              {{ perk_block.settings.perk_text }}
+                                            </li>
+                                          {%- endif -%}
+                                        {%- endfor -%}
+                                        {%- if block.settings.perk_1 != blank -%}
+                                          <li class="c-pdp-hero__plan-perk">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                            {{ block.settings.perk_1 }}
+                                          </li>
+                                        {%- endif -%}
+                                        {%- if block.settings.perk_2 != blank -%}
+                                          <li class="c-pdp-hero__plan-perk">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                            {{ block.settings.perk_2 }}
+                                          </li>
+                                        {%- endif -%}
+                                        {%- if block.settings.perk_3 != blank -%}
+                                          <li class="c-pdp-hero__plan-perk">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                            {{ block.settings.perk_3 }}
+                                          </li>
+                                        {%- endif -%}
+                                        {%- if block.settings.perk_4 != blank -%}
+                                          <li class="c-pdp-hero__plan-perk">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                            {{ block.settings.perk_4 }}
+                                          </li>
+                                        {%- endif -%}
+                                        {%- if block.settings.perk_5 != blank -%}
+                                          <li class="c-pdp-hero__plan-perk">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                            {{ block.settings.perk_5 }}
+                                          </li>
+                                        {%- endif -%}
+                                      {%- endif -%}
+                                    </ul>
+                                </div>
+                              </div>
+
+                              <div class="c-pdp-hero__plan-price-col">
+                                <div class="c-pdp-hero__plan-price-row">
+                                  <span class="c-pdp-hero__plan-price">{{ subscription_price_per_month | money }}</span>
+                                  {%- if one_time_price_per_month > subscription_price_per_month -%}
+                                    <span class="c-pdp-hero__plan-compare"><s>{{ one_time_price_per_month | money }}</s><span class="c-pdp-hero__plan-per-mo">/mo</span></span>
+                                  {%- endif -%}
+                                </div>
+                                <span class="c-pdp-hero__plan-billing">
+                                  {%- assign week_number = months | times: 4 -%}
+                                  {{ allocation.per_delivery_price | money }} billed every {{ week_number }} weeks
+                                  
+                                </span>
+                              </div>
+                            </div>
+                          </label>
+
+                          {%- assign is_first_option = false -%}
+                          {%- assign plan_option_index = plan_option_index | plus: 1 -%}
+                          {%- endfor -%}
+
+                          {%- unless variant.metafields.custom.disable_one_time_purchase -%}
+                          <button
+                            type="button"
+                            class="c-pdp-hero__plan-otp"
+                            data-pdp-otp-btn
+                            data-variant-id="{{ variant.id }}"
+                            data-otp-text-override="{{ variant.metafields.custom.one_time_atc_text.value | default: '' | escape }}"
+                            aria-label="One-time purchase — add to cart"
+                          >
+                            <span class="c-pdp-hero__plan-otp-text">
+                              One-time Purchase {{ variant.price | money }}
+                              {%- if block.settings.otp_shipping_note != blank -%}
+                                + {{ block.settings.otp_shipping_note }}
+                              {%- endif -%}
+                            </span>
+                          </button>
+                          {%- endunless -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+
+                  </div>
+                {%- else -%}
+                  {%- comment -%} No selling plans — simple price display {%- endcomment -%}
+                  <div class="c-pdp-hero__plans" data-pdp-plans {{ block.shopify_attributes }}>
+                    <div class="c-pdp-hero__plan-option c-pdp-hero__plan-option--selected c-pdp-hero__plan-option--otp">
+                      <span class="c-pdp-hero__plan-otp-text">
+                        {{ current_variant.price | money }}
+                        {%- if current_variant.compare_at_price > current_variant.price -%}
+                          <s style="opacity:0.5;">{{ current_variant.compare_at_price | money }}</s>
+                        {%- endif -%}
+                      </span>
+                    </div>
+                  </div>
+                {%- endif -%}
+
+                {%- comment -%} CTA Button & payment info — settings sourced from buy_buttons block {%- endcomment -%}
+                {%- assign bb = section.blocks | where: 'type', 'buy_buttons' | first -%}
+
+                {%- if bb and bb.settings.require_login and customer == null -%}
+                  {%- comment -%} Login gate: submit button replaced by login link {%- endcomment -%}
+                  <div class="c-pdp-hero__cta">
+                    <a
+                      href="{{ bb.settings.login_redirect_url }}"
+                      class="c-pdp-hero__cta-btn"
+                    >
+                      {{ bb.settings.login_button_text | default: 'Login to Purchase' }}
+                    </a>
+                  </div>
+                {%- else -%}
+                  <div class="c-pdp-hero__cta" {% if bb %}{{ bb.shopify_attributes }}{% endif %}>
+                    {%- if customer.b2b? -%}
+                      <div class="c-pdp-hero__cta-row">
+                        <div class="c-pdp-hero__qty" data-pdp-qty>
+                          <button type="button" class="c-pdp-hero__qty-btn" data-pdp-qty-btn="minus" aria-label="Decrease quantity">-</button>
+                          <input
+                            type="number"
+                            name="quantity"
+                            min="1"
+                            value="1"
+                            class="c-pdp-hero__qty-input"
+                            aria-label="Quantity"
+                          >
+                          <button type="button" class="c-pdp-hero__qty-btn" data-pdp-qty-btn="plus" aria-label="Increase quantity">+</button>
+                        </div>
+                    {%- endif -%}
+                    <button
+                      type="submit"
+                      name="add"
+                      class="c-pdp-hero__cta-btn"
+                      data-pdp-cta-btn
+                      {% unless customer.b2b? %}data-subscribe-text="{{ bb.settings.cta_text | default: 'SUBSCRIBE & SAVE' }}"{% endunless %}
+                      data-add-to-cart-text="{{ 'products.product.add_to_cart' | t }}"
+                      {%- if bb.settings.open_side_cart -%}data-open-side-cart{%- endif -%}
+                      {%- unless current_variant.available -%}disabled{%- endunless -%}
+                    >
+                      {%- if current_variant.available -%}
+                        {%- if customer.b2b? -%}
+                          {{- 'products.product.add_to_cart' | t -}}
+                        {%- elsif has_selling_plans -%}
+                          {{- bb.settings.cta_text | default: 'Subscribe & Save' -}}
+                        {%- else -%}
+                          {{- 'products.product.add_to_cart' | t -}}
+                        {%- endif -%}
+                      {%- else -%}
+                        {{- 'products.product.sold_out' | t -}}
+                      {%- endif -%}
+                    </button>
+                    {%- if customer.b2b? -%}
+                      </div>
+                    {%- endif -%}
+
+                    {%- if bb.settings.show_dynamic_checkout -%}
+                      {{ form | payment_button }}
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+
+              {%- endform -%}
+              {%- if bb_for_wrap and bb_for_wrap.settings.open_side_cart -%}
+                </product-form>
+              {%- endif -%}
+
+              {%- if bb -%}
+                {%- comment -%} Shop Pay / TrueMed widgets (require their own form context) {%- endcomment -%}
+                {%- form 'product', product, id: 'pdp-hero-installment-form-{{ section.id }}', class: 'installment' -%}
+                  <input type="hidden" name="id" value="{{ current_variant.id }}">
+                  {%- if bb.settings.show_shoppay_widget -%}
+                    {{ form | payment_terms }}
+                  {%- endif -%}
+                  {%- if bb.settings.show_truemed_widget -%}
+                    {% render 'truemed-widget' %}
+                  {%- endif -%}
+                {%- endform -%}
+              {%- endif -%}
+
+              {%- comment -%} Payment Icons — outside form {%- endcomment -%}
+              {%- assign icons_src = bb.settings.payment_icons_image -%}
+              {%- if icons_src -%}
+                <div class="c-pdp-hero__payment-icons">
+                  {{
+                    icons_src
+                    | image_url: width: 500
+                    | image_tag:
+                      alt: 'Accepted payment methods',
+                      loading: 'lazy'
+                  }}
+                </div>
+              {% comment %} {%- else -%}
+                <div class="c-pdp-hero__payment-icons">
+                  {%- form 'currency' -%}{%- endform -%}
+                  {{- shop.enabled_payment_types | payment_type_svg_tag: class: 'icon icon--full-color', style: 'height:35px;' -}}
+                </div> {% endcomment %}
+              {%- endif -%}
+
+            {%- when 'trust_badges' -%}
+              {%- liquid
+                assign has_certs = false
+                for i in (1..4)
+                  assign cert_key = 'cert_' | append: i | append: '_image'
+                  if block.settings[cert_key] != blank
+                    assign has_certs = true
+                    break
+                  endif
+                endfor
+              -%}
+              {%- if has_certs -%}
+                <div class="c-pdp-hero__certs" {{ block.shopify_attributes }}>
+                  {%- for i in (1..4) -%}
+                    {%- assign cert_img_key = 'cert_' | append: i | append: '_image' -%}
+                    {%- assign cert_lbl_key = 'cert_' | append: i | append: '_label' -%}
+                    {%- assign cert_img = block.settings[cert_img_key] -%}
+                    {%- assign cert_lbl = block.settings[cert_lbl_key] -%}
+                    {%- if cert_img -%}
+                      <div class="c-pdp-hero__cert">
+                        {{
+                          cert_img
+                          | image_url: width: 120
+                          | image_tag:
+                            class: 'c-pdp-hero__cert-img',
+                            alt: cert_lbl | default: '',
+                            loading: 'lazy'
+                        }}
+                        {%- if cert_lbl != blank -%}
+                          <span class="c-pdp-hero__cert-label">{{ cert_lbl }}</span>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+
+            {%- when 'military_discount' -%}
+              {%- if block.settings.image -%}
+                <div class="c-pdp-hero__military" {{ block.shopify_attributes }}>
+                  {{
+                    block.settings.image
+                    | image_url: width: 800
+                    | image_tag:
+                      alt: block.settings.alt | default: 'Discount available for military, first responders, medical workers and teachers',
+                      loading: 'lazy'
+                  }}
+                </div>
+              {%- endif -%}
+
+            {%- when 'prime_countdown' -%}
+              <div class="c-pdp-hero__prime-countdown" {{ block.shopify_attributes }}>
+                {%- render 'c-prime-countdown',
+                  uid: block.id,
+                  title: block.settings.title,
+                  end_date: block.settings.end_date,
+                  end_label: block.settings.end_label,
+                  days_label: block.settings.days_label,
+                  hours_label: block.settings.hours_label,
+                  minutes_label: block.settings.minutes_label,
+                  seconds_label: block.settings.seconds_label,
+                  bg_color: block.settings.bg_color,
+                  title_color: block.settings.title_color,
+                  number_color: block.settings.number_color,
+                  label_color: block.settings.label_color,
+                  accent_color: block.settings.accent_color,
+                  padding_top: block.settings.padding_top,
+                  padding_bottom: block.settings.padding_bottom,
+                  padding_top_mobile: block.settings.padding_top_mobile,
+                  padding_bottom_mobile: block.settings.padding_bottom_mobile,
+                  border_radius: block.settings.border_radius
+                -%}
+              </div>
+
+            {%- when 'promo_coupon' -%}
+              <div class="c-pdp-hero__promo-coupon" {{ block.shopify_attributes }}>
+                {%- render 'c-promo-coupon',
+                  uid: block.id,
+                  text: block.settings.text,
+                  code: block.settings.code,
+                  copy_label: block.settings.copy_label,
+                  copied_label: block.settings.copied_label,
+                  aria_label: block.settings.aria_label,
+                  bg_color: block.settings.bg_color,
+                  border_color: block.settings.border_color,
+                  text_color: block.settings.text_color,
+                  code_bg_color: block.settings.code_bg_color,
+                  code_border_color: block.settings.code_border_color,
+                  code_text_color: block.settings.code_text_color,
+                  button_bg_color: block.settings.button_bg_color,
+                  button_text_color: block.settings.button_text_color,
+                  padding_top: block.settings.padding_top,
+                  padding_bottom: block.settings.padding_bottom,
+                  padding_top_mobile: block.settings.padding_top_mobile,
+                  padding_bottom_mobile: block.settings.padding_bottom_mobile
+                -%}
+              </div>
+
+            {%- when 'clinical_drawer_button' -%}
+              {%- comment -%} Rendered below the accordion list as a standalone CTA. {%- endcomment -%}
+
+            {%- when 'image_badge' -%}
+              {%- comment -%} Rendered inside the hero gallery as an overlay. {%- endcomment -%}
+
+            {%- when 'subscription_perk', 'plan_perks', 'accordion_item', 'accordion_pdp', 'buy_buttons', 'upsell' -%}
+              {%- comment -%}
+                subscription_perk: handled inside the subscription_plans block loop.
+                accordion_item / accordion_pdp: rendered grouped in the section below.
+                buy_buttons: settings consumed by subscription_plans block; no standalone render needed.
+                upsell: rendered below the accordions container.
+              {%- endcomment -%}
+
+          {%- endcase -%}
+        {%- endfor -%}
+
+        {%- comment -%}
+          Fallback ATC:
+          If no subscription_plans block is present and product has a single variant,
+          render a simple product form so the only variant is preselected and purchasable.
+        {%- endcomment -%}
+        {%- if has_subscription_plans_block == false and single_variant_product and current_variant -%}
+          {%- if buy_buttons_block and buy_buttons_block.settings.open_side_cart -%}
+            <product-form class="c-pdp-hero__product-form">
+              <div data-product-form-errors role="alert" hidden><span data-product-form-error-msg></span></div>
+          {%- endif -%}
+
+          {%- form 'product', product, id: product_form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" id="pdp-variant-{{ section.id }}" value="{{ current_variant.id }}">
+
+            {%- if buy_buttons_block and buy_buttons_block.settings.require_login and customer == null -%}
+              <div class="c-pdp-hero__cta">
+                <a href="{{ buy_buttons_block.settings.login_redirect_url }}" class="c-pdp-hero__cta-btn">
+                  {{ buy_buttons_block.settings.login_button_text | default: 'Login to Purchase' }}
+                </a>
+              </div>
+            {%- else -%}
+              <div class="c-pdp-hero__cta" {% if buy_buttons_block %}{{ buy_buttons_block.shopify_attributes }}{% endif %}>
+                <button
+                  type="submit"
+                  name="add"
+                  class="c-pdp-hero__cta-btn"
+                  data-pdp-cta-btn
+                  data-add-to-cart-text="{{ 'products.product.add_to_cart' | t }}"
+                  {%- if buy_buttons_block and buy_buttons_block.settings.open_side_cart -%}data-open-side-cart{%- endif -%}
+                  {%- unless current_variant.available -%}disabled{%- endunless -%}
+                >
+                  {%- if current_variant.available -%}
+                    {{- 'products.product.add_to_cart' | t -}}
+                  {%- else -%}
+                    {{- 'products.product.sold_out' | t -}}
+                  {%- endif -%}
+                </button>
+
+                {%- if buy_buttons_block and buy_buttons_block.settings.show_dynamic_checkout -%}
+                  {{ form | payment_button }}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endform -%}
+
+          {%- if buy_buttons_block and buy_buttons_block.settings.open_side_cart -%}
+            </product-form>
+          {%- endif -%}
+
+          {%- if buy_buttons_block -%}
+            {%- form 'product', product, id: fallback_installment_form_id, class: 'installment' -%}
+              <input type="hidden" name="id" value="{{ current_variant.id }}">
+              {%- if buy_buttons_block.settings.show_shoppay_widget -%}
+                {{ form | payment_terms }}
+              {%- endif -%}
+              {%- if buy_buttons_block.settings.show_truemed_widget -%}
+                {% render 'truemed-widget' %}
+              {%- endif -%}
+            {%- endform -%}
+
+            {%- assign icons_src = buy_buttons_block.settings.payment_icons_image -%}
+            {%- if icons_src -%}
+              <div class="c-pdp-hero__payment-icons">
+                {{
+                  icons_src
+                  | image_url: width: 500
+                  | image_tag:
+                    alt: 'Accepted payment methods',
+                    loading: 'lazy'
+                }}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- comment -%} Accordion blocks — grouped for visual coherence {%- endcomment -%}
+        {%- if section.blocks.size > 0 -%}
+          <div class="c-pdp-hero__accordions" id="c-pdp-hero-reviews">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'accordion_item' or block.type == 'accordion_pdp' -%}
+                {%- assign is_open = block.settings.open_by_default -%}
+                <div
+                  class="c-pdp-hero__accordion{% if block.type == 'accordion_pdp' %} c-pdp-hero__accordion--pdp{% endif %}{% if is_open %} c-pdp-hero__accordion--open{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  <button
+                    class="c-pdp-hero__accordion-trigger"
+                    aria-expanded="{{ is_open }}"
+                    aria-controls="acc-body-{{ block.id }}"
+                    type="button"
+                  >
+                    <span class="c-pdp-hero__accordion-title">{{ block.settings.title }}</span>
+                    <span class="c-pdp-hero__accordion-icon" aria-hidden="true"></span>
+                  </button>
+                  <div
+                    class="c-pdp-hero__accordion-body"
+                    id="acc-body-{{ block.id }}"
+                    role="region"
+                  >
+                    <div class="c-pdp-hero__accordion-content">
+                      {{ block.settings.content }}
+                    </div>
+                    {%- if block.settings.clinical_drawer_body != blank -%}
+                      {%- render 'clinical-drawer',
+                        drawer_id: block.id,
+                        button_text: block.settings.clinical_drawer_button_text,
+                        button_style: 'link',
+                        drawer_title: block.settings.clinical_drawer_title,
+                        drawer_body: block.settings.clinical_drawer_body,
+                        bg_color: block.settings.clinical_drawer_bg_color,
+                        text_color: block.settings.clinical_drawer_text_color
+                      -%}
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- elsif block.type == 'ingredient_accordion' -%}
+                {%- assign is_open = block.settings.open_by_default -%}
+                <div
+                  class="c-pdp-hero__accordion c-pdp-hero__accordion--ingredient{% if is_open %} c-pdp-hero__accordion--open{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  <button
+                    class="c-pdp-hero__accordion-trigger"
+                    aria-expanded="{{ is_open }}"
+                    aria-controls="acc-body-{{ block.id }}"
+                    type="button"
+                  >
+                    <span class="c-pdp-hero__accordion-title">{{ block.settings.title }}</span>
+                    <span class="c-pdp-hero__accordion-icon" aria-hidden="true"></span>
+                  </button>
+                  <div
+                    class="c-pdp-hero__accordion-body"
+                    id="acc-body-{{ block.id }}"
+                    role="region"
+                  >
+                    <div class="c-pdp-hero__ingredient-list">
+                      {%- for i in (1..3) -%}
+                        {%- assign ingredient_img_key = 'ingredient_' | append: i | append: '_image' -%}
+                        {%- assign ingredient_title_key = 'ingredient_' | append: i | append: '_title' -%}
+                        {%- assign ingredient_desc_key = 'ingredient_' | append: i | append: '_description' -%}
+                        {%- assign ingredient_img = block.settings[ingredient_img_key] -%}
+                        {%- assign ingredient_title = block.settings[ingredient_title_key] -%}
+                        {%- assign ingredient_desc = block.settings[ingredient_desc_key] -%}
+                        {%- if ingredient_img != blank or ingredient_title != blank or ingredient_desc != blank -%}
+                        <div class="c-pdp-hero__ingredient">
+                          {%- if ingredient_img != blank -%}
+                          <div class="c-pdp-hero__ingredient-image-wrap">
+                            {{ ingredient_img | image_url: width: 80 | image_tag: alt: ingredient_title, loading: 'lazy', widths: '80, 160' }}
+                          </div>
+                          {%- endif -%}
+                          <div class="c-pdp-hero__ingredient-text">
+                            {%- if ingredient_title != blank -%}
+                              <div class="c-pdp-hero__ingredient-title">{{ ingredient_title }}</div>
+                            {%- endif -%}
+                            {%- if ingredient_desc != blank -%}
+                              <div class="c-pdp-hero__ingredient-desc">{{ ingredient_desc }}</div>
+                            {%- endif -%}
+                          </div>
+                        </div>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- assign clinical_button_block = section.blocks | where: 'type', 'clinical_drawer_button' | first -%}
+        {%- if clinical_button_block -%}
+          {%- assign block_drawer_body = clinical_button_block.settings.drawer_body -%}
+          {%- if block_drawer_body == blank -%}
+            {%- assign block_drawer_body = clinical_trials_drawer_body_default -%}
+          {%- endif -%}
+          <div class="c-pdp-hero__clinical-button-wrap" {{ clinical_button_block.shopify_attributes }}>
+            {%- render 'clinical-drawer',
+              drawer_id: clinical_button_block.id,
+              button_text: clinical_button_block.settings.button_text,
+              button_style: 'default',
+              drawer_title: clinical_button_block.settings.clinical_drawer_title | default: clinical_button_block.settings.button_text | default: 'Clinical Trials',
+              drawer_body: block_drawer_body,
+              bg_color: clinical_button_block.settings.clinical_drawer_bg_color,
+              text_color: clinical_button_block.settings.clinical_drawer_text_color,
+              show_trigger: false
+            -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Upsell blocks — rendered below accordions {%- endcomment -%}
+        {%- assign upsell_blocks = section.blocks | where: 'type', 'upsell' -%}
+        {%- for block in upsell_blocks -%}
+          {%- if block.settings.product and block.settings.product.available -%}
+            {%- assign upsell_product = block.settings.product -%}
+            {%- assign upsell_variant = upsell_product.selected_or_first_available_variant -%}
+            <div class="c-pdp-hero__upsell" {{ block.shopify_attributes }}>
+              {%- if block.settings.badge_text != blank -%}
+                <span class="c-pdp-hero__upsell-badge" style="--upsell-badge-bg: {{ block.settings.badge_bg_color | default: '#1b1c29' }};">{{- block.settings.badge_text -}}</span>
+              {%- endif -%}
+
+              {%- comment -%} Row: image + text side-by-side (both mobile and desktop) {%- endcomment -%}
+              {%- assign upsell_img_src = block.settings.image_override | default: upsell_product.featured_image -%}
+              {%- assign upsell_img_form_id = 'pdp-upsell-img-form-' | append: block.id -%}
+              <div class="c-pdp-hero__upsell-row">
+                <product-form>
+                  <div data-product-form-errors role="alert" hidden><span data-product-form-error-msg></span></div>
+                  {%- form 'product', upsell_product, id: upsell_img_form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                    <input type="hidden" name="id" value="{{ upsell_variant.id }}">
+                    <button type="submit" name="add" class="c-pdp-hero__upsell-img" aria-label="{{ upsell_product.title }}">
+                      {{-
+                        upsell_img_src
+                        | image_url: width: 300
+                        | image_tag:
+                          alt: upsell_product.title,
+                          loading: 'lazy',
+                          widths: '100, 200, 300'
+                      -}}
+                    </button>
+                  {%- endform -%}
+                </product-form>
+
+                <div class="c-pdp-hero__upsell-text">
+                  {%- if block.settings.title != blank -%}
+                    <p class="c-pdp-hero__upsell-title">{{- block.settings.title -}}</p>
+                  {%- endif -%}
+                  {%- if block.settings.subtitle != blank -%}
+                    <p class="c-pdp-hero__upsell-subtitle">{{- block.settings.subtitle -}}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+
+              {%- comment -%} CTA button — full-width on mobile, flex-1 on desktop {%- endcomment -%}
+              {%- assign upsell_form_id = 'pdp-upsell-form-' | append: block.id -%}
+              <product-form>
+                <div data-product-form-errors role="alert" hidden><span data-product-form-error-msg></span></div>
+                {%- form 'product', upsell_product, id: upsell_form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                  <input type="hidden" name="id" value="{{ upsell_variant.id }}">
+                  <button
+                    type="submit"
+                    name="add"
+                    class="c-pdp-hero__upsell-btn"
+                    {%- unless upsell_variant.available -%}disabled{%- endunless -%}
+                  >
+                    {{- block.settings.button_text | default: 'GET MY SAMPLE PACK' -}}
+                  </button>
+                {%- endform -%}
+              </product-form>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+      </div>{%- comment -%} end info {%- endcomment -%}
+
+    </div>{%- comment -%} /.c-pdp-hero__columns {%- endcomment -%}
+
+  </div>{%- comment -%} /.c-pdp-hero__container {%- endcomment -%}
+</section>
+
+{%- comment -%} ===== JavaScript ===== {%- endcomment -%}
+<script>
+  (function () {
+    var sectionEl = document.querySelector('[data-section-id="{{ section.id }}"]');
+    if (!sectionEl) return;
+
+    /* ---- Accordion ---- */
+    var accordionTriggers = sectionEl.querySelectorAll('.c-pdp-hero__accordion-trigger');
+    accordionTriggers.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var accordion = btn.closest('.c-pdp-hero__accordion');
+        var isOpen = accordion.classList.contains('c-pdp-hero__accordion--open');
+        accordion.classList.toggle('c-pdp-hero__accordion--open', !isOpen);
+        btn.setAttribute('aria-expanded', (!isOpen).toString());
+      });
+    });
+
+    /* ---- Subscription Plan Selector (main-product variant_picker logic) ---- */
+    var planRadios = sectionEl.querySelectorAll("input[name='variant_selling_plan']");
+    var planLabels = sectionEl.querySelectorAll('[data-pdp-plan-label]');
+    var variantInput = sectionEl.querySelector('#pdp-variant-{{ section.id }}');
+    var sellingPlanInput = sectionEl.querySelector('#pdp-selling-plan-{{ section.id }}');
+    var variantSelect = sectionEl.querySelector("select[name='variant_selling_plan']");
+    var ctaBtn = sectionEl.querySelector('[data-pdp-cta-btn]');
+    var isB2bCustomer = {{ customer.b2b? | json }};
+    var priceEl = sectionEl.querySelector('[data-pdp-price]');
+    var priceCompareEl = sectionEl.querySelector('[data-pdp-price-compare]');
+    var priceSaveEl = sectionEl.querySelector('[data-pdp-price-save]');
+    var productVariants = {{ product.variants | json }};
+    var shopMoneyFormat = {{ shop.money_format | json }};
+    var addToCartBaseText = {{ 'products.product.add_to_cart' | t | json }};
+    var soldOutText = {{ 'products.product.sold_out' | t | json }};
+    var variantCtaTextMap = {
+      {%- for variant in product.variants -%}
+        "{{ variant.id }}": {
+          "subscribe": {{ variant.metafields.custom.subscribe_atc_text.value | default: '' | json }},
+          "otp": {{ variant.metafields.custom.one_time_atc_text.value | default: '' | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    };
+
+    function buildCtaText(baseText, variantTitle, appendVariant) {
+      if (!baseText) return '';
+
+      if (baseText.indexOf('[variant_title]') !== -1) {
+        return baseText.replace(/\[variant_title\]/g, variantTitle || '');
+      }
+
+      if (appendVariant && variantTitle) {
+        return baseText + ' - ' + variantTitle;
+      }
+
+      return baseText;
+    }
+
+    function getVariantCtaOverride(variantId, key) {
+      if (!variantId) return '';
+      var variantEntry = variantCtaTextMap[String(variantId)] || {};
+      var value = variantEntry[key] || '';
+      return typeof value === 'string' ? value.trim() : '';
+    }
+
+    if (isB2bCustomer && ctaBtn) {
+      ctaBtn.textContent = addToCartBaseText;
+      ctaBtn.removeAttribute('data-subscribe-text');
+    }
+
+    function formatMoney(cents) {
+      if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+        var fmt = (window.theme && window.theme.moneyFormat) || (window.Shopify.money_format) || shopMoneyFormat;
+        return window.Shopify.formatMoney(cents, fmt);
+      }
+
+      return '$' + (Number(cents || 0) / 100).toFixed(2);
+    }
+
+    function updateDisplayedPrice(selectedVariant) {
+      if (!priceEl || !selectedVariant) return;
+
+      var variantPrice = Number(selectedVariant.price || 0);
+      var variantCompareAt = Number(selectedVariant.compare_at_price || 0);
+      var hasDiscount = variantCompareAt > variantPrice;
+
+      priceEl.textContent = formatMoney(variantPrice);
+
+      if (priceCompareEl) {
+        if (hasDiscount) {
+          priceCompareEl.textContent = formatMoney(variantCompareAt);
+          priceCompareEl.hidden = false;
+        } else {
+          priceCompareEl.textContent = '';
+          priceCompareEl.hidden = true;
+        }
+      }
+
+      if (priceSaveEl) {
+        if (hasDiscount && variantCompareAt > 0) {
+          var savingsPercent = Math.round(((variantCompareAt - variantPrice) / variantCompareAt) * 100);
+          priceSaveEl.textContent = 'Save ' + savingsPercent + '%';
+          priceSaveEl.hidden = false;
+        } else {
+          priceSaveEl.textContent = '';
+          priceSaveEl.hidden = true;
+        }
+      }
+    }
+
+    function updateSellingPlan(event) {
+      if (!event || !event.target) return;
+
+      var selectedValue = event.target.value || '';
+      var valueParts = selectedValue.split('-');
+      var selectedVariantId = valueParts[0] || '';
+      var selectedSellingPlanId = valueParts[1] || 'otp';
+
+      planLabels.forEach(function (label) {
+        var radio = label.querySelector('[data-pdp-plan-radio]');
+        if (radio) {
+          label.classList.toggle('c-pdp-hero__plan-option--selected', radio.value === selectedValue);
+        }
+      });
+
+      if (variantInput && selectedVariantId) {
+        variantInput.value = selectedVariantId;
+      }
+
+      if (sellingPlanInput) {
+        if (selectedSellingPlanId === 'otp') {
+          sellingPlanInput.value = '';
+        } else {
+          sellingPlanInput.value = selectedSellingPlanId;
+        }
+      }
+
+      if (event.target.tagName === 'SELECT') {
+        planRadios.forEach(function (radio) {
+          radio.checked = false;
+        });
+      } else if (event.target.type === 'radio' && variantSelect) {
+        variantSelect.value = '';
+      }
+
+      var selectedVariant = null;
+      if (selectedVariantId && productVariants && productVariants.length) {
+        selectedVariant = productVariants.find(function (variant) {
+          return String(variant.id) === String(selectedVariantId);
+        });
+      }
+
+      if (!ctaBtn) return;
+
+      if (selectedVariant && selectedVariant.available === false) {
+        updateDisplayedPrice(selectedVariant);
+        ctaBtn.textContent = soldOutText;
+        ctaBtn.disabled = true;
+        return;
+      }
+
+      ctaBtn.disabled = false;
+
+      if (isB2bCustomer) {
+        updateDisplayedPrice(selectedVariant);
+        ctaBtn.textContent = addToCartBaseText;
+        planLabels.forEach(function (label) {
+          var radio = label.querySelector('[data-pdp-plan-radio]');
+          if (radio) {
+            label.classList.toggle('c-pdp-hero__plan-option--selected', radio.checked);
+          }
+        });
+        return;
+      }
+
+      var selectedVariantTitle = selectedVariant && selectedVariant.title ? selectedVariant.title : '';
+      var isOneTimePurchase = selectedSellingPlanId === 'otp';
+      var ctaTextOverride = getVariantCtaOverride(selectedVariantId, isOneTimePurchase ? 'otp' : 'subscribe');
+
+      if (event.target.tagName === 'SELECT' && event.target.value !== '') {
+        ctaBtn.textContent = ctaTextOverride
+          ? buildCtaText(ctaTextOverride, selectedVariantTitle, false)
+          : buildCtaText(ctaBtn.dataset.subscribeText || 'SUBSCRIBE & SAVE', selectedVariantTitle, true);
+      } else if (isOneTimePurchase) {
+        ctaBtn.textContent = ctaTextOverride
+          ? buildCtaText(ctaTextOverride, selectedVariantTitle, false)
+          : buildCtaText(addToCartBaseText, selectedVariantTitle, true);
+      } else {
+        ctaBtn.textContent = ctaTextOverride
+          ? buildCtaText(ctaTextOverride, selectedVariantTitle, false)
+          : buildCtaText(ctaBtn.dataset.subscribeText || 'SUBSCRIBE & SAVE', selectedVariantTitle, true);
+      }
+
+      updateDisplayedPrice(selectedVariant);
+
+      planLabels.forEach(function (label) {
+        var radio = label.querySelector('[data-pdp-plan-radio]');
+        if (radio) {
+          label.classList.toggle('c-pdp-hero__plan-option--selected', radio.checked);
+        }
+      });
+    }
+
+    planRadios.forEach(function (radio) {
+      radio.addEventListener('change', updateSellingPlan);
+    });
+
+    if (variantSelect) {
+      variantSelect.addEventListener('change', updateSellingPlan);
+    }
+
+    var initialChecked = sectionEl.querySelector("input[name='variant_selling_plan']:checked");
+    if (initialChecked) {
+      updateSellingPlan({ target: initialChecked });
+    }
+
+    /* ---- OTP button: direct add to cart ---- */
+    if (!isB2bCustomer) {
+      var otpBtns = sectionEl.querySelectorAll('[data-pdp-otp-btn]');
+      otpBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var variantId = btn.dataset.variantId;
+          if (variantInput && variantId) {
+            variantInput.value = variantId;
+          }
+
+          var selectedVariant = null;
+          if (variantId && productVariants && productVariants.length) {
+            selectedVariant = productVariants.find(function (variant) {
+              return String(variant.id) === String(variantId);
+            });
+          }
+          updateDisplayedPrice(selectedVariant);
+
+          if (sellingPlanInput) {
+            sellingPlanInput.value = '';
+          }
+          if (ctaBtn) {
+            ctaBtn.click();
+          }
+        });
+      });
+    }
+
+    var qtyWrap = sectionEl.querySelector('[data-pdp-qty]');
+    if (qtyWrap) {
+      var qtyInput = qtyWrap.querySelector('.c-pdp-hero__qty-input');
+      var qtyBtns = qtyWrap.querySelectorAll('[data-pdp-qty-btn]');
+
+      qtyBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (!qtyInput) return;
+          var current = parseInt(qtyInput.value, 10);
+          if (isNaN(current) || current < 1) current = 1;
+
+          if (btn.dataset.pdpQtyBtn === 'minus') {
+            qtyInput.value = Math.max(1, current - 1);
+          } else {
+            qtyInput.value = current + 1;
+          }
+        });
+      });
+
+      if (qtyInput) {
+        qtyInput.addEventListener('change', function () {
+          var parsed = parseInt(qtyInput.value, 10);
+          if (isNaN(parsed) || parsed < 1) {
+            qtyInput.value = 1;
+          }
+        });
+      }
+    }
+
+    updateDisplayedPrice(productVariants.find(function (variant) {
+      return String(variant.id) === String((variantInput && variantInput.value) || '{{ current_variant.id }}');
+    }));
+
+    /* ---- Image Gallery ---- */
+    var heroImg = sectionEl.querySelector('.c-pdp-hero__hero img, .c-pdp-hero__hero svg');
+    var thumbBtns = sectionEl.querySelectorAll('[data-thumb]');
+
+    if (heroImg && thumbBtns.length) {
+      thumbBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var src = btn.dataset.src;
+          var alt = btn.dataset.alt;
+
+          if (src) {
+            heroImg.src = src;
+            heroImg.srcset = '';
+          }
+          if (alt) heroImg.alt = alt;
+
+          thumbBtns.forEach(function (b) {
+            b.classList.remove('c-pdp-hero__thumb--active');
+            b.setAttribute('aria-pressed', 'false');
+          });
+          btn.classList.add('c-pdp-hero__thumb--active');
+          btn.setAttribute('aria-pressed', 'true');
+        });
+      });
+    }
+
+    /* Re-init gallery on section reload in theme editor */
+    document.addEventListener('shopify:section:load', function (e) {
+      if (e.detail && e.detail.sectionId === '{{ section.id }}') {
+        heroImg = sectionEl.querySelector('[data-gallery-img]');
+        thumbBtns = sectionEl.querySelectorAll('[data-thumb]');
+      }
+    });
+  })();
+</script>
+
+{%- comment -%} ===== Schema ===== {%- endcomment -%}
+{% schema %}
+{
+  "name": "C PDP Hero V2",
+  "tag": "section",
+  "class": "c-pdp-hero-v2-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sl_anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation. Defaults to section ID if blank."
+    },
+    {
+      "type": "header",
+      "content": "Breadcrumbs"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show Breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Hero Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image",
+      "info": "Overrides the product's featured image."
+    },
+    {
+      "type": "text",
+      "id": "bestseller_badge_text",
+      "label": "Bestseller Badge Text",
+      "default": "BESTSELLER"
+    },
+    {
+      "type": "image_picker",
+      "id": "clinicians_badge_image",
+      "label": "Clinicians Choice Banner Image",
+      "info": "Overlay banner shown at the top of the hero image."
+    },
+    {
+      "type": "header",
+      "content": "Gallery Images (optional overrides)"
+    },
+    {
+      "type": "paragraph",
+      "content": "If left blank, images fall back to the product's media gallery (images 2–7)."
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_1",
+      "label": "Gallery Image 1 (row 1 left)"
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_2",
+      "label": "Gallery Image 2 (row 1 right)"
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_3",
+      "label": "Gallery Image 3 (row 2 left)"
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_4",
+      "label": "Gallery Image 4 (row 2 right)"
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_5",
+      "label": "Gallery Image 5 (row 3 left)"
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_6",
+      "label": "Gallery Image 6 (row 3 right)"
+    },
+    {
+      "type": "header",
+      "content": "Subscription Plan Colors"
+    },
+    {
+      "type": "color",
+      "id": "subscription_plans_accent_color",
+      "label": "Subscription Plans Accent Color",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "subscription_plans_selected_bg_color",
+      "label": "Subscription Plans Selected Background",
+      "default": "#fdf5f3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "image_badge",
+      "name": "Image Badge",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Badge image",
+          "info": "Image overlaid on the hero/slider image."
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "top-left", "label": "Top left" },
+            { "value": "top-right", "label": "Top right" },
+            { "value": "bottom-left", "label": "Bottom left" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ],
+          "default": "bottom-right"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "min": 40,
+          "max": 240,
+          "step": 4,
+          "unit": "px",
+          "label": "Width",
+          "default": 96
+        },
+        {
+          "type": "range",
+          "id": "offset",
+          "min": 0,
+          "max": 60,
+          "step": 2,
+          "unit": "px",
+          "label": "Offset from edge",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "prime_countdown",
+      "name": "Prime Countdown",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Prime Savings Match Ends"
+        },
+        {
+          "type": "text",
+          "id": "end_date",
+          "label": "End date",
+          "default": "2026-06-26T23:59:00-05:00",
+          "info": "Use ISO format, e.g. 2026-06-26T23:59:00-05:00"
+        },
+        {
+          "type": "text",
+          "id": "end_label",
+          "label": "End label",
+          "default": "June 26 · 11:59PM"
+        },
+        {
+          "type": "header",
+          "content": "Unit labels"
+        },
+        {
+          "type": "text",
+          "id": "days_label",
+          "label": "Days label",
+          "default": "Days"
+        },
+        {
+          "type": "text",
+          "id": "hours_label",
+          "label": "Hours label",
+          "default": "Hrs"
+        },
+        {
+          "type": "text",
+          "id": "minutes_label",
+          "label": "Minutes label",
+          "default": "Min"
+        },
+        {
+          "type": "text",
+          "id": "seconds_label",
+          "label": "Seconds label",
+          "default": "Sec"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background color",
+          "default": "#1B1E2A"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title color",
+          "default": "#8A8E99"
+        },
+        {
+          "type": "color",
+          "id": "number_color",
+          "label": "Number color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "label_color",
+          "label": "Unit label color",
+          "default": "#8A8E99"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Accent color (dots & end label)",
+          "default": "#D54F2F"
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "range",
+          "id": "padding_top_mobile",
+          "min": 0,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Padding top (mobile)",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom_mobile",
+          "min": 0,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Padding bottom (mobile)",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Padding top (desktop)",
+          "default": 28
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Padding bottom (desktop)",
+          "default": 28
+        },
+        {
+          "type": "header",
+          "content": "Border"
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "px",
+          "label": "Border radius",
+          "default": 24
+        }
+      ]
+    },
+    {
+      "type": "promo_coupon",
+      "name": "Promo Coupon",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>Claim 25% off storewide + up to <strong>48% off first subscriptions</strong></p>",
+          "info": "Wrap the emphasized portion in <strong> to make it bold."
+        },
+        {
+          "type": "text",
+          "id": "code",
+          "label": "Discount code",
+          "default": "PRIME"
+        },
+        {
+          "type": "text",
+          "id": "copy_label",
+          "label": "Copy button label",
+          "default": "Copy"
+        },
+        {
+          "type": "text",
+          "id": "copied_label",
+          "label": "Copied state label",
+          "default": "Copied!"
+        },
+        {
+          "type": "text",
+          "id": "aria_label",
+          "label": "Accessibility label",
+          "default": "Copy discount code"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background color",
+          "default": "#F7EFE2"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border color",
+          "default": "#F7EFE2"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#1B1E2A"
+        },
+        {
+          "type": "color",
+          "id": "code_bg_color",
+          "label": "Code pill background",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "code_border_color",
+          "label": "Code pill border",
+          "default": "#D54F2F"
+        },
+        {
+          "type": "color",
+          "id": "code_text_color",
+          "label": "Code text color",
+          "default": "#1B1E2A"
+        },
+        {
+          "type": "color",
+          "id": "button_bg_color",
+          "label": "Copy button background",
+          "default": "#1B1E2A"
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Copy button text",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "range",
+          "id": "padding_top_mobile",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Padding top (mobile)",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom_mobile",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Padding bottom (mobile)",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Padding top (desktop)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Padding bottom (desktop)",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "frontrow_banner",
+      "name": "FrontRow Banner",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "product_type",
+          "label": "Product Type",
+          "options": [
+            {
+              "value": "menopause",
+              "label": "Menopause & Heart Health Support"
+            },
+            {
+              "value": "nitric-oxide",
+              "label": "Nitric Oxide Support"
+            }
+          ],
+          "default": "nitric-oxide",
+          "info": "Select which FrontRow banner to display over the hero image."
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "Product Title",
+      "limit": 1
+    },
+    {
+      "type": "reviews_fallback",
+      "name": "Fallback Reviews",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "stars_count",
+          "label": "Number of stars",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "rating_text",
+          "label": "Rating text",
+          "default": "4.8 (147 REVIEWS)"
+        },
+        {
+          "type": "text",
+          "id": "trust_text",
+          "label": "Trust text",
+          "default": "TRUSTED BY 3,000+ HEALTHCARE PROVIDERS."
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Product Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "custom_description",
+          "label": "Custom Description",
+          "info": "Overrides the product description. Leave blank to use the Shopify product description (truncated)."
+        }
+      ]
+    },
+    {
+      "type": "included_products",
+      "name": "Included Products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "WHAT'S INCLUDED"
+        },
+        {
+          "type": "header",
+          "content": "Product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "product_1_image",
+          "label": "Product 1 Image",
+          "info": "Leave blank to use the selected product's featured image."
+        },
+        {
+          "type": "text",
+          "id": "product_1_title",
+          "label": "Product 1 Title",
+          "info": "Leave blank to use the selected product title."
+        },
+        {
+          "type": "text",
+          "id": "product_1_subtitle",
+          "label": "Product 1 Subtitle",
+          "info": "Leave blank to use the selected product variant title if available."
+        },
+        {
+          "type": "header",
+          "content": "Product 2"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "product_2_image",
+          "label": "Product 2 Image",
+          "info": "Leave blank to use the selected product's featured image."
+        },
+        {
+          "type": "text",
+          "id": "product_2_title",
+          "label": "Product 2 Title",
+          "info": "Leave blank to use the selected product title."
+        },
+        {
+          "type": "text",
+          "id": "product_2_subtitle",
+          "label": "Product 2 Subtitle",
+          "info": "Leave blank to use the selected product variant title if available."
+        }
+      ]
+    },
+    {
+      "type": "product_price",
+      "name": "Product Price",
+      "limit": 1
+    },
+    {
+      "type": "supplement_facts",
+      "name": "Supplement Facts",
+      "settings": [
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link Label",
+          "default": "SUPPLEMENT FACTS"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Supplement Facts Image",
+          "info": "Upload a supplement facts panel image. Displayed in the modal."
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Content Page",
+          "info": "Used as fallback if no image is selected. Also used as no-JS link target."
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Rich Text Content",
+          "info": "Used if neither an image nor a page is selected."
+        }
+      ]
+    },
+    {
+      "type": "subscription_plans",
+      "name": "Subscription Plans & ATC",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "use_recharge_titles",
+          "label": "Use Recharge selling plan titles",
+          "default": false,
+          "info": "When enabled, subscription options will display the selling plan name instead of the variant title."
+        },
+        {
+          "type": "text",
+          "id": "otp_shipping_note",
+          "label": "One-Time Purchase Shipping Note",
+          "default": "+ $7.50 Shipping",
+          "info": "Appended to the one-time price, e.g. \"+ $7.50 Shipping\""
+        },
+        {
+          "type": "header",
+          "content": "Top Subscription Perks (Most Popular Plan)"
+        },
+        {
+          "type": "paragraph",
+          "content": "These perks appear on the first (Most Popular) subscription plan option. You can also add individual 'Subscription Perk' blocks for more flexibility."
+        },
+        {
+          "type": "text",
+          "id": "perk_1",
+          "label": "Perk 1",
+          "default": "Maximum savings — lowest price per serving"
+        },
+        {
+          "type": "html",
+          "id": "perk_1_icon",
+          "label": "Perk 1 Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        },
+        {
+          "type": "text",
+          "id": "perk_2",
+          "label": "Perk 2",
+          "default": "30-day money-back guarantee"
+        },
+        {
+          "type": "html",
+          "id": "perk_2_icon",
+          "label": "Perk 2 Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        },
+        {
+          "type": "text",
+          "id": "perk_3",
+          "label": "Perk 3",
+          "default": "Includes 10 free test strips"
+        },
+        {
+          "type": "html",
+          "id": "perk_3_icon",
+          "label": "Perk 3 Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        },
+        {
+          "type": "text",
+          "id": "perk_4",
+          "label": "Perk 4",
+          "default": "Free US shipping"
+        },
+        {
+          "type": "html",
+          "id": "perk_4_icon",
+          "label": "Perk 4 Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        },
+        {
+          "type": "text",
+          "id": "perk_5",
+          "label": "Perk 5",
+          "default": "Pause or cancel at any time"
+        },
+        {
+          "type": "html",
+          "id": "perk_5_icon",
+          "label": "Perk 5 Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        }
+      ]
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Subscribe & Save Button Label",
+          "default": "SUBSCRIBE & SAVE"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_side_cart",
+          "default": false,
+          "label": "Open side cart on add to cart",
+          "info": "When enabled, clicking the ATC button will add to cart via AJAX and open the cart drawer instead of navigating to the cart page."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "default": false,
+          "label": "Show dynamic checkout buttons",
+          "info": "Using the most common payment method available in your store, customers see a faster checkout option, like PayPal."
+        },
+        {
+          "type": "header",
+          "content": "Login Gate"
+        },
+        {
+          "type": "checkbox",
+          "id": "require_login",
+          "default": false,
+          "label": "Require login to purchase",
+          "info": "When enabled, unauthenticated users will see a login button instead of add to cart."
+        },
+        {
+          "type": "text",
+          "id": "login_button_text",
+          "default": "Login to Purchase",
+          "label": "Login button text"
+        },
+        {
+          "type": "url",
+          "id": "login_redirect_url",
+          "label": "Login redirect URL"
+        },
+        {
+          "type": "header",
+          "content": "Payment Widgets"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_shoppay_widget",
+          "default": true,
+          "label": "Show Shop Pay Installments Widget"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_truemed_widget",
+          "default": true,
+          "label": "Show TrueMed HSA/FSA Widget"
+        },
+        {
+          "type": "header",
+          "content": "Payment Info Text"
+        },
+        {
+          "type": "text",
+          "id": "shop_pay_text",
+          "label": "Shop Pay / Installments Text",
+          "default": "Pay in 4 interest-free installments with Shop Pay"
+        },
+        {
+          "type": "url",
+          "id": "shop_pay_learn_more_url",
+          "label": "Shop Pay Learn More URL"
+        },
+        {
+          "type": "text",
+          "id": "hsa_text",
+          "label": "HSA/FSA Text",
+          "default": "HSA/FSA eligible for qualified customers"
+        },
+        {
+          "type": "url",
+          "id": "hsa_learn_more_url",
+          "label": "HSA/FSA Learn More URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "payment_icons_image",
+          "label": "Payment Methods Image",
+          "info": "Single image showing all accepted payment icons. Falls back to Shopify's built-in icons."
+        }
+      ]
+    },
+    {
+      "type": "trust_badges",
+      "name": "Trust Badges",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "cert_1_image",
+          "label": "Certification 1 Image"
+        },
+        {
+          "type": "text",
+          "id": "cert_1_label",
+          "label": "Certification 1 Label",
+          "default": "GMP Certified"
+        },
+        {
+          "type": "image_picker",
+          "id": "cert_2_image",
+          "label": "Certification 2 Image"
+        },
+        {
+          "type": "text",
+          "id": "cert_2_label",
+          "label": "Certification 2 Label",
+          "default": "FDA Registered Facility"
+        },
+        {
+          "type": "image_picker",
+          "id": "cert_3_image",
+          "label": "Certification 3 Image"
+        },
+        {
+          "type": "text",
+          "id": "cert_3_label",
+          "label": "Certification 3 Label",
+          "default": "GMO Free"
+        },
+        {
+          "type": "image_picker",
+          "id": "cert_4_image",
+          "label": "Certification 4 Image"
+        },
+        {
+          "type": "text",
+          "id": "cert_4_label",
+          "label": "Certification 4 Label",
+          "default": "Made in USA"
+        }
+      ]
+    },
+    {
+      "type": "military_discount",
+      "name": "Military Discount Banner",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Military Discount Image",
+          "info": "Banner image shown below certifications."
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt Text",
+          "default": "Discount available for Military, First Responders, Medical Workers and Teachers"
+        }
+      ]
+    },
+    {
+      "type": "upsell",
+      "name": "Upsell",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Product to upsell. Block is hidden if the product is unavailable."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_override",
+          "label": "Product Image Override",
+          "info": "Optional. Overrides the product's featured image."
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "EXCLUSIVE TRIAL OFFER"
+        },
+        {
+          "type": "color",
+          "id": "badge_bg_color",
+          "label": "Badge Background Color",
+          "default": "#1b1c29"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Still Unsure?"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Try It for Just $5"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "GET MY SAMPLE PACK"
+        }
+      ]
+    },
+    {
+      "type": "ingredient_accordion",
+      "name": "Ingredient Accordion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab Title",
+          "default": "Key Ingredients"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by Default",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Ingredient 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_1_image",
+          "label": "Ingredient 1 Image"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_1_title",
+          "label": "Ingredient 1 Title"
+        },
+        {
+          "type": "textarea",
+          "id": "ingredient_1_description",
+          "label": "Ingredient 1 Description"
+        },
+        {
+          "type": "header",
+          "content": "Ingredient 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_2_image",
+          "label": "Ingredient 2 Image"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_2_title",
+          "label": "Ingredient 2 Title"
+        },
+        {
+          "type": "textarea",
+          "id": "ingredient_2_description",
+          "label": "Ingredient 2 Description"
+        },
+        {
+          "type": "header",
+          "content": "Ingredient 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "ingredient_3_image",
+          "label": "Ingredient 3 Image"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_3_title",
+          "label": "Ingredient 3 Title"
+        },
+        {
+          "type": "textarea",
+          "id": "ingredient_3_description",
+          "label": "Ingredient 3 Description"
+        }
+      ]
+    },
+    {
+      "type": "accordion_item",
+      "name": "Accordion Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab Title",
+          "default": "How to Use"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab Content",
+          "default": "<p>Add your content here.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by Default",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Clinical Drawer"
+        },
+        {
+          "type": "paragraph",
+          "content": "Optional. When a drawer body is set, a link will appear at the bottom of this tab that opens a slide-out drawer."
+        },
+        {
+          "type": "text",
+          "id": "clinical_drawer_button_text",
+          "label": "Link / Button Text",
+          "default": "Clinical Trials"
+        },
+        {
+          "type": "text",
+          "id": "clinical_drawer_title",
+          "label": "Drawer Title"
+        },
+        {
+          "type": "richtext",
+          "id": "clinical_drawer_body",
+          "label": "Drawer Body",
+          "info": "Required to show the link. Leave blank to hide."
+        },
+        {
+          "type": "color",
+          "id": "clinical_drawer_bg_color",
+          "label": "Drawer Background Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "clinical_drawer_text_color",
+          "label": "Drawer Text Color",
+          "default": "#080b2b"
+        }
+      ]
+    },
+    {
+      "type": "accordion_pdp",
+      "name": "Accordion PDP",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab Title",
+          "default": "Who Is This For?"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab Content",
+          "default": "<p>For adults looking for clinically supported daily Nitric Oxide support with measurable results.</p><p>Suitable for men and women over 18 who want simple, trackable support for blood flow, energy, sexual wellness and healthy aging.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by Default",
+          "default": true
+        }
+      ]
+    },
+    {
+        "type": "clinical_drawer_button",
+        "name": "Clinical trials",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button label",
+            "default": "See clinical trials"
+          },
+          {
+            "type": "select",
+            "id": "button_style",
+            "label": "Button style",
+            "options": [
+              {
+                "value": "link",
+                "label": "Underlined link"
+              },
+              {
+                "value": "default",
+                "label": "Default button"
+              }
+            ],
+            "default": "link"
+          },
+          {
+            "type": "text",
+            "id": "clinical_drawer_title",
+            "label": "Drawer title",
+            "default": "Nitric Oxide Support"
+          },
+          {
+            "type": "richtext",
+            "id": "clinical_drawer_body",
+            "label": "Drawer content",
+            "info": "Leave empty to use the default clinical trials content."
+          },
+          {
+            "type": "color",
+            "id": "clinical_drawer_bg_color",
+            "label": "Drawer background color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "clinical_drawer_text_color",
+            "label": "Drawer text color",
+            "default": "#080b2b"
+          }
+        ]
+    },
+    {
+      "type": "plan_perks",
+      "name": "Plan Perks",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add one 'Plan Perks' block per subscription option, in the same order the plans appear."
+        },
+        {
+          "type": "text",
+          "id": "perk_1",
+          "label": "Perk 1"
+        },
+        {
+          "type": "html",
+          "id": "perk_1_icon",
+          "label": "Perk 1 — Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        },
+        {
+          "type": "text",
+          "id": "perk_2",
+          "label": "Perk 2"
+        },
+        {
+          "type": "html",
+          "id": "perk_2_icon",
+          "label": "Perk 2 — Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        },
+        {
+          "type": "text",
+          "id": "perk_3",
+          "label": "Perk 3"
+        },
+        {
+          "type": "html",
+          "id": "perk_3_icon",
+          "label": "Perk 3 — Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        },
+        {
+          "type": "text",
+          "id": "perk_4",
+          "label": "Perk 4"
+        },
+        {
+          "type": "html",
+          "id": "perk_4_icon",
+          "label": "Perk 4 — Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        },
+        {
+          "type": "text",
+          "id": "perk_5",
+          "label": "Perk 5"
+        },
+        {
+          "type": "html",
+          "id": "perk_5_icon",
+          "label": "Perk 5 — Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        }
+      ]
+    },
+    {
+      "type": "subscription_perk",
+      "name": "Subscription Perk",
+      "settings": [
+        {
+          "type": "text",
+          "id": "perk_text",
+          "label": "Perk Text",
+          "default": "Free shipping on every order"
+        },
+        {
+          "type": "html",
+          "id": "perk_icon",
+          "label": "Perk Icon SVG",
+          "info": "Paste SVG markup. Leave blank to use the default checkmark."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C PDP Hero V2",
+      "blocks": [
+        {
+          "type": "title"
+        },
+        {
+          "type": "reviews_fallback",
+          "settings": {
+            "stars_count": 5,
+            "rating_text": "4.8 (147 REVIEWS)",
+            "trust_text": "TRUSTED BY 3,000+ HEALTHCARE PROVIDERS."
+          }
+        },
+        {
+          "type": "description"
+        },
+        {
+          "type": "included_products",
+          "settings": {
+            "heading": "WHAT'S INCLUDED",
+            "product_1_title": "Nitric Oxide Support",
+            "product_1_subtitle": "60 capsules · 1 month supply",
+            "product_2_title": "NO Test Strips",
+            "product_2_subtitle": "50 count · results in 10 sec"
+          }
+        },
+        {
+          "type": "product_price"
+        },
+        {
+          "type": "clinical_drawer_button",
+          "settings": {
+            "button_text": "Clinical Trials",
+            "clinical_drawer_title": "Clinical Trials",
+            "clinical_drawer_body": "<p>Add your drawer content here.</p>"
+          }
+        },
+        {
+          "type": "subscription_plans",
+          "settings": {
+            "otp_shipping_note": "+ $7.50 Shipping",
+            "perk_1": "Maximum savings — lowest price per serving",
+            "perk_2": "30-day money-back guarantee",
+            "perk_3": "Includes 10 free test strips",
+            "perk_4": "Free US shipping",
+            "perk_5": "Pause or cancel at any time"
+          }
+        },
+        {
+          "type": "buy_buttons",
+          "settings": {
+            "cta_text": "SUBSCRIBE & SAVE",
+            "show_shoppay_widget": true,
+            "show_truemed_widget": true,
+            "shop_pay_text": "Pay in 4 interest-free installments with Shop Pay",
+            "hsa_text": "HSA/FSA eligible for qualified customers"
+          }
+        },
+        {
+          "type": "trust_badges"
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "How to Use",
+            "content": "<p>Take two capsules once a day with water after food. This dosage boosts Nitric Oxide levels throughout for up to 24 hours. Do not exceed the recommended daily intake unless under the direction of your physician.</p><p>Suitable for vegetarians and vegans. Made without most allergens (milk, eggs, fish, shellfish, tree nuts, peanuts, wheat, soy). Gluten and gelatin free.</p>",
+            "open_by_default": true
+          }
+        },
+        {
+          "type": "accordion_pdp",
+          "settings": {
+            "title": "Who Is This For?",
+            "content": "<p>For adults looking for clinically supported daily Nitric Oxide support with measurable results.</p><p>Suitable for men and women over 18 who want simple, trackable support for blood flow, energy, sexual wellness and healthy aging.</p>",
+            "open_by_default": true
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Benefits",
+            "content": "<p>✓ Supports healthy blood pressure &amp; heart health</p><p>✓ Promotes energy and endurance</p><p>✓ Enhances sexual performance</p><p>✓ Measureable with nitric oxide test strips</p>",
+            "open_by_default": false
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Clinical Trials",
+            "content": "<p>Clinically studied ingredients backed by peer-reviewed research.</p>",
+            "open_by_default": false
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Ingredients",
+            "content": "<p><strong>Plant-Based Nitrate Blend</strong></p><p>Provides dietary nitrates that convert into nitric oxide to support circulation and vascular health.</p><p><strong>Vitamin C</strong></p><p>Helps convert nitrates into nitric oxide while supporting immune and vascular function.</p><p><strong>Magnesium</strong></p><p>Relaxes blood vessels and supports cardiovascular health and energy production.</p>",
+            "open_by_default": false
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Who Is This For",
+            "content": "<p>Nitric Oxide Support is designed for anyone looking to improve how their body performs and feels at its core — through better blood flow.</p><ul><li>Adults 30+ experiencing declines in energy, endurance, or recovery</li><li>Individuals focused on heart health and long-term wellness</li><li>Men and women seeking support for sexual health and circulation</li><li>Anyone taking a proactive, preventative approach to healthy aging</li></ul>",
+            "open_by_default": false
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

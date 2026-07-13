@@ -1,0 +1,737 @@
+{%-liquid
+  assign show = true
+  assign now = 'now' | date: '%s' | times: 1
+  assign start_date = section.settings.start_date | default: 'now' | date: '%s' | times: 1
+  assign end_date = section.settings.end_date | date: '%s' | times: 1
+  if start_date > now
+    assign show = false
+  endif
+  if end_date > 0 and end_date < now
+    assign show = false
+  endif
+-%}
+{%- if show -%}
+  <div class="bg-bg" style="--color-text: {{ section.settings.text_color | default: '#090909' }}; --color-bg: {{ section.settings.bg_color | default: '#F6F3F0' }}">
+    <div class="{% unless section.settings.full_width %} px-4 {{ section.settings.mobile_spacing_bottom | prepend: 'pb-' }} {{ section.settings.mobile_spacing_top | prepend: 'pt-' }} {{ section.settings.spacing_top | prepend: 'md:pt-' }} {{ section.settings.spacing_bottom | prepend: 'md:pb-' }}{% endunless %} bg-bg text-text max-width-container">
+      <div class="{{ section.settings.split }} grid grid-rows-1">
+        <style>
+          .box-list{
+            padding:1rem;
+            @media(max-width:768px){
+              padding:0;
+            }
+          }
+          .grid-col-2{
+            align-items: center;
+            @media (min-width:768px){
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+            }     
+          }
+          @media (min-width:768px){
+            .image-first{
+              display: flex;
+              flex-direction: row-reverse;
+            }
+          }
+
+          @media(max-width:768px){
+            .image-mobile{
+              margin-top: 1rem;
+            }
+          }
+          
+        </style>
+        <div class="grid grid-col-2 order-1 {%if section.settings.layout == "image_first"%}image-first{%endif%}">
+          <div data-parent class="{%if section.settings.box_layout == "column"%}flex flex-col{%endif%} {%if section.settings.box_layout == "grid"%}grid grid-col-2 gap-6{%endif%} {% if section.settings.border %}border-2 border-navy rounded-[46px] {% endif %} box-list h-full space-y-6 w-full">
+          {%- for block in section.blocks -%}
+            {% case block.type %}
+              {%- when 'benefit' -%}
+                <style>
+                  .benefits-cards{
+                    gap:24px;
+                  }
+                  .border-card{
+                    display: flex;
+                    min-height: 360px;
+                    flex-direction: column;
+                    border: 1px solid;
+                    border-radius: 16px;
+                    border-color: #D44F2F;
+                    padding: 24px; 
+                    gap: 16px;
+                  }
+                  .card-heading{
+                    color: #D44F2F;
+                    font-size: 18px;
+                    font-weight: 600;
+                    line-height: 120%;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
+                  }
+                  .benefit-paragraph{
+                    font-size: 20px;
+                    line-height: 150%;
+                    font-weight: 400;
+                    color: #080B2B;
+                  }
+                  .mt-0{
+                    margin-top: 0 !important;
+                  }
+                </style>
+              <div class="flex flex-col benefits-cards mt-0">
+                <div class="border-card">
+                  {% if block.settings.icon != blank %}
+                    <div class="icon-benefit">
+                      {{ block.settings.icon }}
+                    </div>
+                  {%endif%}
+                  {% if block.settings.heading %}
+                      <span class="card-heading">
+                        {{block.settings.heading}}
+                      </span>
+                  {% endif %}
+                  {% if block.settings.paragraph %}
+                      <p class="benefit-paragraph">
+                        {{block.settings.paragraph}}
+                      </p>
+                  {% endif %}
+                </div>
+              </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+          <div class="{% if section.settings.mobile_hidden %}hidden md:block {% endif %} {% if section.settings.layout == 'image_first' %} order-1 {% endif %} {% if section.settings.layout == 'text_first' %} md:order-1 {% endif %} {% if section.settings.layout == 'text_first_both' %} order-2 {% endif %} w-full">
+            <div class="{{ section.settings.image_ratio }} relative h-full w-full {% unless section.settings.full_width %} md:h-[85%] {% endunless %} flex justify-center items-center image-mobile">
+              <style>
+                .rounded-16{
+                  border-radius: 16px;
+                }
+              </style>    
+              {%- liquid
+              if section.settings.video_file != blank
+                render 'video-autoplay', id: section.id, video: section.settings.video_file, fit: section.settings.image_cover
+              else
+                if section.settings.image != blank
+                  render 'image', image: section.settings.image, fit: section.settings.image_cover, eager: section.settings.eager, classes: 'h-full rounded-[46px]'
+                else
+                  echo 'image' | placeholder_svg_tag: 'placeholder-svg'
+                endif
+              endif
+            -%}
+
+            {%- assign btn_img_count = 0 -%}
+            {%- for block in section.blocks -%}
+              {% case block.type %}
+                {% when 'btn-img' %}
+                  {%- if btn_img_count < 1 -%}
+                    <style>
+                      .btn-img-fixed {
+                        width: 100%;
+                        margin: 0 auto;
+                        padding: 24px 40px;
+                        background: #d84f2f;
+                        color: #fff;
+                        text-decoration: none;
+                        font-weight: 700;
+                        border-radius: 28px;
+                        text-transform: uppercase;
+                        text-align: center;
+                        
+                        font-size: 14px;
+                        letter-spacing: 0.06em;
+                        transition: filter 0.2s ease;
+                        display: block;
+                      }
+                      .btn-img-fixed:hover {
+                        filter: brightness(1.05);
+                      }
+
+                      .custom-bottom {
+                      bottom: -1rem;
+                      @media (max-width: 576px) {
+                        bottom: 0;
+                      }
+                    }
+                    </style>
+                    <div class="absolute custom-bottom left-1/2 transform -translate-x-1/2 z-10 w-full px-4" {{ block.shopify_attributes }}>
+                      <a href="{{ block.settings.button_link | default: '#' }}" class="btn-img-fixed">
+                        {{ block.settings.button_text | default: 'Get Started' }}
+                      </a>
+                    </div>
+                    {%- assign btn_img_count = btn_img_count | plus: 1 -%}
+                  {%- endif -%}
+              {% endcase %}
+            {%- endfor -%}
+            </div>
+          </div>
+        </div>
+        
+
+        <div data-parent class="flex flex-col {% if section.settings.border %}border-2 border-navy rounded-[46px] {% endif %} {% if section.settings.justify_top %} md:!pt-0 {% else %} justify-center {% endif %} p-4 md:p-8 md:px-16 h-full space-y-6 w-full {{ section.settings.text_align | default: 'text-left' }}">
+          {%- for block in section.blocks -%}
+            {% case block.type %}
+              {%- when 'heading' -%}
+              <{{ block.settings.heading_level | default: 'p' }}
+                data-pre="opacity-0 translate-y-8"
+                data-post="opacity-100 translate-y-0"
+                class="motion-safe:transition-all motion-safe:duration-700 {{ block.settings.heading_style }}"
+                {{ block.shopify_attributes }}>
+                {% if block.settings.cursive_color == "text-white" %}
+                  {{ block.settings.heading | replace_first: "**", "<span class='text-white text-[50px] md:text-[71px] font-secondaryHeader'>" | replace: "**", "</span>" }}
+                {% else %}
+                  {{ block.settings.heading | replace_first: "**", "<span class='text-brand text-[50px] md:text-[71px] font-secondaryHeader'>" | replace_first: "**", "</span>" | replace_first: "**", "<span class='text-brand text-[50px] md:text-[71px] font-secondaryHeader'>" | replace_first: "**", "</span>" }}
+                {% endif %}
+              </{{ block.settings.heading_level | default: 'p' }}>
+              {%- when 'richtext' -%}
+              <div
+                data-pre="opacity-0 translate-y-8"
+                data-post="opacity-100 translate-y-0"
+                class="prose motion-safe:transition-all motion-safe:duration-700 {{ block.settings.text_size }} {% if block.settings.enable_border %}border-b border-black/30 pb-2{% endif %}"
+                {{ block.shopify_attributes }}>
+                <style>
+                  .prose a {
+                    text-decoration: underline;
+                  }
+                </style>
+                {{ block.settings.richtext }}
+              </div>
+              {%- when 'text' -%}
+                <style>
+                   .align-self-center{
+                      align-self: center;
+                    }
+                </style>
+              <div
+                data-pre="opacity-0 translate-y-8"
+                data-post="opacity-100 translate-y-0"
+                class="align-self-center bold-text custom-bullets prose{% if block.settings.columns %} grid grid-cols-2 gap-y-8 gap-x-4 {% endif %} motion-safe:transition-all motion-safe:duration-700 list_div"
+                {{ block.shopify_attributes }}>
+                {{ block.settings.text }}
+              </div>
+              {%- when 'button' -%}
+              {%- if customer.b2b? -%}
+                {% if block.settings.b2b_button_link != blank  %}
+                <div
+                  data-text="{{ block.settings.b2b_button_label }}"
+                  data-pre="opacity-0 translate-y-8"
+                  data-post="opacity-100 translate-y-0"
+                  class="{%if block.settings.mobile_hide %} hidden md:block {%endif%} {{ section.settings.text_align | default: 'text-left' }} motion-safe:transition-all motion-safe:duration-700">
+                  <a
+                    {%- if block.settings.b2b_button_link != blank %}
+                    href="{{ block.settings.b2b_button_link }}"
+                    {% endif %}
+                    class="{{ block.settings.button_style }} {% if block.settings.button_style == 'button--text' %}!text-brand {% else %} md:px-24  {% endif %} "
+                    {{ block.shopify_attributes }}>
+                    {{ block.settings.b2b_button_label | escape }}
+                  </a>
+                </div>
+                  {%- endif -%}
+              {% else %}
+             
+              {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+                <div
+                  data-text="{{ block.settings.button_label }}"
+                  data-pre="opacity-0 translate-y-8"
+                  data-post="opacity-100 translate-y-0"
+                  class="{%if block.settings.mobile_hide %} hidden md:block {%endif%} {{ section.settings.text_align | default: 'text-left' }} motion-safe:transition-all motion-safe:duration-700">
+                  <a
+                    {%- if block.settings.button_link != blank %}
+                    href="{{ block.settings.button_link }}"
+                    {% endif %}
+                    class="{{ block.settings.button_style }} {% if block.settings.button_style == 'button--text' %}!text-brand {% else %} md:px-24  {% endif %} "
+                    {% if block.settings.button_link == blank %}
+                    aria-disabled="true"
+                    {% endif %}
+                    {{ block.shopify_attributes }}>
+                    {{ block.settings.button_label | escape }}
+                  </a>
+                </div>
+              {%- endif -%}
+                  {%- endif -%}
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+
+
+{% schema %}
+{
+  "name": "C Blocks With Image",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image and Color Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "eager",
+      "label": "Eager load the image?",
+      "default": false,
+      "info": "Enable this when this is the first image on the page."
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_hidden",
+      "label": "Hide image on mobile",
+      "default": false,
+    },
+    {
+      "type": "text",
+      "id": "video_file",
+      "label": "Video",
+      "info": "This file, which you can upload to the [file page](/admin/settings/files), will override the image and autoplay muted and looped."
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "aspect-video",
+          "label": "Wider"
+        },
+        {
+          "value": "aspect-[4/3]",
+          "label": "Wide"
+        },
+        {
+          "value": "aspect-[3/4]",
+          "label": "Portrait"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        },
+        {
+          "value": "aspect-square rounded-full",
+          "label": "Circle"
+        }
+      ],
+      "default": "aspect-square",
+      "label": "Image Ratio"
+    },
+    {
+      "type": "select",
+      "id": "image_cover",
+      "options": [
+        {
+          "value": "object-cover",
+          "label": "Cover"
+        },
+        {
+          "value": "object-contain",
+          "label": "Contain"
+        },
+        {
+          "value": "object-cover md:object-contain",
+          "label": "Contain Desktop, Cover Mobile"
+        }
+      ],
+      "default": "object-cover",
+      "label": "Image Stretch",
+      "info": "Whether the image or video stretches to the container of shrinks to fit."
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "image_first",
+          "label": "Image First"
+        },
+        {
+          "value": "text_first",
+          "label": "Text First"
+        },
+        {
+          "value": "text_first_both",
+          "label": "Text First Mobile and Desktop"
+        }
+      ],
+      "default": "image_first",
+      "label": "Image Order on Desktop",
+      "info": "Will default to image first on mobile."
+    },
+    {
+      "type": "select",
+      "id": "box_layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "column",
+          "label": "Columns"
+        }
+      ],
+      "default": "column",
+      "label": "Boxes Layout",
+      "info": "Boxes layout style."
+    },
+    {
+      "type": "select",
+      "id": "split",
+      "options": [
+        {
+          "value": "md:grid-rows-2",
+          "label": "1/2, 1/2"
+        },
+        {
+          "value": "md:grid-rows-[minmax(0px,1fr),minmax(0px,2fr)]",
+          "label": "1/3, 2/3"
+        },
+        {
+          "value": "md:grid-rows-[minmax(0px,2fr),minmax(0px,1fr)]",
+          "label": "2/3, 1/3"
+        }
+      ],
+      "default": "md:grid-rows-2",
+      "label": "Proportional split.",
+      "info": "Only effects desktop size."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "header",
+      "content": "Heading and Text Settings"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Align Text",
+      "options": [
+        {
+          "value": "text-center",
+          "label": "Center all"
+        },
+        {
+          "value": "text-left",
+          "label": "Left all"
+        },
+        {
+          "value": "text-right",
+          "label": "Right all"
+        },
+        {
+          "value": "text-center md:text-left",
+          "label": "Desktop left, Mobile center"
+        },
+        {
+          "value": "text-center md:text-right",
+          "label": "Desktop right, Mobile center"
+        }
+      ],
+      "default": "text-center md:text-left"
+    },
+    {
+      "type": "checkbox",
+      "id": "justify_top",
+      "label": "Top aligned",
+      "default": false,
+    },
+    {
+      "type": "header",
+      "content": "Padding and Margin Settings"
+    },
+    {
+      "type": "range",
+      "id": "spacing_top",
+      "label": "Spacing top",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 8,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_top",
+      "label": "Mobile Spacing Top",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom",
+      "label": "Spacing bottom",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 8,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_bottom",
+      "label": "Mobile Spacing bottom",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width?",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "border",
+      "label": "Add Border",
+      "default": false,
+      "info": "Add a border around the text section"
+    },
+    {
+      "type": "header",
+      "content": "Scheduling",
+      "info": "Enter a start date and/or end date to hide and show this section on a schedule."
+    },
+    {
+      "type": "text",
+      "id": "start_date",
+      "label": "Start Date",
+      "info": "Defaults to now"
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "End Date",
+      "info": "Defaults to never",
+      "placeholder": "2021-12-31 23:59 EST"
+    }
+  ],
+  "blocks": [
+  {
+    "type": "btn-img",
+    "name": "Image Button",
+    "limit": 1,
+    "settings": [
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button Text",
+        "default": "Get Started"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link",
+      }
+    ]
+  },
+  {
+    "type": "benefit",
+    "name":"Benefit",
+    "settings": [
+      {
+        "type":"html",
+        "id": "icon",
+        "label": "Icon"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "heading",
+        "label": "Heading"
+      },
+      {
+        "type": "text",
+        "id": "paragraph",
+        "default": "Lorem Ipsum donor ae",
+        "label": "Paragraph"
+      },            
+    ]
+  },
+  {
+    "type": "heading",
+    "name": "Heading",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "Image with text",
+        "label": "t:sections.image-with-text.blocks.heading.settings.heading.label"
+      },
+      {
+        "type": "select",
+        "id": "cursive_color",
+        "label": "Cursive Color",
+        "default": "text-brand",
+        "options": [
+          {
+            "value": "text-brand",
+            "label": "Orange"
+          },
+          {
+            "value": "text-white",
+            "label": "White"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_level",
+        "label": "Heading Hierarchy",
+        "default": "h2",
+        "options": [
+          { "value": "h1", "label": "Heading 1" },
+          { "value": "h2", "label": "Heading 2" },
+          { "value": "h3", "label": "Heading 3" },
+          { "value": "h4", "label": "Heading 4" },
+          { "value": "h5", "label": "Heading 5" },
+          { "value": "p", "label": "Paragraph" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_style",
+        "label": "Heading Style",
+        "options": [
+          { "value": "h1", "label": "Heading 1" },
+          { "value": "h2", "label": "Heading 2" },
+          { "value": "h3", "label": "Heading 3" },
+          { "value": "h4", "label": "Heading 4" },
+          { "value": "h5", "label": "Heading 5" },
+          { "value": "subhead", "label": "Small Caps" }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "name": "Text",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "text",
+        "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+        "label": "Text Content"
+      },
+      {
+        "type": "checkbox",
+        "id": "columns",
+        "label": "Columns",
+        "default": false
+      }
+    ]
+  },
+  {
+    "type": "button",
+    "name": "Button",
+    "settings": [
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button Label",
+        "info": "Button text to display."
+      },
+      {
+        "type": "text",
+        "id": "b2b_button_label",
+        "label": "B2B Button Label"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      },
+      {
+        "type": "url",
+        "id": "b2b_button_link",
+        "label": "B2B Button Link"
+      },
+      {
+        "type": "select",
+        "id": "button_style",
+        "label": "Button Style",
+        "default": "button button--primary",
+        "options": [
+          { "value": "button button--primary", "label": "Primary Button" },
+          { "value": "button button--secondary", "label": "Secondary Button" },
+          { "value": "button button--outline", "label": "Outline Button" },
+          { "value": "button button--tertiary", "label": "Tertiary Button" },
+          { "value": "button--text", "label": "Text Link" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "mobile_hide",
+        "label": "Hide on mobile",
+        "default": false
+      }
+    ]
+  },
+  {
+    "type": "richtext",
+    "name": "Rich Text",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "richtext",
+        "default": "<p>Add your rich text content here.</p>",
+        "label": "Rich Text Content"
+      },
+      {
+        "type": "select",
+        "id": "text_size",
+        "label": "Text Size",
+        "default": "text-base",
+        "options": [
+          { "value": "text-sm", "label": "Small" },
+          { "value": "text-base", "label": "Normal" },
+          { "value": "text-lg", "label": "Large" },
+          { "value": "text-xl", "label": "Extra Large" }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_border",
+        "label": "Enable Bottom Border",
+        "default": false,
+        "info": "Adds a bottom border to the block (30% opacity black)."
+      }
+    ]
+  }
+  
+],
+  "presets": [
+    {
+      "name": "C Blocks With Image",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

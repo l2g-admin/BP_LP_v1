@@ -1,0 +1,306 @@
+{%- assign contact_methods = section.blocks | where: "type", "contact" -%}
+{%- assign text_blocks = section.blocks | where: "type", "text_block" -%}
+<div class="pt-12 mb-8 bg-cream" id="contact-form">
+<div class="max-w-screen-xl p-4 md:p-12 mx-auto bg-[#EBE8E5] rounded-3xl">
+  {%- for block in text_blocks -%}
+    <div class="mb-4 text-lg font-semibold text-center text-brand">
+      {{ block.settings.text }}
+    </div>
+  {%- endfor -%}
+  <div class="grid grid-cols-1 md:gap-8 md:grid-cols-3">
+    <div class="p-4">
+      <h2 class="md:mb-8 h2 md:w-3/4">
+          <p class="md:mb-4 h2">{{ section.settings.heading | replace_first: "**", "<span class='text-brand font-secondaryHeader'>" | replace_first: "**", "</span>"  }}</p>
+          </h2>
+      {%- unless contact_methods.size == 0 -%}
+        <ul class="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8 items-center ">
+          {%- for block in contact_methods -%}
+            <li class="contents">
+              <span class=" subhead opacity-70">
+                {{ block.settings.label }}
+              </span>
+              <a href="mailto:{{ block.settings.email }}" class="underline underline-offset-2 decoration-transparent hover:underline-gray-200">
+                {{ block.settings.email }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endunless -%}
+    </div>
+    <div class="p-4  md:col-span-2 text-[#838392]">
+
+      {%- form 'contact', id: 'ContactForm' -%}
+        {%- if form.posted_successfully? -%}
+          <div class="flex items-center gap-2 mb-4"><span class="w-6 h-6">{% render 'icon-success' %} </span>{{ 'templates.contact.form.post_success' | t }}</div>
+        {%- elsif form.errors -%}
+          <div class="form__message">
+            <h2 role="alert">{% render 'icon-error' %} {{ 'templates.contact.form.error_heading' | t }}</h2>
+          </div>
+          <ul role="list">
+            <li>
+              <a href="#ContactForm-email" class="underline">
+                {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+              </a>
+            </li>
+          </ul>
+        {%- endif -%}
+        <div class="grid grid-cols-2 gap-4 md:gap-x-8">
+          {%- if section.settings.show_name -%}
+            <div>
+              <input aria-required="true" class="w-full bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0" autocomplete="name" type="text" id="ContactForm-name" name="contact[{{ 'templates.contact.form.name' | t }}]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+              <label class="block tracking-[2.28px] font-bold mt-2 text-sm uppercase cursor-pointer" for="ContactForm-name">First Name*</label>
+
+            </div>
+          {%- endif -%}
+          {%- if section.settings.show_name -%}
+            <div>
+              <input aria-required="true" class="w-full bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0" autocomplete="name" type="text" id="ContactForm-lastname" name="contact[lastname]" value="{% if form.lastname %}{{ form.lastname }}{% elsif customer %}{{ customer.lastname }}{% endif %}">
+              <label class="block text-sm tracking-[2.28px] font-bold mt-2 uppercase cursor-pointer" for="ContactForm-lastname">Last Name*</label>
+
+            </div>
+          {%- endif -%}
+          {%- if section.settings.show_email -%}
+            <div class="col-span-2">
+              <div>
+                <input
+                  autocomplete="email"
+                  type="email"
+                  id="ContactForm-email"
+                  class="w-full bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0"
+                  name="contact[email]"
+                  spellcheck="false"
+                  autocapitalize="off"
+                  value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                  aria-required="true"
+                  required
+                  {% if form.errors contains 'email' %}
+                    aria-invalid="true"
+                    aria-describedby="ContactForm-email-error"
+                  {% endif %}
+                >
+                  <label class="block text-sm tracking-[2.28px] font-bold mt-2 uppercase cursor-pointer" for="ContactForm-email">{{ 'templates.contact.form.email' | t }} <span class="hidden" aria-hidden="true">*</span></label>
+
+              </div>
+              {%- if form.errors contains 'email' -%}
+                <small class="contact__field-error" id="ContactForm-email-error">
+                  <span class="sr-only">{{ 'accessibility.error' | t }}</span>
+                  <span class="form__message">{% render 'icon-error' %}{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</span>
+                </small>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          {%- if section.settings.show_phone -%}
+            <div class="col-span-2">
+             <input type="tel" id="ContactForm-phone" class="w-full bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0" autocomplete="tel" name="contact[{{ 'templates.contact.form.phone' | t }}]" pattern="[0-9\-]*" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}" >
+             <label class="block text-sm uppercase tracking-[2.28px] font-bold mt-2 cursor-pointer" for="ContactForm-phone">{{ 'templates.contact.form.phone' | t }}</label>
+
+            </div>
+          {%- endif -%}
+          
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when "field_text" -%}
+                <div class="">
+                  <input class="w-full bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0" type="text" id="ContactForm-{{ block.settings.label | handleize }}" name="contact[{{ block.settings.label | handleize }}]" value="" >
+                  <label class="block text-sm tracking-[2.28px] font-bold mt-2 uppercase cursor-pointer" for="ContactForm-{{ block.settings.label | handleize }}">{{ block.settings.label }}</label>
+
+                </div>
+              {%- when "field_textarea" -%}
+                <div class="col-span-2">
+                  <textarea
+                    rows="10"
+                    id="ContactForm-{{ block.settings.label | handleize }}"
+                    class="w-full bg-transparent !border-b-2 border-black border-t-0 border-r-0 border-l-0"
+                    name="contact[{{ block.settings.label | handleize }}]"
+                    placeholder="{{ block.settings.label }}"
+                  ></textarea>
+                  <label class="block text-sm tracking-[2.28px] font-bold mt-2 uppercase cursor-pointer" for="ContactForm-{{ block.settings.label | handleize }}">{{ block.settings.label }}</label>
+
+                </div>
+              {%- when "field" -%}
+                {%- assign options = block.settings.options | split: ', ' -%}
+                {%- assign field_key = block.settings.label | handleize | default: block.id -%}
+                {%- if field_key == blank -%}{%- assign field_key = block.id -%}{%- endif -%}
+                <div class="w-full col-span-2 md:col-span-1">
+                  <label class="block text-sm tracking-[2.28px] font-bold mt-2 uppercase cursor-pointer sr-only" for="ContactForm-{{ field_key }}">{{ block.settings.label }}</label>
+                  <select class="uppercase bg-white rounded-full" id="ContactForm-{{ field_key }}" name="contact[{{ field_key }}]">
+                    <option value="" disabled selected>State</option>
+                    {%- for option in options -%}
+                      <option value="{{ option }}">{{ option }}</option>
+                    {%- endfor -%}
+                  </select>
+                </div>
+              {%- when "field_radio" -%}
+                {%- assign options = block.settings.options | split: ', ' -%}
+                {%- assign field_key = block.settings.label | handleize -%}
+                {%- if field_key == blank -%}{%- assign field_key = block.id -%}{%- endif -%}
+                <div class="md:flex w-full col-span-2 gap-4 justify-between text-[#1C1F3F]">
+                  <label class="block text-sm tracking-[2.28px] font-bold mt-2 uppercase cursor-pointer" for="ContactForm-{{ field_key }}">{{ block.settings.label }}</label>
+                    {%- for option in options -%}
+                      <div class="flex gap-4">
+                        <input type="radio" id="ContactForm-{{ option | handleize }}" name="contact[{{ field_key }}]" value="{{ option }}">
+                        <label class="block tracking-[2.28px] font-bold mt-2 text-sm uppercase cursor-pointer " for="ContactForm-{{ option | handleize }}">{{ option }}</label>
+                      </div>
+                    {%- endfor -%}
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+          <div class="col-span-2">
+            <label class="block text-sm uppercase tracking-[2.28px] font-bold mt-2 cursor-pointer sr-only" for="ContactForm-body">{{ 'templates.contact.form.comment' | t }}</label>
+            <textarea
+              rows="10"
+              id="ContactForm-body"
+              class="w-full rounded-2xl placeholder:uppercase bg-transparent border-0 bg-[#F6F3F0]"
+              name="contact[{{ 'templates.contact.form.comment' | t }}]"
+              placeholder="Message"
+            >
+              {{- form.body -}}
+            </textarea>
+          </div>
+        </div>
+        <div class="grid mt-4 gap-y-4 md:grid-cols-2">
+          <div>
+            <input type="checkbox" id="consent" class="rounded-full" name="contact[consent]" value="yes" checked />
+            <label for="consent">I agree to receive SMS Messages from Berkeley Life, which I can opt-out from at any time by replying STOP*</label>
+          </div>
+          <div>
+          <span class="sr-only">{{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}</span>
+          <button type="submit" class="!w-full button button--primary md:px-12">
+            {{ 'templates.contact.form.send' | t }}
+          </button>
+         </div>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.contact-form.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Contact form",
+      "label": "Heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_name",
+      "label": "Show Name Field",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_email",
+      "label": "Show Email Field",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Show Phone Field",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_block",
+      "name": "Standalone Text Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text Content",
+          "default": "This is a custom standalone text block."
+        }
+      ]
+    },
+    {
+      "type": "contact",
+      "name": "Contact Method",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "default": "Label",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email"
+        }
+      ]
+    },
+    {
+      "type": "field_text",
+      "name": "Extra Field - Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "default": "Label",
+          "label": "Label"
+        }
+      ]
+    },
+    {
+      "type": "field_textarea",
+      "name": "Extra Field - Text Area",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "default": "Label",
+          "label": "Label"
+        }
+      ]
+    },
+    {
+      "type": "field",
+      "name": "Extra Field - Dropdown",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "default": "Label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "options",
+          "default": "One, Two, Three",
+          "label": "Options",
+          "info": "Comma-plus-space separated list."
+        }
+      ]
+    },{
+      "type": "field_radio",
+      "name": "Extra Field - Radio",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "default": "Label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "options",
+          "default": "One, Two, Three",
+          "label": "Options",
+          "info": "Comma-plus-space separated list."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.contact-form.presets.name"
+    }
+  ]
+}
+{% endschema %}

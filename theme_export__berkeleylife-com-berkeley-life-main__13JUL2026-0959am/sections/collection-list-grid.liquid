@@ -1,0 +1,139 @@
+
+<div class="px-4 py-8 overflow-hidden md:px-8 md:py-16 bg-bg text-text" style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#f7f7f7' }}">
+  <div class="max-w-screen-lg mx-auto">
+    {%- unless section.settings.title == blank and section.settings.link_url == blank -%}
+      <div class="mb-8 space-y-4 text-center md:text-left md:-mb-8 md:w-1/2">
+        <h2 class="h2">{{ section.settings.title }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
+    {%- unless section.blocks == 0 -%}
+    <ul class="grid w-full grid-flow-row-dense grid-cols-12 gap-4"
+      role="list"
+      data-parent
+    >
+      {%- for block in section.blocks -%}
+        {%- unless block.settings.collection == blank -%}
+          <li data-pre="opacity-0" data-post="opacity-100" data-collection-grid-item class="motion-safe:transition-all motion-safe:duration-700 {% cycle 'col-span-12 md:col-span-6', 'col-span-6', 'col-span-6' %} {% cycle 'md:row-span-2 md:self-center md:py-4', 'md:row-span-1 md:w-2/3', 'md:row-span-1', 'md:row-span-1', 'md:row-span-2 md:self-center md:py-4', 'md:row-span-1 md:w-2/3 md:justify-self-end' %}" {{ block.shopify_attributes }}>
+            <a href="{{ block.settings.collection.url }}" class="block group">
+
+              <div class="relative overflow-hidden {% cycle 'aspect-square md:aspect-[3/4]', 'aspect-[3/4] md:aspect-square', 'aspect-[3/4] md:aspect-[4/3]', 'aspect-[3/4] md:aspect-[3/5]', 'aspect-square md:aspect-[3/4]', 'aspect-[3/4] md:aspect-square' %}">
+                {%-liquid
+                  assign base_image_classes = 'w-full h-full'
+                  assign loop = forloop.index | modulo: 3
+                  assign base_size = '(min-width: 750px) 50vw, 33vw'
+                  if loop == 1
+                    assign base_size = '(min-width: 750px) 50vw, 100vw'
+                  endif
+                  if block.settings.image != blank
+                    render 'image', image: block.settings.image, fit: 'object-cover', classes: 'absolute h-full w-full opacity-0 md:group-hover:opacity-100 md:group-hover:scale-105 motion-safe:transition-all motion-safe:duration-700', img_size: base_size, fade_in: false
+                    assign base_image_classes = base_image_classes | append: ' opacity-100 md:group-hover:opacity-0 md:group-focus:opacity-0 transition-opacity'
+                  endif
+                  render 'image', image: block.settings.collection.featured_image, fit: 'object-cover', classes: base_image_classes, fade_in: false, img_size: base_size
+                -%}
+                {%- if block.settings.description != blank -%}
+                  <div class="absolute inset-0 flex items-center justify-center p-4 text-center transition-opacity opacity-0 md:group-hover:opacity-100 md:group-focus:opacity-100 bg-black/25 backdrop-grayscale">
+                    <span class="block text-white h3">{{ block.settings.description }}</span>
+                  </div>
+                {%- endif -%}
+              </div>
+
+              <h3 class="flex items-center pt-2 space-x-1 md:pt-4 group-hover:underline group-focus:underline">
+                {%- if block.settings.title != blank -%}
+                  <span class="h5">{{- block.settings.title | escape -}}</span>
+                {%- elsif block.settings.collection.title != blank -%}
+                  <span class="h5">{{- block.settings.collection.title | escape -}}</span>
+                {%- endif -%}
+                {% render 'icon-arrow' classes: "text-white" %}
+              </h3>
+            </a>
+            </li>
+        {%- endunless -%}
+      {%- endfor -%}
+    </ul>
+    {%- endunless -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collections Grid",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add these in groups of 3 in order to maintain the right layout."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title Override",
+          "info": "Use this to override the collection title."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override",
+          "info": "Use this to override the collection image on hover."
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Short Description",
+          "info": "Shown on hover."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections Grid",
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

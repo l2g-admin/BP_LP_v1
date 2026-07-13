@@ -1,0 +1,653 @@
+{%- liquid
+  assign section_bg = section.settings.background_color
+  assign card_bg = section.settings.card_background_color
+
+  assign pt_desktop = section.settings.padding_top_desktop | append: 'px'
+  assign pb_desktop = section.settings.padding_bottom_desktop | append: 'px'
+  assign pt_mobile = section.settings.padding_top_mobile | append: 'px'
+  assign pb_mobile = section.settings.padding_bottom_mobile | append: 'px'
+  
+  assign orange_color = '#D44F2F'
+
+  assign image_block = section.blocks | where: 'type', 'image' | first
+-%}
+
+{%- capture star_svg -%}
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="13" viewBox="0 0 14 13" fill="none">
+    <path d="M13.6921 5.04074C13.6921 4.84618 13.5417 4.72237 13.2411 4.66931L9.12881 4.0591L7.29819 0.344817C7.19207 0.132572 7.05942 0.0264502 6.90024 0.0264502C6.74105 0.0264502 6.6084 0.132572 6.50228 0.344817L4.67166 4.0591L0.559419 4.66931C0.258739 4.72237 0.108398 4.84618 0.108398 5.04074C0.108398 5.16455 0.179147 5.2972 0.320643 5.43869L3.29207 8.33053L2.57575 12.4162C2.57575 12.487 2.57575 12.5401 2.57575 12.5754C2.57575 12.6816 2.60228 12.7744 2.65534 12.854C2.7084 12.9336 2.79683 12.9734 2.92064 12.9734C3.00908 12.9734 3.1152 12.938 3.23901 12.8673L6.90024 10.9571L10.5615 12.8673C10.6853 12.938 10.7914 12.9734 10.8798 12.9734C11.0036 12.9734 11.0921 12.9336 11.1451 12.854C11.1982 12.7744 11.2247 12.6816 11.2247 12.5754C11.2247 12.5047 11.2247 12.4516 11.2247 12.4162L10.5084 8.33053L13.4798 5.43869C13.6213 5.2972 13.6921 5.16455 13.6921 5.04074Z" fill="#D44F2F"/>
+  </svg>
+{%- endcapture -%}
+
+<style>
+  .section-{{ section.id }} {
+    --color-brand-orange: {{ orange_color }};
+    --section-bg-color: {{ section_bg }};
+    --card-bg-color: {{ card_bg }};
+    
+    --padding-top-mobile: {{ pt_mobile }};
+    --padding-bottom-mobile: {{ pb_mobile }};
+    --padding-top-desktop: {{ pt_desktop }};
+    --padding-bottom-desktop: {{ pb_desktop }};
+
+    background-color: var(--section-bg-color);
+    padding-top: var(--padding-top-mobile);
+    padding-bottom: var(--padding-bottom-mobile);
+  }
+
+  @media (min-width: 768px) {
+    .section-{{ section.id }} {
+      padding-top: var(--padding-top-desktop);
+      padding-bottom: var(--padding-bottom-desktop);
+    }
+
+    .section-heading{
+      text-align: center;
+      /* TT Commons Pro/H2 */
+      font-size: 54px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 120%; /* 64.8px */
+    }
+
+    .highlight-text
+    {
+      color: var(--color-brand-orange);
+      font-style: italic;
+      font-family: "cormorant-garamond";
+      font-size: 64px;
+      font-weight: 400;
+    }
+
+    .product-paragraph{
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%; /* 30px */
+    }
+
+    .product-card{
+      padding: 32px;
+      align-items: center;
+      gap: 32px;
+      align-self: stretch;
+      border-radius: 16px;
+      border: 1px solid var(--Secondary-Dark-Cream, #EBE8E4);
+      box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    .section-{{ section.id }} .highlight-box {
+      display: flex;
+      padding: 15px 8px;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      flex: 1 0 0;
+      align-self: stretch;
+      border: 1px solid var(--color-brand-orange); 
+      border-radius: 8px;
+      color: var(--color-brand-orange);
+      background-color: #FFFFFF;
+      flex-shrink: 0; 
+    }
+
+    .product-image{
+      display: flex;
+      width: 500px;
+      height: 336px !important;
+      align-items: flex-start;
+      gap: 25px;
+      aspect-ratio: 125/84 !important;
+    }
+
+    .product-title{
+      font-family: "cormorant-garamond";
+      font-size: 64px;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 100%; /* 64px */
+    }
+
+    .review{
+      align-items: center;
+      flex-direction: row !important;
+    }
+  }
+
+  .section-heading{
+    text-align: center;
+    /* TT Commons Pro/H2 */
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%; /* 64.8px */
+  }
+
+  .product-title{
+    font-family: "cormorant-garamond";
+    font-size: 48px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 100%; /* 64px */
+  }
+
+  .highlight-text
+  {
+    color: var(--color-brand-orange);
+    font-style: italic;
+    font-family: "cormorant-garamond";
+    font-size: 48px;
+    font-weight: 400;
+  }
+
+  .product-paragraph{
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 30px */
+  }
+
+  .product-card-container {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .product-card{
+    padding: 24px;
+    align-items: center;
+    gap: 32px;
+    align-self: stretch;
+    border-radius: 16px;
+    border: 1px solid var(--Secondary-Dark-Cream, #EBE8E4);
+    box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  .product-image{
+    display: flex;
+    height: 248px;
+    align-items: flex-start;
+    gap: 25px;
+    aspect-ratio: 79/62;
+  }
+
+  .review{
+    padding: 5px 0;
+    align-items: left;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .section-{{ section.id }} .highlight-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; 
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .section-{{ section.id }} .highlight-wrapper {
+      flex-direction: row;
+      gap: 0.75rem; 
+    }
+  }
+
+  .section-{{ section.id }} .highlight-box {
+    display: flex;
+    padding: 15px 8px;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    flex: 1 0 0;
+    align-self: stretch;
+    border: 1px solid var(--color-brand-orange); 
+    border-radius: 8px;
+    color: var(--color-brand-orange);
+    background-color: #FFFFFF;
+    flex-shrink: 0; 
+  }
+  
+  .section-{{ section.id }} .highlight-box-icon {
+    width: 1.25rem; 
+    height: 1.25rem;
+    color: var(--color-brand-orange);
+  }
+
+  .highlight-box-text {
+    color: var(--color-brand-orange);
+/* Body Medium/sm */
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 150%; /* 21px */
+  }
+  
+  .section-{{ section.id }} .highlight-box-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .section-{{ section.id }} .rating-stars {
+    display: flex;
+    padding: 1px 2.96px 2px 0;
+    align-items: flex-start;
+    color: var(--color-brand-orange);
+  }
+
+  .trusted-text {
+    color: #080B2B;
+    font-size: 16px;
+    font-family: "TT Commons Pro";
+    font-style: italic;
+    font-weight: 700;
+    line-height: 150%;
+  }
+
+  .section-{{ section.id }} .btn-primary {
+    display: inline-block;
+    width: 100%;
+    background-color: var(--color-brand-orange);
+    color: #FFFFFF;
+    /* font-family: "TT Commons Pro"; */
+    border: 2px;
+    padding: 24px 40px;
+    border-radius: 42px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity 0.2s ease-in-out;
+  }
+  
+  .section-{{ section.id }} .btn-primary:hover {
+    opacity: 0.85;
+  }
+
+  .section-{{ section.id }} .rte p {
+    margin: 0;
+  }
+</style>
+
+<div class="section-{{ section.id }}">
+  <div class="product-card-container">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mx-auto text-center mb-8 md:mb-12">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="section-heading">
+            {{ section.settings.heading | replace: "NO Levels", "<span class='highlight-text'>NO Levels</span>"}}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.paragraph != blank -%}
+          <div class="section-paragraph">{{ section.settings.paragraph }}</div>
+        {%- endif -%}
+      </div>
+
+      <div
+        class="product-card"
+        style="background-color: var(--card-bg-color);"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-2 items-center">
+          
+          {%- if image_block -%}
+            <div class="p-6 md:p-10 product-image" {{ image_block.shopify_attributes }}>
+              <img
+                src="{{ image_block.settings.image | image_url: width: 500, height: 336 }}"
+                alt="{{ image_block.settings.image.alt | default: 'Product image' | escape }}"
+                width="{{ image_block.settings.image.width }}"
+                height="{{ image_block.settings.image.height }}"
+                loading="lazy"
+                class="w-full h-auto object-contain"
+              >
+            </div>
+          {%- endif -%}
+
+          <div class="p-6 md:p-10 pt-0 md:pt-10">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'image' %}{% continue %}{% endif -%}
+              
+              {%- if block.type == 'highlight' -%}
+              <div class="highlight-wrapper">
+                
+                <div class="highlight-box" {{ block.shopify_attributes }}>
+                  <span class="highlight-box-icon">
+                    {{ block.settings.icon_svg }}
+                  </span>
+                  <span class="highlight-box-text">{{ block.settings.text }}</span>
+                </div>
+                <div class="highlight-box" {{ block.shopify_attributes }}>
+                  <span class="highlight-box-icon">
+                    {{ block.settings.icon_svg_2 }}
+                  </span>
+                  <span class="highlight-box-text">{{ block.settings.text_2 }}</span>
+                </div>
+                <div class="highlight-box" {{ block.shopify_attributes }}>
+                  <span class="highlight-box-icon">
+                    {{ block.settings.icon_svg_3 }}
+                  </span>
+                  <span class="highlight-box-text">{{ block.settings.text_3 }}</span>
+                </div>
+                
+              </div>
+              {%- else -%}
+                <div
+                  class="
+                    {%- if block.type == 'rating' -%} mb-3
+                    {%- elsif block.type == 'title' -%} mb-3
+                    {%- elsif block.type == 'paragraph' -%} mb-4
+                    {%- elsif block.type == 'button' -%} mt-6
+                    {%- elsif block.type == 'info' -%} mt-3
+                    {%- endif -%}
+                  "
+                  {{ block.shopify_attributes }}
+                >
+                  {%- case block.type -%}
+                    {%- when 'rating' -%}
+                      <div class="flex flex-row sm:flex-col sm:items-center review">
+                        <div class="rating-stars">
+                          {%- for i in (1..block.settings.star_count) -%}
+                            {{ star_svg }}
+                          {%- endfor -%}
+                        </div>
+                        <span class="trusted-text">
+                          {{ block.settings.text }}
+                        </span>
+                      </div>
+
+                    {%- when 'title' -%}
+                      <h3 class="product-title">
+                        {{ block.settings.title }}
+                      </h3>
+
+                    {%- when 'paragraph' -%}
+                      <div class="product-paragraph rte">
+                        {{ block.settings.content }}
+                      </div>
+
+                    {%- when 'button' -%}
+                      <a href="{{ block.settings.button_link }}" class="btn-primary">
+                        {{ block.settings.button_label }}
+                      </a>
+                    
+                    {%- when 'info' -%}
+                      <p class="text-xs text-gray-500 text-center">
+                        {{ block.settings.text }}
+                      </p>
+
+                  {%- endcase -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "C Product Info Card",
+  "tag": "section",
+  "class": "shopify-section-product-highlight-card",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section Background Color",
+      "default": "#F8F7F4"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Improve Your NO Levels with the Berkeley Life System"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "default": "<p>Support your Nitric Oxide levels naturally with our supplements.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Desktop Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Desktop Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Card Image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "rating",
+      "name": "Rating",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "star_count",
+          "label": "Star Count",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Trusted by 3,000+ healthcare providers."
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "NO Foundation"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Nitric Oxide Foundation provides a convenient, clinically effective, two-capsule daily dose to support healthy blood flow, heart health, energy, sexual performance, and overall vitality.</p>"
+        }
+      ]
+    },
+    {
+      "type": "highlight",
+      "name": "Highlight",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "icon_svg",
+          "label": "Icon (Paste SVG code)",
+          "info": "Find icons on sites like heroicons.com and paste the full <svg> code here."
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Highlight text"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_svg_2",
+          "label": "Second Icon (Paste SVG code)",
+          "info": "Find icons on sites like heroicons.com and paste the full <svg> code here."
+        },
+        {
+          "type": "text",
+          "id": "text_2",
+          "label": "Second Text",
+          "default": "Highlight text"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_svg_3",
+          "label": "Third Icon (Paste SVG code)",
+          "info": "Find icons on sites like heroicons.com and paste the full <svg> code here."
+        },
+        {
+          "type": "text",
+          "id": "text_3",
+          "label": "Third Text",
+          "default": "Highlight text"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "CLAIM 20% OFF + FREE STRIPS"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    },
+    {
+      "type": "info",
+      "name": "Info Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Limited time offer • No code required"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Product Info Card",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "rating"
+        },
+        {
+          "type": "title"
+        },
+        {
+          "type": "paragraph"
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "icon_svg": "<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z' /></svg>",
+            "text": "Clinically Backed"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "icon_svg": "<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75' /></svg>",
+            "text": "Easy to use"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "icon_svg": "<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z' /></svg>",
+            "text": "Trusted by Providers"
+          }
+        },
+        {
+          "type": "button"
+        },
+        {
+          "type": "info"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

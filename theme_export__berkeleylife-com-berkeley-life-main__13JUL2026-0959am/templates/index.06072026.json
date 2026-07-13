@@ -1,0 +1,1146 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "c_border_hero_promo_Rkw6Ec": {
+      "type": "c-border-hero-promo",
+      "blocks": {
+        "badge_6GVKEY": {
+          "type": "badge",
+          "settings": {
+            "image": "shopify://shop_images/clinic-choice.svg",
+            "open_trust_reviews": true,
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "badge_6GVKEY"
+      ],
+      "disabled": true,
+      "name": "C Border Hero Promo",
+      "settings": {
+        "use_container": false,
+        "bg_image": "shopify://shop_images/prime-hero.webp",
+        "image_position": "center",
+        "image_position_mobile": "top",
+        "mobile_image_height": 320,
+        "mobile_content_bg": "#1b1e2a",
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.2,
+        "subtitle": "CLINICALLY STUDIED · DOCTOR TRUSTED",
+        "title_part_1_italic": "Prime Savings",
+        "title_part_2": "Extended. Shop & Save 48%",
+        "description": "Healthy blood flow is the foundation of health. Berkeley Life delivers clinically studied Nitric Oxide support — trusted by physicians, backed by decades of research, and proven to support energy, performance, recovery, and long-term heart health.",
+        "btn_label": "Shop Now",
+        "btn_link": "https://berkeleylife.com/collections/shop-all",
+        "show_promo": true,
+        "promo_headline": "<p>25% off storewide + up to <strong>48% off first subscriptions</strong></p>",
+        "promo_note": "Free Test Strips with NO Support or Menopause orders",
+        "promo_code": "PRIME",
+        "promo_copy_label": "Copy",
+        "promo_copied_label": "Copied!",
+        "promo_bg_color_mobile": "#d15234",
+        "promo_border_color_mobile": "#d15234",
+        "promo_bg_color": "rgba(213, 79, 47, 0.30)",
+        "promo_border_color": "#d54f2f",
+        "promo_text_color": "#ffffff",
+        "promo_headline_color": "#f4b89a",
+        "promo_code_bg": "#ffffff",
+        "promo_code_color": "#1b1e2a",
+        "promo_copy_bg": "#1b1e2a",
+        "promo_copy_color": "#ffffff",
+        "show_product_card": true,
+        "card_product": "nitric-oxide-support",
+        "card_badge": "BEST SELLER",
+        "card_link_text": "SHOP NOW",
+        "card_image_override": "shopify://shop_images/IMG_0c0be226-0056-4bb7-ab3a-c3a330ad7444.png",
+        "card_link_override": "",
+        "section_bg_color": "#ffffff",
+        "text_color": "#ffffff",
+        "accent_color": "#d15234",
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0,
+        "padding_top": 2,
+        "padding_bottom": 4
+      }
+    },
+    "c_prime_countdown_FP4UzE": {
+      "type": "c-prime-countdown",
+      "disabled": true,
+      "name": "C Prime Countdown",
+      "settings": {
+        "sl_anchor_id": "",
+        "title": "Prime savings extender",
+        "end_date": "2026-06-29T23:59:00-05:00",
+        "end_label": "June 29 · 11:59PM",
+        "days_label": "Days",
+        "hours_label": "Hrs",
+        "minutes_label": "Min",
+        "seconds_label": "Sec",
+        "bg_color": "#1b1e2a",
+        "title_color": "#8a8e99",
+        "number_color": "#ffffff",
+        "label_color": "#8a8e99",
+        "accent_color": "#d54f2f",
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 24,
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "border_radius": 0
+      }
+    },
+    "c_border_hero_PMJqQX": {
+      "type": "c-border-hero",
+      "blocks": {
+        "badge_mcgqCg": {
+          "type": "badge",
+          "settings": {
+            "image": "shopify://shop_images/clinic-choice_fbd968cf-ee0a-4116-a0a0-a0273a71b618.svg",
+            "open_trust_reviews": true,
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "badge_mcgqCg"
+      ],
+      "name": "C Border Hero",
+      "settings": {
+        "use_container": false,
+        "bg_image": "shopify://shop_images/bb3f82b98c486bc023364e5ec3dbc961dca0785f.jpg",
+        "image_position": "center",
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.4,
+        "subtitle": "CLINICALLY STUDIED · DOCTOR TRUSTED",
+        "title_part_1": "Restore the molecule",
+        "title_part_2_italic": "your body stops making.",
+        "description": "Nitric oxide drops 50% by age 40. Berkeley Life's Nitric Oxide Support replenishes it in days — backed by 30+ clinical studies and 2,500+ healthcare providers.",
+        "hide_description_mobile": true,
+        "btn_label": "Shop Now",
+        "btn_link": "https://berkeleylife.com/collections/shop-all",
+        "show_product_card": true,
+        "card_product": "nitric-oxide-support",
+        "card_badge": "BEST SELLER",
+        "card_link_text": "SHOP NOW",
+        "card_image_override": "shopify://shop_images/IMG_0c0be226-0056-4bb7-ab3a-c3a330ad7444.png",
+        "card_link_override": "",
+        "section_bg_color": "#ffffff",
+        "text_color": "#ffffff",
+        "accent_color": "#d15234",
+        "padding_top": 4,
+        "padding_bottom": 4,
+        "padding_top_mobile": 2,
+        "padding_bottom_mobile": 2
+      }
+    },
+    "c_featured_plan_LFVDDL": {
+      "type": "c-featured-plan",
+      "name": "C Featured Plan",
+      "settings": {
+        "subtitle": "SHOP BESTSELLERS",
+        "title_prefix": "Better Blood Flow Starts with",
+        "title_highlight": "Nitric Oxide",
+        "title_suffix": "",
+        "product": "nitric-oxide-support",
+        "variant_position": "2",
+        "selling_plan_id": "",
+        "subscription_variant_position": "1",
+        "top_badge": "BEST SELLER",
+        "description": "The only Nitric Oxide supplement you can test and track with simple at-home saliva strips. Supports healthy blood flow, energy, heart health, and cognition daily.",
+        "fallback_title": "Nitric Oxide Support",
+        "plan_1_title": "Single",
+        "plan_1_note": "+ shipping",
+        "plan_2_title": "3-Month Sub",
+        "plan_2_note": "free 10ct test strips & free shipping",
+        "plan_2_badge_override": "Save 30%",
+        "btn_label": "Shop Now",
+        "redirect_to_pdp": true,
+        "bg_active_color": "rgba(213, 79, 47, 0.50)",
+        "bg_color": "#f4efe9",
+        "text_color": "#2b2e38",
+        "accent_color": "#d15234",
+        "card_bg_color": "#1b1e2a",
+        "card_text_color": "#ffffff",
+        "plan_bg_color": "#2a2c3a",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_blocks_dropdown_8ffbiU": {
+      "type": "c-blocks-dropdown",
+      "blocks": {
+        "system_card_gNVMkN": {
+          "type": "system_card",
+          "settings": {
+            "title": "CARDIOVASCULAR HEALTH",
+            "subtitle": "Clinically proven to support healthy blood pressure, circulation & arterial flexibility",
+            "description": "<p><strong>Potassium Nitrate<br/>Vitamin C<br/>Vitamin B12<br/>Fermented Beet Root<br/>Beetroot Extract (25% Betaine Nitrate)</strong><br/><br/>Berkeley Life works via the dietary nitrate → nitrite → nitric oxide pathway, validated in double-blind, placebo-controlled trials. Nitric oxide signals blood vessels to relax and widen, improving circulation and supporting healthy blood pressure. Clinical research on Berkeley Life's formula showed reductions in carotid artery stiffness and improvements in vascular responsiveness after 8–12 weeks of daily use. Magnesium reinforces this by further relaxing smooth muscle in blood vessel walls.</p>",
+            "use_cormorant_strong": false
+          }
+        },
+        "system_card_cwnWCA": {
+          "type": "system_card",
+          "settings": {
+            "title": "ENERGY & ENDURANCE",
+            "subtitle": "Boosts oxygen delivery to muscles for lasting stamina and faster recovery",
+            "description": "<p><strong>Potassium Nitrate<br/>Vitamin C<br/>Vitamin B12<br/>Fermented Beet Root<br/>Beetroot Extract (25% Betaine Nitrate)</strong><br/><br/>Nitric oxide improves how efficiently your muscles receive and use oxygen — Berkeley Life's clinical trial subjects showed a 300% increase in capacity to produce energy after 3 months. Vitamin B12 and Thiamin (B1) are essential co-factors in cellular energy metabolism, and Magnesium plays a direct role in ATP production. The result is sustained stamina and reduced fatigue — with no stimulants.</p>",
+            "use_cormorant_strong": false
+          }
+        },
+        "system_card_RKxNHB": {
+          "type": "system_card",
+          "settings": {
+            "title": "COGNITIVE FUNCTION",
+            "subtitle": "Promotes cerebral blood flow for mental clarity, focus and mood",
+            "description": "<p><strong>Potassium Nitrate<br/>Vitamin C<br/>Vitamin B12<br/>Fermented Beet Root<br/>Beetroot Extract (25% Betaine Nitrate)</strong><br/><br/>The brain consumes ~20% of the body's blood supply. By driving vasodilation via the nitrate-to-NO pathway, Berkeley Life supports the cerebral circulation needed for sharp thinking and sustained focus. Vitamin B12 is critical for neurological function, nerve sheath integrity, and neurotransmitter synthesis. Thiamin (B1) supports glucose metabolism in the brain — the primary fuel for cognitive performance.</p>",
+            "use_cormorant_strong": false
+          }
+        },
+        "system_card_WYqBnd": {
+          "type": "system_card",
+          "settings": {
+            "title": "SEXUAL HEALTH",
+            "subtitle": "Supports libido, arousal and performance for men and women",
+            "description": "<p><strong>Potassium Nitrate<br/>Vitamin C<br/>Vitamin B12<br/>Fermented Beet Root<br/>Beetroot Extract (25% Betaine Nitrate)<br/><br/></strong><br/>Nitric oxide is the key molecule behind blood flow to every part of the body — including sexual function. Berkeley Life's clinical pilot showed a 75% increase in libido and 83% enhanced orgasm after 60 days. Improved circulation supports desire and performance in both men and women. Vitamin C enhances NO bioavailability by reducing oxidative breakdown, extending the duration and magnitude of each dose.</p>",
+            "use_cormorant_strong": false
+          }
+        },
+        "system_card_7KRLAa": {
+          "type": "system_card",
+          "settings": {
+            "title": "ACTIVE AGING",
+            "subtitle": "Counteracts the age-related NO decline that drives cardiovascular and metabolic risk",
+            "description": "<p><strong>Potassium Nitrate<br/>Vitamin C<br/>Vitamin B12<br/>Fermented Beet Root<br/>Beetroot Extract (25% Betaine Nitrate)</strong><br/><br/>Nitric oxide is the key molecule behind blood flow to every part of the body — including sexual function. Berkeley Life's clinical pilot showed a 75% increase in libido and 83% enhanced orgasm after 60 days. Improved circulation supports desire and performance in both men and women. Vitamin C enhances NO bioavailability by reducing oxidative breakdown, extending the duration and magnitude of each dose.</p>",
+            "use_cormorant_strong": false
+          }
+        }
+      },
+      "block_order": [
+        "system_card_gNVMkN",
+        "system_card_cwnWCA",
+        "system_card_RKxNHB",
+        "system_card_WYqBnd",
+        "system_card_7KRLAa"
+      ],
+      "name": "C Blocks Dropdown",
+      "settings": {
+        "heading_1": "One Molecule.",
+        "heading_2_highlight": "Five Systems.",
+        "subtext": "Two capsules a day. Clinically validated Nitric Oxide support for the systems that drive how you feel, perform, and age.",
+        "image": "shopify://shop_images/block-dropdowns.webp",
+        "primary_btn_label": "Shop Nitric Oxide Support",
+        "primary_btn_link": "shopify://products/nitric-oxide-support",
+        "secondary_btn_label": "Learn How It Works",
+        "secondary_btn_link": "shopify://pages/the-science",
+        "bg_color": "#1b1b24",
+        "heading_color": "#ffffff",
+        "highlight_color": "#d95c3c",
+        "text_color": "#ffffff",
+        "card_bg_color": "#f6f5f3",
+        "card_title_color": "#d95c3c",
+        "card_text_color": "#333333",
+        "btn_primary_bg": "#d95c3c",
+        "btn_primary_text": "#ffffff",
+        "btn_secondary_border": "#ffffff",
+        "btn_secondary_text": "#ffffff",
+        "padding_top": 5,
+        "padding_bottom": 5
+      }
+    },
+    "c_new_product_card_hfKMcJ": {
+      "type": "c-new-product-card",
+      "blocks": {
+        "product_card_7qyQMM": {
+          "type": "product_card",
+          "settings": {
+            "product": "prebiotic-nitrate-gum",
+            "badge_text": "NEW FORMULA",
+            "custom_title": "Nitric Oxide Support Gum",
+            "custom_image": "shopify://shop_images/product-card-spring-2.webp",
+            "use_custom_price": false,
+            "custom_price": "$26.99",
+            "custom_compare_price": "",
+            "variant_index": "1",
+            "redirect_to_pdp": true
+          }
+        },
+        "product_card_7cpgPW": {
+          "type": "product_card",
+          "settings": {
+            "product": "menopause-and-heart-health-support",
+            "badge_text": "NEW",
+            "custom_title": "Menopause and Heart Health",
+            "custom_image": "shopify://shop_images/product-card-spring-1.webp",
+            "use_custom_price": false,
+            "custom_price": "$53.99",
+            "custom_compare_price": "$59.99",
+            "variant_index": "1",
+            "redirect_to_pdp": true
+          }
+        },
+        "product_card_RRhjEL": {
+          "type": "product_card",
+          "settings": {
+            "product": "nitric-oxide-test-strips",
+            "badge_text": "PATENTED",
+            "custom_title": "",
+            "custom_image": "shopify://shop_images/product-card-spring-3.webp",
+            "use_custom_price": false,
+            "custom_price": "4.24",
+            "custom_compare_price": "4.99",
+            "variant_index": "",
+            "redirect_to_pdp": true
+          }
+        }
+      },
+      "block_order": [
+        "product_card_7qyQMM",
+        "product_card_7cpgPW",
+        "product_card_RRhjEL"
+      ],
+      "name": "C New Product Card",
+      "settings": {
+        "bg_color": "#f6f3f0",
+        "card_bg_color": "#f6f3f0",
+        "accent_color": "#d54f2f",
+        "title_color": "#1b1c29",
+        "desc_color": "#1b1c29",
+        "card_title_color": "#1b1c29",
+        "header_alignment": "space-between",
+        "title": "Complete Your  <span> System</span>",
+        "description": "",
+        "shop_all_text": "",
+        "shop_all_link": "https://berkeleylife.com/discount/SPRING?redirect=/collections/shop-all",
+        "show_subscription_pricing": true,
+        "add_to_cart_text": "Shop Now",
+        "desktop_slides_per_view": 3,
+        "padding_top_desktop": 80,
+        "padding_bottom_desktop": 80,
+        "padding_top_mobile": 50,
+        "padding_bottom_mobile": 50
+      }
+    },
+    "1739199459aacb5165": {
+      "type": "apps",
+      "settings": {}
+    },
+    "c_content_text_mBtPGM": {
+      "type": "c-content-text",
+      "name": "C Content Text",
+      "settings": {
+        "desktop_layout": "row-reverse",
+        "mobile_layout": "column-reverse",
+        "image_desktop": "shopify://shop_images/bk-content-text-2.webp",
+        "heading_1": "Curious About Your",
+        "heading_2_italic": "Nitric Oxide Levels?",
+        "text": "<p>Our easy-to-use test strips help you monitor your body’s Nitric Oxide levels in seconds, so you can take control of your health.</p>",
+        "btn_variant": "pill",
+        "btn_label": "Get Your Test Strips",
+        "btn_link": "shopify://products/nitric-oxide-test-strips",
+        "btn_bg_color": "#d54f2f",
+        "btn_text_color": "#ffffff",
+        "btn_show_arrow": false,
+        "btn_2_variant": "underline",
+        "btn_2_label": "How do they work",
+        "btn_2_link": "shopify://products/nitric-oxide-test-strips",
+        "btn_2_bg_color": "#d15234",
+        "btn_2_text_color": "#d15234",
+        "btn_2_show_arrow": false,
+        "bg_color": "#1b1c29",
+        "text_color": "#ffffff",
+        "highlight_color": "#d54f2f",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_swiper_hover_xaE7Ed": {
+      "type": "c-swiper-hover",
+      "blocks": {
+        "category_EnjQAi": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/c6085759edf23b4331381dfda8387bf5352b931b.jpg",
+            "title": "Menopause &\nHormone Health",
+            "link": "shopify://collections/menopause-hormone-health",
+            "badge_1": "HORMONE BALANCE",
+            "badge_2": "CYCLE STABILITY",
+            "badge_3": "MENOPAUSE SUPPORT",
+            "btn_label": "Shop Now"
+          }
+        },
+        "category_tNgDgd": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/hover-cards-5.webp",
+            "title": "Sexual Health",
+            "link": "shopify://collections/sexual-health",
+            "badge_1": "INTIMACY",
+            "badge_2": "VITALITY",
+            "badge_3": "MENOPAUSE SUPPORT",
+            "btn_label": "Shop Now"
+          }
+        },
+        "category_Tt3kzx": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/hover-cards-1.webp",
+            "title": "Blood\nPressure",
+            "link": "shopify://collections/blood-pressure",
+            "badge_1": "HEART SUPPORT",
+            "badge_2": "CIRCULATION",
+            "badge_3": "MENOPAUSE SUPPORT",
+            "btn_label": "Shop Now"
+          }
+        },
+        "category_JfHWMd": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/hover-cards-4.webp",
+            "title": "Heart Health",
+            "link": "shopify://collections/heart-health",
+            "badge_1": "CHOLESTEROL",
+            "badge_2": "ENDURANCE",
+            "badge_3": "MENOPAUSE SUPPORT",
+            "btn_label": "Shop Now"
+          }
+        },
+        "category_99CQFb": {
+          "type": "category",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/bb3f82b98c486bc023364e5ec3dbc961dca0785f.jpg",
+            "title": "Menopause &\nHormone Health",
+            "link": "",
+            "badge_1": "HORMONE BALANCE",
+            "badge_2": "CYCLE STABILITY",
+            "badge_3": "MENOPAUSE SUPPORT",
+            "btn_label": "Shop Now"
+          }
+        }
+      },
+      "block_order": [
+        "category_EnjQAi",
+        "category_tNgDgd",
+        "category_Tt3kzx",
+        "category_JfHWMd",
+        "category_99CQFb"
+      ],
+      "name": "C Swiper Hover",
+      "settings": {
+        "heading": "What Do You Need Help With?",
+        "global_link_text": "SHOP ALL",
+        "global_link_url": "shopify://collections",
+        "slides_desktop": 3.5,
+        "slides_desktop_large": 3.5,
+        "initial_slide": 0,
+        "card_height": 450,
+        "card_height_desktop": 550,
+        "hover_blur": 6,
+        "overlay_opacity": 60,
+        "overlay_opacity_hover": 80,
+        "bg_color": "#f6f3f0",
+        "text_color": "#1b1c29",
+        "accent_color": "#cf5b43",
+        "card_text_color": "#ffffff",
+        "overlay_color": "#2b3223",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_content_text_K6p4gT": {
+      "type": "c-content-text",
+      "name": "C Content Text",
+      "settings": {
+        "desktop_layout": "row",
+        "mobile_layout": "column",
+        "image_desktop": "shopify://shop_images/bk-content-text-3.webp",
+        "heading_1": "Small Molecule.",
+        "heading_2_italic": "Big Impact.",
+        "text": "<p>Nitric Oxide (NO) helps signal your blood vessels to relax and expand, allowing oxygen and nutrients to move more efficiently throughout the body. It plays a key role in supporting energy, endurance, circulation, heart health, and sexual performance. But as we age, the body’s natural Nitric Oxide production begins to decline.<br/><br/>Berkeley Life is designed to help restore healthy Nitric Oxide levels, supporting blood flow, healthy blood pressure, daily energy, recovery, and overall performance so you can feel and function at your best every day.</p>",
+        "btn_variant": "pill",
+        "btn_label": "Shop Nitric Oxide Support",
+        "btn_link": "https://berkeleylife.com/collections/shop-all",
+        "btn_bg_color": "#d15234",
+        "btn_text_color": "#ffffff",
+        "btn_show_arrow": false,
+        "btn_2_variant": "underline",
+        "btn_2_label": "",
+        "btn_2_link": "shopify://products/nitric-oxide-support",
+        "btn_2_bg_color": "#d15234",
+        "btn_2_text_color": "#d15234",
+        "btn_2_show_arrow": false,
+        "bg_color": "#f6f3f0",
+        "text_color": "#1b1c29",
+        "highlight_color": "#d15234",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_clinical_research_Kgg8FW": {
+      "type": "c-clinical-research",
+      "blocks": {
+        "stat_gUFDMb": {
+          "type": "stat",
+          "settings": {
+            "value": "12.5 mmHg",
+            "label": "reduction in systolic blood pressure",
+            "desc": "Supporting healthier cardiovascular function"
+          }
+        },
+        "stat_VUhA67": {
+          "type": "stat",
+          "settings": {
+            "value": "378%",
+            "label": "increase in nitrate levels",
+            "desc": "Indicating significantly improved nitric oxide production"
+          }
+        },
+        "stat_8TQepU": {
+          "type": "stat",
+          "settings": {
+            "value": "28%",
+            "label": "improvement in circulation (FMD)",
+            "desc": "The gold standard measure of blood flow"
+          }
+        },
+        "stat_BgYkh6": {
+          "type": "stat",
+          "settings": {
+            "value": "Reductions",
+            "label": "in key inflammatory markers",
+            "desc": "Supporting long-term metabolic and cardiovascular health"
+          }
+        }
+      },
+      "block_order": [
+        "stat_gUFDMb",
+        "stat_VUhA67",
+        "stat_8TQepU",
+        "stat_BgYkh6"
+      ],
+      "name": "C Clinical Research",
+      "settings": {
+        "bg_color": "#0d0f1a",
+        "use_container_color": false,
+        "container_bg_color": "#1b1e2a",
+        "bg_image": "shopify://shop_images/blocks-1.webp",
+        "bg_position": "center center",
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "title_1": "Backed By",
+        "title_2_italic": "Clinical Research",
+        "description": "In a randomized, placebo-controlled clinical trial, participants taking Nitric Oxide Support experienced:",
+        "highlight_text": "Built on 3 clinical trials and over 28,000 published studies on nitric oxide biology",
+        "btn_label": "Learn More",
+        "btn_link": "shopify://pages/the-science",
+        "card_solid_bg": "#1b1e2a",
+        "highlight_box_bg": "#2a2d3c",
+        "card_glass_bg": "#00000073",
+        "text_color": "#ffffff",
+        "accent_color": "#d15234",
+        "show_stat_dividers": false,
+        "divider_color": "#3a3d4d",
+        "padding_top": 6,
+        "padding_bottom": 6
+      }
+    },
+    "c_expert_trust_87ReaR": {
+      "type": "c-expert-trust",
+      "blocks": {
+        "testimonial_VaaCMk": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "\"This will be absolutely transformative for the millions of women who are currently suffering through this transition with limited solutions, outside of HRT.\"",
+            "author": "DR. MARIZA SYNDER",
+            "image": "shopify://shop_images/image_39.png"
+          }
+        },
+        "testimonial_3DP9Q7": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "“Berkeley Life is a company that has gained my respect for their commitment to the development of science-based products that modulate Nitric Oxide status and function. Their commitment to scientific rigor and innovative solutions makes them a powerful ally in the pursuit of functional health.”",
+            "author": "Dr. Jeffrey Bland",
+            "image": "shopify://shop_images/image_39_0fbed095-15dd-4860-b51b-2d2a8e3cbd79.png"
+          }
+        },
+        "testimonial_ApdPgd": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "“Blood flow and healing are critical to the success of our treatments, and the integration of Nitric Oxide has really helped. We continue to promote Berkeley’s N.O. for all of our body procedures as well as men presenting to our men's clinic – our patients are loving the results.”",
+            "author": "Dr. Richard Moore",
+            "image": "shopify://shop_images/image_39_1.png"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_VaaCMk",
+        "testimonial_3DP9Q7",
+        "testimonial_ApdPgd"
+      ],
+      "name": "C Expert Trust",
+      "settings": {
+        "title_prefix": "Trusted By Top",
+        "title_highlight": "Experts Everywhere",
+        "badge_logo": "shopify://shop_images/Clinicians_Choice.svg",
+        "badge_text": "<p><strong>424 clinicians</strong> share Berkeley Life on FrontrowMD without compensation.</p>",
+        "badge_avatars": "shopify://shop_images/IMG_93490f6f-2f47-4aa0-960d-1150a22b62d7.svg",
+        "badge_link_text": "Read their Reviews",
+        "badge_link_url": "",
+        "show_reviews_inline": true,
+        "reviews_product_type": "nitric-oxide",
+        "bg_color": "#f6f3f0",
+        "text_color": "#2b2e38",
+        "accent_color": "#d15234",
+        "card_bg_color": "#1b1e2a",
+        "card_text_color": "#ffffff",
+        "badge_bg_color": "#ebe8e6",
+        "pagination_color": "#ffffff",
+        "pagination_active_color": "#d54f2f",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_real_results_reviews_yQYVqy": {
+      "type": "c-real-results-reviews",
+      "blocks": {
+        "text_review_qecM3C": {
+          "type": "text_review",
+          "settings": {
+            "review_title": "They completely transformed the way I work out.",
+            "review_body": "\"Since starting Berkeley Life three months ago, my endurance has improved dramatically. I'm pushing past plateaus I couldn't break through for years.\"",
+            "author_name": ""
+          }
+        },
+        "video_review_7UdBce": {
+          "type": "video_review",
+          "settings": {
+            "video_cdn_url": "https://cdn.shopify.com/videos/c/o/v/d7387fadc2e348a2a29bbb3067ccf574.mp4",
+            "author_name": ""
+          }
+        },
+        "text_review_i4JV98": {
+          "type": "text_review",
+          "settings": {
+            "review_title": "Beverly H.",
+            "review_body": "\"I was a doubter!\nWaited 6 months before submitting this review because I wanted to make sure of the long term outcomes first. Now, six months later I know Nitric Oxide really has improved my health. My energy level is up and my overall feeling of well being is better. Highly recommend this product to anyone of any age. I’m 70 years old and it has made an improvement in my daily feeling of well being.\"",
+            "author_name": ""
+          }
+        },
+        "video_review_Y8pTNb": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/Review_1.mp4",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "text_review_VcDtez": {
+          "type": "text_review",
+          "settings": {
+            "review_title": "Michael B.",
+            "review_body": "\"My energy level was always pretty good\nIn fact I literally pole vault out of bed each day, my wife loves it :)\"",
+            "author_name": ""
+          }
+        },
+        "video_review_DY4bGk": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/NO for energy & intimacy.mov",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "text_review_KPwRm8": {
+          "type": "text_review",
+          "settings": {
+            "review_title": "Art M.",
+            "review_body": "\"Working !!!!!!!!!\nAbsolutely working … got these for my BF for ED issues he took a brand from GNC with little results ….. Did some research highly recommended\"",
+            "author_name": ""
+          }
+        },
+        "video_review_QqcXRw": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/Review_2_92821a77-3757-4363-ac56-8ce6302e8867.mp4",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "text_review_JJtWM4": {
+          "type": "text_review",
+          "settings": {
+            "review_title": "Irene R.",
+            "review_body": "\"Renewed Energy\nI love the way I feel. Berkeley makes me feel my energetic! Someone said my skin looks bright. I thank God for Berkeley!\"",
+            "author_name": ""
+          }
+        },
+        "video_review_Nwiphq": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/Greg Mckettrick_Compounding Pharmacist and Men's Health Specialist_92c2f84b-2127-4818-902b-793f5f23ea40.mp4",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "text_review_qw66e8": {
+          "type": "text_review",
+          "settings": {
+            "review_title": "Peter B.",
+            "review_body": "\"Initially Sceptical\nI was initially skeptical of the claims, but as it turns out this is one of the few supplement products that I have tried where I actually noticed a difference. There has been a noticable improvement in circulation.\"",
+            "author_name": ""
+          }
+        },
+        "video_review_xzJiT9": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/Maurice Daher_Clinical Nutrionist.mp4",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "video_review_mRYKRF": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/Nitric Oxide Support_ Amazing Energy Boost for Post-Menopausal Women!.mp4",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "video_review_R9UBRg": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/UGC_Thomas S._Sexual & Performance.mp4",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "video_review_rFmMj7": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/UGC_Jenna_NO Support.mp4",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "video_review_iKDdbd": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/Maurice Daher_Clinical Nutrionist_V2 Sexual Health.mp4",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "video_review_hixFwM": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/BerkeleyLife2 (1).MP4",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "video_review_g4NNFP": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/web (1).webm",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        },
+        "video_review_Uqq7zR": {
+          "type": "video_review",
+          "settings": {
+            "video": "shopify://files/videos/Berkeley Life_ Your Secret to Health & Wellness (2).mp4",
+            "video_cdn_url": "",
+            "author_name": ""
+          }
+        }
+      },
+      "block_order": [
+        "text_review_qecM3C",
+        "video_review_7UdBce",
+        "text_review_i4JV98",
+        "video_review_Y8pTNb",
+        "text_review_VcDtez",
+        "video_review_DY4bGk",
+        "text_review_KPwRm8",
+        "video_review_QqcXRw",
+        "text_review_JJtWM4",
+        "video_review_Nwiphq",
+        "text_review_qw66e8",
+        "video_review_xzJiT9",
+        "video_review_mRYKRF",
+        "video_review_R9UBRg",
+        "video_review_rFmMj7",
+        "video_review_iKDdbd",
+        "video_review_hixFwM",
+        "video_review_g4NNFP",
+        "video_review_Uqq7zR"
+      ],
+      "name": "C Real Results Reviews",
+      "settings": {
+        "sl_anchor_id": "",
+        "heading_line_1": "Trusted By Real People.",
+        "heading_line_2": "Everywhere",
+        "padding_top_desktop": 128,
+        "padding_bottom_desktop": 128,
+        "padding_top_mobile": 64,
+        "padding_bottom_mobile": 64,
+        "background_color": "#f6f3f0",
+        "title_color": "#0b0b0b",
+        "title_accent_color": "#d54f2f",
+        "card_background_color": "#fdfeff",
+        "text_color": "#080b2b",
+        "accent_color": "#d54f2f",
+        "track_color": "#d0ccc9",
+        "track_active_color": "#d54f2f"
+      }
+    },
+    "c_comparison_table_gy8JQU": {
+      "type": "c-comparison-table",
+      "blocks": {
+        "row_Ng3jyT": {
+          "type": "row",
+          "settings": {
+            "feature_text": "Targets dietary nitrate pathway (effective with age)",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        },
+        "row_4JeUpq": {
+          "type": "row",
+          "settings": {
+            "feature_text": "Clinically proven formulation",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        },
+        "row_8fNFFg": {
+          "type": "row",
+          "settings": {
+            "feature_text": "Standardization, effective nitrate dosing",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        },
+        "row_GeVbNB": {
+          "type": "row",
+          "settings": {
+            "feature_text": "Measurable results with test strips",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        },
+        "row_Npty9h": {
+          "type": "row",
+          "settings": {
+            "feature_text": "Supports full nitric oxide pathway (system approach)",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        },
+        "row_nexdk4": {
+          "type": "row",
+          "settings": {
+            "feature_text": "Transparent, science-backed positioning",
+            "col2_positive": true,
+            "col3_positive": false
+          }
+        }
+      },
+      "block_order": [
+        "row_Ng3jyT",
+        "row_4JeUpq",
+        "row_8fNFFg",
+        "row_GeVbNB",
+        "row_Npty9h",
+        "row_nexdk4"
+      ],
+      "settings": {
+        "sl_anchor_id": "",
+        "bg_image": "shopify://shop_images/610f0fea54f025cd1d2984df0361162d78a2ff6a.webp",
+        "heading_text": "A Smarter Approach To",
+        "heading_italic": "Nitric Oxide",
+        "col2_logo": "shopify://shop_images/Logo_853b6d5e-00bd-4bec-8875-bdeeec17621e.png",
+        "col2_label": "Berkeley Life",
+        "accent_color": "#d54f2f",
+        "col2_check_icon": "shopify://shop_images/Approval.png",
+        "col2_cross_icon": "shopify://shop_images/X.svg",
+        "col3_label": "OTHER NO SUPPLEMENTS",
+        "col3_check_icon": "shopify://shop_images/Approval.png",
+        "col3_cross_icon": "shopify://shop_images/X.svg",
+        "btn_text": "Shop the Collection",
+        "btn_link": "https://berkeleylife.com/collections/shop-all",
+        "btn_bg_color": "#d54f2f",
+        "btn_text_color": "#ffffff",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "c_content_text_Kjcnpf": {
+      "type": "c-content-text",
+      "name": "C Content Text",
+      "settings": {
+        "desktop_layout": "row-reverse",
+        "mobile_layout": "column-reverse",
+        "image_desktop": "shopify://shop_images/bk-content-text-1.webp",
+        "heading_1": "Why Blood Flow",
+        "heading_2_italic": "Matters",
+        "text": "<p>Blood flow powers every part of your body, delivering oxygen and nutrients where they’re needed most. When circulation is strong, you feel the difference in your energy, endurance, focus, recovery, and overall performance. But as Nitric Oxide levels naturally decline with age, healthy circulation can slow down too.<br/><br/>Supporting blood flow helps your body perform at its best, promoting stamina, faster recovery, cardiovascular health, and long-term vitality.</p>",
+        "btn_variant": "pill",
+        "btn_label": "Shop Nitric Oxide Support",
+        "btn_link": "",
+        "btn_bg_color": "#d15234",
+        "btn_text_color": "#ffffff",
+        "btn_show_arrow": false,
+        "btn_2_variant": "underline",
+        "btn_2_label": "",
+        "btn_2_link": "shopify://products/nitric-oxide-support",
+        "btn_2_bg_color": "#d15234",
+        "btn_2_text_color": "#d15234",
+        "btn_2_show_arrow": false,
+        "bg_color": "#f6f3f0",
+        "text_color": "#1b1c29",
+        "highlight_color": "#d15234",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_swiper_hover_GagJhV": {
+      "type": "c-swiper-hover",
+      "blocks": {
+        "blog_mYDnUE": {
+          "type": "blog",
+          "settings": {
+            "image": "shopify://shop_images/c-bkl-blog-2.webp",
+            "subtitle": "",
+            "title": "NO & Active Aging Blog",
+            "text_color": "#ffffff",
+            "link": "https://berkeleylife.com/blogs/news/nitric-oxide-aging-blood-flow-energy-longevity?_cd=a3dbef955cc5e5a34fdb94a050db3645b0629418db477c41c0acb77e8f666836&_uid=91719827619&preview_theme_id=149383708835&preview_token=4c6gv1u3esk5t3n4s1ru2x8gjasioltu"
+          }
+        },
+        "blog_kDDiR3": {
+          "type": "blog",
+          "settings": {
+            "image": "shopify://shop_images/bb3f82b98c486bc023364e5ec3dbc961dca0785f.jpg",
+            "subtitle": "",
+            "title": "NO & Intimacy Blog",
+            "text_color": "#ffffff",
+            "link": "https://berkeleylife.com/blogs/news/nitric-oxide-is-the-heart-of-intimacy?_cd=a3dbef955cc5e5a34fdb94a050db3645b0629418db477c41c0acb77e8f666836&_uid=91719827619&preview_theme_id=149383708835&preview_token=xnpdv881qrub2fhrz8lxokxjpcpr0g7k"
+          }
+        },
+        "blog_m4c9zp": {
+          "type": "blog",
+          "settings": {
+            "image": "shopify://shop_images/c-bkl-blog-3.webp",
+            "subtitle": "",
+            "title": "Menopause Blog",
+            "text_color": "#ffffff",
+            "link": "https://berkeleylife.com/blogs/news/blogs-womens-health-menopause-heart-health-nitric-oxide"
+          }
+        },
+        "blog_AUU8eJ": {
+          "type": "blog",
+          "settings": {
+            "image": "shopify://shop_images/c-bkl-blog-4.webp",
+            "subtitle": "CATEGORY",
+            "title": "HRT & NO Blog",
+            "text_color": "#1b1c29",
+            "link": "https://berkeleylife.com/blogs/news/nitric-oxide-menopause-hrt-heart-health?_cd=a3dbef955cc5e5a34fdb94a050db3645b0629418db477c41c0acb77e8f666836&_uid=91719827619&preview_theme_id=149383708835&preview_token=3pktxvsprkdankvlr6hbjrc7d6cae4ik"
+          }
+        }
+      },
+      "block_order": [
+        "blog_mYDnUE",
+        "blog_kDDiR3",
+        "blog_m4c9zp",
+        "blog_AUU8eJ"
+      ],
+      "name": "C Swiper Hover",
+      "settings": {
+        "heading": "Be In The NO",
+        "global_link_text": "",
+        "global_link_url": "",
+        "slides_desktop": 3.5,
+        "slides_desktop_large": 3.5,
+        "initial_slide": 0,
+        "card_height": 450,
+        "card_height_desktop": 550,
+        "hover_blur": 6,
+        "overlay_opacity": 60,
+        "overlay_opacity_hover": 80,
+        "bg_color": "#f6f3f0",
+        "text_color": "#1b1c29",
+        "accent_color": "#cf5b43",
+        "card_text_color": "#ffffff",
+        "overlay_color": "#2b3223",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_banner_TfYLqQ": {
+      "type": "c-banner",
+      "blocks": {
+        "feature_pf4PPL": {
+          "type": "feature",
+          "settings": {
+            "text": "30% OFF RECURRING"
+          }
+        },
+        "feature_3jTnbG": {
+          "type": "feature",
+          "settings": {
+            "text": "FREE NO TEST STRIPS"
+          }
+        },
+        "feature_cMERj4": {
+          "type": "feature",
+          "settings": {
+            "text": "FREE SHIPPING"
+          }
+        },
+        "feature_hziWbX": {
+          "type": "feature",
+          "settings": {
+            "text": "SKIP OR CANCEL ANYTIME"
+          }
+        }
+      },
+      "block_order": [
+        "feature_pf4PPL",
+        "feature_3jTnbG",
+        "feature_cMERj4",
+        "feature_hziWbX"
+      ],
+      "name": "C Banner",
+      "settings": {
+        "card_position": "flex-end",
+        "card_max_width": 520,
+        "min_height_desktop": 600,
+        "min_height_mobile": 800,
+        "bg_image_desktop": "shopify://shop_images/bkl-c-banner-1.webp",
+        "bg_image_mobile": "shopify://shop_images/bkl-c-banner-2.webp",
+        "bg_position": "center center",
+        "subtitle": "SUBSCRIBE & SAVE",
+        "title_1": "Save 30% on a",
+        "title_2_italic": "3-Month Foundation Plan.",
+        "description": "Get the most researched Nitric Oxide formula delivered every 90 days at your best price. Cancel or adjust any time.",
+        "btn_label": "Start My Plan",
+        "btn_link": "shopify://products/nitric-oxide-support",
+        "bottom_note": "SHIPS EVERY 90 DAYS",
+        "bg_color": "#b33821",
+        "card_bg_color": "rgba(255, 255, 255, 0.2)",
+        "text_color": "#ffffff",
+        "pill_bg_color": "#00000040",
+        "pill_text_color": "#ffffff",
+        "btn_bg_color": "#1b1e2a",
+        "btn_text_color": "#ffffff",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "c_faqs_Tc9N9E": {
+      "type": "c-faqs",
+      "blocks": {
+        "faq_GCQHNw": {
+          "type": "faq",
+          "settings": {
+            "question": "What is Berkeley Life?",
+            "answer": "<p>Berkeley Life is a practitioner-grade Nitric Oxide support company focused on vascular health, circulation, and healthy aging.<br/>Our products are designed to support Nitric Oxide production — a critical molecule involved in blood flow, cardiovascular function, energy production, and cellular signaling.<br/><br/></p>"
+          }
+        },
+        "faq_F8te3a": {
+          "type": "faq",
+          "settings": {
+            "question": "What is Nitric Oxide and why is it important?",
+            "answer": "<p>Nitric Oxide is a signaling molecule produced in the body that helps:</p><ul><li>Relax and dilate blood vessels</li><li>Regulate blood pressure</li><li>Improve circulation</li><li>Deliver oxygen and nutrients to tissues</li><li>Support mitochondrial energy production</li><li>Maintain endothelial function</li></ul><p></p><p>Nitric Oxide production naturally declines with age.</p>"
+          }
+        },
+        "faq_NMjDJX": {
+          "type": "faq",
+          "settings": {
+            "question": "Why does Nitric Oxide decline as we age?",
+            "answer": "<p>Nitric Oxide declines due to:</p><ul><li>Reduced endothelial Nitric Oxide synthase (eNOS) activity</li><li>Oxidative stress</li><li>Chronic inflammation</li><li>Insulin resistance</li><li>Hormonal changes</li><li>Poor oral microbiome health</li></ul><p></p><p>By age 40–50, Nitric Oxide production may be significantly reduced compared to early adulthood.</p>"
+          }
+        },
+        "faq_ghEM3M": {
+          "type": "faq",
+          "settings": {
+            "question": "How are Berkeley Life products different from other Nitric Oxide supplements?",
+            "answer": "<p>Many Nitric Oxide supplements use L-arginine or L-citrulline.<br/>Berkeley Life uses dietary nitrates, which:</p><ul><li>Bypass age-related decline in the arginine pathway</li><li>Work independently of eNOS</li><li>Have strong clinical validation</li><li>Provide more consistent Nitric Oxide production</li></ul><p></p><p>Our formulas are clinically studied and practitioner-trusted.</p>"
+          }
+        },
+        "faq_9yNxTC": {
+          "type": "faq",
+          "settings": {
+            "question": "Is potassium nitrate safe?",
+            "answer": "<p>Berkeley Life uses food-grade potassium nitrate.<br/>It is chemically identical to the nitrate naturally found in leafy green vegetables.<br/>It is not the same as industrial-grade nitrates used in fertilizers or explosives.<br/><br/></p>"
+          }
+        },
+        "faq_zN946m": {
+          "type": "faq",
+          "settings": {
+            "question": "Can Nitric Oxide become harmful?",
+            "answer": "<p>Nitric Oxide is a natural signaling molecule essential for vascular health.</p><p>In conditions of extreme oxidative stress, reactive nitrogen species may form. Maintaining a healthy diet and lifestyle helps support balanced Nitric Oxide activity.</p><p>Dietary nitrates from vegetables and Berkeley Life formulas are considered safe for daily use in healthy adults.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_GCQHNw",
+        "faq_F8te3a",
+        "faq_NMjDJX",
+        "faq_ghEM3M",
+        "faq_9yNxTC",
+        "faq_zN946m"
+      ],
+      "name": "C FAQs",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "open_first": false,
+        "allow_multiple": false,
+        "bg_color": "#f6f3f0",
+        "text_color": "#1b1c29",
+        "card_bg_color": "#ffffff",
+        "border_color": "#1b1c29",
+        "question_color": "#1b1c29",
+        "active_color": "#d54f2f",
+        "answer_color": "#555555",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "c_border_hero_promo_Rkw6Ec",
+    "c_prime_countdown_FP4UzE",
+    "c_border_hero_PMJqQX",
+    "c_featured_plan_LFVDDL",
+    "c_blocks_dropdown_8ffbiU",
+    "c_new_product_card_hfKMcJ",
+    "1739199459aacb5165",
+    "c_content_text_mBtPGM",
+    "c_swiper_hover_xaE7Ed",
+    "c_content_text_K6p4gT",
+    "c_clinical_research_Kgg8FW",
+    "c_expert_trust_87ReaR",
+    "c_real_results_reviews_yQYVqy",
+    "c_comparison_table_gy8JQU",
+    "c_content_text_Kjcnpf",
+    "c_swiper_hover_GagJhV",
+    "c_banner_TfYLqQ",
+    "c_faqs_Tc9N9E"
+  ]
+}

@@ -1,0 +1,839 @@
+<style>
+  #{{section.id}} {
+    {%- assign half_padding_top = section.settings.padding_top | divided_by: 2.0 -%}
+    {%- assign half_padding_bottom = section.settings.padding_bottom | divided_by: 2.0 -%}
+    padding-top: {{ half_padding_top }}em;
+    padding-bottom: {{ half_padding_bottom }}em;
+    background-color: {{ section.settings.bg_color }};
+
+    & * {
+      color: {{ section.settings.text_color }};
+      position: relative;
+      z-index: 2;
+    }
+
+    & .section__features__container {
+      padding-block: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      & .features__hero__texts {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        margin-inline: auto;
+      }
+
+      & .features__title {
+        font-size: clamp(32px, 6vw + 1rem, 54px);
+        max-width: 800px;
+        text-wrap: balance;
+        text-align: center;
+        line-height: normal;
+        margin: 0;
+      }
+
+      & .features__title--span,
+      & .features__description--span {
+        color: {{ section.settings.accent_color }};
+        font-family: "Cormorant Garamond";
+        font-style: italic;
+      }
+
+      & .features__title--span {
+        font-weight: 300;
+        font-style: italic;
+      }
+
+      & .features__description {
+        max-width: 650px;
+        text-align: center;
+        font-size: clamp(16px, 2.5dvw, 18px);
+        margin: 0;
+      }
+
+      & .features__sound-btn {
+        font-size: clamp(14px, 2dvw, 16px);
+        text-align: center;
+        margin: 0;
+       
+        opacity: 0.8;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: {{ section.settings.text_color }};
+        text-decoration: underline;
+        transition: opacity 0.3s ease;
+
+         
+      }
+
+      /* Mobile Version */
+      & .features__grid--mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      & .features__grid--desktop {
+        display: none;
+      }
+
+      & .features__media__container {
+        width: 90%;
+        max-width: 425px;
+        margin-inline: auto;
+        display: flex;
+        border-radius: 1rem;
+        overflow: hidden;
+      }
+
+      & .features__media {
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+        height: auto;
+      }
+
+      & .features__video {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+
+      & .features__cards {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      & .features__card {
+        position: relative;
+        border: 1px solid {{ section.settings.accent_color }};
+        border-radius: 1rem;
+        padding: min(0.75rem, 4dvw);
+      }
+
+      & .features__card__content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      & .features__card__header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      & .features__card__img {
+        width: 1.5rem;
+        height: 1.5rem;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+        object-position: center;
+        border-radius: 50%;
+      }
+
+      & .features__card__title {
+        font-size: clamp(20px, 2.5dvw, 24px);
+        line-height: 100%;
+        font-style: italic;
+        color: {{ section.settings.accent_color }};
+        font-family: "Cormorant Garamond";
+        margin: 0;
+      }
+
+      & .features__card__text {
+        font-size: clamp(0.85rem, 2.5dvw, 1rem);
+        font-weight: 300;
+        margin: 0;
+        line-height: 150%;
+      }
+
+      & .btn__cta {
+        display: inline-block;
+        width: max-content;
+        padding: 1rem 1.75rem;
+        background-color: {{ section.settings.accent_color }};
+        border-radius: 1.5rem;
+        color: #fff;
+        font-size: 0.75rem;
+        text-decoration: none;
+        margin-inline: auto;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+
+  @media screen and (width >= 48rem) {
+    #{{section.id}} {
+      padding-top: {{ section.settings.padding_top }}em;
+      padding-bottom: {{ section.settings.padding_bottom }}em;
+
+      .section__features__container {
+        & .features__grid--mobile {
+          & .features__cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (width >= 64rem) {
+    #{{section.id}} {
+      .section__features__container {
+        & .features__grid--mobile {
+          display: none;
+        }
+
+        & .features__grid--desktop {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 2rem;
+          align-items: center;
+        }
+
+        & .features__column {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        & .features__column--left {
+          & .features__card__wrapper {
+            display: flex;
+            align-items: center;
+          }
+
+          & .features__card {
+            flex: 1;
+          }
+
+          & .card__line {
+            width: 2rem;
+            height: 1px;
+            border-top: 1px dashed {{ section.settings.accent_color }};
+            flex-shrink: 0;
+            {% unless section.settings.show_card_lines %}
+              display: none;
+            {% endunless %}
+          }
+        }
+
+        & .features__column--right {
+          & .features__card__wrapper {
+            display: flex;
+            align-items: center;
+          }
+
+          & .features__card {
+            flex: 1;
+          }
+
+          & .card__line {
+            width: 2rem;
+            height: 1px;
+            border-top: 1px dashed {{ section.settings.accent_color }};
+            flex-shrink: 0;
+            {% unless section.settings.show_card_lines %}
+              display: none;
+            {% endunless %}
+          }
+        }
+
+        & .features__column--center {
+          & .features__media__container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+          }
+        }
+
+        & .features__card {
+          padding: min(1.25rem, 4dvw);
+        }
+
+        & .features__cards {
+          gap: 1.5rem;
+        }
+      }
+    }
+  }
+</style>
+
+<section id="{{section.id}}">
+  <div class="section__features__container container-sl">
+    {% if section.settings.title != blank or section.settings.description != blank %}
+      <div class="features__hero__texts">
+        {% if section.settings.title != blank %}
+          <h2 class="features__title">
+            {% assign title_with_accent = section.settings.title | replace: '{accent}', '<span class="features__title--span">' | replace: '{/accent}', '</span>' %}
+            {{ title_with_accent }}
+          </h2>
+        {% endif %}
+        {% if section.settings.description != blank %}
+          <p class="features__description">
+            {% assign description_with_accent = section.settings.description | replace: '{accent}', '<span class="features__description--span">' | replace: '{/accent}', '</span>' %}
+            {{ description_with_accent }}
+          </p>
+        {% endif %}
+        {% if section.settings.media_type == 'video' and section.settings.media_video != blank and section.settings.sound_text != blank %}
+          <button type="button" class="btn__cta {{ section.settings.sound_text_class }}" data-video-toggle>{{ section.settings.sound_text }}</button>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Mobile Version -->
+    <div class="features__grid--mobile">
+      {% if section.settings.media_image != blank or section.settings.media_video != blank %}
+        <div class="features__media__container">
+          {% if section.settings.media_type == 'video' and section.settings.media_video != blank %}
+            {{ section.settings.media_video | video_tag: 
+               autoplay: true, 
+               loop: true, 
+               muted: true, 
+               playsinline: true,
+               class: 'features__video' }}
+          {% elsif section.settings.media_image != blank %}
+            {{ section.settings.media_image | image_url: width: 425 | image_tag: 
+               alt: section.settings.media_image.alt | default: 'Feature image',
+               class: 'features__media',
+               width: 425,
+               height: 'auto' }}
+          {% endif %}
+        </div>
+      {% endif %}
+      
+      {% if section.blocks.size > 0 %}
+        <ul class="features__cards">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'feature_card' %}
+                <li class="features__card" {{ block.shopify_attributes }}>
+                  <div class="features__card__content">
+                    <div class="features__card__header">
+                      {% if block.settings.icon %}
+                        {{ block.settings.icon | image_url: width: 48 | image_tag: 
+                           alt: 'Icon',
+                           class: 'features__card__img',
+                           width: 48,
+                           height: 48 }}
+                      {% endif %}
+                      <h3 class="features__card__title">{{ block.settings.title }}</h3>
+                    </div>
+                    <p class="features__card__text">{{ block.settings.description }}</p>
+                  </div>
+                </li>
+            {% endcase %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <!-- Desktop Version -->
+    <div class="features__grid--desktop">
+      <!-- Left Column -->
+      <div class="features__column features__column--left">
+        {% for block in section.blocks %}
+          {% if block.settings.desktop_position == 'left' %}
+            {% case block.type %}
+              {% when 'feature_card' %}
+                <div class="features__card__wrapper" {{ block.shopify_attributes }}>
+                  <div class="features__card">
+                    <div class="features__card__content">
+                      <div class="features__card__header">
+                        {% if block.settings.icon %}
+                          {{ block.settings.icon | image_url: width: 48 | image_tag: 
+                             alt: 'Icon',
+                             class: 'features__card__img',
+                             width: 48,
+                             height: 48 }}
+                        {% endif %}
+                        <h3 class="features__card__title">{{ block.settings.title }}</h3>
+                      </div>
+                      <p class="features__card__text">{{ block.settings.description }}</p>
+                    </div>
+                  </div>
+                  <span class="card__line"></span>
+                </div>
+            {% endcase %}
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <!-- Center Column - Media -->
+      <div class="features__column features__column--center">
+        {% if section.settings.media_image != blank or section.settings.media_video != blank %}
+          <div class="features__media__container">
+            {% if section.settings.media_type == 'video' and section.settings.media_video != blank %}
+              {{ section.settings.media_video | video_tag: 
+                 autoplay: true, 
+                 loop: true, 
+                 muted: true, 
+                 playsinline: true,
+                 class: 'features__video' }}
+            {% elsif section.settings.media_image != blank %}
+              {{ section.settings.media_image | image_url: width: 600 | image_tag: 
+                 alt: section.settings.media_image.alt | default: 'Feature image',
+                 class: 'features__media',
+                 width: 600,
+                 height: 'auto' }}
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Right Column -->
+      <div class="features__column features__column--right">
+        {% for block in section.blocks %}
+          {% if block.settings.desktop_position == 'right' %}
+            {% case block.type %}
+              {% when 'feature_card' %}
+                <div class="features__card__wrapper" {{ block.shopify_attributes }}>
+                  <span class="card__line"></span>
+                  <div class="features__card">
+                    <div class="features__card__content">
+                      <div class="features__card__header">
+                        {% if block.settings.icon %}
+                          {{ block.settings.icon | image_url: width: 48 | image_tag: 
+                             alt: 'Icon',
+                             class: 'features__card__img',
+                             width: 48,
+                             height: 48 }}
+                        {% endif %}
+                        <h3 class="features__card__title">{{ block.settings.title }}</h3>
+                      </div>
+                      <p class="features__card__text">{{ block.settings.description }}</p>
+                    </div>
+                  </div>
+                </div>
+            {% endcase %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if section.settings.cta_text != blank %}
+      <a href="{{ section.settings.cta_link }}" class="btn__cta">{{ section.settings.cta_text }}</a>
+    {% endif %}
+  </div>
+</section>
+
+{% if section.settings.media_type == 'video' and section.settings.media_video != blank %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.getElementById('{{ section.id }}');
+    if (!section) return;
+
+    const videos = section.querySelectorAll('.features__video');
+    if (!videos.length) return;
+
+    // Detect mobile devices/iOS
+    const isMobile = function() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+
+    const isIOS = function() {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent);
+    };
+
+    // Get visible video based on viewport
+    const getVisibleVideo = function() {
+      const mobileContainer = section.querySelector('.features__grid--mobile');
+      const desktopContainer = section.querySelector('.features__grid--desktop');
+      
+      if (mobileContainer && window.getComputedStyle(mobileContainer).display !== 'none') {
+        return mobileContainer.querySelector('.features__video');
+      }
+      if (desktopContainer && window.getComputedStyle(desktopContainer).display !== 'none') {
+        return desktopContainer.querySelector('.features__video');
+      }
+      return videos[0];
+    };
+
+    // Pause all videos except the visible one
+    const pauseHiddenVideos = function() {
+      const visibleVideo = getVisibleVideo();
+      videos.forEach(function(video) {
+        if (video !== visibleVideo && !video.paused) {
+          video.pause();
+          video.muted = true;
+        }
+      });
+    };
+
+    // Function to force autoplay on mobile devices
+    const forceAutoplayOnMobile = function(video) {
+      if (isMobile() && video.hasAttribute('autoplay')) {
+        video.muted = true;
+        video.playsInline = true;
+        
+        const playPromise = video.play();
+        
+        if (playPromise !== undefined) {
+          playPromise
+            .then(function() {
+              console.log('Autoplay successful on mobile');
+            })
+            .catch(function(error) {
+              console.log('Autoplay failed, waiting for user interaction');
+              
+              const startPlayback = function() {
+                video.play().catch(function(e) { console.log('Error playing:', e); });
+                document.removeEventListener('touchstart', startPlayback);
+                document.removeEventListener('click', startPlayback);
+              };
+              
+              document.addEventListener('touchstart', startPlayback, { once: true });
+              document.addEventListener('click', startPlayback, { once: true });
+            });
+        }
+      }
+    };
+
+    // Toggle video controls on click - only for visible video
+    const toggleVideoControls = function() {
+      const video = getVisibleVideo();
+      if (!video) return;
+
+      // Pause all hidden videos first
+      pauseHiddenVideos();
+
+      const isActive = video.classList.contains('show-controls');
+
+      if (!isActive) {
+        // Activate: show controls, unmute, disable autoplay and loop
+        video.classList.add('show-controls');
+        video.controls = true;
+        video.muted = false;
+        video.loop = false;
+        video.removeAttribute('autoplay');
+        
+        if (video.paused) {
+          video.play().catch(function(e) { console.log('Error playing:', e); });
+        }
+      } else {
+        // Deactivate: hide controls, mute, re-enable autoplay and loop
+        video.classList.remove('show-controls');
+        video.controls = false;
+        video.muted = true;
+        video.loop = true;
+        video.setAttribute('autoplay', '');
+        
+        if (video.paused) {
+          video.play().catch(function(e) { console.log('Error playing:', e); });
+        }
+      }
+    };
+
+    // Initialize videos
+    videos.forEach(function(video) {
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+    });
+
+    // Only autoplay the visible video
+    const visibleVideo = getVisibleVideo();
+    if (visibleVideo) {
+      if (isMobile()) {
+        visibleVideo.muted = true;
+        forceAutoplayOnMobile(visibleVideo);
+      }
+    }
+
+    // Pause hidden videos on init
+    pauseHiddenVideos();
+
+    // Handle resize to switch between mobile/desktop video
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        pauseHiddenVideos();
+        const visible = getVisibleVideo();
+        if (visible && visible.paused && !visible.classList.contains('show-controls')) {
+          visible.play().catch(function(e) { console.log('Error playing on resize:', e); });
+        }
+      }, 250);
+    });
+
+    // Button click handler
+    const toggleButton = section.querySelector('[data-video-toggle]');
+    if (toggleButton) {
+      toggleButton.addEventListener('click', function() {
+        toggleVideoControls();
+        toggleButton.style.display = 'none';
+      }, false);
+    }
+
+    // For iOS: try to start playback after any interaction
+    if (isIOS()) {
+      const enableAutoplayAfterInteraction = function() {
+        const visible = getVisibleVideo();
+        if (visible && visible.paused && !visible.classList.contains('show-controls')) {
+          visible.play().catch(function(e) { console.log('Error playing after interaction:', e); });
+        }
+        document.removeEventListener('touchend', enableAutoplayAfterInteraction);
+      };
+      
+      document.addEventListener('touchend', enableAutoplayAfterInteraction, { once: true });
+    }
+  });
+</script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "C Features Grid",
+  "tag": "section",
+  "class": "section section-features-grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Clean, functional {accent}ingredients{/accent} that work with your body."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Each piece combines {accent}clinically studied nutrients{/accent} and prebiotic dietary nitrates to restore your oral microbiome and naturally boost Nitric Oxide."
+    },
+    {
+      "type": "text",
+      "id": "sound_text",
+      "label": "Sound Activation Text (Video only)",
+      "default": "Click to activate sound",
+      "info": "Text shown below description when video is enabled"
+    },
+    {
+      "type": "text",
+      "id": "sound_text_class",
+      "label": "Sound Text CSS Class",
+      "info": "Optional custom CSS class for sound text styling"
+    },
+    {
+      "type": "header",
+      "content": "Media (Center Column)"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media Type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_image",
+      "label": "Image"
+    },
+    {
+      "type": "video",
+      "id": "media_video",
+      "label": "Video"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "LEARN MORE"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Layout Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_card_lines",
+      "label": "Show Card Lines (Desktop)",
+      "default": true,
+      "info": "Show dashed lines connecting cards to center media on desktop"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#d2691e"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "default": 2
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_card",
+      "name": "Feature Card",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Feature description goes here"
+        },
+        {
+          "type": "select",
+          "id": "desktop_position",
+          "label": "Desktop Position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left Column"
+            },
+            {
+              "value": "right",
+              "label": "Right Column"
+            }
+          ],
+          "default": "left",
+          "info": "Position of the card on desktop layout (max 3 per side). Cards appear in order on mobile."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Features Grid",
+      "blocks": [
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Potassium Nitrate (121 mg)",
+            "description": "Fuels beneficial oral bacteria that convert nitrates into Nitric Oxide — supporting better circulation and energy.",
+            "desktop_position": "left"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Probiotic Blend (4.5B CFUs)",
+            "description": "Restores healthy oral microbiome balance to promote fresh breath and enhance Nitric Oxide pathways.",
+            "desktop_position": "left"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Vitamin C (22% DV)",
+            "description": "Protects Nitric Oxide molecules and supports gum health with antioxidant power.",
+            "desktop_position": "left"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Zinc (9% DV)",
+            "description": "Helps maintain healthy blood pressure and promotes optimal circulation.",
+            "desktop_position": "right"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "CoQ10 Support",
+            "description": "Supports cellular energy production and cardiovascular health at the cellular level.",
+            "desktop_position": "right"
+          }
+        },
+        {
+          "type": "feature_card",
+          "settings": {
+            "title": "Sugar-Free Formula",
+            "description": "Naturally sweetened with gentle ingredients that protect teeth and support oral health.",
+            "desktop_position": "right"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

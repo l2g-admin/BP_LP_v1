@@ -1,0 +1,137 @@
+<style>
+.faq-section{
+  max-width:1200px;
+  margin:60px auto;
+  padding:0 20px;
+}
+
+.faq-heading{
+  font-size:36px;
+  font-weight:700;
+  margin-bottom:30px;
+  text-align:center;
+}
+
+.faq-item{
+  border-bottom:1px solid #ddd;
+}
+
+.faq-question{
+  width:100%;
+  background:none;
+  border:none;
+  outline:none;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:22px 0;
+  cursor:pointer;
+  font-size:20px;
+  font-weight:600;
+  text-align:left;
+}
+
+.faq-icon{
+  font-size:30px;
+  transition:.3s ease;
+}
+
+.faq-answer{
+  display:none;
+  padding:0 0 20px;
+  font-size:16px;
+  line-height:1.8;
+}
+
+.faq-item.active .faq-answer{
+  display:block;
+}
+
+.faq-item.active .faq-icon{
+  transform:rotate(45deg);
+}
+
+@media(max-width:768px){
+
+.faq-heading{
+  font-size:28px;
+}
+
+.faq-question{
+  font-size:17px;
+}
+
+.faq-answer{
+  font-size:15px;
+}
+
+}
+</style>
+
+{% assign faqs = product.metafields.custom.faqs.value %}
+
+{% if faqs != blank %}
+
+<div class="faq-section">
+
+  <h2 class="faq-heading">
+    Frequently Asked Questions
+  </h2>
+
+  {% for faq in faqs %}
+
+    <div class="faq-item">
+
+      <button class="faq-question" type="button">
+
+        <span>
+          {{ faq.question }}
+        </span>
+
+        <span class="faq-icon">
+          +
+        </span>
+
+      </button>
+
+      <div class="faq-answer">
+        {{ faq.answer | metafield_tag }}
+      </div>
+
+    </div>
+
+  {% endfor %}
+
+</div>
+
+{% endif %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  document.querySelectorAll(".faq-question").forEach(function(button){
+
+    button.addEventListener("click", function(){
+
+      this.parentElement.classList.toggle("active");
+
+    });
+
+  });
+
+});
+</script>
+
+{% schema %}
+{
+  "name": "Dynamic FAQ",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Dynamic FAQ"
+    }
+  ]
+}
+{% endschema %}

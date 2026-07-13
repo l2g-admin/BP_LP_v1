@@ -1,0 +1,331 @@
+{%- liquid
+  assign products_to_display = section.settings.collection.all_products_count
+  if section.settings.collection.all_products_count > section.settings.products_to_show
+    assign products_to_display = section.settings.products_to_show
+    assign more_in_collection = true
+  endif
+-%}
+
+<div class="text-text md:ml-8 md:mx-0 bg-linear {{ section.settings.mobile_spacing_bottom | prepend: 'pb-' }} {{ section.settings.mobile_spacing_top | prepend: 'pt-' }} {{ section.settings.spacing_top | prepend: 'md:pt-' }} {{ section.settings.spacing_bottom | prepend: 'md:pb-' }} mx-auto overflow-hidden " style="--color-text: {{ section.settings.text_color | default: '#000000' }}; --color-bg: {{ section.settings.bg_color | default: '#FFFFFF' }}">
+  <div class="mx-auto max-w-screen-2xl">
+    {%- unless section.settings.title == blank -%}
+      <div class="{{ section.settings.text_align | default: 'text-left' }} mb-8 space-y-4 px-4">
+        <h2 class=" h2">{{ section.settings.title }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
+
+    <ul class="px-4 py-1 pb-2 mobile-invisibile-scrollbar gap-8 {% if products_to_display == 4 or section.settings.collection == blank %} md:grid-cols-4 {% else %} md:grid-cols-3 {% endif %} {% if section.settings.collection.all_products_count > 2 and section.settings.swipe_on_mobile and section.settings.products_to_show > 2 %} flex overflow-x-auto overscroll-x-contain snap-x snap-mandatory scroll-p-8 md:grid {% else %} grid grid-cols-2 {% endif %}" role="list">
+      {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
+        <li class="{% cycle 'button-orange', 'button-navy', 'button-aqua' %} {% if section.settings.collection.all_products_count > 2 and section.settings.swipe_on_mobile and section.settings.products_to_show > 2 %} w-[calc(100%-3rem)] md:w-full snap-start shrink-0{% else %}w-full{% endif %}">
+          {% render 'product-card'
+          , product_card_product: product,
+          image_ratio: section.settings.image_ratio,
+          show_secondary_image: section.settings.show_secondary_image,
+          show_vendor: section.settings.show_vendor,
+          show_price: true,
+          quick_shop: section.settings.quick_shop,
+          show_color_swatches: section.settings.show_color_swatches,
+          gated_info: section.settings.gated_b2b %}
+        </li>
+      {%- endfor -%}
+      <li aria-hidden="true" class="{% if section.settings.collection.all_products_count > 2 and section.settings.swipe_on_mobile and section.settings.products_to_show > 2 %} w-px shrink-0{% else %}hidden{% endif %}"></li>
+    </ul>
+
+    {%- if section.settings.show_view_all and more_in_collection -%}
+      {% if section.settings.gated_b2b %}
+        {% if customer.b2b? %}
+          {% comment %} wholesale customer {% endcomment %}
+          <div class="text-center ">
+            <a
+              href="{{ section.settings.collection.url }}"
+              class="{{ section.settings.button_style }} !text-brand"
+              aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title }}">
+              {% if section.settings.button_text != blank %}
+                {{ section.settings.button_text }}
+                {% else %}
+              {{ 'sections.featured_collection.view_all' | t: collection_name: section.settings.collection.title }}
+              {% endif %}
+          </a>
+          </div>
+          
+        {% else %}
+          <div class="text-center ">
+            <a
+          href="{{ section.settings.non_b2b_button_link }}"
+          class="{{ section.settings.button_style }} !text-brand"
+          aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title }}">
+            {{ section.settings.non_b2b_button_text }}
+            </a>
+          </div>
+        {% endif %}
+        {% else %}
+          <div class="text-center ">
+        <a
+          href="{{ section.settings.collection.url }}"
+          class="{{ section.settings.button_style }} !text-brand"
+          aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title }}">
+          {% if section.settings.button_text != blank %}
+            {{ section.settings.button_text }}
+            {% else %}
+          {{ 'sections.featured_collection.view_all' | t: collection_name: section.settings.collection.title }}
+          {% endif %}
+      </a>
+      </div>
+      {% else %}
+
+        {% comment %} Normal Button {% endcomment %}
+      <div class="text-center ">
+        <a
+          href="{{ section.settings.collection.url }}"
+          class="{{ section.settings.button_style }} !text-brand"
+          aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title }}">
+          {% if section.settings.button_text != blank %}
+            {{ section.settings.button_text }}
+            {% else %}
+          {{ 'sections.featured_collection.view_all' | t: collection_name: section.settings.collection.title }}
+          {% endif %}
+      </a>
+      </div>
+      {%- endif -%}
+    {%- endif -%}
+</div>
+</div>
+
+{% schema %}
+{
+  "name": "C Featured Collection",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Color and Image Settings"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "header",
+      "content": "Heading and Text Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Featured collection",
+      "label": "t:sections.featured-collection.settings.title.label"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Align Text",
+      "options": [
+        {
+          "value": "text-center",
+          "label": "Center all"
+        },
+        {
+          "value": "text-left",
+          "label": "Left all"
+        },
+        {
+          "value": "text-right",
+          "label": "Right all"
+        },
+        {
+          "value": "text-center md:text-left",
+          "label": "Desktop left, Mobile center"
+        },
+        {
+          "value": "text-center md:text-right",
+          "label": "Desktop right, Mobile center"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Padding and Margin Settings"
+    },
+    {
+      "type": "range",
+      "id": "spacing_top",
+      "label": "Spacing top",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 8,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_top",
+      "label": "Mobile Spacing Top",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom",
+      "label": "Spacing bottom",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 8,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_bottom",
+      "label": "Mobile Spacing bottom",
+      "unit": "x",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Collection Settings"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.featured-collection.settings.collection.label"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.featured-collection.settings.products_to_show.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "t:sections.featured-collection.settings.show_view_all.label"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "default": "Shop All",
+      "label": "Button Text"
+    },
+    {
+      "type": "text",
+      "id": "non_b2b_button_text",
+      "default": "Login to see wholesale pricing",
+      "label": "Non B2B Button Text"
+    },
+    {
+    "type": "url",
+    "id": "non_b2b_button_link",
+    "label": "Non B2B Button Link"
+    } ,
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button Style",
+      "default": "button button--primary",
+      "options": [
+        {
+          "value": "button button--primary",
+          "label": "Primary Button"
+        },
+        {
+          "value": "button button--secondary",
+          "label": "Secondary Button"
+        },
+        {
+          "value": "button button--slide",
+          "label": "Slide Button"
+        },
+        {
+          "value": "button button--outline",
+          "label": "Outline Button"
+        },
+        {
+          "value": "button button--tertiary",
+          "label": "Tertiary Button"
+        },
+        {
+          "value": "button--text",
+          "label": "Text Link"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "swipe_on_mobile",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.swipe_on_mobile.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.featured-collection.settings.header.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "aspect-[4/3]",
+          "label": "Wide"
+        },
+        {
+          "value": "aspect-[3/4]",
+          "label": "Portrait"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        }
+      ],
+      "default": "aspect-square",
+      "label": "Image Ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": true,
+      "label": "t:sections.featured-collection.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "quick_shop",
+      "default": true,
+      "label": "Enable quick shop?"
+    },
+    {
+      "type": "checkbox",
+      "id": "gated_b2b",
+      "default": false,
+      "label": "Apply gated b2b info"
+    }
+  ],
+  "presets": [
+    {
+      "name": "C Featured Collection"
+    }
+  ]
+}
+{% endschema %}

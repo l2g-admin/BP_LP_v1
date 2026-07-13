@@ -1,0 +1,50 @@
+<div class="bg-bg" style="--color-text: {{ section.settings.text_color | default: '#090909' }}; --color-bg: {{ section.settings.bg_color | default: '#F6F3F0' }}">
+    <div class="grid items-center max-w-screen-xl grid-cols-1 px-8 py-12 mx-auto gap-x-20 md:grid-cols-2 md:py-20 bg-bg text-text ">
+        <div>
+            <h2 class="h2">
+                {{ section.settings.heading | replace_first: "**", "<span class='text-brand font-secondaryHeader'>" | replace: "**", "</span>" }}
+            </h2>
+        </div>
+        <div>
+            <div class="text-lg">
+            {{ section.settings.text }}
+            </div>
+        </div>
+    </div>
+</div>
+{% schema %}
+    {
+      "name": "Columns",
+      "settings": [
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Image with text",
+          "label": "t:sections.image-with-text.blocks.heading.settings.heading.label"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+          "label": "t:sections.image-with-text.blocks.text.settings.text.label"
+         }
+    
+  ],
+  "presets": [
+    {
+      "name": "Columns",
+    }
+  ]
+    }
+    {% endschema %}
+    

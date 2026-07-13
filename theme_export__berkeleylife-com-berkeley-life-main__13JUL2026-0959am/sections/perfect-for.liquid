@@ -1,0 +1,132 @@
+{%- liquid
+  assign show = true
+  if product
+    assign show = false
+    assign block_settings = section.blocks | map: 'settings'
+    assign block_products = block_settings | map: 'condition'
+    if block_products contains 'true'
+      assign show = true
+    endif
+  endif
+-%}
+
+{%- if show -%}
+<div id="PerfectFor" class="px-4 md:px-8 py-8 md:py-16 bg-[#FFFCFB]">
+  <div id="PerfectFor" class=" max-w-screen-xl mx-auto">
+
+    {%- unless section.settings.title == blank -%}
+      <h2 class="h3 mb-4">{{ section.settings.title }}</h2>
+    {%- endunless -%}
+    <div class="md:py-20 md:grid-cols-2 md:border-t md:border-b grid items-center grid-cols-1 gap-8 py-0 border-t-0 border-gray-200 border-solid">
+      {%- unless section.settings.image == blank and product.metafields.perfect.image == blank -%}
+        <div class="rounded-tr-[16vw] rounded-bl-[16vw] overflow-hidden aspect-square md:order-2">
+          {%- if product.metafields.perfect.image -%}
+            {% render 'image', image: product.metafields.perfect.image, classes: 'object-cover' %}
+          {%- else -%}
+            {% render 'image', image: section.settings.image, classes: 'object-cover' %}
+          {%- endif -%}
+        </div>
+      {%- endunless -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="md:border-t-0 md:border-b-0 md:border-r md:pr-8 flex flex-col justify-center min-h-full border-t border-b border-gray-200 border-solid"
+        role="list"
+        >
+        {%- for block in section.blocks -%}
+          {%- if block.settings.condition == 'true' -%}
+            <li class="group">
+                <div class="px-2 md:px-4{% if block.settings.image %} flex flex-row gap-4 items-center{% endif %}">
+                  {%- if block.settings.image -%}
+                    <div class="md:w-24 grow-0 shrink-0 w-20 h-auto max-w-full">
+                      {% render 'image', image: block.settings.image, classes: 'object-contain' %}
+                    </div>
+                  {%- endif -%}
+                  <div class="group-last-of-type:border-transparent w-full py-8 space-y-4 border-b border-gray-200">
+                    <h4 class="h5">{{ block.settings.title }}</h4>
+                    {%- if block.settings.bullets -%}
+                      {%- assign bullet_list =  block.settings.bullets | newline_to_br | split: '<br />' -%}
+                      <ul class="md:text-base md:gap-4 grid grid-cols-2 gap-2 text-sm">
+                        {%- for bullet in bullet_list -%}
+                          <li class="pl-6">{{- bullet -}}</li>
+                        {%- endfor -%}
+                      </p>
+                    {%- endif -%}
+                  </div>
+                </div>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Perfect For",
+  "tag": "section",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "This image is overwritten if the product has a 'Perfect for' image in its metafield."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Lorem Headline",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "perfectfor",
+      "name": "Perfect For",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "condition",
+          "label": "Metafield for showing?"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "bullets",
+          "label": "Bullet Points",
+          "info": "New bullet on each line"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Perfect For",
+      "blocks": [
+        {
+          "type": "perfectfor"
+        },
+        {
+          "type": "perfectfor"
+        },
+        {
+          "type": "perfectfor"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

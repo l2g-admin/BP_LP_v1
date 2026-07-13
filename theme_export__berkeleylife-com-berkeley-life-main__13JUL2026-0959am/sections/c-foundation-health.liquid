@@ -1,0 +1,830 @@
+{%- comment -%}
+  Section: Foundation for Health
+  Description: Top split row (heading + intro), bottom row (image + accordion benefits).
+  sl-id: sl-section-foundation-health-v2
+  Figma (desktop): https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=6119-1218
+  Figma (accordion): https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=6122-26789
+  Figma (mobile): https://www.figma.com/design/f1AWMl23NcBW13s8SML1B5/BKL?node-id=5347-7495
+{%- endcomment -%}
+
+{%- liquid
+  assign sl_id = 'sl-section-foundation-health-v2'
+
+  assign bg_color = section.settings.bg_color | default: '#ffffff'
+  assign text_color = section.settings.text_color | default: '#1b1c29'
+  assign accent_color = section.settings.accent_color | default: '#d54f2f'
+  assign tab_bg_color = section.settings.tab_bg_color | default: '#f6f3f0'
+
+  assign heading_sans = section.settings.heading_sans
+  assign heading_italic = section.settings.heading_italic
+  assign subtext = section.settings.subtext
+  assign image = section.settings.image
+
+  assign open_tabs_by_default = section.settings.open_tabs_by_default
+
+  assign pt_desktop = section.settings.padding_top_desktop | append: 'px'
+  assign pb_desktop = section.settings.padding_bottom_desktop | append: 'px'
+  assign pt_mobile = section.settings.padding_top_mobile | append: 'px'
+  assign pb_mobile = section.settings.padding_bottom_mobile | append: 'px'
+-%}
+
+<section
+  id="{{ section.id }}"
+  class="c-foundation-health"
+  data-section-id="{{ section.id }}"
+  data-sl-id="{{ sl_id }}"
+  data-section-type="c-foundation-health"
+  {% if section.settings.anchor_id != blank %}data-anchor="{{ section.settings.anchor_id }}"{% endif %}
+>
+  <div class="c-foundation-health__container page-width">
+    <div class="c-foundation-health__top-row">
+      <div class="c-foundation-health__heading-wrap">
+        {%- if heading_sans != blank or heading_italic != blank -%}
+          <h2 class="c-foundation-health__heading">
+            {%- if heading_sans != blank -%}
+              <span class="c-foundation-health__heading-sans">{{ heading_sans }}</span>
+            {%- endif -%}
+            {%- if heading_italic != blank -%}
+              <em class="c-foundation-health__heading-italic">{{ heading_italic }}</em>
+            {%- endif -%}
+          </h2>
+        {%- endif -%}
+      </div>
+
+      {%- if subtext != blank -%}
+        <div class="c-foundation-health__intro-wrap">
+          <p class="c-foundation-health__intro">{{ subtext }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="c-foundation-health__bottom-row">
+      <div class="c-foundation-health__image-wrap">
+        {%- if image != blank -%}
+          {{
+            image
+            | image_url: width: 1208
+            | image_tag:
+              class: 'c-foundation-health__image',
+              loading: 'lazy',
+              widths: '371, 604, 800, 1208',
+              sizes: '(min-width: 1200px) 604px, (min-width: 768px) 48vw, 100vw',
+              alt: image.alt | escape
+          }}
+        {%- else -%}
+          <div class="c-foundation-health__image-placeholder">
+            {{ 'product-1' | placeholder_svg_tag: 'c-foundation-health__image c-foundation-health__image--placeholder' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="c-foundation-health__tabs-wrap">
+        <div class="c-foundation-health__tabs">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'benefit_tab' -%}
+              {%- assign panel_id = 'c-foundation-health-panel-' | append: section.id | append: '-' | append: block.id -%}
+              {%- assign is_open = false -%}
+              {%- if open_tabs_by_default or block.settings.open_by_default -%}
+                {%- assign is_open = true -%}
+              {%- endif -%}
+
+              <article class="c-foundation-health__tab{% if is_open %} is-open{% endif %}" {{ block.shopify_attributes }}>
+                <button
+                  type="button"
+                  class="c-foundation-health__tab-trigger"
+                  aria-expanded="{% if is_open %}true{% else %}false{% endif %}"
+                  aria-controls="{{ panel_id }}"
+                >
+                  <span class="c-foundation-health__tab-summary">
+                    {%- if block.settings.title != blank -%}
+                      <span class="c-foundation-health__tab-title">{{ block.settings.title }}</span>
+                    {%- endif -%}
+                    {%- if block.settings.description != blank -%}
+                      <span class="c-foundation-health__tab-desc">{{ block.settings.description }}</span>
+                    {%- endif -%}
+                  </span>
+
+                  <span class="c-foundation-health__tab-icon" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" focusable="false" role="presentation">
+                      <path d="M8 2V14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                      <path d="M2 8H14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                    </svg>
+                  </span>
+                </button>
+
+                <div id="{{ panel_id }}" class="c-foundation-health__tab-panel" {% unless is_open %}hidden{% endunless %}>
+                  {%- if block.settings.ingredient_1 != blank or block.settings.ingredient_2 != blank or block.settings.ingredient_3 != blank or block.settings.ingredient_4 != blank or block.settings.ingredient_5 != blank -%}
+                    <ul class="c-foundation-health__tab-ingredients" role="list">
+                      {%- if block.settings.ingredient_1 != blank -%}<li>{{ block.settings.ingredient_1 }}</li>{%- endif -%}
+                      {%- if block.settings.ingredient_2 != blank -%}<li>{{ block.settings.ingredient_2 }}</li>{%- endif -%}
+                      {%- if block.settings.ingredient_3 != blank -%}<li>{{ block.settings.ingredient_3 }}</li>{%- endif -%}
+                      {%- if block.settings.ingredient_4 != blank -%}<li>{{ block.settings.ingredient_4 }}</li>{%- endif -%}
+                      {%- if block.settings.ingredient_5 != blank -%}<li>{{ block.settings.ingredient_5 }}</li>{%- endif -%}
+                    </ul>
+                  {%- endif -%}
+
+                  {%- if block.settings.details != blank -%}
+                    <div class="c-foundation-health__tab-details rte">{{ block.settings.details }}</div>
+                  {%- endif -%}
+                </div>
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #{{ section.id }}.c-foundation-health {
+    --c-fh-bg: {{ bg_color }};
+    --c-fh-text: {{ text_color }};
+    --c-fh-accent: {{ accent_color }};
+    --c-fh-tab-bg: {{ tab_bg_color }};
+    --c-fh-pt-mobile: {{ pt_mobile }};
+    --c-fh-pb-mobile: {{ pb_mobile }};
+    --c-fh-pt-desktop: {{ pt_desktop }};
+    --c-fh-pb-desktop: {{ pb_desktop }};
+
+    background-color: var(--c-fh-bg);
+    padding-top: var(--c-fh-pt-mobile);
+    padding-bottom: var(--c-fh-pb-mobile);
+  }
+
+  #{{ section.id }} .c-foundation-health__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  #{{ section.id }} .c-foundation-health__top-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-foundation-health__heading {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  #{{ section.id }} .c-foundation-health__heading-sans {
+    font-family: "TT Commons Pro", "TT Commons", sans-serif;
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #080b2b;
+    letter-spacing: -1.2px;
+  }
+
+  #{{ section.id }} .c-foundation-health__heading-italic {
+    font-family: "Cormorant Garamond";
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--c-fh-accent);
+    font-style: italic;
+    letter-spacing: 0;
+  }
+
+  #{{ section.id }} .c-foundation-health__intro {
+    margin: 0;
+    color: var(--c-fh-text);
+    font-family: "TT Commons Pro", "TT Commons", sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.54px;
+    text-align: left;
+  }
+
+  #{{ section.id }} .c-foundation-health__bottom-row {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+
+  #{{ section.id }} .c-foundation-health__image-wrap {
+    width: 100%;
+    max-width: 371px;
+  }
+
+  #{{ section.id }} .c-foundation-health__image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  #{{ section.id }} .c-foundation-health__image--placeholder {
+    width: 100%;
+    aspect-ratio: 604 / 614;
+    background: #e8e4e0;
+  }
+
+  #{{ section.id }} .c-foundation-health__tabs-wrap,
+  #{{ section.id }} .c-foundation-health__tabs {
+    width: 100%;
+  }
+
+  #{{ section.id }} .c-foundation-health__tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab {
+    border-radius: 6px;
+    background: var(--c-fh-tab-bg);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-trigger {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    text-align: left;
+    cursor: pointer;
+    color: var(--c-fh-text);
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-title {
+    color: var(--c-fh-accent);
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 2.1px;
+    text-transform: uppercase;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-desc {
+    display: none;
+    color: var(--c-fh-text);
+    font-family: "TT Commons Pro", "TT Commons", sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.54px;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: #1b1c29;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab.is-open .c-foundation-health__tab-trigger {
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--c-fh-accent);
+  }
+
+  #{{ section.id }} .c-foundation-health__tab.is-open .c-foundation-health__tab-icon svg path:first-child {
+    opacity: 0;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-panel {
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.38s ease, opacity 0.3s ease, padding-top 0.3s ease;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-panel[hidden] {
+    display: none;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab.is-open .c-foundation-health__tab-panel {
+    padding-top: 12px;
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #{{ section.id }} .c-foundation-health__tab-panel {
+      transition: none;
+    }
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-ingredients {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-ingredients li {
+    color: var(--c-fh-accent);
+    font-family: "TT Commons", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 2.1px;
+    text-transform: uppercase;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-details {
+    color: var(--c-fh-text);
+    font-family: "TT Commons Pro", "TT Commons", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.42px;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-details p,
+  #{{ section.id }} .c-foundation-health__tab-details ul,
+  #{{ section.id }} .c-foundation-health__tab-details ol {
+    margin: 0;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-details p + p,
+  #{{ section.id }} .c-foundation-health__tab-details p + ul,
+  #{{ section.id }} .c-foundation-health__tab-details p + ol,
+  #{{ section.id }} .c-foundation-health__tab-details ul + p,
+  #{{ section.id }} .c-foundation-health__tab-details ol + p {
+    margin-top: 10px;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-details ul,
+  #{{ section.id }} .c-foundation-health__tab-details ol {
+    padding-left: 18px;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-details li + li {
+    margin-top: 4px;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-details a {
+    color: var(--c-fh-accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  #{{ section.id }} .c-foundation-health__tab-details strong {
+    font-weight: 700;
+  }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .c-foundation-health__tab {
+      padding: 24px;
+    }
+
+    #{{ section.id }} .c-foundation-health__tab-desc {
+      display: block;
+    }
+  }
+
+  @media (min-width: 978px) {
+    #{{ section.id }}.c-foundation-health {
+      padding-top: var(--c-fh-pt-desktop);
+      padding-bottom: var(--c-fh-pb-desktop);
+    }
+
+    #{{ section.id }} .c-foundation-health__container {
+      gap: 32px;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    #{{ section.id }} .c-foundation-health__top-row {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    #{{ section.id }} .c-foundation-health__heading-wrap {
+      flex: 1 1 auto;
+    }
+
+    #{{ section.id }} .c-foundation-health__heading-sans {
+      font-size: 48px;
+      letter-spacing: -1.38px;
+    }
+
+    #{{ section.id }} .c-foundation-health__heading-italic {
+      font-size: 64px;
+    }
+
+    #{{ section.id }} .c-foundation-health__intro-wrap {
+      flex: 0 0 403px;
+    }
+
+    #{{ section.id }} .c-foundation-health__intro {
+      text-align: right;
+    }
+
+    #{{ section.id }} .c-foundation-health__bottom-row {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 48px;
+    }
+
+    #{{ section.id }} .c-foundation-health__image-wrap {
+      max-width: 604px;
+      flex: 0 0 604px;
+    }
+
+    #{{ section.id }} .c-foundation-health__tabs-wrap {
+      max-width: 596px;
+      flex: 0 1 596px;
+    }
+
+    #{{ section.id }} .c-foundation-health__tab-title {
+      font-size: 18px;
+      letter-spacing: 2.7px;
+    }
+  }
+{% endstyle %}
+
+<script>
+(function () {
+  function transitionPanel(tab, trigger, panel, shouldOpen) {
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (shouldOpen) {
+      trigger.setAttribute('aria-expanded', 'true');
+      tab.classList.add('is-open');
+      panel.hidden = false;
+
+      if (reduceMotion) {
+        panel.style.maxHeight = 'none';
+        panel.style.opacity = '1';
+        return;
+      }
+
+      panel.style.maxHeight = '0px';
+      panel.style.opacity = '0';
+      panel.offsetHeight;
+
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+      panel.style.opacity = '1';
+
+      var onOpenEnd = function (event) {
+        if (event.propertyName !== 'max-height') return;
+        panel.style.maxHeight = 'none';
+        panel.removeEventListener('transitionend', onOpenEnd);
+      };
+      panel.addEventListener('transitionend', onOpenEnd);
+
+      return;
+    }
+
+    trigger.setAttribute('aria-expanded', 'false');
+
+    if (reduceMotion) {
+      tab.classList.remove('is-open');
+      panel.hidden = true;
+      panel.style.maxHeight = '';
+      panel.style.opacity = '';
+      return;
+    }
+
+    var startHeight = panel.scrollHeight;
+    panel.style.maxHeight = startHeight + 'px';
+    panel.style.opacity = '1';
+    panel.offsetHeight;
+
+    tab.classList.remove('is-open');
+    panel.style.maxHeight = '0px';
+    panel.style.opacity = '0';
+
+    var onCloseEnd = function (event) {
+      if (event.propertyName !== 'max-height') return;
+      panel.hidden = true;
+      panel.style.maxHeight = '';
+      panel.style.opacity = '';
+      panel.removeEventListener('transitionend', onCloseEnd);
+    };
+    panel.addEventListener('transitionend', onCloseEnd);
+  }
+
+  function initFoundationHealth(section) {
+    if (!section || section.dataset.cFoundationHealthInitialized === 'true') return;
+    section.dataset.cFoundationHealthInitialized = 'true';
+
+    var tabs = section.querySelectorAll('.c-foundation-health__tab');
+    tabs.forEach(function (tab) {
+      var trigger = tab.querySelector('.c-foundation-health__tab-trigger');
+      var panel = tab.querySelector('.c-foundation-health__tab-panel');
+      if (!trigger || !panel) return;
+
+      var isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      if (isOpen) {
+        tab.classList.add('is-open');
+        panel.hidden = false;
+        panel.style.maxHeight = 'none';
+        panel.style.opacity = '1';
+      } else {
+        tab.classList.remove('is-open');
+        panel.hidden = true;
+        panel.style.maxHeight = '0px';
+        panel.style.opacity = '0';
+      }
+    });
+
+    var triggers = section.querySelectorAll('.c-foundation-health__tab-trigger');
+    triggers.forEach(function (trigger) {
+      trigger.addEventListener('click', function () {
+        var tab = trigger.closest('.c-foundation-health__tab');
+        var panelId = trigger.getAttribute('aria-controls');
+        var panel = panelId ? section.querySelector('#' + panelId) : null;
+
+        if (!tab || !panel) return;
+
+        var isOpen = trigger.getAttribute('aria-expanded') === 'true';
+        transitionPanel(tab, trigger, panel, !isOpen);
+      });
+    });
+  }
+
+  function setup() {
+    var section = document.getElementById('{{ section.id }}');
+    if (section) initFoundationHealth(section);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+
+  document.addEventListener('shopify:section:load', function (e) {
+    if (e.detail && e.detail.sectionId === '{{ section.id }}') {
+      var section = document.getElementById('{{ section.id }}');
+      if (section) initFoundationHealth(section);
+    }
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Foundation for Health",
+  "tag": "section",
+  "class": "c-foundation-health-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "HTML anchor for internal navigation"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_tabs_by_default",
+      "label": "Open benefit tabs by default",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "heading_sans",
+      "label": "Heading — Line 1 (sans-serif)",
+      "default": "One Molecule."
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading — Line 2 (italic serif)",
+      "default": "Five Systems."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Intro text (top-right on desktop)",
+      "default": "Two capsules a day. Clinically validated nitric oxide support for the systems that drive how you feel, perform, and age."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Section image"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1b1c29"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#d54f2f"
+    },
+    {
+      "type": "color",
+      "id": "tab_bg_color",
+      "label": "Accordion background color",
+      "default": "#f6f3f0"
+    },
+    {
+      "type": "header",
+      "content": "Spacing — Desktop"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Spacing — Mobile"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit_tab",
+      "name": "Benefit Tab",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Cardiovascular Health"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Short description",
+          "default": "Supports healthy blood pressure, circulation & arterial flexibility"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_1",
+          "label": "Ingredient 1",
+          "default": "Potassium Nitrate"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_2",
+          "label": "Ingredient 2",
+          "default": "Vitamin C"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_3",
+          "label": "Ingredient 3",
+          "default": "Magnesium"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_4",
+          "label": "Ingredient 4",
+          "default": "Fermented Beet Root"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_5",
+          "label": "Ingredient 5",
+          "default": "Beetroot Extract (25% Betaine Nitrate)"
+        },
+        {
+          "type": "richtext",
+          "id": "details",
+          "label": "Expanded content (rich text)",
+          "default": "<p>Berkeley Life works via the dietary nitrate to nitrite to nitric oxide pathway, validated in double-blind, placebo-controlled trials.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Foundation for Health",
+      "blocks": [
+        {
+          "type": "benefit_tab",
+          "settings": {
+            "title": "Cardiovascular Health",
+            "description": "Supports healthy blood pressure, circulation & arterial flexibility"
+          }
+        },
+        {
+          "type": "benefit_tab",
+          "settings": {
+            "title": "Energy & Endurance",
+            "description": "Boosts oxygen delivery to muscles for lasting stamina and faster recovery"
+          }
+        },
+        {
+          "type": "benefit_tab",
+          "settings": {
+            "title": "Cognitive Function",
+            "description": "Promotes cerebral blood flow for mental clarity, focus and mood"
+          }
+        },
+        {
+          "type": "benefit_tab",
+          "settings": {
+            "title": "Sexual Health",
+            "description": "Supports libido, arousal and performance for men and women"
+          }
+        },
+        {
+          "type": "benefit_tab",
+          "settings": {
+            "title": "Active Aging",
+            "description": "Counteracts the age-related NO decline that drives cardiovascular and metabolic risk"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

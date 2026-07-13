@@ -1,0 +1,39 @@
+  {% comment %} {% unless customer.b2b? %} {% endcomment %}
+  <div id="cart-free-shipping" data-id="{{ section.id }}">
+
+  <div class="js-contents">
+    {%-liquid
+      if customer.b2b?
+        assign target = settings.b2b_free_shipping_target | times: 100
+        else
+      assign target = settings.free_shipping_target | times: 75
+      endif
+      if cart.currency.iso_code != shop.currency
+        assign target = target | times: cart.currency.rate | round
+      endif
+      assign diff = target | minus: cart.total_price
+      assign diff_money = diff | money
+    -%}
+   
+    {% capture bar_text %}
+      {% if diff > 0 %}
+        {{ settings.free_shipping_no | replace: "[amount]", diff_money }}
+      {% else %}
+        {{ settings.free_shipping_yes }}
+      {% endif %}
+    {% endcapture %}
+
+    <div class="text-center p-2 md:p-4 mb-4 mx-auto max-w-xs space-y-3 {% if cart == empty %}hidden{% endif %}" >
+      <div>
+        {{ bar_text }}
+      </div>
+      <div class="w-full h-4 overflow-hidden bg-gray-100 rounded-full text-brand">
+        <progress max="{{ target }}" value="{{ cart.total_price }}" class="block w-full h-4 overflow-hidden bg-white border-0 border-none appearance-none motion-safe:animate-my-pulse">
+        </progress>
+      </div>
+      {%- if settings.keep_shopping_link and diff >= 0 -%}
+        <a class="inline-block font-bold underline uppercase tracking-[3.04px] transition-all decoration-1 underline-offset-2 hover:decoration-2 text-aqua" href="/collections/shop-all">{{ section.keep_shopping_text | default: "Keep Shopping" }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,329 @@
+{% comment %}theme-check-disable NestedSnippet{% endcomment %}
+{% if section.settings.show_breadcrumbs %}
+  {% render 'breadcrumbs' %}
+{% endif %}
+
+
+<article class="relative max-w-screen-xl px-4 py-8 mx-auto space-y-8 md:px-12  {% if article.metafields.custom.featured_products != blank %} md:grid gap-x-8 md:grid-cols-7 {% endif %}">
+  {% if article.metafields.custom.featured_products != blank %}
+   <div class="md:col-span-5">
+   {% endif %}
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when '@app' -%}
+        <div class="mx-auto max-w-prose">
+          {% render block %}
+        </div>
+      {%- when 'featured_image'-%}
+        {%- if article.image -%}
+          <div class="aspect-[9/5] border-b-2 border-navy pb-8  w-full overflow-hidden" {{ block.shopify_attributes }}>
+            {% render 'image', image: article.image, fit: 'object-cover', img_size: '(min-width: 750px) calc(100vw - 8rem), 100vw', classes: 'w-full h-full mx-auto pb-8' %}
+          </div>
+        {%- endif -%}
+      {%- when 'title'-%}
+        <header class="mx-auto text-left " {{ block.shopify_attributes }}>
+          {%- if block.settings.blog_show_date -%}
+            <span class="text-base uppercase text-brand font-bold tracking-[3.04px]">{{ article.published_at | time_tag: format: 'month_year' }}</span>
+          {%- endif -%}
+          <h1 class="my-4 h2">{{ article.title | escape }}</h1>
+  
+          {%- if block.settings.blog_show_author -%}
+            <span>{{ article.author }}</span>
+          {%- endif -%}
+        </header>
+        {% if article.tags != blank %}
+        <ul id="articleTags" class="items-center hidden gap-4 my-8 md:flex">
+          {%- for tag in article.tags -%}
+             <li class="p-2 px-4 text-sm font-bold uppercase border rounded-full border-navy ">{{ tag | link_to_tag: tag | replace: '" title', '#blogNav" title' }}</li>
+          {%- endfor -%}
+        </ul>
+      {% endif %}
+      {%- when 'excerpt'-%}
+        {%- unless article.excerpt == blank -%}
+        <div class="" {{ block.shopify_attributes }}>
+          {{ article.excerpt }}
+        </div>
+        {%- endunless -%}
+      {%- when 'content'-%}
+        {%-liquid
+          assign wrapper_classes = ''
+          assign base_classes = ''
+          if block.settings.use_shortcodes and article.content contains '[[featured-product'
+            assign wrapper_classes = 'max-w-none grid grid-cols-1 md:grid-cols-5 gap-x-4'
+            assign base_classes = 'md:col-span-3 md:col-start-2'
+          endif
+        -%}
+
+        <div class="lg:prose-lg prose-headings:font-serif  prose {{ wrapper_classes }}" {{ block.shopify_attributes }}>
+          {%- comment -%}Check if article contains any shortcode{%- endcomment -%}
+          {%-liquid
+            if block.settings.use_shortcodes and article.content contains '['
+              assign pieces = article.content | split: '[['
+              for piece in pieces
+                if piece contains ']]' and piece contains '~'
+                  assign inner_pieces = piece | split: ']]'
+                  for inner_piece in inner_pieces
+                    if inner_piece contains '~'
+                      assign short_code_parts = inner_piece | split: '~'
+                      assign short_code_type = short_code_parts[0]
+                      assign short_code_value = short_code_parts[1]
+                      case short_code_type
+                        when 'featured-product'
+                          render 'shortcode-featured-product', short_code_value: short_code_value, base_classes: base_classes
+                        when 'product'
+                          render 'shortcode-product', short_code_value: short_code_value, base_classes: base_classes
+                        when 'collection'
+                          render 'shortcode-collection', short_code_value: short_code_value, base_classes: base_classes
+                        when 'article'
+                          render 'shortcode-article', short_code_value: short_code_value, base_classes: base_classes
+                        else
+                      endcase
+                    else
+                      echo '<div class="'
+                      echo base_classes
+                      echo '">'
+                      echo inner_piece | strip
+                      echo '</div>'
+                    endif
+                  endfor
+                else
+                  echo piece | strip
+                endif
+              endfor
+            else
+              echo article.content
+            endif
+          -%}
+        </div>
+      {%- when 'share' -%}
+        <div class="mx-auto prose lg:prose-lg">
+          {% render 'share', share_url: article.url, block: block, type: 'Article' %}
+        </div>
+    {%- endcase -%}
+  {%- endfor -%}
+  {% if article.metafields.custom.featured_products != blank %}
+     </div>
+  {% endif %}
+
+  {% if article.metafields.custom.featured_products != blank %}
+    {% render 'article-products', redirect_to_pdp: section.settings.redirect_to_pdp %}
+  {% endif %}
+
+ {% if article.metafields.custom.faq_schema.value != blank %}
+<script type="application/ld+json">
+{{ article.metafields.custom.faq_schema.value }}
+</script>
+{% endif %}
+
+
+
+       {% if article.metafields.custom.author_profile_html %}
+  {{ article.metafields.custom.author_profile_html | raw }}
+{% endif %}
+
+
+
+     
+<style>.author-profile {
+    width: 100%;
+    width: 775px;
+    /* font-size: 12px; */
+    padding: 22px 10px;
+    margin: 30px auto;
+    border-bottom: 1px solid #dcdcdc;
+    padding-bottom: 25px;
+    box-shadow: 0px -3px 9px #ded8d8;
+    border-radius: 10px;
+}
+
+
+.author-top{
+    display:flex;
+    align-items:flex-start;
+    gap:22px;
+}
+
+.author-photo{
+    flex:0 0 72px;
+}
+
+.author-photo img{
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    object-fit:cover;
+    display:block;
+}
+
+.author-info{
+    flex:1;
+}
+
+.author-info h3{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:0;
+    font-size:28px;
+    font-weight:700;
+    color:#222;
+    line-height:1.2;
+}
+
+.author-info h3 a img{
+    width:18px;
+    height:18px;
+    display:block;
+}
+
+.author-designation{
+    display:block;
+    margin:4px 0 18px;
+    font-size:18px;
+    color:#555;
+    font-weight:400;
+}
+
+.author-info p {
+    margin: 0 0 14px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+
+@media(max-width:768px){
+
+.author-top{
+    flex-direction:column;
+    gap:18px;
+}
+
+.author-photo{
+    flex:none;
+}
+
+.author-photo img{
+    width:90px;
+    height:90px;
+}
+
+.author-info h3{
+    font-size:22px;
+}
+
+.author-designation{
+    font-size:16px;
+}
+
+.author-info p{
+    font-size:15px;
+    line-height:1.7;
+}
+
+}
+</style>
+
+
+</article>
+
+
+{% schema %}
+{
+  "name": "t:sections.main-article.name",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "featured_image",
+      "name": "t:sections.main-article.blocks.featured_image.name",
+      "limit": 1,
+      "settings": [
+
+      ]
+    },
+    {
+      "type": "title",
+      "name": "t:sections.main-article.blocks.title.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "blog_show_date",
+          "default": true,
+          "label": "t:sections.main-article.blocks.title.settings.blog_show_date.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "blog_show_author",
+          "default": false,
+          "label": "t:sections.main-article.blocks.title.settings.blog_show_author.label"
+        }
+      ]
+    },
+    {
+      "type": "content",
+      "name": "t:sections.main-article.blocks.content.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Shortcodes"
+        },
+        {
+          "type": "paragraph",
+          "content": "This allows for using shortcodes in the article content."
+        },
+        {
+          "type": "checkbox",
+          "id": "use_shortcodes",
+          "default": false,
+          "label": "Enable shortcodes."
+        }
+      ]
+    },
+    {
+      "type": "excerpt",
+      "name": "Excerpt",
+      "limit": 1
+    },
+    {
+      "type": "share",
+      "name": "t:sections.main-article.blocks.share.name",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "share_label",
+          "label": "t:sections.main-article.blocks.share.settings.text.label",
+          "default": "Share"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.main-article.blocks.share.settings.featured_image_info.content"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.main-article.blocks.share.settings.title_info.content"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs?",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "redirect_to_pdp",
+      "label": "Redirect to product page on click",
+      "default": false,
+      "info": "When enabled, clicking the + button will redirect to the product page instead of adding to cart"
+    }
+  ]
+}
+{% endschema %}

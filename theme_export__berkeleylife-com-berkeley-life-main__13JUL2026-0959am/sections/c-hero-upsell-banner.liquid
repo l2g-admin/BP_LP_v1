@@ -1,0 +1,946 @@
+{% comment %}
+  ** Hero Upsell Banner Section **
+  - Two column hero layout with trust badges, headline, and CTA
+  - 5-step progress guide below
+  - Fully responsive for desktop, tablet, and mobile
+{% endcomment %}
+
+<style>
+  .hero-upsell-section {
+    --bg-cream: {{ section.settings.background_color }};
+    --text-navy: {{ section.settings.text_color }};
+    --accent-orange: {{ section.settings.accent_color }};
+
+    background-color: var(--bg-cream);
+    padding: 40px 24px;
+  }
+
+  .hero-upsell__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* Hero Content - Two Columns */
+  .hero-upsell__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  /* Column 1 - Text Content */
+  .hero-upsell__text {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    order: 2;
+  }
+
+  /* Trust Badges */
+  .hero-upsell__trust {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hero-upsell__reviews {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .hero-upsell__stars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .hero-upsell__stars svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--accent-orange);
+  }
+
+  .hero-upsell__review-text {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--accent-orange);
+  }
+
+  .hero-upsell__providers {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-navy);
+  }
+
+  /* Headline */
+  .hero-upsell__heading {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 500;
+    font-size: clamp(36px, 6vw, 64px);
+    line-height: 1.1;
+    color: var(--text-navy);
+    margin: 0;
+  }
+
+  .hero-upsell__heading-highlight {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(40px, 7vw, 72px);
+    color: var(--accent-orange);
+  }
+
+  .hero-upsell__heading-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Description */
+  .hero-upsell__description {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 500;
+    font-size: clamp(16px, 2.5vw, 24px);
+    line-height: 1.4;
+    color: var(--text-navy);
+    margin: 0;
+  }
+
+  .hero-upsell__description strong {
+    font-weight: 700;
+  }
+
+  .hero-upsell__benefits-list {
+    border: 1px solid var(--accent-orange);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  .hero-upsell__benefits-item {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .hero-upsell__benefits-icon {
+    align-items: center;
+    color: var(--accent-orange);
+    display: inline-flex;
+    flex-shrink: 0;
+    height: 24px;
+    justify-content: center;
+    width: 24px;
+  }
+
+  .hero-upsell__benefits-icon svg {
+    display: block;
+    height: 14px;
+    width: 14px;
+  }
+
+  .hero-upsell__benefits-text {
+    color: var(--text-navy);
+    flex: 1 0 0;
+    font-family: "TT Commons Pro", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .hero-upsell__benefits-text p {
+    margin: 0;
+  }
+
+  .hero-upsell__benefits-text strong {
+    font-weight: 700;
+  }
+
+  .hero-upsell__buttons {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+  }
+
+  /* CTA Button */
+  .hero-upsell__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 40px;
+    background-color: var(--accent-orange);
+    color: var(--bg-cream);
+    border: none;
+    border-radius: 42px;
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.5;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    flex: 1 1 50%;
+    width: 50%;
+  }
+
+  .hero-upsell__button:hover {
+    transform: translateY(-2px);
+  }
+
+  .hero-upsell__button:not(.hero-upsell__button--secondary):hover {
+    transform: translateY(-2px);
+    background-color: {{ section.settings.accent_color | color_darken: 10 }};
+  }
+
+  .hero-upsell__button--secondary {
+    background-color: transparent;
+    border: 2px solid var(--accent-orange);
+    color: var(--accent-orange);
+  }
+
+  .hero-upsell__button--secondary:hover {
+    background-color: rgba(213, 79, 47, 0.08);
+  }
+
+  /* Column 2 - Image */
+  .hero-upsell__image-wrapper {
+    position: relative;
+    border-radius: 24px;
+    overflow: visible;
+    order: 1;
+    aspect-ratio: 600 / 560;
+    min-height: 300px;
+  }
+
+  .hero-upsell__main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 24px;
+  }
+
+  .hero-upsell__products {
+    position: absolute;
+    bottom: -20px;
+    right: -10px;
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+  }
+
+  .hero-upsell__product-box {
+    width: 120px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+  }
+
+  .hero-upsell__product-bottle {
+    width: 80px;
+    height: auto;
+    object-fit: contain;
+    margin-left: -20px;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+  }
+
+  /* Steps Section */
+  .hero-upsell__steps {
+    border: 1px solid var(--accent-orange);
+    border-radius: 24px;
+    padding: 24px 16px;
+  }
+
+  .hero-upsell__steps-title {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--text-navy);
+    margin: 0 0 16px 0;
+  }
+
+  .hero-upsell__steps-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .hero-upsell__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 16px 8px;
+  }
+
+  /* Progress Line */
+  .hero-upsell__step-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-top: 16px;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .hero-upsell__step-line {
+    flex: 1;
+    height: 1px;
+    border-top: 2px dashed var(--accent-orange);
+    opacity: 0.5;
+  }
+
+  .hero-upsell__step-line--hidden {
+    visibility: hidden;
+  }
+
+  .hero-upsell__step-circle {
+    width: 15px;
+    height: 15px;
+    background-color: var(--accent-orange);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Step Content */
+  .hero-upsell__step-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .hero-upsell__step-number {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 36px;
+    line-height: 1;
+    color: var(--accent-orange);
+    margin-bottom: 8px;
+  }
+
+  .hero-upsell__step-title {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.2;
+    color: var(--text-navy);
+    margin: 0 0 4px 0;
+  }
+
+  .hero-upsell__step-description {
+    font-family: "TT Commons Pro", sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-navy);
+    margin: 0;
+  }
+
+  /* Tablet Styles */
+  @media (min-width: 600px) {
+    .hero-upsell-section {
+      padding: 60px 24px;
+    }
+
+    .hero-upsell__container {
+      gap: 60px;
+    }
+
+    .hero-upsell__review-text,
+    .hero-upsell__providers {
+      font-size: 16px;
+    }
+
+    .hero-upsell__steps {
+      padding: 24px;
+    }
+
+    .hero-upsell__steps-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .hero-upsell__step-number {
+      font-size: 42px;
+    }
+
+    .hero-upsell__product-box {
+      width: 160px;
+    }
+
+    .hero-upsell__product-bottle {
+      width: 100px;
+      margin-left: -25px;
+    }
+  }
+
+  /* Desktop Styles */
+  @media (min-width: 992px) {
+    .hero-upsell-section {
+      padding: 80px 24px;
+    }
+
+    .hero-upsell__container {
+      gap: 80px;
+    }
+
+    .hero-upsell__content {
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+
+    .hero-upsell__text {
+      gap: 32px;
+      order: 1;
+    }
+
+    .hero-upsell__image-wrapper {
+      order: 2;
+      border-radius: 32px;
+      min-height: 400px;
+    }
+
+    .hero-upsell__main-image {
+      border-radius: 32px;
+    }
+
+    .hero-upsell__products {
+      bottom: -30px;
+      right: -20px;
+    }
+
+    .hero-upsell__product-box {
+      width: 200px;
+    }
+
+    .hero-upsell__product-bottle {
+      width: 130px;
+      margin-left: -30px;
+    }
+
+    .hero-upsell__steps-list {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .hero-upsell__step-number {
+      font-size: 48px;
+    }
+
+    .hero-upsell__step-title {
+      font-size: 18px;
+    }
+
+    .hero-upsell__step-description {
+      font-size: 14px;
+    }
+  }
+
+  /* Large Desktop */
+  @media (min-width: 1200px) {
+    .hero-upsell__image-wrapper {
+      min-height: 560px;
+    }
+
+    .hero-upsell__products {
+      bottom: -30px;
+      right: 0;
+    }
+
+    .hero-upsell__product-box {
+      width: 240px;
+    }
+
+    .hero-upsell__product-bottle {
+      width: 150px;
+      margin-left: -40px;
+    }
+  }
+</style>
+
+<section class="hero-upsell-section">
+  <div class="hero-upsell__container">
+    {%- liquid
+      assign hero_description_block = blank
+      assign hero_benefits_block = blank
+      for block in section.blocks
+        if block.type == 'hero_description'
+          assign hero_description_block = block
+        endif
+        if block.type == 'hero_benefits_list'
+          assign hero_benefits_block = block
+        endif
+      endfor
+    -%}
+
+    <!-- Hero Content -->
+    <div class="hero-upsell__content">
+      <!-- Column 1 - Text -->
+      <div class="hero-upsell__text">
+        <!-- Trust Badges -->
+        <div class="hero-upsell__trust">
+          <div class="hero-upsell__reviews">
+            <div class="hero-upsell__stars">
+              {% for i in (1..5) %}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              {% endfor %}
+            </div>
+            <span class="hero-upsell__review-text">{{ section.settings.review_text }}</span>
+          </div>
+          <p class="hero-upsell__providers">{{ section.settings.providers_text }}</p>
+        </div>
+
+        <div class="hero-upsell__heading-group">
+          <!-- Heading -->
+          <h1 class="hero-upsell__heading">
+            {{ section.settings.heading_line_1 }} <span class="hero-upsell__heading-highlight">{{ section.settings.heading_highlight }}</span> {{ section.settings.heading_line_2 }}
+          </h1>
+
+          <!-- Description (Block) -->
+          {%- if hero_description_block != blank and hero_description_block.settings.text != blank -%}
+            <div class="hero-upsell__description" {{ hero_description_block.shopify_attributes }}>
+              {{ hero_description_block.settings.text }}
+            </div>
+          {%- elsif section.settings.description != blank -%}
+            <div class="hero-upsell__description">
+              {{ section.settings.description }}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if hero_benefits_block != blank -%}
+          <div class="hero-upsell__benefits-list" {{ hero_benefits_block.shopify_attributes }}>
+            {%- if hero_benefits_block.settings.item_1 != blank -%}
+              <div class="hero-upsell__benefits-item">
+                <span class="hero-upsell__benefits-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 12.5L9.5 18L20 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <div class="hero-upsell__benefits-text">{{ hero_benefits_block.settings.item_1 }}</div>
+              </div>
+            {%- endif -%}
+            {%- if hero_benefits_block.settings.item_2 != blank -%}
+              <div class="hero-upsell__benefits-item">
+                <span class="hero-upsell__benefits-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 12.5L9.5 18L20 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <div class="hero-upsell__benefits-text">{{ hero_benefits_block.settings.item_2 }}</div>
+              </div>
+            {%- endif -%}
+            {%- if hero_benefits_block.settings.item_3 != blank -%}
+              <div class="hero-upsell__benefits-item">
+                <span class="hero-upsell__benefits-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 12.5L9.5 18L20 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <div class="hero-upsell__benefits-text">{{ hero_benefits_block.settings.item_3 }}</div>
+              </div>
+            {%- endif -%}
+            {%- if hero_benefits_block.settings.item_4 != blank -%}
+              <div class="hero-upsell__benefits-item">
+                <span class="hero-upsell__benefits-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 12.5L9.5 18L20 6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <div class="hero-upsell__benefits-text">{{ hero_benefits_block.settings.item_4 }}</div>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <!-- CTA Buttons -->
+        <div class="hero-upsell__buttons">
+          <a href="{{ section.settings.button_link }}" class="hero-upsell__button">
+            {{ section.settings.button_text }}
+          </a>
+          {%- if section.settings.secondary_button_text != blank -%}
+            <a href="{{ section.settings.secondary_button_link }}" class="hero-upsell__button hero-upsell__button--secondary">
+              {{ section.settings.secondary_button_text }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Column 2 - Image -->
+      <div class="hero-upsell__image-wrapper">
+        {% if section.settings.hero_image != blank %}
+          <img 
+            src="{{ section.settings.hero_image | image_url: width: 1200 }}"
+            alt="{{ section.settings.hero_image_alt | default: 'Hero image' }}"
+            class="hero-upsell__main-image"
+            loading="eager"
+          >
+        {% else %}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'hero-upsell__main-image' }}
+        {% endif %}
+
+        <div class="hero-upsell__products">
+          {% if section.settings.product_image_1 != blank %}
+            <img 
+              src="{{ section.settings.product_image_1 | image_url: width: 500 }}"
+              alt="{{ section.settings.product_1_alt | default: 'Product box' }}"
+              class="hero-upsell__product-box"
+              loading="eager"
+            >
+          {% endif %}
+          {% if section.settings.product_image_2 != blank %}
+            <img 
+              src="{{ section.settings.product_image_2 | image_url: width: 400 }}"
+              alt="{{ section.settings.product_2_alt | default: 'Product bottle' }}"
+              class="hero-upsell__product-bottle"
+              loading="eager"
+            >
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Steps Section -->
+    {% unless section.settings.hide_steps %}
+    <div class="hero-upsell__steps">
+      <h2 class="hero-upsell__steps-title">{{ section.settings.steps_title }}</h2>
+      <div class="hero-upsell__steps-list">
+        {% for block in section.blocks %}
+          {% if block.type == 'step' %}
+            <div class="hero-upsell__step" {{ block.shopify_attributes }}>
+              <div class="hero-upsell__step-progress">
+                <div class="hero-upsell__step-line {% if forloop.first %}hero-upsell__step-line--hidden{% endif %}"></div>
+                <div class="hero-upsell__step-circle"></div>
+                <div class="hero-upsell__step-line {% if forloop.last %}hero-upsell__step-line--hidden{% endif %}"></div>
+              </div>
+              <div class="hero-upsell__step-content">
+                <span class="hero-upsell__step-number">{{ block.settings.step_number }}</span>
+                <h3 class="hero-upsell__step-title">{{ block.settings.step_title }}</h3>
+                <p class="hero-upsell__step-description">{{ block.settings.step_description }}</p>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endunless %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Upsell Banner",
+  "tag": "section",
+  "class": "section-hero-upsell-banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#F6F3F0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1B1C29"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#D54F2F"
+    },
+    {
+      "type": "header",
+      "content": "Trust Badges"
+    },
+    {
+      "type": "text",
+      "id": "review_text",
+      "label": "Review Text",
+      "default": "4.7 | 1300+ Trusted Reviews"
+    },
+    {
+      "type": "text",
+      "id": "providers_text",
+      "label": "Providers Text",
+      "default": "Trusted by 3,000+ Healthcare Providers"
+    },
+    {
+      "type": "header",
+      "content": "Headline"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading Line 1",
+      "default": "Support Menopause Today. Unlock"
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Heading Highlight (Italic)",
+      "default": "25% Off Nitric Oxide"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading Line 2",
+      "default": "Next."
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Buy Menopause Support now and after checkout, receive an exclusive <strong>25% discount on Nitric Oxide Support</strong> to enhance circulation, energy, and overall wellness.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Shop Menopause Support"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Secondary Button Text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Hero Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Main Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "hero_image_alt",
+      "label": "Hero Image Alt Text",
+      "default": "Lifestyle hero image"
+    },
+    {
+      "type": "header",
+      "content": "Product Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image_1",
+      "label": "Product Image 1 (Box)"
+    },
+    {
+      "type": "text",
+      "id": "product_1_alt",
+      "label": "Product 1 Alt Text",
+      "default": "Menopause Support product box"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image_2",
+      "label": "Product Image 2 (Bottle)"
+    },
+    {
+      "type": "text",
+      "id": "product_2_alt",
+      "label": "Product 2 Alt Text",
+      "default": "Nitric Oxide product bottle"
+    },
+    {
+      "type": "header",
+      "content": "Steps Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_steps",
+      "label": "Hide Steps Section",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "steps_title",
+      "label": "Steps Section Title",
+      "default": "How to Get Your 25% Nitric Oxide Discount"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero_description",
+      "name": "Hero Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description Text",
+          "default": "<p>A clinically formulated Nitric Oxide Support designed to promote healthy blood flow, stamina, and sexual performance as men age.</p>"
+        }
+      ]
+    },
+    {
+      "type": "hero_benefits_list",
+      "name": "Hero Benefits List",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "item_1",
+          "label": "List Item 1",
+          "default": "<p>Helps reignite <strong>blood flow</strong> where it matters most</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "item_2",
+          "label": "List Item 2",
+          "default": "<p>Supports <strong>stamina, strength, and lasting confidence</strong></p>"
+        },
+        {
+          "type": "richtext",
+          "id": "item_3",
+          "label": "List Item 3",
+          "default": "<p>Backed by <strong>clinically studied</strong> Nitric Oxide science</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "item_4",
+          "label": "List Item 4",
+          "default": "<p>Trusted by physicians and over <strong>3,000 healthcare providers</strong></p>"
+        }
+      ]
+    },
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_number",
+          "label": "Step Number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "step_title",
+          "label": "Step Title",
+          "default": "Purchase Menopause Support"
+        },
+        {
+          "type": "textarea",
+          "id": "step_description",
+          "label": "Step Description",
+          "default": "Start by purchasing Menopause Support — your foundation for daily menopause relief."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Upsell Banner",
+      "blocks": [
+        {
+          "type": "hero_description",
+          "settings": {
+            "text": "<p>A clinically formulated Nitric Oxide Support designed to promote healthy blood flow, stamina, and sexual performance as men age.</p>"
+          }
+        },
+        {
+          "type": "hero_benefits_list",
+          "settings": {
+            "item_1": "<p>Helps reignite <strong>blood flow</strong> where it matters most</p>",
+            "item_2": "<p>Supports <strong>stamina, strength, and lasting confidence</strong></p>",
+            "item_3": "<p>Backed by <strong>clinically studied</strong> Nitric Oxide science</p>",
+            "item_4": "<p>Trusted by physicians and over <strong>3,000 healthcare providers</strong></p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "01",
+            "step_title": "Purchase Menopause Support",
+            "step_description": "Start by purchasing Menopause Support — your foundation for daily menopause relief."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "02",
+            "step_title": "Complete Checkout as Usual",
+            "step_description": "Finish your order as you normally would. No bundles. No codes. No extra steps."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "03",
+            "step_title": "Unlock a One-Time Offer",
+            "step_description": "Right after your purchase is confirmed, you'll see an exclusive, one-time offer."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "04",
+            "step_title": "Add Nitric Oxide at 25% Off",
+            "step_description": "With one click, add Nitric Oxide Support to your order at 25% off — before it ships."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "05",
+            "step_title": "Same Order. Same Delivery.",
+            "step_description": "Both products ship together, making it easy to support circulation, energy, and overall wellness."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
