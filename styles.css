@@ -1317,7 +1317,17 @@ body {
 }
 
 .reveal__bottle {
-  position: relative;
+  /* Absolutely positioned, NOT in-flow with height: 100%: the stage's
+     height comes from flex inside a min-height fold, which the spec
+     calls indefinite — older iOS Safari therefore ignores a percentage
+     height on an in-flow img and renders it at its intrinsic 536x1000,
+     swallowing the whole phone screen. Percentages on an absolutely
+     positioned box resolve against the stage's USED height in every
+     engine, so the bottle can never escape the stage. inset + margin
+     auto centers it (no transform — the entrance animation owns that). */
+  position: absolute;
+  inset: 0;
+  margin: auto;
   z-index: 1;
   display: block;
   height: 100%;
