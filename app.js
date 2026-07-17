@@ -1227,6 +1227,32 @@ if (morph) {
     cta.href = dest.toString();
     cta.addEventListener('click', () => {
       if (window.fbq) fbq('trackCustom', 'LPCTAClick');
+      if (window.clarity) clarity('event', 'cta-click');
     });
   }
+}
+
+// --------------------------------------------------------------------------
+// Slide funnel for Clarity. The deck scrolls inside a pinned body, so
+// Clarity's own scroll-depth data is meaningless here — the document never
+// scrolls and every visitor reads as "100% scrolled". Instead, report each
+// slide the visitor actually settles on (same 0.6 ratio the dot rail uses),
+// once per visit, as numbered events: "reached-1-the-better-way",
+// "reached-2-the-molecule", ... Filter these by device in Clarity to see
+// exactly which slide loses people.
+// --------------------------------------------------------------------------
+{
+  const seen = new Set();
+  const funnelObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.intersectionRatio >= 0.6 && !seen.has(entry.target)) {
+        seen.add(entry.target);
+        if (window.clarity) {
+          clarity('event', `reached-${folds.indexOf(entry.target) + 1}-${entry.target.id || 'slide'}`);
+          if (seen.size === folds.length) clarity('event', 'reached-all-slides');
+        }
+      }
+    }
+  }, { threshold: 0.6 });
+  folds.forEach((fold) => funnelObserver.observe(fold));
 }
