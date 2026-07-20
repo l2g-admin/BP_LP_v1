@@ -1388,6 +1388,10 @@ body {
   display: flex;
   width: max-content;
   animation: strip-drift 30s linear infinite;
+  /* Promote the marquee's compositor layer up front: without this the
+     browser builds it the moment the slide first paints, which reads
+     as a stutter when a fast scroller lands mid-drift. */
+  will-change: transform;
 }
 
 /* Hover or keyboard focus holds the strip still: the bylines are
