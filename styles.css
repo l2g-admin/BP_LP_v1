@@ -22,22 +22,10 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Vertical slideshow: native scroll with each full-screen slide
-   snapping into place. No scroll-jacking.
-
-   The scroller is .deck, a fixed-height inner container — NOT the
-   document (v2, Jul 9). Document scroll let mobile Safari collapse
-   its URL bar mid-swipe, growing the visual viewport past 100svh:
-   every svh-sized slide then sat short of the screen and the next
-   slide bled in at the foot, and the height change re-snapped the
-   last slide late ("snaps and extends"). With the document pinned
-   and only the deck scrolling, the browser chrome never collapses,
-   so the viewport — and every snap point — holds still on any
-   phone. */
-html, body {
-  height: 100%;
-}
-
+/* NATURAL-SCROLL DEMO: the document itself scrolls, no snapping, no
+   pinning. .deck is just a plain wrapper now. Each .fold keeps its
+   full-screen poster composition via min-height, but the page flows
+   like any normal page — flick through at your own speed. */
 body {
   background: var(--bg);
   color: var(--ink);
@@ -45,19 +33,6 @@ body {
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  overflow: hidden;
-}
-
-.deck {
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .deck { scroll-behavior: auto; }
 }
 
 /* --------------------------------------------------------------------------
@@ -66,27 +41,94 @@ body {
    -------------------------------------------------------------------------- */
 
 .fold {
-  /* 100% of the deck — the stable, chrome-independent viewport. */
-  min-height: 100%;
-  /* Each fold clips its own horizontal overflow (the old body-level
-     overflow-x: clip, relocated). The deck can't carry it — clip on
-     one axis of a scroller computes to hidden, and hidden still
-     allows PROGRAMMATIC x-scroll (a hash jump or a Tab focus could
-     shove the whole page sideways). With every fold clipped, the
-     deck simply never has horizontal overflow to scroll to. */
+  /* Scroll-native: sections are as tall as their content, sharing one
+     vertical rhythm (see .hero padding) — no forced viewport heights,
+     no parked leftover air. */
   overflow-x: clip;
   display: flex;
   flex-direction: column;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  /* Positioning context for the keep-scrolling cue at each slide's foot. */
   position: relative;
 }
 
-/* The page's one dark slide: the problem lives in shadow between
-   two bright rooms. */
-.fold--dark {
+/* The dark chapter: ONE painted surface for both dark sections (two
+   adjacent backgrounds render a seam line at some zoom levels; one
+   wrapper can't). It opens on a dusk band and closes on a mirrored
+   dawn band — the page dims into the problem and lightens back out
+   toward the answer. */
+.chapter-dark {
   background: var(--ink);
+  /* flow-root: without it, the dusk band's negative top margin
+     COLLAPSES into this wrapper's own margin — the whole ink block
+     shifts up instead of the white band overlapping the junction,
+     and the ink hairline survives. A BFC keeps the child margin
+     inside, so the band truly paints over the boundary. */
+  display: flow-root;
+}
+
+/* The dusk: a dedicated band where the page dims into the problem.
+   It owns its own space (a block before any content, so nothing can
+   overlap it) and the white fades on an EASED curve — many small
+   stops approximating ease-in-out — so there is no visible edge
+   where the gradient begins or ends, unlike a raw two-stop ramp. */
+.chapter-dark::before {
+  content: "";
+  display: block;
+  /* Overlap the white section above by 2px: at fractional zoom the
+     wrapper's ink and this overlay round to different pixels, and a
+     hairline of ink peeks out at the junction. The band's top rows
+     are pure white, so the overlap itself is invisible. */
+  margin-top: -2px;
+  height: clamp(200px, 30svh, 340px);
+  background: linear-gradient(to bottom,
+    rgb(255, 255, 255) 0%,
+    rgb(252, 252, 252) 8.5%,
+    rgb(243, 243, 245) 16.3%,
+    rgb(229, 230, 233) 23.4%,
+    rgb(212, 212, 218) 30%,
+    rgb(191, 192, 200) 36.3%,
+    rgb(168, 169, 180) 42.2%,
+    rgb(144, 145, 160) 48.1%,
+    rgb(119, 121, 138) 53.9%,
+    rgb(95, 97, 118) 59.8%,
+    rgb(72, 74, 98) 65.7%,
+    rgb(51, 54, 80) 72%,
+    rgb(34, 36, 65) 78.5%,
+    rgb(20, 23, 53) 85.5%,
+    rgb(11, 14, 46) 93%,
+    rgb(8, 11, 43) 100%);
+}
+
+/* The dawn: the mirror of the dusk above — the ink lightens back to
+   white over its own dedicated band before the reveal. Same eased
+   curve reversed, same 2px overlap (downward) so no ink hairline can
+   peek at the junction with the white section below. */
+.chapter-dark::after {
+  content: "";
+  display: block;
+  margin-bottom: -2px;
+  height: clamp(200px, 30svh, 340px);
+  background: linear-gradient(to top,
+    rgb(255, 255, 255) 0%,
+    rgb(252, 252, 252) 8.5%,
+    rgb(243, 243, 245) 16.3%,
+    rgb(229, 230, 233) 23.4%,
+    rgb(212, 212, 218) 30%,
+    rgb(191, 192, 200) 36.3%,
+    rgb(168, 169, 180) 42.2%,
+    rgb(144, 145, 160) 48.1%,
+    rgb(119, 121, 138) 53.9%,
+    rgb(95, 97, 118) 59.8%,
+    rgb(72, 74, 98) 65.7%,
+    rgb(51, 54, 80) 72%,
+    rgb(34, 36, 65) 78.5%,
+    rgb(20, 23, 53) 85.5%,
+    rgb(11, 14, 46) 93%,
+    rgb(8, 11, 43) 100%);
+}
+
+/* The dark folds themselves paint nothing — the wrapper owns the ink. */
+.fold--dark {
+  background: transparent;
   color: var(--header-bg);
 }
 
@@ -102,448 +144,16 @@ body {
   color: var(--header-bg);
 }
 
-/* --------------------------------------------------------------------------
-   Slide 2 choreography: "the bond". app.js flips .is-visible on the
-   fold itself once the slide has mostly settled (a per-element trigger
-   would start the beats mid-snap, half off screen). One clock, beats
-   as transition delays:
-     0s     headline words rise in one after another, echoing slide 1's
-            opening word-rise instead of landing as one block;
-     0.45s  the atoms drift in from opposite sides and dock, over-
-            shooting into the overlap and settling back: a bond forming;
-     1.15s  the N and O surface on the docked atoms;
-     1.35s  the tick draws down, the caption names the molecule;
-     1.8s   the lede and the Nobel line land together, one beat; the
-            medal + citation get the headline's blur-rise, the lede
-            itself stays a plain fade-rise (see note below).
-   Reduced motion: everything below sits inside the no-preference query,
-   so the slide is simply visible in its settled state. */
-@media (prefers-reduced-motion: no-preference) {
-  #the-molecule .hero__headline .w {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(0.3em);
-    filter: blur(4px);
-    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
-  }
+/* Choreography removed for the natural-scroll demo: every slide's
+   base CSS is its settled poster, visible the moment you reach it.
+   The only kept motion is ambient (ring turn, review marquee,
+   vessel flow) — nothing gates content.
 
-  #the-molecule .hero__headline .w.is-on {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-
-  #the-molecule .atom {
-    opacity: 0;
-    transition:
-      transform 0.8s cubic-bezier(0.34, 1.45, 0.5, 1) 0.45s,
-      opacity 0.4s ease 0.45s;
-  }
-  #the-molecule .atom--n { transform: translateX(-38px); }
-  #the-molecule .atom--o { transform: translateX(38px); }
-
-  #the-molecule .mol-symbol {
-    opacity: 0;
-    transition: opacity 0.4s ease 1.15s;
-  }
-
-  #the-molecule .molecule__note::before {
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 0.35s ease 1.35s;
-  }
-
-  #the-molecule .molecule__note span {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(6px);
-    transition: opacity 0.5s ease 1.5s, transform 0.5s ease 1.5s;
-  }
-
-  /* Lede and Nobel line land together, one beat. The lede stays a
-     plain fade-rise: it's a multi-line, text-wrap:pretty paragraph,
-     and animating filter:blur() on it fights the browser's line-
-     breaking pass, visibly re-wrapping a line right as the blur
-     clears. The single-line medal + citation have no line to
-     renegotiate, so they keep the fuller blur-rise, matching the
-     headline's word-in. */
-  #the-molecule .hero__lede,
-  #the-molecule .nobel-lockup {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.55s ease 1.8s, transform 0.55s ease 1.8s;
-  }
-
-  #the-molecule .nobel-lockup {
-    filter: blur(4px);
-    transition: opacity 0.55s ease 1.8s, transform 0.55s ease 1.8s, filter 0.55s ease 1.8s;
-  }
-
-  #the-molecule .mol-shadow {
-    opacity: 0;
-    transition: opacity 0.5s ease 0.9s;
-  }
-
-  #the-molecule.is-visible .atom,
-  #the-molecule.is-visible .mol-symbol,
-  #the-molecule.is-visible .mol-shadow,
-  #the-molecule.is-visible .molecule__note::before,
-  #the-molecule.is-visible .molecule__note span,
-  #the-molecule.is-visible .hero__action > * {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-
-  /* Off screen, app.js resets the slide through this class so a quick
-     return never catches the beats mid-fade. */
-  #the-molecule.is-resetting *,
-  #the-molecule.is-resetting *::before {
-    transition: none !important;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Slide 3 choreography: "the demonstration". The poster assembles:
-   copy accumulates with the scene's events and nothing informative
-   ever dissolves, so the resting slide keeps its whole argument.
-   Walls, cells, molecules and signal rings all move on app.js's one
-   rAF clock (one motion language — see drawFlight); CSS keeps only
-   the copy beats:
-     0s     headline words rise in one after another, like slides 1
-            and 2, over the constricted vessel and its trickle;
-     0.65s  (app.js) two NO pairs ride in with the blood, mid-stream
-            among the cells, and settle onto the inner walls of the
-            constriction — NO works from inside the vessel, carried
-            in the blood — each marking delivery with a quiet ring;
-     1.8s   is-releasing: walls ease open, flow surges, the pairs ride
-            the widening walls out and are carried off downstream —
-            their work done; the lede follows (+0.45s), one paragraph
-            in slide 2's voice.
-   The beat class accumulates (not removed until reset). */
-@media (prefers-reduced-motion: no-preference) {
-  #the-vessel .vessel-scene__headline .w {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(0.3em);
-    filter: blur(4px);
-    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
-  }
-
-  #the-vessel .vessel-scene__headline .w.is-on {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-
-  #the-vessel .vessel__tag {
-    opacity: 0;
-    transition: opacity 0.5s ease 0.3s;
-  }
-
-  #the-vessel.is-visible .vessel__tag {
-    opacity: 1;
-  }
-
-  #the-vessel .hero__lede {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-
-  #the-vessel.is-releasing .hero__lede {
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.6s ease 0.45s, transform 0.6s ease 0.45s;
-  }
-
-  #the-vessel.is-resetting *,
-  #the-vessel.is-resetting *::before {
-    transition: none !important;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Slide 4 choreography: "the supply" (v5, the lifespan chart). Same
-   conductor as slides 2-3 (app.js flips .is-visible once the slide
-   settles); the two data series and the leading marker are drawn
-   per-frame by app.js, so the only CSS beats here are the headline
-   word-rise (like slides 1-3), the chart's entrance, and the copy,
-   keyed to the is-pill class the clock adds when the pill's spikes
-   begin — the words land on a scene that has already shown them.
-     0s      headline words rise in one after another;
-     0.2s    the chart surfaces;
-     0.4s    the draw starts: age sweeps 20 -> 70, the cream supply
-             line falls 100 -> ~25;
-     ~mid    is-pill: from age 40 the blue spikes appear and fall back
-             to the line, shrinking; the lede follows. */
-@media (prefers-reduced-motion: no-preference) {
-  #the-supply .hero__headline .w {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(0.3em);
-    filter: blur(4px);
-    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
-  }
-
-  #the-supply .hero__headline .w.is-on {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-
-  /* The stat line rises with the chart it summarises. */
-  #the-supply .hero__sub,
-  #the-supply .chart-hero {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.55s ease 0.2s, transform 0.55s ease 0.2s;
-  }
-
-  #the-supply .hero__action > * {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-
-  /* The lede waits for the pill's spikes to enter — it lands on the
-     "it runs on what's left" picture already on screen. */
-  #the-supply.is-pill .hero__lede {
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.55s ease 0.3s, transform 0.55s ease 0.3s;
-  }
-
-  #the-supply.is-visible .hero__sub,
-  #the-supply.is-visible .chart-hero {
-    opacity: 1;
-    transform: none;
-  }
-
-  #the-supply.is-resetting *,
-  #the-supply.is-resetting *::before {
-    transition: none !important;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Slide 5 choreography: "the source". Same conductor as slides 2-3.
-   The molecule transforms in place on CSS transitions; app.js adds the
-   step classes (nitrate -> nitrite -> nitric oxide) and, at the last
-   step, is-made (which blooms the halo and lands the lede). Base rules
-   OUTSIDE this query hold the finished NO pair (the no-JS / reduced-
-   motion poster); the no-preference query rewinds the atoms to nitrate
-   and gives them their transitions, then the step classes drive them
-   home.
-     0s      headline words rise in one after another;
-     0s      the figure surfaces as a nitrate molecule;
-     0.8s    step-nitrite: one oxygen peels away and fades;
-     1.7s    step-no + is-made: the second oxygen peels, the N and O
-             settle into the pair, the halo blooms, the lede lands. */
-@media (prefers-reduced-motion: no-preference) {
-  #the-source .hero__headline .w {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(0.3em);
-    filter: blur(4px);
-    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
-  }
-
-  #the-source .hero__headline .w.is-on {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-
-  #the-source .conv {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
-  }
-
-  #the-source.is-visible .conv {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* Rewind to the nitrate molecule: three oxygens around one nitrogen,
-     the nitrogen centered. The transitions here are what the step
-     classes below animate along. */
-  #the-source .conv__n {
-    transform: translate(120px, 96px);
-    transition: transform 0.7s cubic-bezier(0.34, 1.2, 0.5, 1);
-  }
-  #the-source .conv__o {
-    transition: transform 0.7s cubic-bezier(0.34, 1.2, 0.5, 1), opacity 0.4s ease;
-  }
-  #the-source .conv__o1 { transform: translate(120px, 62px); opacity: 1; }
-  #the-source .conv__o2 { transform: translate(149px, 113px); }
-  #the-source .conv__o3 { transform: translate(90px, 113px); opacity: 1; }
-
-  #the-source .conv__glow { opacity: 0; transition: opacity 0.7s ease; }
-
-  #the-source .conv__label {
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-  #the-source.is-visible .conv__label { opacity: 1; }
-
-  #the-source .hero__lede {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-
-  /* step-nitrite: the top oxygen lifts off and fades. */
-  #the-source.step-nitrite .conv__o1 {
-    transform: translate(120px, 6px);
-    opacity: 0;
-  }
-
-  /* step-no: the second oxygen drifts off, the survivors close into
-     the familiar N-left / O-right pair. */
-  #the-source.step-no .conv__n  { transform: translate(104px, 96px); }
-  #the-source.step-no .conv__o2 { transform: translate(148px, 96px); }
-  #the-source.step-no .conv__o3 {
-    transform: translate(64px, 170px);
-    opacity: 0;
-  }
-
-  /* The halo rides step-no (not is-made) so it blooms and rewinds with
-     every pass of the loop; is-made persists across passes and only
-     holds the lede. */
-  #the-source.step-no .conv__glow { opacity: 1; }
-
-  /* is-made: the supply comes back — the lede lands, and stays put
-     while the conversion loops behind it. */
-  #the-source.is-made .hero__lede {
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.55s ease 0.2s, transform 0.55s ease 0.2s;
-  }
-
-  /* The loop's seam. step-exit: the finished pair drifts up and off,
-     sent into circulation. step-enter then holds the silently rewound
-     nitrate just below the stage (declared after is-visible, so it
-     wins) so the next pass rides the same entry transition as the
-     first. */
-  #the-source.step-exit .conv {
-    opacity: 0;
-    transform: translateY(-14px);
-  }
-  #the-source.step-enter .conv {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-
-  #the-source.is-resetting *,
-  #the-source.is-resetting *::before {
-    transition: none !important;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Slide 6 choreography: "the reveal". Same conductor as slide 2 — one
-   .is-visible class from app.js, beats as transition delays. The cut
-   from the dark room is itself the first beat (the room floods with
-   light); everything here just assembles the poster:
-     0s     headline words rise in one after another, like slides 1-4;
-     0.3s   the bottle rises in and settles — the museum-object entrance
-            slide 2's molecule made, now for the product — and the stamp
-            ring surfaces WITH it, already turning;
-     1.25s  the lede lands;
-     1.65s  the review ticker rises in under the bottle, and its
-            marquee drift is already running — the strip arrives
-            mid-motion, like a band of the page that was always
-            turning. The ring STAYS this time (Ewan, Jul 13: with
-            nothing tucked behind the bottle anymore it's no longer
-            clutter half-hidden behind widgets — the spinning stamp
-            is part of the resting poster again).
-   (A caption under the bottle — "This is Nitric Oxide Support." in
-   slide 2's tick idiom — shipped in the first cut; Ewan cut the echo.
-   The label names the product itself.) */
-@media (prefers-reduced-motion: no-preference) {
-  #the-capsule .hero__headline .w {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(0.3em);
-    filter: blur(4px);
-    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
-  }
-
-  #the-capsule .hero__headline .w.is-on {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-
-  #the-capsule .reveal__bottle {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s;
-  }
-
-  /* Surfaces with the bottle and stays — only opacity animates (the
-     element's transform is the centering translate, never touch it;
-     the turn lives on the inner group). */
-  #the-capsule .reveal__ring {
-    opacity: 0;
-    transition: opacity 0.7s ease 0.4s;
-  }
-
-  /* The award takes the old lede beat — with the "Each capsule..."
-     line cut (Jul 9), this is the slide's only copy below the
-     bottle: the award landing under the object it credentials.
-     (Jul 13: the award is now FrontrowMD's live badge iframe; the
-     beat rides its wrapper, whose reserved height keeps the rise
-     steady even though the badge's own paint is network-timed.) */
-  #the-capsule .frontrow-award {
-    opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 0.55s ease 1.25s, transform 0.55s ease 1.25s;
-  }
-
-  /* The receipts band follows the award, one beat later — the same
-     rise, woven in just before the review pill slides out. */
-  #the-capsule .stats {
-    opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 0.55s ease 1.45s, transform 0.55s ease 1.45s;
-  }
-
-  /* The review ticker rises in as the last beat, on the same quiet
-     fade-rise grammar as the award and stats above it — a band of
-     the page arriving, not a widget popping. Its marquee drift runs
-     from load (CSS animation, no visibility gate): arriving
-     mid-motion is the point, and off screen it costs nothing that
-     matters. */
-  #the-capsule .reveal__strip {
-    opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 0.55s ease 1.65s, transform 0.55s ease 1.65s;
-  }
-
-  #the-capsule.is-visible .reveal__bottle,
-  #the-capsule.is-visible .frontrow-award,
-  #the-capsule.is-visible .stats,
-  #the-capsule.is-visible .reveal__strip {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* Opacity ONLY — transform: none here would wipe the ring's
-     centering translate. */
-  #the-capsule.is-visible .reveal__ring {
-    opacity: 1;
-  }
-
-  #the-capsule .reveal__ring-spin {
-    transform-box: view-box;
-    transform-origin: center;
-    animation: ring-turn 75s linear infinite;
-  }
-
-  #the-capsule.is-resetting *,
-  #the-capsule.is-resetting *::before {
-    transition: none !important;
-  }
+   The stamp ring turns continuously. */
+.reveal__ring-spin {
+  transform-box: view-box;
+  transform-origin: center;
+  animation: ring-turn 75s linear infinite;
 }
 
 @keyframes ring-turn {
@@ -551,10 +161,13 @@ body {
 }
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 15;
   background: var(--header-bg);
   border-bottom: 1px solid var(--hairline);
   text-align: center;
-  padding: 18px 24px 14px;
+  padding: 14px 24px 11px;
 }
 
 .site-header__logo {
@@ -655,10 +268,7 @@ body {
   list-style: none;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: calc(124px + env(safe-area-inset-bottom));
+  width: 100%;
   max-width: 480px;
   margin: 0 auto;
 }
@@ -697,10 +307,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   text-align: center;
-  gap: 20px;
-  padding: clamp(20px, 3svh, 40px) 24px clamp(24px, 3.5svh, 48px);
+  gap: clamp(24px, 3.5svh, 40px);
+  padding: clamp(36px, 5.5svh, 56px) 24px;
   width: 100%;
   max-width: 680px;
   margin: 0 auto;
@@ -768,14 +378,10 @@ body {
   gap: 14px;
 }
 
-/* --- Slide 1 choreography (app.js stages these off the video clock) ---
-
-   The claim, lede, and scroll cue all start hidden and rise in as the
-   morph resolves; the hook types itself over the video, then dissolves
-   with the pill. */
-
-/* Hook and claim share one slot; the hook types in first, dissolves
-   as the pill deforms, and the claim takes its place. */
+/* Slide 1's loop: hook and claim share one slot and trade places in
+   step with the video (app.js flips the classes off the video clock);
+   the video dips out before it rewinds so the loop never jump-cuts.
+   Plain crossfades only — no word-rise, nothing staggered. */
 .headline-stack {
   display: grid;
   justify-items: center;
@@ -789,67 +395,21 @@ body {
 .morph-hook {
   max-width: none;
   font-size: clamp(1.7rem, 6.9vw, 2.7rem);
-  transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
 }
 
-.morph-hook.is-out {
-  opacity: 0;
-  transform: translateY(-12px);
-  filter: blur(5px);
-}
-
-/* Hook and lede words rise in one at a time (app.js staggers .is-on). */
-.morph-hook .w,
-.hero__lede .w {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(0.3em);
-  filter: blur(4px);
-  transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
-}
-
-.morph-hook .w.is-on,
-.hero__lede .w.is-on {
-  opacity: 1;
-  transform: none;
-  filter: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .morph-hook .w,
-  .hero__lede .w { transition: none; }
-}
-
-.headline-claim {
-  opacity: 0;
-  transform: translateY(16px);
-  filter: blur(6px);
-  transition: opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease;
-}
-
-.headline-claim.is-in {
-  opacity: 1;
-  transform: none;
-  filter: none;
-}
-
-#the-better-way .scrollcue {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
-}
-
-#the-better-way .scrollcue.is-in {
-  opacity: 1;
-  transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: no-preference) {
+  .morph-hook,
   .headline-claim,
-  #the-better-way .scrollcue,
-  .morph-hook {
-    transition: none;
+  .morph__video {
+    transition: opacity 0.55s ease;
   }
+
+  .morph-hook.is-out { opacity: 0; }
+
+  .headline-claim { opacity: 0; }
+  .headline-claim.is-in { opacity: 1; }
+
+  .morph__video.is-dipped { opacity: 0; }
 }
 
 /* molecule ------------------------------------------------------------------- */
@@ -913,11 +473,11 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   text-align: center;
-  gap: 16px;
+  gap: clamp(24px, 3.5svh, 40px);
   width: 100%;
-  padding: clamp(20px, 3svh, 40px) 24px clamp(24px, 3.5svh, 48px);
+  padding: clamp(36px, 5.5svh, 56px) 24px;
 }
 
 /* One paragraph in slide 2's voice; the wink is one quiet serif
@@ -1137,6 +697,29 @@ body {
   fill: var(--header-bg);
 }
 
+/* The chart's loop seam (same grammar as slide 1's video): only the
+   data series and marker dip out before a redraw — the axes, grid
+   and legend are furniture and never blink. */
+@media (prefers-reduced-motion: no-preference) {
+  .chart__cream-line,
+  .chart__cream-area,
+  .chart__blue-line,
+  .chart__blue-area,
+  .chart__blue-glow,
+  .chart__marker {
+    transition: opacity 0.5s ease;
+  }
+
+  .no-chart.is-dipped .chart__cream-line,
+  .no-chart.is-dipped .chart__cream-area,
+  .no-chart.is-dipped .chart__blue-line,
+  .no-chart.is-dipped .chart__blue-area,
+  .no-chart.is-dipped .chart__blue-glow,
+  .no-chart.is-dipped .chart__marker {
+    opacity: 0;
+  }
+}
+
 /* Legend: a swatch and an uppercase label per series. */
 .chart__leg-cream {
   stroke: var(--header-bg);
@@ -1220,6 +803,61 @@ body {
   text-anchor: middle;
 }
 
+/* The source conversion loop (slide 5): nitrate -> nitrite -> NO,
+   over and over — the body keeps making it. Restored from the
+   choreographed build MINUS every copy gate: headline, lede and
+   label are always visible; only the molecule itself cycles. The
+   rules in this query rewind the resting pose to nitrate and give
+   the atoms their transitions; app.js drives the step classes.
+   Reduced motion (and no-JS) rests on the finished pair below. */
+@media (prefers-reduced-motion: no-preference) {
+  #the-source .conv__n {
+    transform: translate(120px, 96px);
+    transition: transform 0.7s cubic-bezier(0.34, 1.2, 0.5, 1);
+  }
+  #the-source .conv__o {
+    transition: transform 0.7s cubic-bezier(0.34, 1.2, 0.5, 1), opacity 0.4s ease;
+  }
+  #the-source .conv__o1 { transform: translate(120px, 62px); opacity: 1; }
+  #the-source .conv__o2 { transform: translate(149px, 113px); }
+  #the-source .conv__o3 { transform: translate(90px, 113px); opacity: 1; }
+
+  #the-source .conv__glow { opacity: 0; transition: opacity 0.7s ease; }
+
+  /* step-nitrite: the top oxygen lifts off and fades. */
+  #the-source.step-nitrite .conv__o1 {
+    transform: translate(120px, 6px);
+    opacity: 0;
+  }
+
+  /* step-no: the second oxygen drifts off, the survivors close into
+     the familiar N-left / O-right pair; the halo blooms. */
+  #the-source.step-no .conv__n  { transform: translate(104px, 96px); }
+  #the-source.step-no .conv__o2 { transform: translate(148px, 96px); }
+  #the-source.step-no .conv__o3 {
+    transform: translate(64px, 170px);
+    opacity: 0;
+  }
+  #the-source.step-no .conv__glow { opacity: 1; }
+
+  /* The loop's seam: the finished pair drifts up and off into
+     circulation; the silently rewound nitrate re-enters from below. */
+  #the-source .conv { transition: opacity 0.55s ease, transform 0.55s ease; }
+  #the-source.step-exit .conv {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  #the-source.step-enter .conv {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  #the-source.is-resetting *,
+  #the-source.is-resetting *::before {
+    transition: none !important;
+  }
+}
+
 /* reveal (slide 6) --------------------------------------------------------------
 
    The product, staged like slide 2's molecule: one object in bright
@@ -1236,55 +874,39 @@ body {
    up front — without this the lede renders under the fixed bar on
    phones ("Day after day" vanished behind it, Jul 8). */
 #the-capsule {
-  /* The sticky bar's footprint (112px — sized for the one-line badges
-     row; "Clinically backed" bought the width back after Made in USA
-     briefly forced two lines) plus the receipts band now pinned in
-     the fold's foot above it (~64px + 12px clearance, see .stats).
-     Everything in flow ends above both. */
-  padding-bottom: calc(188px + env(safe-area-inset-bottom));
+  /* Painted white (not just the body showing through): the section
+     overlaps the dark chapter's bottom edge by 2px, and an explicit
+     background is what covers the ink hairline that otherwise peeks
+     out at fractional zoom. */
+  background: var(--bg);
+  /* The landing screen: exactly the viewport below the sticky header
+     (~74px), so a full scroll rests on one complete composition —
+     headline through CTA, nothing cut. The bottle stage (flex, below)
+     absorbs whatever height is left over or missing. Padding reserves
+     the fixed sticky bar's footprint plus a small clearance. */
+  min-height: calc(100svh - 74px);
+  padding-bottom: calc(124px + env(safe-area-inset-bottom));
 }
 
-/* Short screens: the fold's minimum content overran the viewport
-   (~35px on a 667px SE with the old laurel; the live FrontrowMD
-   badge's 113px then pushed a 740px Galaxy S8+ over too), and since
-   the stats band is pinned to the fold's FOOT the overflow surfaces
-   as the band's labels sinking under the sticky bar (Ewan, Jul 13 —
-   the receipts must never be the thing that gets cut). Under 750px
-   tall, reclaim ~85px from the pieces with the most give: the logo
-   band's air and width, the hero's stack gaps and paddings, four
-   viewport-points of bottle, and the foot footprint itself (stats
-   ride 2px above the bar instead of 12, buying the flow 12px).
-   Verified fits: 375x667 and 360x740. Scoped to this fold — the
-   other slides fit these heights as they are. */
-@media (max-height: 750px) {
-  #the-capsule {
-    padding-bottom: calc(176px + env(safe-area-inset-bottom));
-  }
+#the-capsule .hero {
+  /* Modest top padding only — the fold already starts below the
+     header at the landing position (min-height above), so the
+     headline needs breathing room, not the band's full height. */
+  padding-top: 28px;
+  padding-bottom: 0;
+}
 
-  #the-capsule .site-header {
-    padding: 10px 24px 8px;
-  }
-
-  #the-capsule .site-header__logo {
-    width: min(200px, 56vw);
-  }
-
+/* Short screens: reclaim air from the pieces with the most give so
+   the fixed landing height still fits headline through stats. */
+@media (max-height: 760px) {
   #the-capsule .hero {
-    gap: 10px;
-    padding-top: 12px;
-    padding-bottom: 14px;
+    padding-top: 16px;
+    gap: 14px;
   }
 
-  /* The ticker is thin already; on short screens shave its last few
-     pixels of air so the flex-sized bottle above keeps as much of
-     the fold's leftover as it can. */
   #the-capsule .reveal__strip {
-    margin-top: 10px;
+    margin-top: 8px;
     padding: 6px 0 7px;
-  }
-
-  #the-capsule .stats {
-    bottom: calc(114px + env(safe-area-inset-bottom));
   }
 }
 
@@ -1312,7 +934,7 @@ body {
   align-items: center;
   align-self: stretch;
   flex: 1 1 0;
-  min-height: 0;
+  min-height: 150px;
   max-height: 420px;
 }
 
@@ -1652,23 +1274,6 @@ body {
   max-width: 42ch;
 }
 
-/* Copy blocks that rise in on a transform transition keep their
-   compositor layer at rest. Without this, the layer the browser
-   promotes for the animation is torn down the instant the transition
-   ends, and the text repaints snapped to the device pixel grid; the
-   block sits at a fractional y (space-evenly leftovers, 26.04px line
-   boxes), so that repaint lands up to half a pixel away from the last
-   animated frame and reads as a line of the paragraph snapping into
-   place right as the rise settles. */
-@media (prefers-reduced-motion: no-preference) {
-  .hero__lede,
-  .hero__sub,
-  .headline-claim,
-  .nobel-lockup {
-    will-change: transform;
-  }
-}
-
 /* "Nobel Prize in Medicine" is tappable: serif italic with a dotted
    underline (the "more here, not a link" affordance). The card pops
    above it with the verbatim citation and a plain-words line. */
@@ -1888,125 +1493,6 @@ body {
   flex-shrink: 0;
 }
 
-/* scroll cue -------------------------------------------------------------------- */
-
-.scrollcue {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  color: rgba(8, 11, 43, 0.35);
-  margin-top: clamp(18px, 3.5svh, 40px);
-}
-
-.scrollcue__label {
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(8, 11, 43, 0.45);
-}
-
-.scrollcue__chevron {
-  display: block;
-  width: 18px;
-  height: auto;
-  animation: cue-drift 2.4s ease-in-out infinite;
-}
-
-@keyframes cue-drift {
-  0%, 100% { transform: translateY(0); opacity: 0.7; }
-  50%      { transform: translateY(5px); opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .scrollcue__chevron { animation: none; }
-}
-
-/* keep-scrolling cue -----------------------------------------------------------
-
-   Slide 1 gets the full labelled cue above; every middle slide (after
-   slide 1, before the last) gets this text-less chevron instead, fading
-   in at the slide's foot once its choreography has settled — a quiet
-   "keep going" that matches the reel-swipe model. app.js injects one per
-   eligible fold and flips .is-cue after a per-slide delay. currentColor
-   so it reads ink on bright slides and cream on the dark ones. */
-
-.keepcue {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(10px, 2.4svh, 24px);
-  transform: translateX(-50%);
-  color: rgba(8, 11, 43, 0.3);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.fold--dark .keepcue { color: rgba(246, 244, 240, 0.42); }
-
-.fold.is-cue .keepcue { opacity: 1; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .keepcue { transition: opacity 0.7s ease; }
-}
-
-.keepcue__chevron {
-  display: block;
-  width: 20px;
-  height: auto;
-  animation: cue-drift 2.4s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .keepcue__chevron { animation: none; }
-}
-
-/* dot rail --------------------------------------------------------------------
-
-   One dot per slide on the right edge: a passive map that says the
-   page is short and the end is in sight. Hidden while slide 1 has the
-   screen to itself (app.js toggles .is-on past slide 1). Ink only;
-   brand orange stays reserved for accent words and the CTA. */
-
-.dotrail {
-  position: fixed;
-  top: 50%;
-  right: max(12px, env(safe-area-inset-right));
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  /* Above slide content, below the lightbox (scrim 50 / card 60). */
-  z-index: 4;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
-.dotrail.is-on { opacity: 1; }
-
-.dotrail__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(8, 11, 43, 0.16);
-  transition: background 0.35s ease, transform 0.35s ease;
-}
-
-.dotrail__dot.is-active {
-  background: var(--ink);
-  transform: scale(1.3);
-}
-
-/* On the dark slide the rail flips to cream (app.js toggles). */
-.dotrail--dark .dotrail__dot { background: rgba(246, 244, 240, 0.28); }
-.dotrail--dark .dotrail__dot.is-active { background: var(--header-bg); }
-
-@media (prefers-reduced-motion: reduce) {
-  .dotrail,
-  .dotrail__dot { transition: none; }
-}
-
 /* sticky cta --------------------------------------------------------------------
 
    v2 (Jul 8): the v1 bare outlined pill read as thin and "floating"
@@ -2186,4 +1672,65 @@ body {
     linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
     linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
   mask-composite: intersect;
+}
+
+
+/* ==========================================================================
+   Desktop (>=1024px): the page was composed for phones, and on a wide
+   screen the figures floated small in empty space. Scale the centered
+   poster up — larger stages, larger type, a wider measure — without
+   touching the phone layout at all (everything lives in this query).
+   Figure sizes stay viewport-height-aware (svh terms) so short desktop
+   windows never overflow a composition.
+   ========================================================================== */
+@media (min-width: 1024px) {
+  .hero {
+    max-width: 780px;
+  }
+
+  .hero__headline {
+    font-size: clamp(3.4rem, 4vw, 4rem);
+  }
+
+  .hero__lede,
+  .hero__sub {
+    font-size: 1.15rem;
+    max-width: 46ch;
+  }
+
+  .morph {
+    width: min(44svh, 460px);
+  }
+
+  .molecule {
+    width: min(30vw, 340px);
+  }
+
+  .molecule__note {
+    font-size: 1.45rem;
+  }
+
+  .vessel {
+    width: min(70vw, 640px);
+  }
+
+  .vessel svg {
+    height: clamp(180px, 26svh, 280px);
+  }
+
+  .no-chart {
+    width: min(48vw, 62svh, 560px);
+  }
+
+  .conv {
+    width: min(30vw, 360px);
+  }
+
+  .reveal__stage {
+    max-height: 520px;
+  }
+
+  .stats {
+    max-width: 560px;
+  }
 }

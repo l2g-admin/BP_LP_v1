@@ -66,6 +66,12 @@
        chrome (dot rail, sticky CTA) stays outside. -->
   <div class="deck">
 
+  <!-- One persistent sticky header: the trust band rides the whole
+       page instead of appearing on slide 1 and again on the reveal. -->
+  <header class="site-header">
+    <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
+  </header>
+
   <!-- ============================================================
        SLIDE 1 — THE ANSWER
        The ad ends "...there's a better way." The page opens by
@@ -77,10 +83,6 @@
        ============================================================ -->
   <div class="fold" id="the-better-way">
 
-    <header class="site-header">
-      <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
-    </header>
-
     <main class="hero">
       <!-- One continuous scene. The video plays from the moment the
            slide is on screen; its opening ~1.5s of near-stillness is
@@ -88,6 +90,11 @@
            video clock: hook types while the pill idles, dissolves as
            the pill deforms, the claim rises as the capsules take
            shape, and the scroll cue lands when the video ends. -->
+      <!-- The opening loops as one complete thought: the hook rides
+           the blue pill, dissolves with it, the claim lands on the
+           capsules, rests, then the whole scene dips out and runs
+           again (app.js drives the crossfades off the video clock).
+           The lede stays put — it reads under both lines. -->
       <div class="hero__intro">
         <div class="headline-stack">
           <p class="hero__headline morph-hook" aria-hidden="true">
@@ -104,19 +111,15 @@
         <!-- Trying the macro product-shot render as an alternative;
              the previous cut lives at assets/better-way.mp4 with its
              poster if we want to switch back. -->
-        <video class="morph__video" muted playsinline preload="auto"
+        <video class="morph__video" autoplay muted playsinline preload="auto"
                poster="assets/better-way-alt-poster.jpg"
                aria-label="A blue diamond-shaped tablet dissolving into two Berkeley Life capsules">
           <source src="assets/better-way-alt.mp4" type="video/mp4">
         </video>
       </figure>
 
-      <div class="hero__action">
-        <div class="scrollcue" aria-hidden="true">
-          <span class="scrollcue__label">Scroll to learn more</span>
-          <svg viewBox="0 0 16 9" class="scrollcue__chevron"><path d="M1.5 1 L8 7.5 L14.5 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-      </div>
+      <!-- No scroll cue in the natural-scroll build: the next section
+           peeking in at the foot IS the cue. -->
     </main>
   </div>
 
@@ -377,6 +380,12 @@
        fires when the pill enters (the lede keys off it). Replays on
        return; reduced motion gets the settled chart (full decline, all
        shrinking spikes, copy). -->
+  <!-- The dark chapter: both dark sections live inside ONE wrapper
+       that paints the ink once (no seam line where two backgrounds
+       meet) and opens on an eased dusk band (its ::before) that owns
+       its own space — content never overlaps the transition. -->
+  <div class="chapter-dark">
+
   <div class="fold fold--dark" id="the-supply">
 
     <section class="hero">
@@ -560,6 +569,8 @@
     </section>
   </div>
 
+  </div><!-- /.chapter-dark -->
+
   <!-- ============================================================
        SLIDE 6 — THE REVEAL
        The answer to the dark room's verdict ("The blue pill doesn't
@@ -625,10 +636,6 @@
        ============================================================ -->
   <div class="fold" id="the-capsule">
 
-    <header class="site-header">
-      <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
-    </header>
-
     <section class="hero">
       <h2 class="hero__headline">
         We put it in a <em class="hl-accent">capsule</em>.
@@ -674,6 +681,19 @@
             <footer class="doc-pop__byline">
               <span class="doc-pop__name">Dr. Mariza Snyder</span>
               <span class="doc-pop__cred">Women&rsquo;s health expert</span>
+            </footer>
+          </div>
+
+          <div class="doc-pop" id="doc-pop-mckettrick" role="note" aria-hidden="true">
+            <button class="doc-pop__close" type="button" aria-label="Close">
+              <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+            <img class="doc-pop__photo" src="assets/dr-greg-mckettrick.jpg"
+                 alt="" width="160" height="160" loading="lazy">
+            <p class="doc-pop__quote">&ldquo;It wasn&rsquo;t until I introduced Berkeley&nbsp;Life&rsquo;s dietary nitric oxide that we really saw the needle move. Crazy move.&rdquo;</p>
+            <footer class="doc-pop__byline">
+              <span class="doc-pop__name">Greg McKettrick, RPh</span>
+              <span class="doc-pop__cred">Men&rsquo;s health expert</span>
             </footer>
           </div>
 
@@ -782,6 +802,17 @@
                   <span class="reveal__strip-cred">Women&rsquo;s health expert</span>
                 </button>
               </blockquote>
+
+              <blockquote class="reveal__strip-item">
+                <p class="reveal__strip-quote">&ldquo;We really saw the needle move.&rdquo;</p>
+                <button class="reveal__strip-byline" type="button"
+                        aria-expanded="false" aria-controls="doc-pop-mckettrick">
+                  <img class="reveal__strip-avatar" src="assets/dr-greg-mckettrick.jpg"
+                       alt="" width="160" height="160" loading="lazy">
+                  <span class="reveal__strip-name">Greg McKettrick, RPh</span>
+                  <span class="reveal__strip-cred">Men&rsquo;s health expert</span>
+                </button>
+              </blockquote>
             </div>
 
             <div class="reveal__strip-run" aria-hidden="true" inert>
@@ -816,6 +847,17 @@
                        alt="" width="160" height="160" loading="lazy">
                   <span class="reveal__strip-name">Dr. Mariza Snyder</span>
                   <span class="reveal__strip-cred">Women&rsquo;s health expert</span>
+                </button>
+              </blockquote>
+
+              <blockquote class="reveal__strip-item">
+                <p class="reveal__strip-quote">&ldquo;We really saw the needle move.&rdquo;</p>
+                <button class="reveal__strip-byline" type="button" tabindex="-1"
+                        aria-expanded="false" aria-controls="doc-pop-mckettrick">
+                  <img class="reveal__strip-avatar" src="assets/dr-greg-mckettrick.jpg"
+                       alt="" width="160" height="160" loading="lazy">
+                  <span class="reveal__strip-name">Greg McKettrick, RPh</span>
+                  <span class="reveal__strip-cred">Men&rsquo;s health expert</span>
                 </button>
               </blockquote>
             </div>
@@ -912,13 +954,6 @@
 
   </div><!-- /.deck -->
 
-  <!-- Dot rail: one dot per slide, fixed to the right edge — a quiet
-       "you are here, and the end is in sight" signal. app.js builds
-       the dots from the .fold count and keeps the rail hidden while
-       slide 1 has the screen to itself. Decorative only: no taps, so
-       hidden from assistive tech. -->
-  <div class="dotrail" aria-hidden="true"></div>
-
   <!-- Sticky bottom CTA: a quiet exit ramp for the visitor who's ready
        to buy before the page finishes making its case. app.js shows it
        once slide 6 (#the-capsule, "the reveal") is on screen — the
@@ -962,7 +997,7 @@
              Nitric Oxide Support" was too much text and "Shop now"
              still read aggressive. Short, low-commitment, and the
              bar's badges + the slide already name the product. -->
-        Try it <span class="cta__arrow">&rarr;</span>
+        Learn More <span class="cta__arrow">&rarr;</span>
       </a>
 
       <!-- Default proof: an echo of the badges already shown on this
