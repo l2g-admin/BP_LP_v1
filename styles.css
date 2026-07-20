@@ -788,6 +788,16 @@ body {
   transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
 }
 
+/* The loop's silent rewind: with this class on, every slide-1
+   transition is suppressed so reset() snaps the text back to its
+   pre-rise state invisibly. Without it the hook's wrapper fades IN
+   (is-out removal) while its words fade OUT (is-on removal) — a
+   half-transparent ghost of the sentence at the seam. */
+#the-better-way.is-resetting *,
+#the-better-way.is-resetting *::before {
+  transition: none !important;
+}
+
 .morph-hook.is-out {
   opacity: 0;
   transform: translateY(-12px);

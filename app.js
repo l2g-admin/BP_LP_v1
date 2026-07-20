@@ -1206,10 +1206,20 @@ if (morph) {
         claim.classList.remove('is-in');
         ledeWords.forEach((w) => w.classList.remove('is-on'));
         later(() => {
-          reset();  // rewinds to frame 0 while the video is invisible
-          morph.classList.remove('is-dipped');
-          morph.play();
-          later(() => rise(hookWords, WORD_MS), 350);
+          // Silent rewind: suppress every transition while reset()
+          // snaps the text back, then restore them (double rAF) so
+          // only the video's fade-in and the fresh word-rise animate.
+          const fold = document.getElementById('the-better-way');
+          fold.classList.add('is-resetting');
+          reset();
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              fold.classList.remove('is-resetting');
+              morph.classList.remove('is-dipped');
+              morph.play();
+              later(() => rise(hookWords, WORD_MS), 300);
+            })
+          );
         }, DIP_MS);
       }, HOLD_MS);
     });
