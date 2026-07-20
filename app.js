@@ -1193,8 +1193,29 @@ if (morph) {
       }
     });
 
-    // Plays once per visit: scrolling back up to slide 1 later should
-    // find the scene exactly as it was left, not restarted.
+    // The loop (Ewan, Jul 20): after resting a beat on the settled
+    // capsules + claim, the video and text dip out together, the
+    // scene silently rewinds under the fade, and the pass replays
+    // from the hook — one complete thought on repeat, never a jump
+    // cut back to the pill.
+    const HOLD_MS = 2200;  // the static rest on capsules + claim
+    const DIP_MS = 650;    // covers the 0.6s opacity dips
+    morph.addEventListener('ended', () => {
+      later(() => {
+        morph.classList.add('is-dipped');
+        claim.classList.remove('is-in');
+        ledeWords.forEach((w) => w.classList.remove('is-on'));
+        later(() => {
+          reset();  // rewinds to frame 0 while the video is invisible
+          morph.classList.remove('is-dipped');
+          morph.play();
+          later(() => rise(hookWords, WORD_MS), 350);
+        }, DIP_MS);
+      }, HOLD_MS);
+    });
+
+    // First play still waits for the slide to be on screen; after
+    // that the loop above owns the scene.
     let played = false;
 
     new IntersectionObserver((entries) => {

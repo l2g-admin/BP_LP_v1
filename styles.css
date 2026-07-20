@@ -2255,6 +2255,9 @@ body {
   width: 100%;
   height: auto;
   aspect-ratio: 1;
+  /* The loop's seam: the video dips out with the text before the
+     scene rewinds, so the pass never jump-cuts back to the pill. */
+  transition: opacity 0.6s ease;
   /* Feather the square frame into the page so its edges never read;
      the outer ~9% of the clip is background only. */
   -webkit-mask-image:
@@ -2265,6 +2268,10 @@ body {
     linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
     linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
   mask-composite: intersect;
+}
+
+.morph__video.is-dipped {
+  opacity: 0;
 }
 
 
