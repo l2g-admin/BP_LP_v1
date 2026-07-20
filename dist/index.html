@@ -49,17 +49,17 @@
       y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xnybecip4t");
   </script>
-  <meta name="build" content="2026-07-20T20:33Z">
+  <meta name="build" content="2026-07-20T20:42Z">
 </head>
 <body>
 
   <div class="deck">
 
-  <header class="site-header">
-    <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
-  </header>
-
   <div class="fold" id="the-better-way">
+
+    <header class="site-header">
+      <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
+    </header>
 
     <main class="hero">
       <div class="hero__intro">
@@ -75,13 +75,19 @@
       </div>
 
       <figure class="morph">
-        <video class="morph__video" autoplay muted playsinline preload="auto"
+        <video class="morph__video" muted playsinline preload="auto"
                poster="assets/better-way-alt-poster.jpg"
                aria-label="A blue diamond-shaped tablet dissolving into two Berkeley Life capsules">
           <source src="assets/better-way-alt.mp4" type="video/mp4">
         </video>
       </figure>
 
+      <div class="hero__action">
+        <button class="scrollcue" type="button" aria-label="Go to the next slide">
+          <span class="scrollcue__label">Scroll to learn more</span>
+          <svg viewBox="0 0 16 9" class="scrollcue__chevron"><path d="M1.5 1 L8 7.5 L14.5 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
     </main>
   </div>
 
@@ -227,8 +233,6 @@
     </section>
   </div>
 
-  <div class="chapter-dark">
-
   <div class="fold fold--dark" id="the-supply">
 
     <section class="hero">
@@ -355,8 +359,11 @@
     </section>
   </div>
 
-  </div>
   <div class="fold" id="the-capsule">
+
+    <header class="site-header">
+      <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
+    </header>
 
     <section class="hero">
       <h2 class="hero__headline">
@@ -554,6 +561,16 @@
   </div>
 
   </div>
+  <div class="navrail">
+    <button class="navrail__btn navrail__btn--up navrail__btn--hidden" type="button" aria-label="Previous slide">
+      <svg viewBox="0 0 16 9" aria-hidden="true"><path d="M1.5 7.5 L8 1 L14.5 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <p class="navrail__count" aria-hidden="true">1 / 6</p>
+    <button class="navrail__btn navrail__btn--down" type="button" aria-label="Next slide">
+      <svg viewBox="0 0 16 9" aria-hidden="true"><path d="M1.5 1 L8 7.5 L14.5 1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
   <div class="sticky-cta">
     <div class="sticky-cta__inner">
       <a class="sticky-cta__link" href="https://berkeleylife.com/collections/shop-all/products/nitric-oxide-support">

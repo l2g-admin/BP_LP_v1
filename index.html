@@ -66,12 +66,6 @@
        chrome (dot rail, sticky CTA) stays outside. -->
   <div class="deck">
 
-  <!-- One persistent sticky header: the trust band rides the whole
-       page instead of appearing on slide 1 and again on the reveal. -->
-  <header class="site-header">
-    <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
-  </header>
-
   <!-- ============================================================
        SLIDE 1 — THE ANSWER
        The ad ends "...there's a better way." The page opens by
@@ -83,6 +77,10 @@
        ============================================================ -->
   <div class="fold" id="the-better-way">
 
+    <header class="site-header">
+      <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
+    </header>
+
     <main class="hero">
       <!-- One continuous scene. The video plays from the moment the
            slide is on screen; its opening ~1.5s of near-stillness is
@@ -90,11 +88,6 @@
            video clock: hook types while the pill idles, dissolves as
            the pill deforms, the claim rises as the capsules take
            shape, and the scroll cue lands when the video ends. -->
-      <!-- The opening loops as one complete thought: the hook rides
-           the blue pill, dissolves with it, the claim lands on the
-           capsules, rests, then the whole scene dips out and runs
-           again (app.js drives the crossfades off the video clock).
-           The lede stays put — it reads under both lines. -->
       <div class="hero__intro">
         <div class="headline-stack">
           <p class="hero__headline morph-hook" aria-hidden="true">
@@ -111,15 +104,22 @@
         <!-- Trying the macro product-shot render as an alternative;
              the previous cut lives at assets/better-way.mp4 with its
              poster if we want to switch back. -->
-        <video class="morph__video" autoplay muted playsinline preload="auto"
+        <video class="morph__video" muted playsinline preload="auto"
                poster="assets/better-way-alt-poster.jpg"
                aria-label="A blue diamond-shaped tablet dissolving into two Berkeley Life capsules">
           <source src="assets/better-way-alt.mp4" type="video/mp4">
         </video>
       </figure>
 
-      <!-- No scroll cue in the natural-scroll build: the next section
-           peeking in at the foot IS the cue. -->
+      <div class="hero__action">
+        <!-- Guided demo: the cue is a real button (tap advances to
+             slide 2) and is visible from the first frame — older
+             visitors tap the thing that tells them what to do. -->
+        <button class="scrollcue" type="button" aria-label="Go to the next slide">
+          <span class="scrollcue__label">Scroll to learn more</span>
+          <svg viewBox="0 0 16 9" class="scrollcue__chevron"><path d="M1.5 1 L8 7.5 L14.5 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
     </main>
   </div>
 
@@ -380,12 +380,6 @@
        fires when the pill enters (the lede keys off it). Replays on
        return; reduced motion gets the settled chart (full decline, all
        shrinking spikes, copy). -->
-  <!-- The dark chapter: both dark sections live inside ONE wrapper
-       that paints the ink once (no seam line where two backgrounds
-       meet) and opens on an eased dusk band (its ::before) that owns
-       its own space — content never overlaps the transition. -->
-  <div class="chapter-dark">
-
   <div class="fold fold--dark" id="the-supply">
 
     <section class="hero">
@@ -569,8 +563,6 @@
     </section>
   </div>
 
-  </div><!-- /.chapter-dark -->
-
   <!-- ============================================================
        SLIDE 6 — THE REVEAL
        The answer to the dark room's verdict ("The blue pill doesn't
@@ -635,6 +627,10 @@
        Replays on return; reduced motion gets the settled poster.
        ============================================================ -->
   <div class="fold" id="the-capsule">
+
+    <header class="site-header">
+      <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
+    </header>
 
     <section class="hero">
       <h2 class="hero__headline">
@@ -953,6 +949,22 @@
   </div>
 
   </div><!-- /.deck -->
+
+  <!-- Guided nav rail: the deck's navigation made explicit for the
+       ICP — big prev/next arrow buttons stacked around the progress
+       dots, plus a "1 / 6" counter that says the page is short and
+       finite. app.js builds the dots (tappable, a bonus affordance),
+       wires the arrows, and flips the rail to cream on dark slides.
+       Visible from slide 1: discoverability IS this variant. -->
+  <div class="navrail">
+    <button class="navrail__btn navrail__btn--up navrail__btn--hidden" type="button" aria-label="Previous slide">
+      <svg viewBox="0 0 16 9" aria-hidden="true"><path d="M1.5 7.5 L8 1 L14.5 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <p class="navrail__count" aria-hidden="true">1 / 6</p>
+    <button class="navrail__btn navrail__btn--down" type="button" aria-label="Next slide">
+      <svg viewBox="0 0 16 9" aria-hidden="true"><path d="M1.5 1 L8 7.5 L14.5 1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
 
   <!-- Sticky bottom CTA: a quiet exit ramp for the visitor who's ready
        to buy before the page finishes making its case. app.js shows it
