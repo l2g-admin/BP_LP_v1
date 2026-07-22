@@ -57,21 +57,6 @@ https://try.berkeleylife.com/?utm_source=facebook&utm_medium=paid&utm_campaign=Y
 
 The page automatically copies these labels onto the buy button link (code at the bottom of `app.js`), so they survive the hop to the store and Shopify credits the order to your ad.
 
-## The A/B test: how to read the results
-
-Every visitor is randomly assigned to the guided deck or the natural-scroll page (see CLAUDE.md for the mechanics). Same URL, same campaign, same pixel — only the page differs, so any difference in results is caused by the page. The variant name follows the visitor through every system:
-
-| Where to look | What to check | What it tells you |
-|---|---|---|
-| Meta Events Manager → ViewContent → parameter `variant` | views per variant | the split is landing ~50/50 |
-| Meta Events Manager → LPCTAClick → parameter `variant` | clicks ÷ views per variant | which page gets more people to the store (early signal, significant fastest) |
-| Shopify → Analytics → Sessions/Sales by UTM content | orders where utm_content contains `guided-demo` vs `scroll-demo` | which page actually sells (the deciding metric) |
-| Clarity → Filters → Custom tags → `variant` | recordings, scroll funnel per variant | *why* one page wins |
-
-If the ad already sets its own utm_content, the variant is suffixed onto it (`{ad-content}__scroll-demo`) so ad-level labels survive; filter Shopify by "contains".
-
-Two rules for a clean test: do not stop it early because one side jumps ahead in the first days (wait for a few hundred orders total, or agree a fixed run length up front), and do not edit either page's content mid-test.
-
 ## Checking it all works (launch day)
 
 1. Install the free "Meta Pixel Helper" Chrome extension.

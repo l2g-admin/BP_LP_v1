@@ -3,24 +3,6 @@
 Static one-page LP served by Cloudflare Pages at take.berkeleylife.com.
 Repo: https://github.com/l2g-admin/BP_LP_v1
 
-## A/B test: guided deck vs natural scroll
-
-Two page variants ship behind the same URL. `functions/_middleware.js`
-(Cloudflare Pages Functions, deployed automatically from that directory)
-coin-flips each new visitor, pins the choice in a `bl_ab` cookie, and
-rewrites — never redirects — bucketed visitors to the scroll build. Visitors
-always see `take.berkeleylife.com/`, so the ad campaign needs no changes.
-
-- Repo root (`index.html`, `app.js`, `styles.css`) → `dist/` — **guided
-  deck** (variant B, the control, live since c6a45ce).
-- `scroll/` → `dist/s/` — **natural scroll** (variant A, resurrected from
-  commit 73a01aa with tracking intact). Its build rewrites asset/css/js
-  references to absolute `/s/` paths since the page is served at `/`.
-
-QA: `?v=guided` / `?v=scroll` forces a bucket (and re-pins the cookie).
-Analytics per variant: see TRACKING.md. A change that applies to both
-variants must be made in both source trees.
-
 ## Source vs. dist
 
 `index.html`, `styles.css`, and `app.js` at the repo root are the **source**

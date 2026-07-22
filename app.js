@@ -1255,12 +1255,8 @@ if (morph) {
 // Shopify's own analytics credit the eventual order to the ad that
 // started it. Also tell the pixel when the CTA is actually used —
 // LPCTAClick separates visitors who engaged from those who bounced.
-// A/B test: the variant tag rides along as utm_content (suffixed onto
-// whatever the ad already set, so ad-level labels survive) — that is
-// what lets Shopify attribute each purchase to guided vs scroll.
 // --------------------------------------------------------------------------
 {
-  const VARIANT = 'guided-demo';
   const cta = document.querySelector('.sticky-cta__link');
   if (cta) {
     const inbound = new URLSearchParams(location.search);
@@ -1268,11 +1264,9 @@ if (morph) {
     for (const [key, value] of inbound) {
       if (/^utm_/i.test(key) || key === 'fbclid') dest.searchParams.set(key, value);
     }
-    const adContent = dest.searchParams.get('utm_content');
-    dest.searchParams.set('utm_content', adContent ? `${adContent}__${VARIANT}` : VARIANT);
     cta.href = dest.toString();
     cta.addEventListener('click', () => {
-      if (window.fbq) fbq('trackCustom', 'LPCTAClick', { variant: VARIANT });
+      if (window.fbq) fbq('trackCustom', 'LPCTAClick');
       if (window.clarity) clarity('event', 'cta-click');
     });
   }
