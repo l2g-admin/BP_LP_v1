@@ -18,7 +18,8 @@ always see `take.berkeleylife.com/`, so the ad campaign needs no changes.
   references to absolute `/s/` paths since the page is served at `/`.
 
 QA: `?v=guided` / `?v=scroll` forces a bucket (and re-pins the cookie).
-Analytics per variant: see TRACKING.md. A change that applies to both
+Analytics per variant: see TRACKING.md. Test rules, reading results, and
+how to end the test: see AB_TEST.md. A change that applies to both
 variants must be made in both source trees.
 
 ## Source vs. dist
