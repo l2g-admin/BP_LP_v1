@@ -6,17 +6,17 @@
   <title>The Better Way to Healthy Blood Flow | Berkeley Life</title>
   <meta name="description" content="You might not need the little blue pill. Berkeley Life helps your body restore its own Nitric Oxide. Prescription free, backed by clinical research.">
   <meta name="theme-color" content="#f6f3f0">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="assets/favicon.png" type="image/png" sizes="128x128">
-  <link rel="apple-touch-icon" href="assets/favicon.png">
+  <link rel="icon" href="/s/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/s/assets/favicon.png" type="image/png" sizes="128x128">
+  <link rel="apple-touch-icon" href="/s/assets/favicon.png">
 
   <link rel="stylesheet" href="https://use.typekit.net/wbx3yzs.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css">
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="/s/styles.css">
+  <script src="/s/app.js" defer></script>
 
   <script>
     // Only track on the real domain — local dev and preview builds
@@ -35,7 +35,7 @@
     fbq('track', 'ViewContent', {
       content_name: 'Nitric Oxide Support',
       content_type: 'product',
-      variant: 'guided-demo'
+      variant: 'scroll-demo'
     });
     }
   </script>
@@ -51,7 +51,7 @@
     })(window, document, "clarity", "script", "xnybecip4t");
     // A/B test: tag every session with its bucket so Clarity dashboards
     // can be filtered per variant (Filters > Custom tags > variant).
-    clarity("set", "variant", "guided-demo");
+    clarity("set", "variant", "scroll-demo");
   </script>
   <meta name="build" content="2026-07-22T16:30Z">
 </head>
@@ -59,11 +59,11 @@
 
   <div class="deck">
 
-  <div class="fold" id="the-better-way">
+  <header class="site-header">
+    <img class="site-header__logo" src="/s/assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
+  </header>
 
-    <header class="site-header">
-      <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
-    </header>
+  <div class="fold" id="the-better-way">
 
     <main class="hero">
       <div class="hero__intro">
@@ -79,19 +79,13 @@
       </div>
 
       <figure class="morph">
-        <video class="morph__video" muted playsinline preload="auto"
-               poster="assets/better-way-alt-poster.jpg"
+        <video class="morph__video" autoplay muted playsinline preload="auto"
+               poster="/s/assets/better-way-alt-poster.jpg"
                aria-label="A blue diamond-shaped tablet dissolving into two Berkeley Life capsules">
-          <source src="assets/better-way-alt.mp4" type="video/mp4">
+          <source src="/s/assets/better-way-alt.mp4" type="video/mp4">
         </video>
       </figure>
 
-      <div class="hero__action">
-        <button class="scrollcue" type="button" aria-label="Go to the next slide">
-          <span class="scrollcue__label">Scroll to learn more</span>
-          <svg viewBox="0 0 16 9" class="scrollcue__chevron"><path d="M1.5 1 L8 7.5 L14.5 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
     </main>
   </div>
 
@@ -152,7 +146,7 @@
               <button class="nobel-pop__close" type="button" aria-label="Close">
                 <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
               </button>
-              <img class="nobel-pop__photo" src="assets/nobel-1998.jpg"
+              <img class="nobel-pop__photo" src="/s/assets/nobel-1998.jpg"
                    alt="Robert Furchgott accepting the Nobel Prize from the King of Sweden at the 1998 ceremony in Stockholm"
                    width="640" height="885" loading="lazy">
               <span class="nobel-pop__caption">
@@ -164,7 +158,7 @@
           </span>.
         </p>
         <div class="nobel-lockup">
-          <img class="nobel-lockup__medal" src="assets/nobel-medal.png" alt="Nobel Prize medal" width="36" height="36">
+          <img class="nobel-lockup__medal" src="/s/assets/nobel-medal.png" alt="Nobel Prize medal" width="36" height="36">
           <p class="nobel__source">1998 &middot; Furchgott, Ignarro, and Murad</p>
         </div>
 
@@ -236,6 +230,8 @@
       </div>
     </section>
   </div>
+
+  <div class="chapter-dark">
 
   <div class="fold fold--dark" id="the-supply">
 
@@ -363,11 +359,8 @@
     </section>
   </div>
 
+  </div>
   <div class="fold" id="the-capsule">
-
-    <header class="site-header">
-      <img class="site-header__logo" src="assets/berkeley-life-logo.svg" alt="Berkeley Life" width="230" height="47">
-    </header>
 
     <section class="hero">
       <h2 class="hero__headline">
@@ -385,7 +378,7 @@
             </g>
           </svg>
 
-          <img class="reveal__bottle" src="assets/no-support-60.png"
+          <img class="reveal__bottle" src="/s/assets/no-support-60.png"
                alt="A white Berkeley Life supplement bottle. The label reads Nitric Oxide Support, promotes blood flow for energy and heart health, 60 capsules."
                width="536" height="1000">
 
@@ -393,8 +386,8 @@
             <button class="doc-pop__close" type="button" aria-label="Close">
               <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
             </button>
-            <img class="doc-pop__photo" src="assets/dr-mariza-snyder.jpg"
-                 alt="" width="160" height="160" decoding="async">
+            <img class="doc-pop__photo" src="/s/assets/dr-mariza-snyder.jpg"
+                 alt="" width="160" height="160" loading="lazy">
             <p class="doc-pop__quote">&ldquo;I view Nitric Oxide as a keystone for women&rsquo;s health. When it&rsquo;s supported, everything from exercise recovery to cognitive sharpness to everyday energy improves. That&rsquo;s why I recommend Berkeley&nbsp;Life. It&rsquo;s clinically effective, easy for women to integrate, and truly makes a difference.&rdquo;</p>
             <footer class="doc-pop__byline">
               <span class="doc-pop__name">Dr. Mariza Snyder</span>
@@ -406,8 +399,8 @@
             <button class="doc-pop__close" type="button" aria-label="Close">
               <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
             </button>
-            <img class="doc-pop__photo" src="assets/dr-greg-mckettrick.jpg"
-                 alt="" width="160" height="160" decoding="async">
+            <img class="doc-pop__photo" src="/s/assets/dr-greg-mckettrick.jpg"
+                 alt="" width="160" height="160" loading="lazy">
             <p class="doc-pop__quote">&ldquo;It wasn&rsquo;t until I introduced Berkeley&nbsp;Life&rsquo;s dietary nitric oxide that we really saw the needle move. Crazy move.&rdquo;</p>
             <footer class="doc-pop__byline">
               <span class="doc-pop__name">Greg McKettrick, RPh</span>
@@ -419,8 +412,8 @@
             <button class="doc-pop__close" type="button" aria-label="Close">
               <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
             </button>
-            <img class="doc-pop__photo" src="assets/dr-richard-moore.jpg"
-                 alt="" width="160" height="160" decoding="async">
+            <img class="doc-pop__photo" src="/s/assets/dr-richard-moore.jpg"
+                 alt="" width="160" height="160" loading="lazy">
             <p class="doc-pop__quote">&ldquo;Blood flow and healing are critical to the success of our treatments, and the integration of Nitric Oxide has really helped. We continue to promote Berkeley&rsquo;s N.O. for all of our body procedures as well as men presenting to our men&rsquo;s clinic. Our patients are loving the results.&rdquo;</p>
             <footer class="doc-pop__byline">
               <span class="doc-pop__name">Dr. Richard Moore</span>
@@ -452,8 +445,8 @@
                 <p class="reveal__strip-quote">&ldquo;Our patients are loving the results.&rdquo;</p>
                 <button class="reveal__strip-byline" type="button"
                         aria-expanded="false" aria-controls="doc-pop-moore">
-                  <img class="reveal__strip-avatar" src="assets/dr-richard-moore.jpg"
-                       alt="" width="160" height="160" decoding="async">
+                  <img class="reveal__strip-avatar" src="/s/assets/dr-richard-moore.jpg"
+                       alt="" width="160" height="160" loading="lazy">
                   <span class="reveal__strip-name">Dr. Richard Moore</span>
                   <span class="reveal__strip-cred">Men&rsquo;s health clinic</span>
                 </button>
@@ -463,8 +456,8 @@
                 <p class="reveal__strip-quote">&ldquo;I recommend Berkeley Life.&rdquo;</p>
                 <button class="reveal__strip-byline" type="button"
                         aria-expanded="false" aria-controls="doc-pop-snyder">
-                  <img class="reveal__strip-avatar" src="assets/dr-mariza-snyder.jpg"
-                       alt="" width="160" height="160" decoding="async">
+                  <img class="reveal__strip-avatar" src="/s/assets/dr-mariza-snyder.jpg"
+                       alt="" width="160" height="160" loading="lazy">
                   <span class="reveal__strip-name">Dr. Mariza Snyder</span>
                   <span class="reveal__strip-cred">Women&rsquo;s health expert</span>
                 </button>
@@ -474,8 +467,8 @@
                 <p class="reveal__strip-quote">&ldquo;We really saw the needle move.&rdquo;</p>
                 <button class="reveal__strip-byline" type="button"
                         aria-expanded="false" aria-controls="doc-pop-mckettrick">
-                  <img class="reveal__strip-avatar" src="assets/dr-greg-mckettrick.jpg"
-                       alt="" width="160" height="160" decoding="async">
+                  <img class="reveal__strip-avatar" src="/s/assets/dr-greg-mckettrick.jpg"
+                       alt="" width="160" height="160" loading="lazy">
                   <span class="reveal__strip-name">Greg McKettrick, RPh</span>
                   <span class="reveal__strip-cred">Men&rsquo;s health expert</span>
                 </button>
@@ -499,8 +492,8 @@
                 <p class="reveal__strip-quote">&ldquo;Our patients are loving the results.&rdquo;</p>
                 <button class="reveal__strip-byline" type="button" tabindex="-1"
                         aria-expanded="false" aria-controls="doc-pop-moore">
-                  <img class="reveal__strip-avatar" src="assets/dr-richard-moore.jpg"
-                       alt="" width="160" height="160" decoding="async">
+                  <img class="reveal__strip-avatar" src="/s/assets/dr-richard-moore.jpg"
+                       alt="" width="160" height="160" loading="lazy">
                   <span class="reveal__strip-name">Dr. Richard Moore</span>
                   <span class="reveal__strip-cred">Men&rsquo;s health clinic</span>
                 </button>
@@ -510,8 +503,8 @@
                 <p class="reveal__strip-quote">&ldquo;I recommend Berkeley Life.&rdquo;</p>
                 <button class="reveal__strip-byline" type="button" tabindex="-1"
                         aria-expanded="false" aria-controls="doc-pop-snyder">
-                  <img class="reveal__strip-avatar" src="assets/dr-mariza-snyder.jpg"
-                       alt="" width="160" height="160" decoding="async">
+                  <img class="reveal__strip-avatar" src="/s/assets/dr-mariza-snyder.jpg"
+                       alt="" width="160" height="160" loading="lazy">
                   <span class="reveal__strip-name">Dr. Mariza Snyder</span>
                   <span class="reveal__strip-cred">Women&rsquo;s health expert</span>
                 </button>
@@ -521,8 +514,8 @@
                 <p class="reveal__strip-quote">&ldquo;We really saw the needle move.&rdquo;</p>
                 <button class="reveal__strip-byline" type="button" tabindex="-1"
                         aria-expanded="false" aria-controls="doc-pop-mckettrick">
-                  <img class="reveal__strip-avatar" src="assets/dr-greg-mckettrick.jpg"
-                       alt="" width="160" height="160" decoding="async">
+                  <img class="reveal__strip-avatar" src="/s/assets/dr-greg-mckettrick.jpg"
+                       alt="" width="160" height="160" loading="lazy">
                   <span class="reveal__strip-name">Greg McKettrick, RPh</span>
                   <span class="reveal__strip-cred">Men&rsquo;s health expert</span>
                 </button>
@@ -565,16 +558,6 @@
   </div>
 
   </div>
-  <div class="navrail">
-    <button class="navrail__btn navrail__btn--up navrail__btn--hidden" type="button" aria-label="Previous slide">
-      <svg viewBox="0 0 16 9" aria-hidden="true"><path d="M1.5 7.5 L8 1 L14.5 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <p class="navrail__count" aria-hidden="true">1 / 6</p>
-    <button class="navrail__btn navrail__btn--down" type="button" aria-label="Next slide">
-      <svg viewBox="0 0 16 9" aria-hidden="true"><path d="M1.5 1 L8 7.5 L14.5 1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
-
   <div class="sticky-cta">
     <div class="sticky-cta__inner">
       <a class="sticky-cta__link" href="https://berkeleylife.com/collections/shop-all/products/nitric-oxide-support">
