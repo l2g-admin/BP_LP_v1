@@ -57,6 +57,15 @@ https://try.berkeleylife.com/?utm_source=facebook&utm_medium=paid&utm_campaign=Y
 
 The page automatically copies these labels onto the buy button link (code at the bottom of `app.js`), so they survive the hop to the store and Shopify credits the order to your ad.
 
+## PostHog
+
+Added July 2026 on client request: the standard PostHog snippet (project
+`phc_mKHE...`, US cloud) loads in both A/B variants' `<head>`, behind the same
+domain guard as the pixel, so localhost and previews stay silent. Every
+PostHog event automatically carries a `variant` property (`guided-demo` /
+`scroll-demo`), so its dashboards can be split per variant like everything
+else.
+
 ## The A/B test: how to read the results
 
 Every visitor is randomly assigned to the guided deck or the natural-scroll page (see CLAUDE.md for the mechanics). Same URL, same campaign, same pixel — only the page differs, so any difference in results is caused by the page. The variant name follows the visitor through every system:
